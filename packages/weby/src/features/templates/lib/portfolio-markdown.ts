@@ -106,9 +106,10 @@ const parseProfileLine = (line: string, profile: Profile) => {
       const url = linkLine.slice(colonIdx + 1).trim();
       const key = label.toLowerCase().replaceAll(/[^a-z0-9]/g, "");
       if (key && url) {
-        profile.links[key] = { label, url };
         if (key.includes("portfolio") || label.toLowerCase().includes("portfolio")) {
           profile.links.portfolio = { label, url };
+        } else {
+          profile.links[key] = { label, url };
         }
       }
     }

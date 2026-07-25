@@ -171,17 +171,25 @@ const PreviewSocialLinks = ({ links }: { links?: Record<string, Link> }) => {
   if (!links) {
     return null;
   }
-  const linkItems = Object.values(links).filter((l) => l.url && l.label);
-  if (linkItems.length === 0) {
+
+  const uniqueLinks = [
+    ...new Map(
+      Object.entries(links)
+        .filter(([k, l]) => k !== "portfolio" && l.url && l.label)
+        .map(([, l]) => [l.url, l]),
+    ).values(),
+  ];
+
+  if (uniqueLinks.length === 0) {
     return null;
   }
 
   return (
     <div className="shrink-0 flex items-center justify-between pt-2">
       <div className="flex flex-wrap items-center gap-4">
-        {linkItems.map((lk) => (
+        {uniqueLinks.map((lk, idx) => (
           <a
-            key={lk.url + lk.label}
+            key={`${lk.url}-${idx}`}
             href={lk.url}
             target="_blank"
             rel="noreferrer"
