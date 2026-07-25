@@ -1,6 +1,7 @@
 import type { BlogManifestSection, ExperienceItem, Profile, Project } from "#/shared/types";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
+import { isDesktopApp } from "#/shared/lib/desktop";
 
 const fetchJson = async <T>(url: string, init?: RequestInit): Promise<T> => {
   const res = await fetch(url, init);
@@ -19,7 +20,8 @@ export const useIsMounted = (): boolean => {
 };
 
 const getInitialFromStorage = <T>(key: string): T | undefined => {
-  if (typeof window === "undefined") {
+  // WebKit (Electrobun) has very slow sync localStorage — skip placeholder reads
+  if (typeof window === "undefined" || isDesktopApp()) {
     return undefined;
   }
   try {
@@ -31,7 +33,7 @@ const getInitialFromStorage = <T>(key: string): T | undefined => {
 };
 
 const saveToStorage = <T>(key: string, data: T): void => {
-  if (typeof window === "undefined") {
+  if (typeof window === "undefined" || isDesktopApp()) {
     return;
   }
   try {
@@ -78,6 +80,20 @@ export const useBlogManifest = () =>
   useQuery<BlogManifestSection[]>({
     queryFn: ({ signal }) => fetchJson<BlogManifestSection[]>("/api/blogs", { signal }),
     queryKey: ["blogManifest"],
+  });
+
+interface TemplateInfo {
+  description: string;
+  icon: string;
+  id: string;
+  isDefault: boolean;
+  title: string;
+}
+
+export const useTemplates = () =>
+  useQuery<TemplateInfo[]>({
+    queryFn: ({ signal }) => fetchJson<TemplateInfo[]>("/api/console/templates", { signal }),
+    queryKey: ["console-templates"],
   });
 
 export const useIsFetchingData = (): boolean => {

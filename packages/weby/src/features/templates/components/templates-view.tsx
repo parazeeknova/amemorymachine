@@ -1,8 +1,9 @@
-import { CheckCircleIcon, PlusIcon } from "@phosphor-icons/react";
+import { PlusIcon } from "@phosphor-icons/react";
 import { useEffect, useMemo, useRef } from "react";
 import { gsap } from "gsap";
 import { useTheme } from "#/shared/hooks/use-theme";
 import { useNavigate } from "@tanstack/react-router";
+import { useTemplates } from "#/features/landing";
 
 interface PortfolioTemplatePreviewProps {
   cardRef: React.RefObject<HTMLButtonElement | null>;
@@ -153,6 +154,9 @@ export const TemplatesView = () => {
   const { isDarkMode } = useTheme();
   const navigate = useNavigate();
   const cardRef = useRef<HTMLButtonElement>(null);
+  const { data: templates } = useTemplates();
+
+  const isPortfolioActive = templates?.some((tmpl) => tmpl.isDefault) ?? false;
 
   const t = (dark: string, light: string) => (isDarkMode ? dark : light);
 
@@ -190,66 +194,79 @@ export const TemplatesView = () => {
         {/* Square Cards Grid */}
         <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
           {/* Developer Portfolio Card (Square) */}
-          <button
-            ref={cardRef}
-            className={`aspect-square flex flex-col justify-between border p-4 text-left lowercase bg-linear-to-b transition-all overflow-hidden cursor-pointer w-full ${t("border-border-dark from-white/3 to-transparent hover:bg-white/5", "border-border-light from-black/2 to-transparent hover:bg-black/3")}`}
-            onClick={() => navigate({ to: "/home/templates/portfolio" })}
-            type="button"
-          >
-            <div className="flex flex-col flex-1 min-h-0 w-full">
-              <div className="flex items-center justify-between shrink-0">
-                <h3
-                  className={`text-[13px] font-medium ${t("text-text-dark/80", "text-text-light/80")}`}
+          <div className="flex flex-col">
+            <button
+              ref={cardRef}
+              className={`aspect-square flex flex-col justify-between border border-b-0 p-4 text-left lowercase bg-linear-to-b transition-all overflow-hidden cursor-pointer w-full ${t("border-border-dark from-white/3 to-transparent hover:bg-white/5", "border-border-light from-black/2 to-transparent hover:bg-black/3")}`}
+              onClick={() => navigate({ to: "/home/templates/portfolio" })}
+              type="button"
+            >
+              <div className="flex flex-col flex-1 min-h-0 w-full">
+                <div className="flex items-center justify-between shrink-0">
+                  <h3
+                    className={`text-[13px] font-medium ${t("text-text-dark/80", "text-text-light/80")}`}
+                  >
+                    developer portfolio
+                  </h3>
+                </div>
+
+                <p
+                  className={`mt-2 text-[10px] leading-tight shrink-0 line-clamp-2 ${t("text-text-dark/40", "text-text-light/40")}`}
                 >
-                  developer portfolio
-                </h3>
-                <span
-                  className={`flex items-center gap-1 text-[9px] font-mono border px-1.5 py-0.5 ${t("border-purple-500/30 text-purple-400 bg-purple-500/5", "border-purple-600/30 text-purple-700 bg-purple-500/5")}`}
-                >
-                  <CheckCircleIcon size={10} /> active
-                </span>
+                  personal developer portfolio with profile bio, work timeline, project showcase,
+                  and github stats.
+                </p>
+
+                {/* Interactive GSAP V-Fan to Grid Template Preview */}
+                <PortfolioTemplatePreview cardRef={cardRef} />
               </div>
+            </button>
 
-              <p
-                className={`mt-2 text-[10px] leading-tight shrink-0 line-clamp-2 ${t("text-text-dark/40", "text-text-light/40")}`}
-              >
-                personal developer portfolio with profile bio, work timeline, project showcase, and
-                github stats.
-              </p>
-
-              {/* Interactive GSAP V-Fan to Grid Template Preview */}
-              <PortfolioTemplatePreview cardRef={cardRef} />
+            {/* Status strip — attached to card */}
+            <div
+              className={`flex items-center px-2.5 py-1 border border-t-0 text-[9px] lowercase ${isPortfolioActive ? `bg-linear-to-t from-purple-500/10 to-transparent ${t("border-purple-500/30 text-purple-400", "border-purple-600/30 text-purple-700")}` : t("border-border-dark text-text-dark/25", "border-border-light text-text-light/25")}`}
+            >
+              {isPortfolioActive ? "active on /" : "not in use"}
             </div>
-          </button>
+          </div>
 
           {/* More Templates Coming Soon Card (Square) */}
-          <div
-            className={`aspect-square flex flex-col justify-between border border-dashed p-4 text-left lowercase bg-linear-to-b overflow-hidden ${t("border-border-dark/60 from-white/2 to-transparent text-text-dark/30", "border-border-light/60 from-black/2 to-transparent text-text-light/30")}`}
-          >
-            <div>
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-1.5">
-                  <PlusIcon size={14} />
-                  <h3 className="text-[13px] font-medium">more templates</h3>
+          <div className="flex flex-col">
+            <div
+              className={`aspect-square flex flex-col justify-between border border-dashed border-b-0 p-4 text-left lowercase bg-linear-to-b overflow-hidden ${t("border-border-dark/60 from-white/2 to-transparent text-text-dark/30", "border-border-light/60 from-black/2 to-transparent text-text-light/30")}`}
+            >
+              <div>
+                <div className="flex items-center justify-between">
+                  <div className="flex items-center gap-1.5">
+                    <PlusIcon size={14} />
+                    <h3 className="text-[13px] font-medium">more templates</h3>
+                  </div>
+                  <span
+                    className={`text-[9px] font-mono border px-1.5 py-0.5 ${t("border-border-dark/40 text-text-dark/30", "border-border-light/40 text-text-light/30")}`}
+                  >
+                    coming soon
+                  </span>
                 </div>
-                <span
-                  className={`text-[9px] font-mono border px-1.5 py-0.5 ${t("border-border-dark/40 text-text-dark/30", "border-border-light/40 text-text-light/30")}`}
-                >
-                  coming soon
-                </span>
+
+                <p className="mt-3 text-[11px] leading-relaxed line-clamp-5">
+                  additional page templates (blog showcase, documentation hub, product landing page)
+                  are coming soon.
+                </p>
               </div>
 
-              <p className="mt-3 text-[11px] leading-relaxed line-clamp-5">
-                additional page templates (blog showcase, documentation hub, product landing page)
-                are coming soon.
-              </p>
+              <div
+                className={`flex items-center justify-between border-t pt-3 ${t("border-border-dark/40", "border-border-light/40")}`}
+              >
+                <span className="text-[10px] font-mono">verso engine</span>
+                <span className="text-[10px] font-mono opacity-60">v0.5</span>
+              </div>
             </div>
 
+            {/* Status strip — attached to card */}
             <div
-              className={`flex items-center justify-between border-t pt-3 ${t("border-border-dark/40", "border-border-light/40")}`}
+              className={`flex items-center px-2.5 py-1 border border-t-0 text-[9px] lowercase ${t("border-border-dark/60 text-text-dark/25", "border-border-light/60 text-text-light/25")}`}
             >
-              <span className="text-[10px] font-mono">verso engine</span>
-              <span className="text-[10px] font-mono opacity-60">v0.5</span>
+              coming soon
             </div>
           </div>
         </div>

@@ -9,4 +9,5 @@ export {
   useIsFetchingData,
   useProfile,
   useProjects,
+  useTemplates,
 } from "./hooks/use-data";

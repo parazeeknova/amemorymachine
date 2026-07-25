@@ -6,6 +6,7 @@ import { useState } from "react";
 import { createTheme, MantineProvider } from "@mantine/core";
 
 import { useTheme } from "#/shared/hooks/use-theme";
+import { isDesktopApp } from "#/shared/lib/desktop";
 import "#/shared/lib/i18n";
 
 import mantineCss from "@mantine/core/styles.css?url";
@@ -32,13 +33,18 @@ const theme = createTheme({
 
 const RootComponent = () => {
   const [queryClient] = useState(createQueryClient);
-  const [persister] = useState(() =>
-    typeof window === "undefined"
-      ? undefined
-      : createSyncStoragePersister({
-          storage: window.localStorage,
-        }),
-  );
+  const [persister] = useState(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    // WebKit (Electrobun) has very slow sync localStorage — skip persistence entirely
+    if (isDesktopApp()) {
+      return;
+    }
+    return createSyncStoragePersister({
+      storage: window.localStorage,
+    });
+  });
   const { isDarkMode } = useTheme();
 
   if (!persister) {
@@ -70,7 +76,10 @@ const THEME_SCRIPT = [
   "var nativeTheme=null;",
   "if(window.__versoInitialTheme&&window.__versoInitialTheme.preference){nativeTheme=window.__versoInitialTheme.preference}",
   "if(nativeTheme==='light'||nativeTheme==='dark'){resolvedTheme=nativeTheme}",
-  "else{var storedVersoThemeRaw=localStorage.getItem('verso-theme');",
+  // In the native app (Electrobun), the shell handles theme — skip slow sync localStorage reads.
+  // __versoEnv may not be injected yet; pathname is always available as fallback.
+  "else if(!window.__versoEnv&&window.location.pathname.indexOf('/desktop')!==0){",
+  "var storedVersoThemeRaw=localStorage.getItem('verso-theme');",
   "if(storedVersoThemeRaw){var parsedVersoTheme=JSON.parse(storedVersoThemeRaw);var versoPreference=parsedVersoTheme.state&&parsedVersoTheme.state.preference;",
   "if(versoPreference==='light'||versoPreference==='dark'||versoPreference==='system')storedVersoTheme=versoPreference}",
   "if(!storedVersoTheme){var legacyPreference=localStorage.getItem('theme-preference');",

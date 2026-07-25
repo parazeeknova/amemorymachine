@@ -1,6 +1,19 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
 import { getCachedTheme } from "#/shared/lib/native-storage";
+import { isDesktopApp } from "#/shared/lib/desktop";
+
+// In-memory fallback for Electrobun/WebKit where sync localStorage is too slow
+const memoryStore = new Map<string, string>();
+const inMemoryStorage = {
+  getItem: (name: string) => memoryStore.get(name) ?? null,
+  removeItem: (name: string) => {
+    memoryStore.delete(name);
+  },
+  setItem: (name: string, value: string) => {
+    memoryStore.set(name, value);
+  },
+};
 
 export type ThemePreference = "light" | "dark" | "system";
 
@@ -34,6 +47,10 @@ const applyDOM = (resolved: "light" | "dark") => {
 };
 
 const readStoredPreference = (): ThemePreference | null => {
+  // WebKit (Electrobun) has very slow sync localStorage — native shell handles theme
+  if (isDesktopApp()) {
+    return null;
+  }
   if (typeof localStorage === "undefined") {
     return null;
   }
@@ -119,7 +136,7 @@ export const useThemeStore = create<ThemeState & ThemeActions>()(
     {
       name: "verso-theme",
       partialize: (state) => ({ preference: state.preference }),
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => (isDesktopApp() ? inMemoryStorage : localStorage)),
     },
   ),
 );
