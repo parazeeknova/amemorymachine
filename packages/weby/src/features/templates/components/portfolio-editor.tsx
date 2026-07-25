@@ -64,9 +64,12 @@ export const PortfolioEditor = ({
   };
 
   const handleScroll = (e: React.UIEvent<HTMLTextAreaElement>) => {
-    if (gutterRef.current) {
-      gutterRef.current.scrollTop = e.currentTarget.scrollTop;
-    }
+    const { scrollTop } = e.currentTarget;
+    requestAnimationFrame(() => {
+      if (gutterRef.current) {
+        gutterRef.current.scrollTop = scrollTop;
+      }
+    });
   };
 
   const handlePin = async () => {

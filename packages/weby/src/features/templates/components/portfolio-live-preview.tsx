@@ -1,5 +1,5 @@
 import { WarningCircleIcon } from "@phosphor-icons/react";
-import { useEffect, useMemo, useRef } from "react";
+import { memo, useEffect, useMemo, useRef } from "react";
 import { useTheme } from "#/shared/hooks/use-theme";
 import type { ExperienceItem, Link, Profile, Project } from "#/shared/types";
 import type { ParsedPortfolio } from "../lib/portfolio-markdown";
@@ -11,7 +11,7 @@ interface PortfolioLivePreviewProps {
   parsedData: ParsedPortfolio;
 }
 
-const PreviewProfileSection = ({ profile }: { profile: Profile }) => {
+const PreviewProfileSection = memo(({ profile }: { profile: Profile }) => {
   const descriptionHtml = useMemo(
     () => (profile.description ? markdownToHtml(profile.description) : ""),
     [profile.description],
@@ -74,9 +74,9 @@ const PreviewProfileSection = ({ profile }: { profile: Profile }) => {
       )}
     </div>
   );
-};
+});
 
-const PreviewExperienceSection = ({ experiences }: { experiences: ExperienceItem[] }) => {
+const PreviewExperienceSection = memo(({ experiences }: { experiences: ExperienceItem[] }) => {
   if (experiences.length === 0) {
     return null;
   }
@@ -86,7 +86,7 @@ const PreviewExperienceSection = ({ experiences }: { experiences: ExperienceItem
       <h3 className="font-medium text-base lowercase">work i did</h3>
       <div className="space-y-4">
         {experiences.map((item, idx) => (
-          <div key={item.title + idx} className="space-y-0.5">
+          <div key={`${item.title}-${idx}`} className="space-y-0.5">
             <h4 className="font-medium text-xs sm:text-sm">{item.title}</h4>
             <p className="text-gray-500 text-xs sm:text-sm">
               {item.location} | {item.period}
@@ -96,9 +96,9 @@ const PreviewExperienceSection = ({ experiences }: { experiences: ExperienceItem
       </div>
     </div>
   );
-};
+});
 
-const PreviewProjectsSection = ({ projects }: { projects: Project[] }) => {
+const PreviewProjectsSection = memo(({ projects }: { projects: Project[] }) => {
   if (projects.length === 0) {
     return null;
   }
@@ -112,7 +112,7 @@ const PreviewProjectsSection = ({ projects }: { projects: Project[] }) => {
           const linkUrl = proj.productUrl || proj.repoUrl;
           return (
             <div
-              key={proj.title + idx}
+              key={`${proj.title}-${idx}`}
               className={`flex items-center gap-3 sm:gap-4 ${isEven ? "" : "flex-row-reverse"}`}
             >
               {proj.image && (
@@ -165,9 +165,9 @@ const PreviewProjectsSection = ({ projects }: { projects: Project[] }) => {
       </div>
     </div>
   );
-};
+});
 
-const PreviewSocialLinks = ({ links }: { links?: Record<string, Link> }) => {
+const PreviewSocialLinks = memo(({ links }: { links?: Record<string, Link> }) => {
   if (!links) {
     return null;
   }
@@ -201,141 +201,121 @@ const PreviewSocialLinks = ({ links }: { links?: Record<string, Link> }) => {
       </div>
     </div>
   );
-};
+});
 
-export const PortfolioLivePreview = ({
-  errors,
-  isValid,
-  parsedData,
-}: PortfolioLivePreviewProps) => {
-  const { isDarkMode } = useTheme();
-  const containerRef = useRef<HTMLDivElement>(null);
+export const PortfolioLivePreview = memo(
+  ({ errors, isValid, parsedData }: PortfolioLivePreviewProps) => {
+    const { isDarkMode } = useTheme();
+    const containerRef = useRef<HTMLDivElement>(null);
+    const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Prevent trackpad swipe back navigation on horizontal wheel/swipe
-  useEffect(() => {
-    const el = containerRef.current;
-    if (!el) {
-      return;
-    }
-
-    const handleWheel = (e: WheelEvent) => {
-      if (Math.abs(e.deltaX) > Math.abs(e.deltaY)) {
-        e.preventDefault();
+    // Ensure header video plays automatically on mount and pauses on unmount
+    useEffect(() => {
+      const v = videoRef.current;
+      if (v) {
+        v.muted = true;
+        v.playsInline = true;
+        const playVideo = async () => {
+          try {
+            await v.play();
+          } catch {
+            // Ignore autoplay restrictions or interruptions
+          }
+        };
+        void playVideo();
       }
-    };
-
-    el.addEventListener("wheel", handleWheel, { passive: false });
-    return () => el.removeEventListener("wheel", handleWheel);
-  }, []);
-
-  const videoRef = useRef<HTMLVideoElement>(null);
-
-  // Ensure header video plays automatically on mount and pauses on unmount
-  useEffect(() => {
-    const v = videoRef.current;
-    if (v) {
-      v.muted = true;
-      v.playsInline = true;
-      const playVideo = async () => {
-        try {
-          await v.play();
-        } catch {
-          // Ignore autoplay restrictions or interruptions
+      return () => {
+        if (v) {
+          v.pause();
         }
       };
-      void playVideo();
-    }
-    return () => {
-      if (v) {
-        v.pause();
-      }
-    };
-  }, []);
+    }, []);
 
-  const { experiences, profile, projects } = parsedData;
+    const { experiences, profile, projects } = parsedData;
 
-  const headerGradient = isDarkMode
-    ? "linear-gradient(to bottom, transparent 0%, rgba(10, 10, 10, 0.4) 60%, #0a0a0a 100%)"
-    : "linear-gradient(to bottom, transparent 0%, rgba(250, 250, 250, 0.4) 60%, #fafafa 100%)";
+    const headerGradient = isDarkMode
+      ? "linear-gradient(to bottom, transparent 0%, rgba(10, 10, 10, 0.4) 60%, #0a0a0a 100%)"
+      : "linear-gradient(to bottom, transparent 0%, rgba(250, 250, 250, 0.4) 60%, #fafafa 100%)";
 
-  if (!isValid) {
-    return (
-      <div className="flex flex-col items-center justify-center h-full p-6 text-center">
-        <div className="p-3 mb-3 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20">
-          <WarningCircleIcon size={24} />
+    if (!isValid) {
+      return (
+        <div className="flex flex-col items-center justify-center h-full p-6 text-center">
+          <div className="p-3 mb-3 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20">
+            <WarningCircleIcon size={24} />
+          </div>
+          <h4 className="text-sm font-medium lowercase text-text-dark/80 dark:text-text-dark/80">
+            syntax error in template
+          </h4>
+          <p className="mt-1 text-[11px] max-w-xs leading-relaxed text-text-dark/40 dark:text-text-dark/40">
+            fix the markdown structure errors to restore live preview:
+          </p>
+
+          <div className="w-full max-w-xs mt-4 space-y-1.5 text-left">
+            {errors.map((err, idx) => (
+              <div
+                key={`${err}-${idx}`}
+                className="p-2 text-[10px] font-mono border rounded border-rose-500/30 bg-rose-500/5 text-rose-400"
+              >
+                • {err}
+              </div>
+            ))}
+          </div>
         </div>
-        <h4 className="text-sm font-medium lowercase text-text-dark/80 dark:text-text-dark/80">
-          syntax error in template
-        </h4>
-        <p className="mt-1 text-[11px] max-w-xs leading-relaxed text-text-dark/40 dark:text-text-dark/40">
-          fix the markdown structure errors to restore live preview:
-        </p>
+      );
+    }
 
-        <div className="w-full max-w-xs mt-4 space-y-1.5 text-left">
-          {errors.map((err, idx) => (
-            <div
-              key={`${err}-${idx}`}
-              className="p-2 text-[10px] font-mono border rounded border-rose-500/30 bg-rose-500/5 text-rose-400"
+    return (
+      <div
+        ref={containerRef}
+        className="h-full overflow-y-auto overscroll-contain overscroll-x-contain bg-bg-light dark:bg-bg-dark text-text-light dark:text-text-dark"
+        onClickCapture={(e) => {
+          const anchor = (e.target as HTMLElement).closest("a");
+          if (anchor) {
+            e.preventDefault();
+            e.stopPropagation();
+          }
+        }}
+      >
+        {/* Top Banner Cover Video */}
+        <div className="relative mx-auto w-full h-36 sm:h-44 overflow-hidden transform-gpu">
+          <video
+            ref={videoRef}
+            autoPlay
+            loop
+            muted
+            playsInline
+            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
+            src="https://img.przknv.cc/t/header.mp4"
+          />
+          <div
+            className="absolute inset-0 -bottom-1 pointer-events-none"
+            style={{ background: headerGradient }}
+          />
+        </div>
+
+        {/* Main Content Area matching / route */}
+        <div className="-mt-4 mx-auto flex max-w-2xl flex-col gap-6 p-4 sm:p-6 text-left">
+          {/* Navbar simulated links */}
+          <div className="flex items-center justify-end gap-3 w-full">
+            <span className="text-[13px] lowercase opacity-60">blogs</span>
+            <span className="h-3 w-3 rounded-full border border-current opacity-60 inline-block" />
+          </div>
+
+          <PreviewProfileSection profile={profile} />
+          <PreviewExperienceSection experiences={experiences} />
+          <PreviewProjectsSection projects={projects} />
+          <PreviewSocialLinks links={profile.links} />
+
+          <div className="flex justify-end pt-4 pb-2">
+            <span
+              className="text-3xl sm:text-4xl opacity-40"
+              style={{ fontFamily: '"Louison Adriana", cursive' }}
             >
-              • {err}
-            </div>
-          ))}
+              — with love, {profile.name?.split(" ")[0]?.toLowerCase() || "harsh"}
+            </span>
+          </div>
         </div>
       </div>
     );
-  }
-
-  return (
-    <div
-      ref={containerRef}
-      className="h-full overflow-y-auto overscroll-contain bg-bg-light dark:bg-bg-dark text-text-light dark:text-text-dark"
-      onClickCapture={(e) => {
-        const anchor = (e.target as HTMLElement).closest("a");
-        if (anchor) {
-          e.preventDefault();
-          e.stopPropagation();
-        }
-      }}
-    >
-      {/* Top Banner Cover Video */}
-      <div className="relative mx-auto w-full h-36 sm:h-44 overflow-hidden">
-        <video
-          ref={videoRef}
-          autoPlay
-          loop
-          muted
-          playsInline
-          className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-          src="https://img.przknv.cc/t/header.mp4"
-        />
-        <div
-          className="absolute inset-0 -bottom-1 pointer-events-none"
-          style={{ background: headerGradient }}
-        />
-      </div>
-
-      {/* Main Content Area matching / route */}
-      <div className="-mt-4 mx-auto flex max-w-2xl flex-col gap-6 p-4 sm:p-6 text-left">
-        {/* Navbar simulated links */}
-        <div className="flex items-center justify-end gap-3 w-full">
-          <span className="text-[13px] lowercase opacity-60">blogs</span>
-          <span className="h-3 w-3 rounded-full border border-current opacity-60 inline-block" />
-        </div>
-
-        <PreviewProfileSection profile={profile} />
-        <PreviewExperienceSection experiences={experiences} />
-        <PreviewProjectsSection projects={projects} />
-        <PreviewSocialLinks links={profile.links} />
-
-        <div className="flex justify-end pt-4 pb-2">
-          <span
-            className="text-3xl sm:text-4xl opacity-40"
-            style={{ fontFamily: '"Louison Adriana", cursive' }}
-          >
-            — with love, {profile.name?.split(" ")[0]?.toLowerCase() || "harsh"}
-          </span>
-        </div>
-      </div>
-    </div>
-  );
-};
+  },
+);
