@@ -1,8 +1,7 @@
-import { createFileRoute } from "@tanstack/react-router";
-import { TemplatesView } from "#/features/templates/components/templates-view";
+import { Outlet, createFileRoute } from "@tanstack/react-router";
 
-const TemplatesRouteComponent = () => <TemplatesView />;
+const TemplatesLayout = () => <Outlet />;
 
 export const Route = createFileRoute("/home/templates")({
-  component: TemplatesRouteComponent,
+  component: TemplatesLayout,
 });

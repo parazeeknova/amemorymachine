@@ -96,6 +96,7 @@ export const ConsoleLayout = () => {
   const isSettingsRoute = routerState.location.pathname.startsWith("/settings");
   const isSettingsDebugRoute = routerState.location.pathname === "/settings/systems/debug";
   const isSpaceRoute = routerState.location.pathname.startsWith("/s/");
+  const isTemplatesRoute = routerState.location.pathname.startsWith("/home/templates");
   const isProfileRoute = routerState.location.pathname === "/settings/account/profile";
   const isPreferencesRoute = routerState.location.pathname === "/settings/account/preferences";
   const isWorkspaceRoute = routerState.location.pathname === "/settings/workspace";
@@ -400,7 +401,7 @@ export const ConsoleLayout = () => {
           )}
 
           <main
-            className={`min-h-0 min-w-0 flex-1 relative flex flex-col ${isSpaceRoute ? "overflow-hidden" : "overflow-y-auto"}`}
+            className={`min-h-0 min-w-0 flex-1 relative flex flex-col ${isSpaceRoute || isTemplatesRoute ? "overflow-hidden" : "overflow-y-auto"}`}
             ref={mainRef}
           >
             <Outlet />

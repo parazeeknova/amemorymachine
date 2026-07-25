@@ -5,7 +5,7 @@ import {
   PushPinIcon,
   WarningCircleIcon,
 } from "@phosphor-icons/react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import type { ExperienceItem, Profile, Project } from "#/shared/types";
 import { useTheme } from "#/shared/hooks/use-theme";
 import { setFlashToast } from "#/features/console/components/flash-toast";
@@ -42,8 +42,10 @@ export const PortfolioEditor = ({
     setRawMarkdown(generatePortfolioMarkdown(initialProfile, initialExperiences, initialProjects));
   }, [initialProfile, initialExperiences, initialProjects]);
 
-  // Syntax validation - instantly recomputed on every character change
-  const validation = useMemo(() => validatePortfolioMarkdown(rawMarkdown), [rawMarkdown]);
+  const deferredMarkdown = useDeferredValue(rawMarkdown);
+
+  // Syntax validation - deferred to keep main thread scrolling & typing 60+ FPS smooth
+  const validation = useMemo(() => validatePortfolioMarkdown(deferredMarkdown), [deferredMarkdown]);
 
   const lineCount = useMemo(() => rawMarkdown.split("\n").length, [rawMarkdown]);
 

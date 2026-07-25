@@ -32,10 +32,12 @@ import { Route as ApiProfileRouteImport } from './routes/api/profile'
 import { Route as ApiExperienceRouteImport } from './routes/api/experience'
 import { Route as ApiBlogsRouteImport } from './routes/api/blogs'
 import { Route as SSpaceSlugIndexRouteImport } from './routes/s/$spaceSlug/index'
+import { Route as HomeTemplatesIndexRouteImport } from './routes/home/templates/index'
 import { Route as SettingsSystemsDebugRouteImport } from './routes/settings/systems/debug'
 import { Route as SettingsAccountProfileRouteImport } from './routes/settings/account/profile'
 import { Route as SettingsAccountPreferencesRouteImport } from './routes/settings/account/preferences'
 import { Route as SSpaceSlugSettingsRouteImport } from './routes/s/$spaceSlug/settings'
+import { Route as HomeTemplatesPortfolioRouteImport } from './routes/home/templates/portfolio'
 import { Route as ApiShortShortcodeRouteImport } from './routes/api/short/$shortcode'
 import { Route as ApiSharesTokenRouteImport } from './routes/api/shares/$token'
 import { Route as ApiGithubStatsRouteImport } from './routes/api/github/stats'
@@ -235,6 +237,11 @@ const SSpaceSlugIndexRoute = SSpaceSlugIndexRouteImport.update({
   path: '/',
   getParentRoute: () => SSpaceSlugRoute,
 } as any)
+const HomeTemplatesIndexRoute = HomeTemplatesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => HomeTemplatesRoute,
+} as any)
 const SettingsSystemsDebugRoute = SettingsSystemsDebugRouteImport.update({
   id: '/systems/debug',
   path: '/systems/debug',
@@ -255,6 +262,11 @@ const SSpaceSlugSettingsRoute = SSpaceSlugSettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
   getParentRoute: () => SSpaceSlugRoute,
+} as any)
+const HomeTemplatesPortfolioRoute = HomeTemplatesPortfolioRouteImport.update({
+  id: '/portfolio',
+  path: '/portfolio',
+  getParentRoute: () => HomeTemplatesRoute,
 } as any)
 const ApiShortShortcodeRoute = ApiShortShortcodeRouteImport.update({
   id: '/api/short/$shortcode',
@@ -729,7 +741,7 @@ export interface FileRoutesByFullPath {
   '/api/projects': typeof ApiProjectsRoute
   '/api/stats': typeof ApiStatsRoute
   '/home/debug': typeof HomeDebugRoute
-  '/home/templates': typeof HomeTemplatesRoute
+  '/home/templates': typeof HomeTemplatesRouteWithChildren
   '/s/$spaceSlug': typeof SSpaceSlugRouteWithChildren
   '/settings/groups': typeof SettingsGroupsRoute
   '/settings/members': typeof SettingsMembersRoute
@@ -757,10 +769,12 @@ export interface FileRoutesByFullPath {
   '/api/github/stats': typeof ApiGithubStatsRoute
   '/api/shares/$token': typeof ApiSharesTokenRouteWithChildren
   '/api/short/$shortcode': typeof ApiShortShortcodeRoute
+  '/home/templates/portfolio': typeof HomeTemplatesPortfolioRoute
   '/s/$spaceSlug/settings': typeof SSpaceSlugSettingsRoute
   '/settings/account/preferences': typeof SettingsAccountPreferencesRoute
   '/settings/account/profile': typeof SettingsAccountProfileRoute
   '/settings/systems/debug': typeof SettingsSystemsDebugRoute
+  '/home/templates/': typeof HomeTemplatesIndexRoute
   '/s/$spaceSlug/': typeof SSpaceSlugIndexRoute
   '/api/auth/mfa/verify': typeof ApiAuthMfaVerifyRoute
   '/api/console/auth/collab-token': typeof ApiConsoleAuthCollabTokenRoute
@@ -840,7 +854,6 @@ export interface FileRoutesByTo {
   '/api/projects': typeof ApiProjectsRoute
   '/api/stats': typeof ApiStatsRoute
   '/home/debug': typeof HomeDebugRoute
-  '/home/templates': typeof HomeTemplatesRoute
   '/settings/groups': typeof SettingsGroupsRoute
   '/settings/members': typeof SettingsMembersRoute
   '/settings/spaces': typeof SettingsSpacesRoute
@@ -867,10 +880,12 @@ export interface FileRoutesByTo {
   '/api/github/stats': typeof ApiGithubStatsRoute
   '/api/shares/$token': typeof ApiSharesTokenRouteWithChildren
   '/api/short/$shortcode': typeof ApiShortShortcodeRoute
+  '/home/templates/portfolio': typeof HomeTemplatesPortfolioRoute
   '/s/$spaceSlug/settings': typeof SSpaceSlugSettingsRoute
   '/settings/account/preferences': typeof SettingsAccountPreferencesRoute
   '/settings/account/profile': typeof SettingsAccountProfileRoute
   '/settings/systems/debug': typeof SettingsSystemsDebugRoute
+  '/home/templates': typeof HomeTemplatesIndexRoute
   '/s/$spaceSlug': typeof SSpaceSlugIndexRoute
   '/api/auth/mfa/verify': typeof ApiAuthMfaVerifyRoute
   '/api/console/auth/collab-token': typeof ApiConsoleAuthCollabTokenRoute
@@ -952,7 +967,7 @@ export interface FileRoutesById {
   '/api/projects': typeof ApiProjectsRoute
   '/api/stats': typeof ApiStatsRoute
   '/home/debug': typeof HomeDebugRoute
-  '/home/templates': typeof HomeTemplatesRoute
+  '/home/templates': typeof HomeTemplatesRouteWithChildren
   '/s/$spaceSlug': typeof SSpaceSlugRouteWithChildren
   '/settings/groups': typeof SettingsGroupsRoute
   '/settings/members': typeof SettingsMembersRoute
@@ -980,10 +995,12 @@ export interface FileRoutesById {
   '/api/github/stats': typeof ApiGithubStatsRoute
   '/api/shares/$token': typeof ApiSharesTokenRouteWithChildren
   '/api/short/$shortcode': typeof ApiShortShortcodeRoute
+  '/home/templates/portfolio': typeof HomeTemplatesPortfolioRoute
   '/s/$spaceSlug/settings': typeof SSpaceSlugSettingsRoute
   '/settings/account/preferences': typeof SettingsAccountPreferencesRoute
   '/settings/account/profile': typeof SettingsAccountProfileRoute
   '/settings/systems/debug': typeof SettingsSystemsDebugRoute
+  '/home/templates/': typeof HomeTemplatesIndexRoute
   '/s/$spaceSlug/': typeof SSpaceSlugIndexRoute
   '/api/auth/mfa/verify': typeof ApiAuthMfaVerifyRoute
   '/api/console/auth/collab-token': typeof ApiConsoleAuthCollabTokenRoute
@@ -1094,10 +1111,12 @@ export interface FileRouteTypes {
     | '/api/github/stats'
     | '/api/shares/$token'
     | '/api/short/$shortcode'
+    | '/home/templates/portfolio'
     | '/s/$spaceSlug/settings'
     | '/settings/account/preferences'
     | '/settings/account/profile'
     | '/settings/systems/debug'
+    | '/home/templates/'
     | '/s/$spaceSlug/'
     | '/api/auth/mfa/verify'
     | '/api/console/auth/collab-token'
@@ -1177,7 +1196,6 @@ export interface FileRouteTypes {
     | '/api/projects'
     | '/api/stats'
     | '/home/debug'
-    | '/home/templates'
     | '/settings/groups'
     | '/settings/members'
     | '/settings/spaces'
@@ -1204,10 +1222,12 @@ export interface FileRouteTypes {
     | '/api/github/stats'
     | '/api/shares/$token'
     | '/api/short/$shortcode'
+    | '/home/templates/portfolio'
     | '/s/$spaceSlug/settings'
     | '/settings/account/preferences'
     | '/settings/account/profile'
     | '/settings/systems/debug'
+    | '/home/templates'
     | '/s/$spaceSlug'
     | '/api/auth/mfa/verify'
     | '/api/console/auth/collab-token'
@@ -1316,10 +1336,12 @@ export interface FileRouteTypes {
     | '/api/github/stats'
     | '/api/shares/$token'
     | '/api/short/$shortcode'
+    | '/home/templates/portfolio'
     | '/s/$spaceSlug/settings'
     | '/settings/account/preferences'
     | '/settings/account/profile'
     | '/settings/systems/debug'
+    | '/home/templates/'
     | '/s/$spaceSlug/'
     | '/api/auth/mfa/verify'
     | '/api/console/auth/collab-token'
@@ -1601,6 +1623,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SSpaceSlugIndexRouteImport
       parentRoute: typeof SSpaceSlugRoute
     }
+    '/home/templates/': {
+      id: '/home/templates/'
+      path: '/'
+      fullPath: '/home/templates/'
+      preLoaderRoute: typeof HomeTemplatesIndexRouteImport
+      parentRoute: typeof HomeTemplatesRoute
+    }
     '/settings/systems/debug': {
       id: '/settings/systems/debug'
       path: '/systems/debug'
@@ -1628,6 +1657,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/s/$spaceSlug/settings'
       preLoaderRoute: typeof SSpaceSlugSettingsRouteImport
       parentRoute: typeof SSpaceSlugRoute
+    }
+    '/home/templates/portfolio': {
+      id: '/home/templates/portfolio'
+      path: '/portfolio'
+      fullPath: '/home/templates/portfolio'
+      preLoaderRoute: typeof HomeTemplatesPortfolioRouteImport
+      parentRoute: typeof HomeTemplatesRoute
     }
     '/api/short/$shortcode': {
       id: '/api/short/$shortcode'
@@ -2213,15 +2249,29 @@ declare module '@tanstack/react-router' {
   }
 }
 
+interface HomeTemplatesRouteChildren {
+  HomeTemplatesPortfolioRoute: typeof HomeTemplatesPortfolioRoute
+  HomeTemplatesIndexRoute: typeof HomeTemplatesIndexRoute
+}
+
+const HomeTemplatesRouteChildren: HomeTemplatesRouteChildren = {
+  HomeTemplatesPortfolioRoute: HomeTemplatesPortfolioRoute,
+  HomeTemplatesIndexRoute: HomeTemplatesIndexRoute,
+}
+
+const HomeTemplatesRouteWithChildren = HomeTemplatesRoute._addFileChildren(
+  HomeTemplatesRouteChildren,
+)
+
 interface HomeRouteChildren {
   HomeDebugRoute: typeof HomeDebugRoute
-  HomeTemplatesRoute: typeof HomeTemplatesRoute
+  HomeTemplatesRoute: typeof HomeTemplatesRouteWithChildren
   HomeIndexRoute: typeof HomeIndexRoute
 }
 
 const HomeRouteChildren: HomeRouteChildren = {
   HomeDebugRoute: HomeDebugRoute,
-  HomeTemplatesRoute: HomeTemplatesRoute,
+  HomeTemplatesRoute: HomeTemplatesRouteWithChildren,
   HomeIndexRoute: HomeIndexRoute,
 }
 
