@@ -230,14 +230,24 @@ export const PortfolioLivePreview = ({
 
   const videoRef = useRef<HTMLVideoElement>(null);
 
-  // Clean up video hardware decoding pipelines when unmounting preview
+  // Ensure header video plays automatically on mount and pauses on unmount
   useEffect(() => {
     const v = videoRef.current;
+    if (v) {
+      v.muted = true;
+      v.playsInline = true;
+      const playVideo = async () => {
+        try {
+          await v.play();
+        } catch {
+          // Ignore autoplay restrictions or interruptions
+        }
+      };
+      void playVideo();
+    }
     return () => {
       if (v) {
         v.pause();
-        v.removeAttribute("src");
-        v.load();
       }
     };
   }, []);
