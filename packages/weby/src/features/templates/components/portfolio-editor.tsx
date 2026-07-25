@@ -13,6 +13,43 @@ import { generatePortfolioMarkdown, validatePortfolioMarkdown } from "../lib/por
 import { FormatGuideModal } from "./format-guide-modal";
 import { PortfolioLivePreview } from "./portfolio-live-preview";
 
+const highlightSyntax = (text: string, isDark: boolean) => {
+  const escapeMap: Record<string, string> = {
+    '"': "&quot;",
+    "&": "&amp;",
+    "'": "&#39;",
+    "<": "&lt;",
+    ">": "&gt;",
+  };
+  let html = text.replaceAll(/[&<>"']/g, (m) => escapeMap[m]);
+
+  const commentColor = isDark ? "text-emerald-400" : "text-emerald-600";
+  const keyColor = isDark ? "text-blue-400" : "text-blue-600";
+  const listColor = isDark ? "text-fuchsia-400" : "text-fuchsia-600";
+  const urlColor = isDark ? "text-purple-400" : "text-purple-600";
+
+  html = html.replaceAll(
+    /(&lt;!--.*?--&gt;)/g,
+    `<span class="${commentColor} opacity-80 font-bold">$1</span>`,
+  );
+  html = html.replaceAll(
+    /^(Name:|Tagline:|Username:|Email:|Description:|Links:|Location:|Period:|Desc:|Image:|Stack:|Readme:|Repo:|Product:)/gm,
+    `<span class="${keyColor} font-semibold">$1</span>`,
+  );
+  html = html.replaceAll(/^(- |### )/gm, `<span class="${listColor} font-bold">$1</span>`);
+  html = html.replaceAll(
+    /(\[.*?\])\((.*?)\)/g,
+    `<span class="${urlColor}">$1</span><span class="opacity-50">(<span class="underline">$2</span>)</span>`,
+  );
+
+  // Note: we append a zero-width space if it ends in newline so the textarea height matches precisely.
+  if (html.endsWith("\n")) {
+    html += "&#8203;";
+  }
+
+  return { __html: html };
+};
+
 interface PortfolioEditorProps {
   initialProfile?: Profile;
   initialExperiences?: ExperienceItem[];
@@ -29,7 +66,7 @@ export const PortfolioEditor = ({
   const { isDarkMode } = useTheme();
   const t = (dark: string, light: string) => (isDarkMode ? dark : light);
 
-  const gutterRef = useRef<HTMLDivElement>(null);
+  const preRef = useRef<HTMLPreElement>(null);
 
   const [rawMarkdown, setRawMarkdown] = useState(() =>
     generatePortfolioMarkdown(initialProfile, initialExperiences, initialProjects),
@@ -47,7 +84,10 @@ export const PortfolioEditor = ({
   // Syntax validation - deferred to keep main thread scrolling & typing 60+ FPS smooth
   const validation = useMemo(() => validatePortfolioMarkdown(deferredMarkdown), [deferredMarkdown]);
 
-  const lineCount = useMemo(() => rawMarkdown.split("\n").length, [rawMarkdown]);
+  const highlightedHtml = useMemo(
+    () => highlightSyntax(rawMarkdown, isDarkMode),
+    [rawMarkdown, isDarkMode],
+  );
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Tab") {
@@ -68,8 +108,8 @@ export const PortfolioEditor = ({
   const handleScroll = (e: React.UIEvent<HTMLTextAreaElement>) => {
     const { scrollTop } = e.currentTarget;
     requestAnimationFrame(() => {
-      if (gutterRef.current) {
-        gutterRef.current.scrollTop = scrollTop;
+      if (preRef.current) {
+        preRef.current.scrollTop = scrollTop;
       }
     });
   };
@@ -220,39 +260,29 @@ export const PortfolioEditor = ({
             </div>
           )}
 
-          {/* Editor Container with Synchronized Line Gutter + Textarea */}
-          <div className="flex-1 flex overflow-hidden font-mono text-[11px]">
-            {/* Line Number Gutter */}
-            <div
-              ref={gutterRef}
-              className={`select-none py-3 px-3 text-right border-r font-mono text-[11px] shrink-0 overflow-hidden pointer-events-none w-10 ${t(
-                "border-border-dark/40 bg-white/2 text-text-dark/25",
-                "border-border-light/40 bg-black/2 text-text-light/25",
-              )}`}
-              style={{ lineHeight: "1.5rem" }}
-            >
-              {Array.from({ length: Math.max(lineCount, 40) }, (_, i) => (
-                <div key={i + 1} className="h-6 leading-6">
-                  {i + 1}
-                </div>
-              ))}
-            </div>
+          {/* Editor Container with Syntax Highlighting & Dynamic Text Wrap */}
+          <div className="flex-1 relative overflow-hidden bg-transparent">
+            {/* Syntax Highlighted Background Layer */}
+            <pre
+              ref={preRef}
+              aria-hidden="true"
+              className="absolute inset-0 w-full h-full py-4 px-4 m-0 overflow-hidden whitespace-pre-wrap break-words pointer-events-none font-mono text-[12px] leading-loose"
+              dangerouslySetInnerHTML={highlightedHtml}
+            />
 
-            {/* Editable Textarea with exact 24px (1.5rem) line height */}
+            {/* Transparent Editable Overlay */}
             <textarea
               aria-label="Portfolio Template Markdown Editor"
-              className={`w-full h-full py-3 px-3 bg-transparent outline-none font-mono text-[11px] overflow-auto overscroll-contain whitespace-pre resize-none ${t(
-                "text-text-dark placeholder:text-text-dark/20",
-                "text-text-light placeholder:text-text-light/20",
+              className={`absolute inset-0 w-full h-full py-4 px-4 m-0 bg-transparent outline-none overflow-auto whitespace-pre-wrap break-words resize-none font-mono text-[12px] leading-loose ${t(
+                "text-transparent caret-white placeholder:text-text-dark/20",
+                "text-transparent caret-black placeholder:text-text-light/20",
               )}`}
               onChange={(e) => setRawMarkdown(e.target.value)}
               onKeyDown={handleKeyDown}
               onScroll={handleScroll}
               placeholder="Type your markdown template here..."
               spellCheck={false}
-              style={{ lineHeight: "1.5rem" }}
               value={rawMarkdown}
-              wrap="off"
             />
           </div>
         </div>
