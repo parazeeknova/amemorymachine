@@ -24,6 +24,7 @@ import { Route as SettingsSpacesRouteImport } from './routes/settings/spaces'
 import { Route as SettingsMembersRouteImport } from './routes/settings/members'
 import { Route as SettingsGroupsRouteImport } from './routes/settings/groups'
 import { Route as SSpaceSlugRouteImport } from './routes/s/$spaceSlug'
+import { Route as HomeTemplatesRouteImport } from './routes/home/templates'
 import { Route as HomeDebugRouteImport } from './routes/home/debug'
 import { Route as ApiStatsRouteImport } from './routes/api/stats'
 import { Route as ApiProjectsRouteImport } from './routes/api/projects'
@@ -41,6 +42,7 @@ import { Route as ApiGithubStatsRouteImport } from './routes/api/github/stats'
 import { Route as ApiConsoleWorkspacesRouteImport } from './routes/api/console/workspaces'
 import { Route as ApiConsoleUsersRouteImport } from './routes/api/console/users'
 import { Route as ApiConsoleUploadRouteImport } from './routes/api/console/upload'
+import { Route as ApiConsoleTemplatesRouteImport } from './routes/api/console/templates'
 import { Route as ApiConsoleSystemSettingsRouteImport } from './routes/api/console/system-settings'
 import { Route as ApiConsoleSpacesRouteImport } from './routes/api/console/spaces'
 import { Route as ApiConsoleProfileRouteImport } from './routes/api/console/profile'
@@ -193,6 +195,11 @@ const SSpaceSlugRoute = SSpaceSlugRouteImport.update({
   path: '/s/$spaceSlug',
   getParentRoute: () => rootRouteImport,
 } as any)
+const HomeTemplatesRoute = HomeTemplatesRouteImport.update({
+  id: '/templates',
+  path: '/templates',
+  getParentRoute: () => HomeRoute,
+} as any)
 const HomeDebugRoute = HomeDebugRouteImport.update({
   id: '/debug',
   path: '/debug',
@@ -277,6 +284,11 @@ const ApiConsoleUsersRoute = ApiConsoleUsersRouteImport.update({
 const ApiConsoleUploadRoute = ApiConsoleUploadRouteImport.update({
   id: '/api/console/upload',
   path: '/api/console/upload',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiConsoleTemplatesRoute = ApiConsoleTemplatesRouteImport.update({
+  id: '/api/console/templates',
+  path: '/api/console/templates',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiConsoleSystemSettingsRoute =
@@ -717,6 +729,7 @@ export interface FileRoutesByFullPath {
   '/api/projects': typeof ApiProjectsRoute
   '/api/stats': typeof ApiStatsRoute
   '/home/debug': typeof HomeDebugRoute
+  '/home/templates': typeof HomeTemplatesRoute
   '/s/$spaceSlug': typeof SSpaceSlugRouteWithChildren
   '/settings/groups': typeof SettingsGroupsRoute
   '/settings/members': typeof SettingsMembersRoute
@@ -737,6 +750,7 @@ export interface FileRoutesByFullPath {
   '/api/console/profile': typeof ApiConsoleProfileRouteWithChildren
   '/api/console/spaces': typeof ApiConsoleSpacesRouteWithChildren
   '/api/console/system-settings': typeof ApiConsoleSystemSettingsRoute
+  '/api/console/templates': typeof ApiConsoleTemplatesRoute
   '/api/console/upload': typeof ApiConsoleUploadRoute
   '/api/console/users': typeof ApiConsoleUsersRouteWithChildren
   '/api/console/workspaces': typeof ApiConsoleWorkspacesRouteWithChildren
@@ -826,6 +840,7 @@ export interface FileRoutesByTo {
   '/api/projects': typeof ApiProjectsRoute
   '/api/stats': typeof ApiStatsRoute
   '/home/debug': typeof HomeDebugRoute
+  '/home/templates': typeof HomeTemplatesRoute
   '/settings/groups': typeof SettingsGroupsRoute
   '/settings/members': typeof SettingsMembersRoute
   '/settings/spaces': typeof SettingsSpacesRoute
@@ -845,6 +860,7 @@ export interface FileRoutesByTo {
   '/api/console/profile': typeof ApiConsoleProfileRouteWithChildren
   '/api/console/spaces': typeof ApiConsoleSpacesRouteWithChildren
   '/api/console/system-settings': typeof ApiConsoleSystemSettingsRoute
+  '/api/console/templates': typeof ApiConsoleTemplatesRoute
   '/api/console/upload': typeof ApiConsoleUploadRoute
   '/api/console/users': typeof ApiConsoleUsersRouteWithChildren
   '/api/console/workspaces': typeof ApiConsoleWorkspacesRouteWithChildren
@@ -936,6 +952,7 @@ export interface FileRoutesById {
   '/api/projects': typeof ApiProjectsRoute
   '/api/stats': typeof ApiStatsRoute
   '/home/debug': typeof HomeDebugRoute
+  '/home/templates': typeof HomeTemplatesRoute
   '/s/$spaceSlug': typeof SSpaceSlugRouteWithChildren
   '/settings/groups': typeof SettingsGroupsRoute
   '/settings/members': typeof SettingsMembersRoute
@@ -956,6 +973,7 @@ export interface FileRoutesById {
   '/api/console/profile': typeof ApiConsoleProfileRouteWithChildren
   '/api/console/spaces': typeof ApiConsoleSpacesRouteWithChildren
   '/api/console/system-settings': typeof ApiConsoleSystemSettingsRoute
+  '/api/console/templates': typeof ApiConsoleTemplatesRoute
   '/api/console/upload': typeof ApiConsoleUploadRoute
   '/api/console/users': typeof ApiConsoleUsersRouteWithChildren
   '/api/console/workspaces': typeof ApiConsoleWorkspacesRouteWithChildren
@@ -1048,6 +1066,7 @@ export interface FileRouteTypes {
     | '/api/projects'
     | '/api/stats'
     | '/home/debug'
+    | '/home/templates'
     | '/s/$spaceSlug'
     | '/settings/groups'
     | '/settings/members'
@@ -1068,6 +1087,7 @@ export interface FileRouteTypes {
     | '/api/console/profile'
     | '/api/console/spaces'
     | '/api/console/system-settings'
+    | '/api/console/templates'
     | '/api/console/upload'
     | '/api/console/users'
     | '/api/console/workspaces'
@@ -1157,6 +1177,7 @@ export interface FileRouteTypes {
     | '/api/projects'
     | '/api/stats'
     | '/home/debug'
+    | '/home/templates'
     | '/settings/groups'
     | '/settings/members'
     | '/settings/spaces'
@@ -1176,6 +1197,7 @@ export interface FileRouteTypes {
     | '/api/console/profile'
     | '/api/console/spaces'
     | '/api/console/system-settings'
+    | '/api/console/templates'
     | '/api/console/upload'
     | '/api/console/users'
     | '/api/console/workspaces'
@@ -1266,6 +1288,7 @@ export interface FileRouteTypes {
     | '/api/projects'
     | '/api/stats'
     | '/home/debug'
+    | '/home/templates'
     | '/s/$spaceSlug'
     | '/settings/groups'
     | '/settings/members'
@@ -1286,6 +1309,7 @@ export interface FileRouteTypes {
     | '/api/console/profile'
     | '/api/console/spaces'
     | '/api/console/system-settings'
+    | '/api/console/templates'
     | '/api/console/upload'
     | '/api/console/users'
     | '/api/console/workspaces'
@@ -1390,6 +1414,7 @@ export interface RootRouteChildren {
   ApiConsoleProfileRoute: typeof ApiConsoleProfileRouteWithChildren
   ApiConsoleSpacesRoute: typeof ApiConsoleSpacesRouteWithChildren
   ApiConsoleSystemSettingsRoute: typeof ApiConsoleSystemSettingsRoute
+  ApiConsoleTemplatesRoute: typeof ApiConsoleTemplatesRoute
   ApiConsoleUploadRoute: typeof ApiConsoleUploadRoute
   ApiConsoleUsersRoute: typeof ApiConsoleUsersRouteWithChildren
   ApiConsoleWorkspacesRoute: typeof ApiConsoleWorkspacesRouteWithChildren
@@ -1520,6 +1545,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SSpaceSlugRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/home/templates': {
+      id: '/home/templates'
+      path: '/templates'
+      fullPath: '/home/templates'
+      preLoaderRoute: typeof HomeTemplatesRouteImport
+      parentRoute: typeof HomeRoute
+    }
     '/home/debug': {
       id: '/home/debug'
       path: '/debug'
@@ -1637,6 +1669,13 @@ declare module '@tanstack/react-router' {
       path: '/api/console/upload'
       fullPath: '/api/console/upload'
       preLoaderRoute: typeof ApiConsoleUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/console/templates': {
+      id: '/api/console/templates'
+      path: '/api/console/templates'
+      fullPath: '/api/console/templates'
+      preLoaderRoute: typeof ApiConsoleTemplatesRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/console/system-settings': {
@@ -2176,11 +2215,13 @@ declare module '@tanstack/react-router' {
 
 interface HomeRouteChildren {
   HomeDebugRoute: typeof HomeDebugRoute
+  HomeTemplatesRoute: typeof HomeTemplatesRoute
   HomeIndexRoute: typeof HomeIndexRoute
 }
 
 const HomeRouteChildren: HomeRouteChildren = {
   HomeDebugRoute: HomeDebugRoute,
+  HomeTemplatesRoute: HomeTemplatesRoute,
   HomeIndexRoute: HomeIndexRoute,
 }
 
@@ -2600,6 +2641,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiConsoleProfileRoute: ApiConsoleProfileRouteWithChildren,
   ApiConsoleSpacesRoute: ApiConsoleSpacesRouteWithChildren,
   ApiConsoleSystemSettingsRoute: ApiConsoleSystemSettingsRoute,
+  ApiConsoleTemplatesRoute: ApiConsoleTemplatesRoute,
   ApiConsoleUploadRoute: ApiConsoleUploadRoute,
   ApiConsoleUsersRoute: ApiConsoleUsersRouteWithChildren,
   ApiConsoleWorkspacesRoute: ApiConsoleWorkspacesRouteWithChildren,

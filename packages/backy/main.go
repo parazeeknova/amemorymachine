@@ -175,6 +175,7 @@ func main() {
 		h = handlers.NewWithDB(cfg, pageService, spaceService, workspaceService, groupService)
 		h.SetNotifier(notificationService)
 		h.SetPageFavoriteRepo(pageFavRepo)
+		h.SetPortfolioRepo(repositories.NewPortfolioRepo())
 	} else {
 		h = handlers.New(cfg)
 	}
@@ -340,6 +341,10 @@ func main() {
 			}
 			// Collab token endpoint
 			console.POST("/auth/collab-token", authHandlers.CollabToken)
+
+			// Templates
+			console.GET("/templates", h.GetTemplates)
+			console.POST("/templates/pin", h.PinPortfolioTemplate)
 
 			// Profile
 			profileHandlers.RegisterRoutes(console)

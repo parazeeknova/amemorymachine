@@ -6,6 +6,7 @@ import {
   FileTextIcon,
   GlobeSimpleIcon,
   HouseSimpleIcon,
+  LayoutIcon,
   PlusIcon,
   TrashIcon,
 } from "@phosphor-icons/react";
@@ -37,6 +38,7 @@ const ModIcon = platform === "mac" ? CommandIcon : ControlIcon;
 
 const NAV_ROUTES = [
   { href: "/home", icon: HouseSimpleIcon, label: "home", shortcut: "1" },
+  { href: "/home/templates", icon: LayoutIcon, label: "templates", shortcut: "4" },
   { href: "/projects", icon: GlobeSimpleIcon, label: "public", shortcut: "2" },
   { href: "/blogs", icon: ChatCenteredTextIcon, label: "blogs", shortcut: "3" },
 ] as const;
@@ -148,6 +150,9 @@ export const ConsoleLayout = () => {
   });
   useHotkey("Mod+3", () => {
     window.location.href = "/#blogs";
+  });
+  useHotkey("Mod+4", () => {
+    window.location.href = "/home/templates";
   });
 
   const t = (dark: string, light: string) => (isDarkMode ? dark : light);

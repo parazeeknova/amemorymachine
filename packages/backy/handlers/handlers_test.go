@@ -1,6 +1,7 @@
 package handlers
 
 import (
+	"context"
 	"encoding/json"
 	"net/http"
 	"net/http/httptest"
@@ -12,6 +13,28 @@ import (
 	"verso/backy/database/models"
 )
 
+type mockPortfolioRepo struct{}
+
+func (m *mockPortfolioRepo) GetPinnedProfile(_ context.Context) (models.Profile, error) {
+	return models.Profile{
+		Name:    "Test User",
+		Tagline: "Engineer",
+		Links:   map[string]models.Link{"github": {URL: "https://github.com/test"}},
+	}, nil
+}
+
+func (m *mockPortfolioRepo) GetPinnedExperiences(_ context.Context) ([]models.ExperienceItem, error) {
+	return []models.ExperienceItem{{Title: "Dev", Location: "Remote", Period: "2020-present"}}, nil
+}
+
+func (m *mockPortfolioRepo) GetPinnedProjects(_ context.Context) ([]models.Project, error) {
+	return []models.Project{{Title: "Verso", Desc: "A workspace platform"}}, nil
+}
+
+func (m *mockPortfolioRepo) SaveAndPinPortfolio(_ context.Context, _ *string, _ models.Profile, _ []models.ExperienceItem, _ []models.Project) error {
+	return nil
+}
+
 func setupRouter() (*gin.Engine, *Handlers) {
 	gin.SetMode(gin.TestMode)
 	r := gin.New()
@@ -22,6 +45,7 @@ func setupRouter() (*gin.Engine, *Handlers) {
 	}
 
 	h := New(cfg)
+	h.SetPortfolioRepo(&mockPortfolioRepo{})
 
 	r.GET("/health", h.Health)
 	r.GET("/api/profile", h.GetProfile)

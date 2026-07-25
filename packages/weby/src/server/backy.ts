@@ -920,3 +920,26 @@ export const resolveComment = (
     },
     method: "POST",
   });
+
+export interface TemplateSummary {
+  description: string;
+  icon: string;
+  id: string;
+  isDefault: boolean;
+  title: string;
+}
+
+export const getTemplates = (cookieHeader?: string | null) =>
+  fetchBacky<TemplateSummary[]>("console/templates", {
+    headers: cookieHeader ? { Cookie: cookieHeader } : undefined,
+  });
+
+export const pinTemplate = (body: unknown, cookieHeader?: string | null) =>
+  fetchBacky<{ message: string; status: string }>("console/templates/pin", {
+    body: JSON.stringify(body),
+    headers: {
+      ...(cookieHeader ? { Cookie: cookieHeader } : {}),
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+  });

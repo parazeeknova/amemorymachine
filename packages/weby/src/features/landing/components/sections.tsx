@@ -11,8 +11,16 @@ import { AnimatedLink } from "#/shared/components/animated-link";
 import { LoadingDots } from "#/shared/components/loading";
 import { markdownToHtml } from "#/features/blog/lib/markdown-to-html";
 
-const getLink = (links: Record<string, Link> | undefined, key: string): Link | undefined =>
-  links?.[key];
+const getLink = (links: Record<string, Link> | undefined, key: string): Link | undefined => {
+  if (!links) {
+    return undefined;
+  }
+  if (links[key]) {
+    return links[key];
+  }
+  const matchedKey = Object.keys(links).find((k) => k.includes(key));
+  return matchedKey ? links[matchedKey] : undefined;
+};
 
 interface ProfileSectionProps {
   isMobile?: boolean;
