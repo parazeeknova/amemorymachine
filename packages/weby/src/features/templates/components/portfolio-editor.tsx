@@ -45,7 +45,7 @@ export const PortfolioEditor = ({
   // Syntax validation - instantly recomputed on every character change
   const validation = useMemo(() => validatePortfolioMarkdown(rawMarkdown), [rawMarkdown]);
 
-  const lineCount = useMemo(() => rawMarkdown.split("\n").length, [rawMarkdown]);
+  const lines = useMemo(() => rawMarkdown.split("\n"), [rawMarkdown]);
 
   const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
     if (e.key === "Tab") {
@@ -215,27 +215,36 @@ export const PortfolioEditor = ({
             </div>
           )}
 
-          {/* Editor Container with Synchronized Line Gutter + Textarea */}
+          {/* Editor Container with Soft-Wrap Synchronized Line Gutter + Textarea */}
           <div className="flex-1 flex overflow-hidden font-mono text-[11px] leading-5">
-            {/* Line Number Gutter */}
+            {/* Soft-wrap matched Line Number Gutter */}
             <div
               ref={gutterRef}
-              className={`select-none pt-3 pb-3 px-2.5 text-right border-r font-mono text-[11px] leading-5 shrink-0 overflow-hidden pointer-events-none ${t(
+              className={`select-none pt-3 pb-3 px-2 text-right border-r font-mono text-[11px] leading-5 shrink-0 overflow-hidden pointer-events-none w-10 ${t(
                 "border-border-dark/40 bg-white/2 text-text-dark/25",
                 "border-border-light/40 bg-black/2 text-text-light/25",
               )}`}
             >
-              {Array.from({ length: Math.max(lineCount, 40) }, (_, i) => (
-                <div key={i + 1} className="h-5 leading-5">
-                  {i + 1}
+              {lines.map((lineText, idx) => (
+                <div
+                  key={idx + 1}
+                  className="relative w-full text-right"
+                  style={{ minHeight: "1.25rem" }}
+                >
+                  {/* Invisible text mirror to force exact soft-wrap height */}
+                  <span className="invisible block whitespace-pre-wrap break-words">
+                    {lineText || " "}
+                  </span>
+                  {/* Visible Line Number */}
+                  <span className="absolute top-0 right-0 leading-5">{idx + 1}</span>
                 </div>
               ))}
             </div>
 
-            {/* Editable Textarea with wrap="off" for 1:1 code alignment */}
+            {/* Editable Textarea with soft text wrapping enabled */}
             <textarea
               aria-label="Portfolio Template Markdown Editor"
-              className={`w-full h-full pt-3 pb-3 px-3 bg-transparent outline-none font-mono text-[11px] leading-5 overflow-auto overscroll-contain whitespace-pre ${t(
+              className={`w-full h-full pt-3 pb-3 px-3 bg-transparent outline-none font-mono text-[11px] leading-5 overflow-y-auto overscroll-contain whitespace-pre-wrap break-words resize-none ${t(
                 "text-text-dark placeholder:text-text-dark/20",
                 "text-text-light placeholder:text-text-light/20",
               )}`}
@@ -245,7 +254,6 @@ export const PortfolioEditor = ({
               placeholder="Type your markdown template here..."
               spellCheck={false}
               value={rawMarkdown}
-              wrap="off"
             />
           </div>
         </div>
