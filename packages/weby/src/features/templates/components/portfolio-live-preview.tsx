@@ -272,9 +272,9 @@ export const PortfolioLivePreview = ({
         </p>
 
         <div className="w-full max-w-xs mt-4 space-y-1.5 text-left">
-          {errors.map((err) => (
+          {errors.map((err, idx) => (
             <div
-              key={err}
+              key={`${err}-${idx}`}
               className="p-2 text-[10px] font-mono border rounded border-rose-500/30 bg-rose-500/5 text-rose-400"
             >
               • {err}

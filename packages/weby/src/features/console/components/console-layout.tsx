@@ -290,7 +290,7 @@ export const ConsoleLayout = () => {
                       "text-text-light/50 hover:bg-black/3 hover:text-text-light/80 rounded",
                     )
               }`}
-              key={route.href}
+              key={route.label}
               to={route.href}
             >
               <route.icon size={12} />

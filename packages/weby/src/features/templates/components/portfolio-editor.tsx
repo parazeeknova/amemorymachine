@@ -207,8 +207,8 @@ export const PortfolioEditor = ({
               <div className="font-semibold flex items-center gap-1">
                 <WarningCircleIcon size={11} /> syntax error in template format:
               </div>
-              {validation.errors.map((err) => (
-                <div key={err} className="pl-3">
+              {validation.errors.map((err, idx) => (
+                <div key={`${err}-${idx}`} className="pl-3">
                   • {err}
                 </div>
               ))}
