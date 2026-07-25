@@ -216,24 +216,26 @@ export const PortfolioEditor = ({
           )}
 
           {/* Editor Container with Synchronized Line Gutter + Textarea */}
-          <div className="flex-1 flex overflow-hidden font-mono text-[11px] leading-relaxed">
+          <div className="flex-1 flex overflow-hidden font-mono text-[11px] leading-5">
             {/* Line Number Gutter */}
             <div
               ref={gutterRef}
-              className={`select-none py-3 px-2 text-right border-r font-mono text-[10px] shrink-0 overflow-hidden pointer-events-none ${t(
+              className={`select-none pt-3 pb-3 px-2.5 text-right border-r font-mono text-[11px] leading-5 shrink-0 overflow-hidden pointer-events-none ${t(
                 "border-border-dark/40 bg-white/2 text-text-dark/25",
                 "border-border-light/40 bg-black/2 text-text-light/25",
               )}`}
             >
-              {Array.from({ length: Math.max(lineCount, 30) }, (_, i) => (
-                <div key={i + 1}>{i + 1}</div>
+              {Array.from({ length: Math.max(lineCount, 40) }, (_, i) => (
+                <div key={i + 1} className="h-5 leading-5">
+                  {i + 1}
+                </div>
               ))}
             </div>
 
-            {/* Editable Textarea */}
+            {/* Editable Textarea with wrap="off" for 1:1 code alignment */}
             <textarea
               aria-label="Portfolio Template Markdown Editor"
-              className={`w-full h-full p-3 bg-transparent resize-none outline-none font-mono text-[11px] leading-relaxed overflow-y-auto overscroll-contain ${t(
+              className={`w-full h-full pt-3 pb-3 px-3 bg-transparent outline-none font-mono text-[11px] leading-5 overflow-auto overscroll-contain whitespace-pre ${t(
                 "text-text-dark placeholder:text-text-dark/20",
                 "text-text-light placeholder:text-text-light/20",
               )}`}
@@ -243,6 +245,7 @@ export const PortfolioEditor = ({
               placeholder="Type your markdown template here..."
               spellCheck={false}
               value={rawMarkdown}
+              wrap="off"
             />
           </div>
         </div>
