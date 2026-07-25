@@ -267,7 +267,8 @@ export const PortfolioLivePreview = memo(
     return (
       <div
         ref={containerRef}
-        className="h-full overflow-y-auto overscroll-contain overscroll-x-contain bg-bg-light dark:bg-bg-dark text-text-light dark:text-text-dark"
+        className="h-full overflow-y-auto overflow-x-hidden transform-gpu bg-bg-light dark:bg-bg-dark text-text-light dark:text-text-dark"
+        style={{ WebkitOverflowScrolling: "touch", willChange: "scroll-position" }}
         onClickCapture={(e) => {
           const anchor = (e.target as HTMLElement).closest("a");
           if (anchor) {
@@ -284,6 +285,8 @@ export const PortfolioLivePreview = memo(
             loop
             muted
             playsInline
+            disablePictureInPicture
+            preload="auto"
             className="absolute inset-0 w-full h-full object-cover pointer-events-none"
             src="https://img.przknv.cc/t/header.mp4"
           />
@@ -294,7 +297,10 @@ export const PortfolioLivePreview = memo(
         </div>
 
         {/* Main Content Area matching / route */}
-        <div className="-mt-4 mx-auto flex max-w-2xl flex-col gap-6 p-4 sm:p-6 text-left">
+        <div
+          className="-mt-4 mx-auto flex max-w-2xl flex-col gap-6 p-4 sm:p-6 text-left"
+          style={{ containIntrinsicSize: "auto 1000px", contentVisibility: "auto" }}
+        >
           {/* Navbar simulated links */}
           <div className="flex items-center justify-end gap-3 w-full">
             <span className="text-[13px] lowercase opacity-60">blogs</span>
