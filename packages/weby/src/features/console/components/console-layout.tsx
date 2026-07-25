@@ -38,9 +38,9 @@ const ModIcon = platform === "mac" ? CommandIcon : ControlIcon;
 
 const NAV_ROUTES = [
   { href: "/home", icon: HouseSimpleIcon, label: "home", shortcut: "1" },
-  { href: "/home/templates", icon: LayoutIcon, label: "templates", shortcut: "4" },
   { href: "/projects", icon: GlobeSimpleIcon, label: "public", shortcut: "2" },
   { href: "/blogs", icon: ChatCenteredTextIcon, label: "blogs", shortcut: "3" },
+  { href: "/home/templates", icon: LayoutIcon, label: "templates", shortcut: "4" },
 ] as const;
 
 export const ConsoleLayout = () => {
