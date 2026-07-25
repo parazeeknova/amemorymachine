@@ -23,6 +23,8 @@ const PreviewProfileSection = ({ profile }: { profile: Profile }) => {
       (l) => l.label.toLowerCase().includes("portfolio") || l.url.includes("folio"),
     );
 
+  const taglineText = profile.tagline || portfolioLink?.label;
+
   return (
     <div className="shrink-0 space-y-3">
       {profile.name && (
@@ -42,19 +44,19 @@ const PreviewProfileSection = ({ profile }: { profile: Profile }) => {
         </h1>
       )}
 
-      {(portfolioLink || profile.email) && (
+      {(taglineText || profile.email) && (
         <p className="mb-4 text-sm sm:text-base">
-          {portfolioLink && (
+          {taglineText && (
             <a
-              href={portfolioLink.url}
+              href={portfolioLink?.url || "#"}
               target="_blank"
               rel="noopener noreferrer"
               className="link-underline"
             >
-              {portfolioLink.label}
+              {taglineText}
             </a>
           )}
-          {portfolioLink && profile.email && " · "}
+          {taglineText && profile.email && " · "}
           {profile.email && (
             <a href={`mailto:${profile.email}`} className="link-underline">
               {profile.email}
@@ -165,42 +167,33 @@ const PreviewProjectsSection = ({ projects }: { projects: Project[] }) => {
   );
 };
 
-const PreviewSocialLinks = ({ links }: { links?: Record<string, Link> }) => (
-  <div className="shrink-0 flex items-center justify-between pt-2">
-    <div className="flex items-center gap-4">
-      {links?.github?.url && (
-        <a
-          href={links.github.url}
-          target="_blank"
-          rel="noreferrer"
-          className="text-text-light/60 dark:text-text-dark/60 text-xs lowercase hover:text-text-light dark:hover:text-text-dark"
-        >
-          github
-        </a>
-      )}
-      {links?.linkedin?.url && (
-        <a
-          href={links.linkedin.url}
-          target="_blank"
-          rel="noreferrer"
-          className="text-text-light/60 dark:text-text-dark/60 text-xs lowercase hover:text-text-light dark:hover:text-text-dark"
-        >
-          linkedin
-        </a>
-      )}
-      {links?.twitter?.url && (
-        <a
-          href={links.twitter.url}
-          target="_blank"
-          rel="noreferrer"
-          className="text-text-light/60 dark:text-text-dark/60 text-xs lowercase hover:text-text-light dark:hover:text-text-dark"
-        >
-          twitter
-        </a>
-      )}
+const PreviewSocialLinks = ({ links }: { links?: Record<string, Link> }) => {
+  if (!links) {
+    return null;
+  }
+  const linkItems = Object.values(links).filter((l) => l.url && l.label);
+  if (linkItems.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="shrink-0 flex items-center justify-between pt-2">
+      <div className="flex flex-wrap items-center gap-4">
+        {linkItems.map((lk) => (
+          <a
+            key={lk.url + lk.label}
+            href={lk.url}
+            target="_blank"
+            rel="noreferrer"
+            className="text-text-light/60 dark:text-text-dark/60 text-xs lowercase hover:text-text-light dark:hover:text-text-dark"
+          >
+            {lk.label}
+          </a>
+        ))}
+      </div>
     </div>
-  </div>
-);
+  );
+};
 
 export const PortfolioLivePreview = ({
   errors,

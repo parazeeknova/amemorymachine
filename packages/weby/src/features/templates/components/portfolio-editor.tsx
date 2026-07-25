@@ -5,7 +5,7 @@ import {
   PushPinIcon,
   WarningCircleIcon,
 } from "@phosphor-icons/react";
-import { useEffect, useMemo, useState } from "react";
+import { useEffect, useMemo, useRef, useState } from "react";
 import type { ExperienceItem, Profile, Project } from "#/shared/types";
 import { useTheme } from "#/shared/hooks/use-theme";
 import { setFlashToast } from "#/features/console/components/flash-toast";
@@ -28,6 +28,8 @@ export const PortfolioEditor = ({
 }: PortfolioEditorProps) => {
   const { isDarkMode } = useTheme();
   const t = (dark: string, light: string) => (isDarkMode ? dark : light);
+
+  const gutterRef = useRef<HTMLDivElement>(null);
 
   const [rawMarkdown, setRawMarkdown] = useState(() =>
     generatePortfolioMarkdown(initialProfile, initialExperiences, initialProjects),
@@ -58,6 +60,12 @@ export const PortfolioEditor = ({
         target.selectionStart = start + 2;
         target.selectionEnd = start + 2;
       }, 0);
+    }
+  };
+
+  const handleScroll = (e: React.UIEvent<HTMLTextAreaElement>) => {
+    if (gutterRef.current) {
+      gutterRef.current.scrollTop = e.currentTarget.scrollTop;
     }
   };
 
@@ -207,11 +215,12 @@ export const PortfolioEditor = ({
             </div>
           )}
 
-          {/* Editor Container with Gutter + Textarea */}
+          {/* Editor Container with Synchronized Line Gutter + Textarea */}
           <div className="flex-1 flex overflow-hidden font-mono text-[11px] leading-relaxed">
             {/* Line Number Gutter */}
             <div
-              className={`select-none py-3 px-2 text-right border-r font-mono text-[10px] shrink-0 overflow-hidden ${t(
+              ref={gutterRef}
+              className={`select-none py-3 px-2 text-right border-r font-mono text-[10px] shrink-0 overflow-hidden pointer-events-none ${t(
                 "border-border-dark/40 bg-white/2 text-text-dark/25",
                 "border-border-light/40 bg-black/2 text-text-light/25",
               )}`}
@@ -230,6 +239,7 @@ export const PortfolioEditor = ({
               )}`}
               onChange={(e) => setRawMarkdown(e.target.value)}
               onKeyDown={handleKeyDown}
+              onScroll={handleScroll}
               placeholder="Type your markdown template here..."
               spellCheck={false}
               value={rawMarkdown}
