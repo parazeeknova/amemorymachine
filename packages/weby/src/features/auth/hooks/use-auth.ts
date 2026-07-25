@@ -3,6 +3,7 @@ import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchProtected } from "./fetch-protected";
 import { setAuthCache } from "#/features/auth/lib/auth-cache";
 import { useConsoleStore } from "#/features/console/stores/console-store";
+import { getCachedAuth } from "#/shared/lib/native-storage";
 
 export interface LoginResult {
   mfa_required?: boolean;
@@ -11,6 +12,12 @@ export interface LoginResult {
 
 export const useAuth = () => {
   const queryClient = useQueryClient();
+  const cachedAuth = getCachedAuth();
+  const hasValidCache =
+    cachedAuth !== null &&
+    cachedAuth.user !== null &&
+    typeof cachedAuth.expiresAt === "number" &&
+    cachedAuth.expiresAt > Date.now();
 
   return useQuery<AuthUser | null>({
     queryFn: async ({ signal }) => {
@@ -20,8 +27,6 @@ export const useAuth = () => {
         if (error instanceof DOMException && error.name === "AbortError") {
           throw error;
         }
-        // Only clear the cached auth state on explicit unauthenticated responses.
-        // Network errors, 5xx, etc. should not flush the cache.
         if (
           error instanceof Error &&
           (error.message.startsWith("HTTP 401") || error.message.startsWith("HTTP 403"))
@@ -35,8 +40,10 @@ export const useAuth = () => {
       }
     },
     queryKey: ["auth"],
+    refetchOnMount: hasValidCache,
     retry: false,
-    staleTime: 30 * 60 * 1000,
+    staleTime: hasValidCache ? 0 : 30 * 60 * 1000,
+    ...(hasValidCache && cachedAuth?.user ? { initialData: cachedAuth.user as AuthUser } : {}),
   });
 };
 
@@ -76,7 +83,6 @@ export const useAuthActions = () => {
     }
     const data = (await res.json()) as LoginResult;
 
-    // If MFA is required, return without invalidating auth cache
     if (data.mfa_required) {
       return data;
     }

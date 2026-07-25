@@ -4,13 +4,16 @@ import { useEffect, useRef, useState } from "react";
 import { getAuthCache, setAuthCache } from "#/features/auth/lib/auth-cache";
 import { useAuth } from "#/features/auth/hooks/use-auth";
 import { useTheme } from "#/shared/hooks/use-theme";
+import { hasCachedSession } from "#/shared/lib/native-storage";
 
 export const AuthGate = ({ children }: { children: React.ReactNode }) => {
   const { data: user, isPending, isError } = useAuth();
   const navigate = useNavigate();
   const { isDarkMode } = useTheme();
   const loadingRef = useRef<HTMLDivElement>(null);
-  const [visible, setVisible] = useState(() => getAuthCache() !== "authenticated");
+  const [visible, setVisible] = useState(
+    () => getAuthCache() !== "authenticated" && !hasCachedSession(),
+  );
   const hasRedirected = useRef(false);
   const t = (dark: string, light: string) => (isDarkMode ? dark : light);
 

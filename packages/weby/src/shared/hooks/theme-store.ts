@@ -1,5 +1,6 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
+import { getCachedTheme } from "#/shared/lib/native-storage";
 
 export type ThemePreference = "light" | "dark" | "system";
 
@@ -59,11 +60,30 @@ const readStoredPreference = (): ThemePreference | null => {
   return null;
 };
 
+const getNativeInitialTheme = (): ThemePreference | null => {
+  const cached = getCachedTheme();
+  if (!cached || !cached.preference) {
+    return null;
+  }
+  const p = cached.preference;
+  if (p === "light" || p === "dark" || p === "system") {
+    return p;
+  }
+  return null;
+};
+
 export const useThemeStore = create<ThemeState & ThemeActions>()(
   persist(
     (set, get) => ({
       hydrate: () => {
         if (get().hydrated) {
+          return;
+        }
+        const nativeTheme = getNativeInitialTheme();
+        if (nativeTheme) {
+          const resolved = resolvePreference(nativeTheme);
+          applyDOM(resolved);
+          set({ hydrated: true, preference: nativeTheme, resolved });
           return;
         }
         const stored = readStoredPreference();
