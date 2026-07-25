@@ -209,25 +209,42 @@ export const PortfolioLivePreview = memo(
     const containerRef = useRef<HTMLDivElement>(null);
     const videoRef = useRef<HTMLVideoElement>(null);
 
-    // Ensure header video plays automatically on mount and pauses on unmount
+    // Ensure header video plays automatically and resumes when scrolled back into view
     useEffect(() => {
       const v = videoRef.current;
-      if (v) {
-        v.muted = true;
-        v.playsInline = true;
-        const playVideo = async () => {
-          try {
-            await v.play();
-          } catch {
-            // Ignore autoplay restrictions or interruptions
-          }
-        };
-        void playVideo();
+      if (!v) {
+        return;
       }
-      return () => {
-        if (v) {
-          v.pause();
+
+      v.muted = true;
+      v.playsInline = true;
+
+      const playVideo = async () => {
+        try {
+          await v.play();
+        } catch {
+          // Ignore autoplay restrictions or interruptions
         }
+      };
+
+      const observer = new IntersectionObserver(
+        (entries) => {
+          for (const entry of entries) {
+            if (entry.isIntersecting) {
+              void playVideo();
+            } else {
+              v.pause();
+            }
+          }
+        },
+        { threshold: 0 },
+      );
+
+      observer.observe(v);
+
+      return () => {
+        observer.disconnect();
+        v.pause();
       };
     }, []);
 
@@ -297,10 +314,7 @@ export const PortfolioLivePreview = memo(
         </div>
 
         {/* Main Content Area matching / route */}
-        <div
-          className="-mt-4 mx-auto flex max-w-2xl flex-col gap-6 p-4 sm:p-6 text-left"
-          style={{ containIntrinsicSize: "auto 1000px", contentVisibility: "auto" }}
-        >
+        <div className="-mt-4 mx-auto flex max-w-2xl flex-col gap-6 p-4 sm:p-6 text-left">
           {/* Navbar simulated links */}
           <div className="flex items-center justify-end gap-3 w-full">
             <span className="text-[13px] lowercase opacity-60">blogs</span>
