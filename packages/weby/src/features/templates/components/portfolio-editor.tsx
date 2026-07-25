@@ -23,20 +23,20 @@ const highlightSyntax = (text: string, isDark: boolean) => {
   };
   let html = text.replaceAll(/[&<>"']/g, (m) => escapeMap[m]);
 
-  const commentColor = isDark ? "text-emerald-400" : "text-emerald-600";
+  const sectionColor = isDark ? "text-emerald-400" : "text-emerald-600";
   const keyColor = isDark ? "text-blue-400" : "text-blue-600";
   const listColor = isDark ? "text-fuchsia-400" : "text-fuchsia-600";
   const urlColor = isDark ? "text-purple-400" : "text-purple-600";
 
   html = html.replaceAll(
-    /(&lt;!--.*?--&gt;)/g,
-    `<span class="${commentColor} opacity-80 font-bold">$1</span>`,
-  );
-  html = html.replaceAll(
-    /^(Name:|Tagline:|Username:|Email:|Description:|Links:|Location:|Period:|Desc:|Image:|Stack:|Readme:|Repo:|Product:)/gm,
-    `<span class="${keyColor} font-semibold">$1</span>`,
+    /^(## PROFILE|## EXPERIENCE|## PROJECTS)/gm,
+    `<span class="${sectionColor} opacity-80 font-bold">$1</span>`,
   );
   html = html.replaceAll(/^(- |### )/gm, `<span class="${listColor} font-bold">$1</span>`);
+  html = html.replaceAll(
+    /(Name:|Tagline:|Username:|Email:|Description:|Links:|Location:|Period:|Desc:|Image:|Stack:|Readme:|Repo:|Product:)/g,
+    `<span class="${keyColor} font-semibold">$1</span>`,
+  );
   html = html.replaceAll(
     /(\[.*?\])\((.*?)\)/g,
     `<span class="${urlColor}">$1</span><span class="opacity-50">(<span class="underline">$2</span>)</span>`,

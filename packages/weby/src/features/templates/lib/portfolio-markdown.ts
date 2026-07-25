@@ -69,7 +69,7 @@ export const generatePortfolioMarkdown = (
     )
     .join("\n\n");
 
-  return `<!-- ==================== PROFILE SECTION (REQUIRED BY PORTFOLIO) ==================== -->
+  return `## PROFILE
 Name: ${pName}
 Tagline: ${pTagline}
 Username: ${pUsername}
@@ -79,10 +79,10 @@ Description: ${pDesc}
 Links:
 ${linksArr}
 
-<!-- ==================== EXPERIENCE TIMELINE (REQUIRED BY PORTFOLIO) ==================== -->
+## EXPERIENCE
 ${expsArr}
 
-<!-- ==================== PROJECT SHOWCASE (REQUIRED BY PORTFOLIO) ==================== -->
+## PROJECTS
 ${projsArr}
 `;
 };
@@ -201,11 +201,11 @@ export const parsePortfolioMarkdown = (markdown: string): ParsedPortfolio => {
   for (const rawLine of lines) {
     const line = rawLine.trim();
 
-    if (line.includes("PROFILE SECTION")) {
+    if (line.includes("## PROFILE")) {
       currentSection = "PROFILE";
       continue;
     }
-    if (line.includes("EXPERIENCE TIMELINE")) {
+    if (line.includes("## EXPERIENCE")) {
       currentSection = "EXPERIENCE";
       if (currentExpItem) {
         experiences.push(currentExpItem);
@@ -213,7 +213,7 @@ export const parsePortfolioMarkdown = (markdown: string): ParsedPortfolio => {
       }
       continue;
     }
-    if (line.includes("PROJECT SHOWCASE")) {
+    if (line.includes("## PROJECTS")) {
       currentSection = "PROJECTS";
       if (currentProjItem) {
         projects.push(currentProjItem);
@@ -251,18 +251,18 @@ export const validatePortfolioMarkdown = (markdown: string): ValidationResult =>
   const errors: string[] = [];
   const lines = markdown.split("\n");
 
-  const hasProfileSection = lines.some((l) => l.includes("PROFILE SECTION"));
-  const hasExperienceSection = lines.some((l) => l.includes("EXPERIENCE TIMELINE"));
-  const hasProjectsSection = lines.some((l) => l.includes("PROJECT SHOWCASE"));
+  const hasProfileSection = lines.some((l) => l.includes("## PROFILE"));
+  const hasExperienceSection = lines.some((l) => l.includes("## EXPERIENCE"));
+  const hasProjectsSection = lines.some((l) => l.includes("## PROJECTS"));
 
   if (!hasProfileSection) {
-    errors.push("Missing section header: <!-- ... PROFILE SECTION ... -->");
+    errors.push("Missing section header: ## PROFILE");
   }
   if (!hasExperienceSection) {
-    errors.push("Missing section header: <!-- ... EXPERIENCE TIMELINE ... -->");
+    errors.push("Missing section header: ## EXPERIENCE");
   }
   if (!hasProjectsSection) {
-    errors.push("Missing section header: <!-- ... PROJECT SHOWCASE ... -->");
+    errors.push("Missing section header: ## PROJECTS");
   }
 
   const parsed = parsePortfolioMarkdown(markdown);
