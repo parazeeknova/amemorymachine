@@ -1,9 +1,8 @@
 import { CheckCircleIcon, PlusIcon } from "@phosphor-icons/react";
-import { useEffect, useMemo, useRef, useState } from "react";
+import { useEffect, useMemo, useRef } from "react";
 import { gsap } from "gsap";
-import { useExperience, useProfile, useProjects } from "#/features/landing/hooks/use-data";
 import { useTheme } from "#/shared/hooks/use-theme";
-import { PortfolioEditor } from "./portfolio-editor";
+import { useNavigate } from "@tanstack/react-router";
 
 interface PortfolioTemplatePreviewProps {
   cardRef: React.RefObject<HTMLButtonElement | null>;
@@ -21,74 +20,79 @@ const PortfolioTemplatePreview = ({ cardRef }: PortfolioTemplatePreviewProps) =>
       return;
     }
 
-    // Set initial V-fan transforms via GSAP to avoid CSS transform shorthand mismatch
-    gsap.set(img1, {
-      rotate: -8,
-      scale: 0.95,
-      xPercent: -70,
-      yPercent: -50,
-    });
-    gsap.set(img2, {
-      rotate: 8,
-      scale: 0.95,
-      xPercent: -30,
-      yPercent: -50,
+    const ctx = gsap.context(() => {
+      // Set initial V-fan transforms via GSAP to avoid CSS transform shorthand mismatch
+      gsap.set(img1, {
+        rotate: -8,
+        scale: 0.95,
+        xPercent: -70,
+        yPercent: -50,
+      });
+      gsap.set(img2, {
+        rotate: 8,
+        scale: 0.95,
+        xPercent: -30,
+        yPercent: -50,
+      });
     });
 
     const onEnter = () => {
-      // Hovered Grid Mode: Side-by-side with 2% edge padding and 1% center gap
-      // img1: [2% .. 49%] = 47% wide, img2: [51% .. 98%] = 47% wide
-      gsap.to(img1, {
-        duration: 0.3,
-        ease: "power2.out",
-        height: "90%",
-        left: "2%",
-        rotate: 0,
-        scale: 1,
-        top: "50%",
-        width: "47%",
-        xPercent: 0,
-        yPercent: -50,
-      });
-      gsap.to(img2, {
-        duration: 0.3,
-        ease: "power2.out",
-        height: "90%",
-        left: "51%",
-        rotate: 0,
-        scale: 1,
-        top: "50%",
-        width: "47%",
-        xPercent: 0,
-        yPercent: -50,
+      ctx.add(() => {
+        // Hovered Grid Mode: Side-by-side with 2% edge padding and 1% center gap
+        gsap.to(img1, {
+          duration: 0.3,
+          ease: "power2.out",
+          height: "90%",
+          left: "2%",
+          rotate: 0,
+          scale: 1,
+          top: "50%",
+          width: "47%",
+          xPercent: 0,
+          yPercent: -50,
+        });
+        gsap.to(img2, {
+          duration: 0.3,
+          ease: "power2.out",
+          height: "90%",
+          left: "51%",
+          rotate: 0,
+          scale: 1,
+          top: "50%",
+          width: "47%",
+          xPercent: 0,
+          yPercent: -50,
+        });
       });
     };
 
     const onLeave = () => {
-      // Idle V-Fan Mode: Centered overlapping V-fan stack of portrait cards
-      gsap.to(img1, {
-        duration: 0.3,
-        ease: "power2.out",
-        height: "90%",
-        left: "50%",
-        rotate: -8,
-        scale: 0.95,
-        top: "50%",
-        width: "48%",
-        xPercent: -70,
-        yPercent: -50,
-      });
-      gsap.to(img2, {
-        duration: 0.3,
-        ease: "power2.out",
-        height: "90%",
-        left: "50%",
-        rotate: 8,
-        scale: 0.95,
-        top: "50%",
-        width: "48%",
-        xPercent: -30,
-        yPercent: -50,
+      ctx.add(() => {
+        // Idle V-Fan Mode: Centered overlapping V-fan stack of portrait cards
+        gsap.to(img1, {
+          duration: 0.3,
+          ease: "power2.out",
+          height: "90%",
+          left: "50%",
+          rotate: -8,
+          scale: 0.95,
+          top: "50%",
+          width: "48%",
+          xPercent: -70,
+          yPercent: -50,
+        });
+        gsap.to(img2, {
+          duration: 0.3,
+          ease: "power2.out",
+          height: "90%",
+          left: "50%",
+          rotate: 8,
+          scale: 0.95,
+          top: "50%",
+          width: "48%",
+          xPercent: -30,
+          yPercent: -50,
+        });
       });
     };
 
@@ -98,6 +102,7 @@ const PortfolioTemplatePreview = ({ cardRef }: PortfolioTemplatePreviewProps) =>
     return () => {
       card.removeEventListener("mouseenter", onEnter);
       card.removeEventListener("mouseleave", onLeave);
+      ctx.revert();
     };
   }, [cardRef]);
 
@@ -146,11 +151,7 @@ const PortfolioTemplatePreview = ({ cardRef }: PortfolioTemplatePreviewProps) =>
 
 export const TemplatesView = () => {
   const { isDarkMode } = useTheme();
-  const { data: profile } = useProfile();
-  const { data: experience } = useExperience();
-  const { data: projects } = useProjects();
-
-  const [activeTemplate, setActiveTemplate] = useState<string | null>(null);
+  const navigate = useNavigate();
   const cardRef = useRef<HTMLButtonElement>(null);
 
   const t = (dark: string, light: string) => (isDarkMode ? dark : light);
@@ -161,17 +162,6 @@ export const TemplatesView = () => {
     month: "short",
     weekday: "short",
   });
-
-  if (activeTemplate === "portfolio") {
-    return (
-      <PortfolioEditor
-        initialExperiences={experience}
-        initialProfile={profile}
-        initialProjects={projects}
-        onPinComplete={() => setActiveTemplate(null)}
-      />
-    );
-  }
 
   return (
     <div className="mx-auto flex w-full max-w-2xl flex-col px-4 pt-12 min-h-full">
@@ -203,7 +193,7 @@ export const TemplatesView = () => {
           <button
             ref={cardRef}
             className={`aspect-square flex flex-col justify-between border p-4 text-left lowercase bg-linear-to-b transition-all overflow-hidden cursor-pointer w-full ${t("border-border-dark from-white/3 to-transparent hover:bg-white/5", "border-border-light from-black/2 to-transparent hover:bg-black/3")}`}
-            onClick={() => setActiveTemplate("portfolio")}
+            onClick={() => navigate({ to: "/home/templates/portfolio" })}
             type="button"
           >
             <div className="flex flex-col flex-1 min-h-0 w-full">

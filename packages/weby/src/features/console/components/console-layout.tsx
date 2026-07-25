@@ -12,7 +12,7 @@ import {
 } from "@phosphor-icons/react";
 import { useHotkey } from "@tanstack/react-hotkeys";
 import { detectPlatform } from "@tanstack/hotkeys";
-import { Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
+import { Link, Outlet, useNavigate, useRouterState } from "@tanstack/react-router";
 import { gsap } from "gsap";
 import { useCallback, useEffect, useLayoutEffect, useRef, useState } from "react";
 import { useAuth } from "#/features/auth/hooks/use-auth";
@@ -38,8 +38,8 @@ const ModIcon = platform === "mac" ? CommandIcon : ControlIcon;
 
 const NAV_ROUTES = [
   { href: "/home", icon: HouseSimpleIcon, label: "home", shortcut: "1" },
-  { href: "/projects", icon: GlobeSimpleIcon, label: "public", shortcut: "2" },
-  { href: "/blogs", icon: ChatCenteredTextIcon, label: "blogs", shortcut: "3" },
+  { href: "/", icon: GlobeSimpleIcon, label: "public", shortcut: "2" },
+  { href: "/", icon: ChatCenteredTextIcon, label: "blogs", shortcut: "3" },
   { href: "/home/templates", icon: LayoutIcon, label: "templates", shortcut: "4" },
 ] as const;
 
@@ -143,16 +143,16 @@ export const ConsoleLayout = () => {
   }, [isSpecialRoute]);
 
   useHotkey("Mod+1", () => {
-    window.location.href = "/home";
+    navigate({ to: "/home" });
   });
   useHotkey("Mod+2", () => {
-    window.location.href = "/#projects";
+    navigate({ to: "/" });
   });
   useHotkey("Mod+3", () => {
-    window.location.href = "/#blogs";
+    navigate({ to: "/" });
   });
   useHotkey("Mod+4", () => {
-    window.location.href = "/home/templates";
+    navigate({ to: "/home/templates" });
   });
 
   const t = (dark: string, light: string) => (isDarkMode ? dark : light);
@@ -281,7 +281,7 @@ export const ConsoleLayout = () => {
       <div className="min-h-0 w-full flex-1 flex flex-col overflow-y-auto px-4">
         <nav className="mb-3 space-y-0.5">
           {NAV_ROUTES.map((route) => (
-            <a
+            <Link
               className={`flex items-center gap-2 px-1 py-1 text-[11px] lowercase ${
                 routerState.location.pathname === route.href
                   ? t("bg-white/10 text-text-dark", "bg-black/10 text-text-light")
@@ -290,8 +290,8 @@ export const ConsoleLayout = () => {
                       "text-text-light/50 hover:bg-black/3 hover:text-text-light/80 rounded",
                     )
               }`}
-              href={route.href}
               key={route.href}
+              to={route.href}
             >
               <route.icon size={12} />
               <span className="flex-1">{route.label}</span>
@@ -304,7 +304,7 @@ export const ConsoleLayout = () => {
                 <ModIcon className="inline-block align-middle" size={12} />{" "}
                 <span className="text-md font-bold">{route.shortcut}</span>
               </kbd>
-            </a>
+            </Link>
           ))}
         </nav>
         <nav className="mb-4 space-y-0.5">

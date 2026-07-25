@@ -228,6 +228,20 @@ export const PortfolioLivePreview = ({
     return () => el.removeEventListener("wheel", handleWheel);
   }, []);
 
+  const videoRef = useRef<HTMLVideoElement>(null);
+
+  // Clean up video hardware decoding pipelines when unmounting preview
+  useEffect(() => {
+    const v = videoRef.current;
+    return () => {
+      if (v) {
+        v.pause();
+        v.removeAttribute("src");
+        v.load();
+      }
+    };
+  }, []);
+
   const { experiences, profile, projects } = parsedData;
 
   const headerGradient = isDarkMode
@@ -276,6 +290,7 @@ export const PortfolioLivePreview = ({
       {/* Top Banner Cover Video */}
       <div className="relative mx-auto w-full h-36 sm:h-44 overflow-hidden">
         <video
+          ref={videoRef}
           autoPlay
           loop
           muted

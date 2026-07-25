@@ -1,6 +1,6 @@
 import { gsap } from "gsap";
 import { useQuery } from "@tanstack/react-query";
-import { useNavigate, useRouterState } from "@tanstack/react-router";
+import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useDebouncedState } from "@tanstack/react-pacer";
 import { useEffect, useRef, useState } from "react";
 import type { Stats } from "#/shared/types";
@@ -270,12 +270,12 @@ const SpaceBreadcrumb = ({
 
   return (
     <div className="flex items-center gap-1">
-      <a
+      <Link
         className={`lowercase ${t("text-text-dark/50 hover:text-text-dark", "text-text-light/50 hover:text-text-light")}`}
-        href="/home"
+        to="/home"
       >
         <img alt="verso" className="h-3.5 w-3.5" src="/verso.svg" />
-      </a>
+      </Link>
 
       <span className={t("text-text-dark/15", "text-text-light/15")}>/</span>
 
@@ -367,6 +367,119 @@ const SpaceBreadcrumb = ({
   );
 };
 
+interface TemplatesBreadcrumbProps {
+  isDarkMode: boolean;
+  navigate: ReturnType<typeof useNavigate>;
+  currentPath: string;
+}
+
+const TemplatesBreadcrumb = ({ isDarkMode, navigate, currentPath }: TemplatesBreadcrumbProps) => {
+  const t = (dark: string, light: string) => (isDarkMode ? dark : light);
+  const isTemplatesIndex = currentPath === "/home/templates" || currentPath === "/home/templates/";
+  const isPortfolioPage = currentPath === "/home/templates/portfolio";
+  const [dropdownOpen, setDropdownOpen] = useState(false);
+  const dropdownRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!dropdownOpen) {
+      return;
+    }
+    const handleClick = (e: MouseEvent) => {
+      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
+        setDropdownOpen(false);
+      }
+    };
+    document.addEventListener("mousedown", handleClick);
+    return () => document.removeEventListener("mousedown", handleClick);
+  }, [dropdownOpen]);
+
+  useEffect(() => {
+    if (!dropdownOpen || !dropdownRef.current) {
+      return;
+    }
+    const inner = dropdownRef.current.querySelector(":scope > div");
+    if (inner) {
+      gsap.fromTo(
+        inner,
+        { opacity: 0, scale: 0.98, y: -4 },
+        { duration: 0.15, ease: "power2.out", opacity: 1, scale: 1, y: 0 },
+      );
+    }
+  }, [dropdownOpen]);
+
+  const templatePages = [
+    { href: "/home/templates", label: "templates" },
+    { href: "/home/templates/portfolio", label: "portfolio" },
+  ];
+
+  return (
+    <div className="flex items-center gap-1">
+      <Link
+        className={`lowercase ${t("text-text-dark/50 hover:text-text-dark", "text-text-light/50 hover:text-text-light")}`}
+        to="/home"
+      >
+        <img alt="verso" className="h-3.5 w-3.5" src="/verso.svg" />
+      </Link>
+
+      <span className={t("text-text-dark/15", "text-text-light/15")}>/</span>
+
+      {isTemplatesIndex ? (
+        <span className={`lowercase text-[12px] ${t("text-text-dark/70", "text-text-light/70")}`}>
+          templates
+        </span>
+      ) : (
+        <div className="flex items-center gap-1">
+          <Link
+            className={`lowercase text-[12px] ${t("text-text-dark/50 hover:text-text-dark", "text-text-light/50 hover:text-text-light")}`}
+            to="/home/templates"
+          >
+            templates
+          </Link>
+
+          <span className={t("text-text-dark/15", "text-text-light/15")}>/</span>
+
+          {isPortfolioPage ? (
+            <div className="relative" ref={dropdownRef}>
+              <button
+                className={`flex items-center gap-1.5 lowercase text-[12px] ${t("text-text-dark/50 hover:text-text-dark", "text-text-light/50 hover:text-text-light")}`}
+                onClick={() => setDropdownOpen((o) => !o)}
+                type="button"
+              >
+                portfolio
+                <CaretDownIcon size={10} />
+              </button>
+              {dropdownOpen && (
+                <div
+                  className={`absolute left-0 top-full mt-1 border p-1.5 z-50 shadow-lg w-36 max-h-48 overflow-y-auto ${t("border-border-dark bg-text-light", "border-border-light bg-[#e0e0e0]")}`}
+                >
+                  {templatePages.map((page) => (
+                    <button
+                      className={`flex w-full items-center gap-1.5 px-1.5 py-1 text-left text-[11px] lowercase ${currentPath === page.href ? t("text-text-dark", "text-text-light") : t("text-text-dark/50 hover:text-text-dark", "text-text-light/50 hover:text-text-light")}`}
+                      key={page.href}
+                      onClick={() => {
+                        setDropdownOpen(false);
+                        navigate({ to: page.href });
+                      }}
+                      type="button"
+                    >
+                      {page.label}
+                    </button>
+                  ))}
+                </div>
+              )}
+            </div>
+          ) : (
+            <span
+              className={`lowercase text-[12px] ${t("text-text-dark/70", "text-text-light/70")}`}
+            >
+              template
+            </span>
+          )}
+        </div>
+      )}
+    </div>
+  );
+};
 export const ConsoleNavbar = ({ onToggleSidebar, sidebarOpen }: ConsoleNavbarProps) => {
   const navigate = useNavigate();
   const routerState = useRouterState();
@@ -382,6 +495,7 @@ export const ConsoleNavbar = ({ onToggleSidebar, sidebarOpen }: ConsoleNavbarPro
   const spaceSlug = isSpaceRoute
     ? routerState.location.pathname.replace("/s/", "").split("/")[0]
     : "";
+  const isTemplatesRoute = routerState.location.pathname.startsWith("/home/templates");
   const [searchQuery, setSearchQuery] = useDebouncedState("", { wait: 150 });
 
   const { data: stats } = useQuery<Stats>({
@@ -398,6 +512,45 @@ export const ConsoleNavbar = ({ onToggleSidebar, sidebarOpen }: ConsoleNavbarPro
 
   const t = (dark: string, light: string) => (isDarkMode ? dark : light);
 
+  let leftNavContent: React.ReactNode;
+  if (isSpaceRoute) {
+    leftNavContent = (
+      <SpaceBreadcrumb
+        isDarkMode={isDarkMode}
+        navigate={navigate}
+        selectedWorkspace={
+          selectedWorkspace
+            ? {
+                icon: selectedWorkspace.icon,
+                id: selectedWorkspace.id,
+                name: selectedWorkspace.name,
+              }
+            : undefined
+        }
+        spaceSlug={spaceSlug}
+        workspaces={workspaces}
+      />
+    );
+  } else if (isTemplatesRoute) {
+    leftNavContent = (
+      <TemplatesBreadcrumb
+        isDarkMode={isDarkMode}
+        navigate={navigate}
+        currentPath={routerState.location.pathname}
+      />
+    );
+  } else {
+    leftNavContent = (
+      <Link
+        className={`flex items-center gap-1.5 lowercase mr-1 md:mr-3 ${t("text-text-dark/70 hover:text-text-dark", "text-text-light/70 hover:text-text-light")}`}
+        to="/home"
+      >
+        <img alt="verso" className="h-3.5 w-3.5" src="/verso.svg" />
+        verso
+      </Link>
+    );
+  }
+
   return (
     <nav
       className={`sticky top-0 z-50 flex h-10 items-center gap-3 border-b px-3 text-[13px] transition-colors duration-500 ease-out ${t("border-border-dark", "border-border-light")} ${isDarkMode ? "bg-text-light" : "bg-[#e5e5e5]"}`}
@@ -411,31 +564,7 @@ export const ConsoleNavbar = ({ onToggleSidebar, sidebarOpen }: ConsoleNavbarPro
         >
           {sidebarOpen ? <SidebarSimpleIcon size={14} /> : <SidebarIcon size={14} />}
         </button>
-        {isSpaceRoute ? (
-          <SpaceBreadcrumb
-            isDarkMode={isDarkMode}
-            navigate={navigate}
-            selectedWorkspace={
-              selectedWorkspace
-                ? {
-                    icon: selectedWorkspace.icon,
-                    id: selectedWorkspace.id,
-                    name: selectedWorkspace.name,
-                  }
-                : undefined
-            }
-            spaceSlug={spaceSlug}
-            workspaces={workspaces}
-          />
-        ) : (
-          <a
-            className={`flex items-center gap-1.5 lowercase mr-1 md:mr-3 ${t("text-text-dark/70 hover:text-text-dark", "text-text-light/70 hover:text-text-light")}`}
-            href="/home"
-          >
-            <img alt="verso" className="h-3.5 w-3.5" src="/verso.svg" />
-            verso
-          </a>
-        )}
+        {leftNavContent}
       </div>
 
       {/* Middle: search */}
