@@ -21,6 +21,7 @@ import {
   useProfile,
   useProjects,
 } from "#/features/landing/hooks/use-data";
+import { useTheme } from "#/shared/hooks/use-theme";
 import { crossfadeVideo, getHeaderGradient } from "#/shared/lib/video-helpers";
 
 const useIsMobile = (): boolean => {
@@ -97,8 +98,8 @@ const useThemeButtonHover = (): ThemeButtonRefs => {
 
 const Home = function Home() {
   const isDesktop = useIsDesktop();
+  const { isDarkMode, toggleTheme: toggleThemeStore } = useTheme();
 
-  const [isDarkMode, setIsDarkMode] = useState(true);
   const [viewMode, setViewMode] = useState<"portfolio" | "blogs">("portfolio");
   const [selectedBlogSlug, setSelectedBlogSlug] = useState<string | null>(null);
   const [selectedProject, setSelectedProject] = useState<{
@@ -176,18 +177,6 @@ const Home = function Home() {
     }
   }, [firstPostSlug, firstProject, selectedBlogSlug, selectedProject]);
 
-  // Read initial theme from localStorage on mount
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const savedTheme = localStorage.getItem("theme");
-      if (savedTheme === "light") {
-        setIsDarkMode(false);
-      } else {
-        setIsDarkMode(true);
-      }
-    }
-  }, []);
-
   const videoRef = useRef<HTMLVideoElement>(null);
   const nextVideoRef = useRef<HTMLVideoElement>(null);
   const gradientRef = useRef<HTMLDivElement>(null);
@@ -217,11 +206,8 @@ const Home = function Home() {
   }, [isDarkMode]);
 
   const toggleTheme = useCallback(() => {
-    const newTheme = isDarkMode ? "light" : "dark";
-    setIsDarkMode(!isDarkMode);
-    localStorage.setItem("theme", newTheme);
-    document.documentElement.dataset.theme = newTheme;
-  }, [isDarkMode]);
+    toggleThemeStore();
+  }, [toggleThemeStore]);
 
   const animatedToggleTheme = useCallback(() => {
     const nextDark = !isDarkMode;

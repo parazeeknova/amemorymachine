@@ -10,6 +10,8 @@ export interface Profile {
   name: string;
   tagline: string;
   username?: string;
+  lightVideo?: string;
+  darkVideo?: string;
 }
 
 export interface ExperienceItem {

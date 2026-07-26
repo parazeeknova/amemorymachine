@@ -7,40 +7,47 @@ import { useTemplates } from "#/features/landing";
 
 interface PortfolioTemplatePreviewProps {
   cardRef: React.RefObject<HTMLButtonElement | null>;
+  isDarkMode: boolean;
 }
 
-const PortfolioTemplatePreview = ({ cardRef }: PortfolioTemplatePreviewProps) => {
-  const img1Ref = useRef<HTMLDivElement>(null);
-  const img2Ref = useRef<HTMLDivElement>(null);
+const PortfolioTemplatePreview = ({ cardRef, isDarkMode }: PortfolioTemplatePreviewProps) => {
+  const darkRef = useRef<HTMLDivElement>(null);
+  const lightRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
     const card = cardRef.current;
-    const img1 = img1Ref.current;
-    const img2 = img2Ref.current;
-    if (!card || !img1 || !img2) {
+    const darkImg = darkRef.current;
+    const lightImg = lightRef.current;
+    if (!card || !darkImg || !lightImg) {
       return;
     }
 
+    // Current-theme image on top in the V-fan
+    const topImg = isDarkMode ? darkImg : lightImg;
+    const bottomImg = isDarkMode ? lightImg : darkImg;
+
     const ctx = gsap.context(() => {
       // Set initial V-fan transforms via GSAP to avoid CSS transform shorthand mismatch
-      gsap.set(img1, {
+      gsap.set(topImg, {
         rotate: -8,
         scale: 0.95,
         xPercent: -70,
         yPercent: -50,
+        zIndex: 2,
       });
-      gsap.set(img2, {
+      gsap.set(bottomImg, {
         rotate: 8,
         scale: 0.95,
         xPercent: -30,
         yPercent: -50,
+        zIndex: 1,
       });
     });
 
     const onEnter = () => {
       ctx.add(() => {
-        // Hovered Grid Mode: Side-by-side with 2% edge padding and 1% center gap
-        gsap.to(img1, {
+        // Hovered Grille Mode: Side-by-side with 2% edge padding and 1% center gap
+        gsap.to(topImg, {
           duration: 0.3,
           ease: "power2.out",
           height: "90%",
@@ -52,7 +59,7 @@ const PortfolioTemplatePreview = ({ cardRef }: PortfolioTemplatePreviewProps) =>
           xPercent: 0,
           yPercent: -50,
         });
-        gsap.to(img2, {
+        gsap.to(bottomImg, {
           duration: 0.3,
           ease: "power2.out",
           height: "90%",
@@ -70,7 +77,7 @@ const PortfolioTemplatePreview = ({ cardRef }: PortfolioTemplatePreviewProps) =>
     const onLeave = () => {
       ctx.add(() => {
         // Idle V-Fan Mode: Centered overlapping V-fan stack of portrait cards
-        gsap.to(img1, {
+        gsap.to(topImg, {
           duration: 0.3,
           ease: "power2.out",
           height: "90%",
@@ -81,8 +88,9 @@ const PortfolioTemplatePreview = ({ cardRef }: PortfolioTemplatePreviewProps) =>
           width: "48%",
           xPercent: -70,
           yPercent: -50,
+          zIndex: 2,
         });
-        gsap.to(img2, {
+        gsap.to(bottomImg, {
           duration: 0.3,
           ease: "power2.out",
           height: "90%",
@@ -93,6 +101,7 @@ const PortfolioTemplatePreview = ({ cardRef }: PortfolioTemplatePreviewProps) =>
           width: "48%",
           xPercent: -30,
           yPercent: -50,
+          zIndex: 1,
         });
       });
     };
@@ -105,20 +114,19 @@ const PortfolioTemplatePreview = ({ cardRef }: PortfolioTemplatePreviewProps) =>
       card.removeEventListener("mouseleave", onLeave);
       ctx.revert();
     };
-  }, [cardRef]);
+  }, [cardRef, isDarkMode]);
 
   return (
     <div className="relative flex-1 w-full my-2 overflow-hidden pointer-events-none min-h-40">
       {/* Dark mode image */}
       <div
-        ref={img1Ref}
+        ref={darkRef}
         className="absolute overflow-hidden pointer-events-none rounded-sm shadow-md"
         style={{
           height: "90%",
           left: "50%",
           top: "50%",
           width: "48%",
-          zIndex: 1,
         }}
       >
         <img
@@ -130,14 +138,13 @@ const PortfolioTemplatePreview = ({ cardRef }: PortfolioTemplatePreviewProps) =>
 
       {/* Light mode image */}
       <div
-        ref={img2Ref}
+        ref={lightRef}
         className="absolute overflow-hidden pointer-events-none rounded-sm shadow-md"
         style={{
           height: "90%",
           left: "50%",
           top: "50%",
           width: "48%",
-          zIndex: 2,
         }}
       >
         <img
@@ -218,7 +225,7 @@ export const TemplatesView = () => {
                 </p>
 
                 {/* Interactive GSAP V-Fan to Grid Template Preview */}
-                <PortfolioTemplatePreview cardRef={cardRef} />
+                <PortfolioTemplatePreview cardRef={cardRef} isDarkMode={isDarkMode} />
               </div>
             </button>
 

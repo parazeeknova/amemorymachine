@@ -1,15 +1,10 @@
 import { Extension } from "@tiptap/core";
-import { typingCharPlugin } from "./typing-char-plugin";
 
 export const TypingAnimation = Extension.create({
   addOptions() {
     return {
       duration: 280,
     };
-  },
-
-  addProseMirrorPlugins() {
-    return [typingCharPlugin(this.options.duration)];
   },
 
   addStorage() {

@@ -1,9 +1,10 @@
 import { WarningCircleIcon } from "@phosphor-icons/react";
-import { memo, useEffect, useMemo, useRef } from "react";
+import { memo, useMemo, useRef } from "react";
 import { useTheme } from "#/shared/hooks/use-theme";
 import type { ExperienceItem, Link, Profile, Project } from "#/shared/types";
 import type { ParsedPortfolio } from "../lib/portfolio-markdown";
 import { markdownToHtml } from "#/features/blog/lib/markdown-to-html";
+import { useVideoThumbnail } from "#/shared/hooks/use-video-thumbnail";
 
 interface PortfolioLivePreviewProps {
   errors: string[];
@@ -167,88 +168,55 @@ const PreviewProjectsSection = memo(({ projects }: { projects: Project[] }) => {
   );
 });
 
-const PreviewSocialLinks = memo(({ links }: { links?: Record<string, Link> }) => {
-  if (!links) {
-    return null;
-  }
+const PreviewSocialLinks = memo(
+  ({ links, isDarkMode }: { links?: Record<string, Link>; isDarkMode: boolean }) => {
+    if (!links) {
+      return null;
+    }
 
-  const uniqueLinks = [
-    ...new Map(
-      Object.entries(links)
-        .filter(([k, l]) => k !== "portfolio" && l.url && l.label)
-        .map(([, l]) => [l.url, l]),
-    ).values(),
-  ];
+    const uniqueLinks = [
+      ...new Map(
+        Object.entries(links)
+          .filter(([k, l]) => k !== "portfolio" && l.url && l.label)
+          .map(([, l]) => [l.url, l]),
+      ).values(),
+    ];
 
-  if (uniqueLinks.length === 0) {
-    return null;
-  }
+    if (uniqueLinks.length === 0) {
+      return null;
+    }
 
-  return (
-    <div className="shrink-0 flex items-center justify-between pt-2">
-      <div className="flex flex-wrap items-center gap-4">
-        {uniqueLinks.map((lk, idx) => (
-          <a
-            key={`${lk.url}-${idx}`}
-            href={lk.url}
-            target="_blank"
-            rel="noreferrer"
-            className="text-text-light/60 dark:text-text-dark/60 text-xs lowercase hover:text-text-light dark:hover:text-text-dark"
-          >
-            {lk.label}
-          </a>
-        ))}
+    return (
+      <div className="shrink-0 flex items-center justify-between pt-2">
+        <div className="flex flex-wrap items-center gap-4">
+          {uniqueLinks.map((lk, idx) => (
+            <a
+              key={`${lk.url}-${idx}`}
+              href={lk.url}
+              target="_blank"
+              rel="noreferrer"
+              className={`text-xs lowercase ${isDarkMode ? "text-text-dark/60 hover:text-text-dark" : "text-text-light/60 hover:text-text-light"}`}
+            >
+              {lk.label}
+            </a>
+          ))}
+        </div>
       </div>
-    </div>
-  );
-});
+    );
+  },
+);
 
 export const PortfolioLivePreview = memo(
   ({ errors, isValid, parsedData }: PortfolioLivePreviewProps) => {
     const { isDarkMode } = useTheme();
     const containerRef = useRef<HTMLDivElement>(null);
-    const videoRef = useRef<HTMLVideoElement>(null);
-
-    // Ensure header video plays automatically and resumes when scrolled back into view
-    useEffect(() => {
-      const v = videoRef.current;
-      if (!v) {
-        return;
-      }
-
-      v.muted = true;
-      v.playsInline = true;
-
-      const playVideo = async () => {
-        try {
-          await v.play();
-        } catch {
-          // Ignore autoplay restrictions or interruptions
-        }
-      };
-
-      const observer = new IntersectionObserver(
-        (entries) => {
-          for (const entry of entries) {
-            if (entry.isIntersecting) {
-              void playVideo();
-            } else {
-              v.pause();
-            }
-          }
-        },
-        { threshold: 0 },
-      );
-
-      observer.observe(v);
-
-      return () => {
-        observer.disconnect();
-        v.pause();
-      };
-    }, []);
-
     const { experiences, profile, projects } = parsedData;
+
+    const lightVideoUrl = profile.lightVideo || "https://img.przknv.cc/t/footer.mp4";
+    const darkVideoUrl = profile.darkVideo || "https://img.przknv.cc/t/header.mp4";
+
+    const lightThumb = useVideoThumbnail(lightVideoUrl);
+    const darkThumb = useVideoThumbnail(darkVideoUrl);
 
     const headerGradient = isDarkMode
       ? "linear-gradient(to bottom, transparent 0%, rgba(10, 10, 10, 0.4) 60%, #0a0a0a 100%)"
@@ -260,10 +228,14 @@ export const PortfolioLivePreview = memo(
           <div className="p-3 mb-3 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20">
             <WarningCircleIcon size={24} />
           </div>
-          <h4 className="text-sm font-medium lowercase text-text-dark/80 dark:text-text-dark/80">
+          <h4
+            className={`text-sm font-medium lowercase ${isDarkMode ? "text-text-dark/80" : "text-text-light/80"}`}
+          >
             syntax error in template
           </h4>
-          <p className="mt-1 text-[11px] max-w-xs leading-relaxed text-text-dark/40 dark:text-text-dark/40">
+          <p
+            className={`mt-1 text-[11px] max-w-xs leading-relaxed ${isDarkMode ? "text-text-dark/40" : "text-text-light/40"}`}
+          >
             fix the markdown structure errors to restore live preview:
           </p>
 
@@ -284,7 +256,7 @@ export const PortfolioLivePreview = memo(
     return (
       <div
         ref={containerRef}
-        className="h-full overflow-y-auto overflow-x-hidden transform-gpu bg-bg-light dark:bg-bg-dark text-text-light dark:text-text-dark"
+        className={`h-full overflow-y-auto overflow-x-hidden transform-gpu ${isDarkMode ? "bg-bg-dark text-text-dark" : "bg-bg-light text-text-light"}`}
         style={{ WebkitOverflowScrolling: "touch", willChange: "scroll-position" }}
         onClickCapture={(e) => {
           const anchor = (e.target as HTMLElement).closest("a");
@@ -294,19 +266,24 @@ export const PortfolioLivePreview = memo(
           }
         }}
       >
-        {/* Top Banner Cover Video */}
-        <div className="relative mx-auto w-full h-36 sm:h-44 overflow-hidden transform-gpu">
-          <video
-            ref={videoRef}
-            autoPlay
-            loop
-            muted
-            playsInline
-            disablePictureInPicture
-            preload="auto"
-            className="absolute inset-0 w-full h-full object-cover pointer-events-none"
-            src="https://img.przknv.cc/t/header.mp4"
-          />
+        {/* Top Banner Cover Video Thumbnails */}
+        <div className="relative mx-auto w-full h-36 sm:h-44 overflow-hidden transform-gpu bg-black">
+          {lightThumb && (
+            <img
+              alt="Light theme header"
+              className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-700"
+              style={{ opacity: isDarkMode ? 0 : 1 }}
+              src={lightThumb}
+            />
+          )}
+          {darkThumb && (
+            <img
+              alt="Dark theme header"
+              className="absolute inset-0 w-full h-full object-cover pointer-events-none transition-opacity duration-700"
+              style={{ opacity: isDarkMode ? 1 : 0 }}
+              src={darkThumb}
+            />
+          )}
           <div
             className="absolute inset-0 -bottom-1 pointer-events-none"
             style={{ background: headerGradient }}
@@ -324,7 +301,7 @@ export const PortfolioLivePreview = memo(
           <PreviewProfileSection profile={profile} />
           <PreviewExperienceSection experiences={experiences} />
           <PreviewProjectsSection projects={projects} />
-          <PreviewSocialLinks links={profile.links} />
+          <PreviewSocialLinks links={profile.links} isDarkMode={isDarkMode} />
 
           <div className="flex justify-end pt-4 pb-2">
             <span

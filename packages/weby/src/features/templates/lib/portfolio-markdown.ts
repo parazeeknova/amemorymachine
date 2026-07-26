@@ -15,6 +15,8 @@ export const generatePortfolioMarkdown = (
   const pTagline = profile?.tagline ?? "designer portfolio";
   const pUsername = profile?.username ?? "parazeeknova";
   const pEmail = profile?.email ?? "harsh@itssingularity.com";
+  const lightVideo = profile?.lightVideo ?? "https://img.przknv.cc/t/footer.mp4";
+  const darkVideo = profile?.darkVideo ?? "https://img.przknv.cc/t/header.mp4";
   const pDesc =
     profile?.description ??
     "Engineer and founder, building systems, infrastructure, and tools. Author of [asocialmedia](https://www.asocialmedia.cc). Runs [Singularity Works](https://www.itsingularity.com), an opinionated product studio.";
@@ -74,6 +76,8 @@ Name: ${pName}
 Tagline: ${pTagline}
 Username: ${pUsername}
 Email: ${pEmail}
+LightVideo: ${lightVideo}
+DarkVideo: ${darkVideo}
 Description: ${pDesc}
 
 Links:
@@ -96,6 +100,10 @@ const parseProfileLine = (line: string, profile: Profile) => {
     profile.username = line.slice("Username:".length).trim();
   } else if (line.startsWith("Email:")) {
     profile.email = line.slice("Email:".length).trim();
+  } else if (line.startsWith("LightVideo:")) {
+    profile.lightVideo = line.slice("LightVideo:".length).trim();
+  } else if (line.startsWith("DarkVideo:")) {
+    profile.darkVideo = line.slice("DarkVideo:".length).trim();
   } else if (line.startsWith("Description:")) {
     profile.description = line.slice("Description:".length).trim();
   } else if (line.startsWith("- ")) {

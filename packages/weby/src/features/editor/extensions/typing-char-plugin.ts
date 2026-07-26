@@ -3,6 +3,22 @@ import type { EditorView } from "prosemirror-view";
 
 const typingCharKey = new PluginKey("typingCharAnimation");
 
+// Flush all stale animation spans — if the user types faster than the animation
+// cleanup (280ms), leftover <span class="typing-char-animate"> wrappers corrupt
+// ProseMirror's coordsAtPos / elementsFromPoint calculations, causing cumulative
+// vertical cursor offset drift.
+const normalizeSpans = (root: HTMLElement) => {
+  const spans = root.querySelectorAll(".typing-char-animate");
+  for (const span of spans) {
+    if (span.parentElement) {
+      span.parentElement.replaceChild(document.createTextNode(span.textContent ?? ""), span);
+    }
+  }
+  if (spans.length > 0) {
+    root.normalize();
+  }
+};
+
 const findTextNodeAt = (
   element: Element,
   pos: number,
@@ -83,6 +99,12 @@ export const typingCharPlugin = (duration = 280) => {
         }
 
         try {
+          // Normalize any lingering animation spans before measuring coordinates.
+          // Without this, coordsAtPos sees a DOM that doesn't match the editor
+          // state, and the returned pixel position drifts further with each fast
+          // keystroke.
+          normalizeSpans(view.dom);
+
           const coords = view.coordsAtPos(Math.min(cursorPos, newState.doc.content.size));
           const elements = document.elementsFromPoint(coords.left, coords.top + 2);
           const proseMirror = view.dom;

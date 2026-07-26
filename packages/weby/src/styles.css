@@ -113,7 +113,6 @@
     overflow-x: hidden;
     scroll-behavior: smooth;
     scrollbar-width: none;
-    text-transform: lowercase;
   }
 
   body {
@@ -223,8 +222,7 @@ button {
   color: inherit;
   font-family: inherit;
   font-size: inherit;
-  line-height: inherit;
-  text-transform: lowercase;
+  text-transform: none !important;
   outline: none !important;
   border: none !important;
 }
@@ -255,6 +253,7 @@ button {
   border: none !important;
   box-shadow: none !important;
   min-height: 100%;
+  line-height: normal;
 }
 
 .blog-reader-prose .tiptap .ProseMirror:focus,
@@ -292,6 +291,7 @@ button {
   color: var(--color-text);
   scroll-margin-top: 2rem;
   font-weight: 600;
+  line-height: 1.4;
 }
 
 .blog-reader-prose h1 {
@@ -310,6 +310,7 @@ button {
 .blog-reader-prose blockquote,
 .blog-reader-prose pre {
   margin-bottom: 0.5rem;
+  line-height: 1.4;
 }
 
 .blog-reader-prose ul:not([data-type="taskList"]) {
@@ -1268,31 +1269,6 @@ div[data-type="columns"][data-layout="three_with_sidebars"] > div[data-type="col
 [data-theme="light"] .history-diff-preview .history-diff-deleted {
   background: rgba(220, 40, 40, 0.08);
   color: rgba(200, 50, 50, 0.6);
-}
-
-@keyframes typing-phase-in {
-  0% {
-    opacity: 0.4;
-    color: var(--color-accent);
-    text-shadow: 0 0 8px var(--color-accent);
-    transform: translateY(1px);
-  }
-  60% {
-    opacity: 0.9;
-    text-shadow: 0 0 2px var(--color-accent);
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 1;
-    color: inherit;
-    text-shadow: none;
-    transform: translateY(0);
-  }
-}
-
-.ProseMirror .typing-char-animate {
-  display: inline;
-  animation: typing-phase-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
 }
 
 .ProseMirror.is-typing {

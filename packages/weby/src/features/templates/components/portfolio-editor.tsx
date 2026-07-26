@@ -34,7 +34,7 @@ const highlightSyntax = (text: string, isDark: boolean) => {
   );
   html = html.replaceAll(/^(- |### )/gm, `<span class="${listColor} font-bold">$1</span>`);
   html = html.replaceAll(
-    /(Name:|Tagline:|Username:|Email:|Description:|Links:|Location:|Period:|Desc:|Image:|Stack:|Readme:|Repo:|Product:)/g,
+    /(Name:|Tagline:|Username:|Email:|LightVideo:|DarkVideo:|Description:|Links:|Location:|Period:|Desc:|Image:|Stack:|Readme:|Repo:|Product:)/g,
     `<span class="${keyColor} font-semibold">$1</span>`,
   );
   html = html.replaceAll(
