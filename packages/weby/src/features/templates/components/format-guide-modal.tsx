@@ -1,10 +1,28 @@
-import { CheckCircleIcon, XIcon } from "@phosphor-icons/react";
+import { XIcon } from "@phosphor-icons/react";
 import { useTheme } from "#/shared/hooks/use-theme";
 
 interface FormatGuideModalProps {
   isOpen: boolean;
   onClose: () => void;
 }
+
+const H2 = ({ children }: { children: string }) => (
+  <span className="block text-[11px] font-semibold lowercase text-text-dark/70 mt-3 mb-1">
+    {children}
+  </span>
+);
+
+const P = ({ children }: { children: string }) => (
+  <span className="block text-[10px] leading-relaxed lowercase text-text-dark/40">{children}</span>
+);
+
+const Code = ({ children }: { children: string }) => (
+  <pre className="my-1 px-3 py-2 border border-border-dark/40 bg-white/3 text-[10px] leading-relaxed overflow-x-auto font-mono text-text-dark/60">
+    {children}
+  </pre>
+);
+
+const HR = () => <div className="my-2 border-t border-border-dark/15" />;
 
 export const FormatGuideModal = ({ isOpen, onClose }: FormatGuideModalProps) => {
   const { isDarkMode } = useTheme();
@@ -17,112 +35,96 @@ export const FormatGuideModal = ({ isOpen, onClose }: FormatGuideModalProps) => 
   return (
     <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
       <div
-        className={`w-full max-w-xl max-h-[85vh] flex flex-col border shadow-2xl p-5 text-left lowercase ${t(
-          "bg-bg-dark border-border-dark text-text-dark",
-          "bg-bg-light border-border-light text-text-light",
-        )}`}
+        className={`w-full max-w-xl max-h-[85vh] flex flex-col border ${t("bg-bg-dark border-border-dark text-text-dark", "bg-bg-light border-border-light text-text-light")}`}
       >
-        {/* Header */}
-        <div className="flex items-center justify-between pb-3 border-b border-border-dark/50 shrink-0">
-          <div>
-            <h3 className="text-sm font-semibold">template format guidelines</h3>
-            <p className={`text-[11px] mt-0.5 ${t("text-text-dark/40", "text-text-light/40")}`}>
-              markdown structure rules for sync to database
-            </p>
-          </div>
+        <div
+          className={`flex items-center justify-between px-3 py-1.5 border-b shrink-0 ${t("border-border-dark", "border-border-light")}`}
+        >
+          <span className="text-[12px] font-medium lowercase">format guide</span>
           <button
             className={`p-1 transition-colors ${t("text-text-dark/40 hover:text-text-dark", "text-text-light/40 hover:text-text-light")}`}
             onClick={onClose}
             type="button"
           >
-            <XIcon size={16} />
+            <XIcon size={15} />
           </button>
         </div>
 
-        {/* Content Body */}
-        <div className="flex-1 overflow-y-auto py-4 space-y-4 font-mono text-[11px] leading-relaxed">
-          {/* Section 1: Required Headers */}
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-1.5 text-purple-400 font-bold">
-              <CheckCircleIcon size={14} /> 1. required section comment headers
-            </div>
-            <p className={t("text-text-dark/50", "text-text-light/50")}>
-              the parser looks for these exact comment strings to partition sections:
-            </p>
-            <pre
-              className={`p-2.5 border text-[10px] overflow-x-auto ${t("border-border-dark bg-white/3 text-purple-300", "border-border-light bg-black/3 text-purple-700")}`}
-            >
-              {`<!-- ==================== PROFILE SECTION (REQUIRED BY PORTFOLIO) ==================== -->
-<!-- ==================== EXPERIENCE TIMELINE (REQUIRED BY PORTFOLIO) ==================== -->
-<!-- ==================== PROJECT SHOWCASE (REQUIRED BY PORTFOLIO) ==================== -->`}
-            </pre>
-          </div>
+        <div className="flex-1 overflow-y-auto px-4 py-3 text-left">
+          <H2>section headers</H2>
+          <P>
+            Your template must have three sections. Each section starts with a heading on its own
+            line. The parser looks for these exact headings:
+          </P>
+          <Code>{"## PROFILE\n## EXPERIENCE\n## PROJECTS"}</Code>
+          <P>The order matters. Always put PROFILE first, then EXPERIENCE, then PROJECTS.</P>
 
-          {/* Section 2: Profile Section */}
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-1.5 text-purple-400 font-bold">
-              <CheckCircleIcon size={14} /> 2. profile section fields
-            </div>
-            <pre
-              className={`p-2.5 border text-[10px] overflow-x-auto ${t("border-border-dark bg-white/3 text-text-dark/80", "border-border-light bg-black/3 text-text-light/80")}`}
-            >
-              {`Name: Your Full Name
-Tagline: your title or tagline
-Username: yourusername
-Email: your@email.com
-Description: short bio or summary paragraph.
+          <HR />
 
-Links:
-- label: https://your-link.com
-- github: https://github.com/username`}
-            </pre>
-          </div>
+          <H2>profile section</H2>
+          <P>
+            This is where you describe yourself. Put this right after the PROFILE heading. Every
+            field is optional except the section heading itself. Here are the fields you can use:
+          </P>
+          <Code>
+            {
+              "Name: Your Full Name\nTagline: your title or tagline\nUsername: yourusername\nEmail: your@email.com\nDescription: short bio paragraph."
+            }
+          </Code>
+          <P>
+            You can also add links. Start with "Links:" on its own line, then list each link with a
+            dash:
+          </P>
+          <Code>{"Links:\n- label: https://url.com\n- github: https://github.com/username"}</Code>
+          <P>
+            Each link needs a label and a url separated by a colon. The label is what shows up on
+            the page, the url is where it links to.
+          </P>
 
-          {/* Section 3: Experience Section */}
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-1.5 text-purple-400 font-bold">
-              <CheckCircleIcon size={14} /> 3. experience items format
-            </div>
-            <pre
-              className={`p-2.5 border text-[10px] overflow-x-auto ${t("border-border-dark bg-white/3 text-text-dark/80", "border-border-light bg-black/3 text-text-light/80")}`}
-            >
-              {`### Job Title — Company Name
-- Location: Remote (City, Country)
-- Period: Month YY' – Present`}
-            </pre>
-          </div>
+          <HR />
 
-          {/* Section 4: Projects Section */}
-          <div className="space-y-1.5">
-            <div className="flex items-center gap-1.5 text-purple-400 font-bold">
-              <CheckCircleIcon size={14} /> 4. project items format
-            </div>
-            <pre
-              className={`p-2.5 border text-[10px] overflow-x-auto ${t("border-border-dark bg-white/3 text-text-dark/80", "border-border-light bg-black/3 text-text-light/80")}`}
-            >
-              {`### Project Name
-- Desc: Project description string
-- Image: https://img-url.png
-- Stack: React, TypeScript, Bun, Tailwind
-- Readme: https://raw.github...
-- Repo: https://github...
-- Product: https://app-domain.com`}
-            </pre>
-          </div>
-        </div>
+          <H2>experience section</H2>
+          <P>
+            This is your work history. Each job or role is a separate entry. Start each entry with
+            three hashes followed by the job title and company name separated by an em dash:
+          </P>
+          <Code>
+            {
+              "### Job Title — Company Name\n- Location: Remote (City, Country)\n- Period: Month YY' – Present"
+            }
+          </Code>
+          <P>
+            You can add as many experience entries as you want. Just repeat the pattern for each
+            role.
+          </P>
 
-        {/* Footer */}
-        <div className="pt-3 border-t border-border-dark/50 flex justify-end shrink-0">
-          <button
-            className={`px-3 py-1 text-[11px] border font-mono lowercase transition-colors ${t(
-              "border-purple-500/40 text-purple-400 bg-purple-500/10 hover:bg-purple-500/20",
-              "border-purple-600/40 text-purple-700 bg-purple-500/10 hover:bg-purple-500/20",
-            )}`}
-            onClick={onClose}
-            type="button"
-          >
-            got it
-          </button>
+          <HR />
+
+          <H2>projects section</H2>
+          <P>
+            This is where you show off your work. Each project is an entry starting with three
+            hashes:
+          </P>
+          <Code>
+            {
+              "### Project Name\n- Desc: Project description\n- Image: https://img-url.png\n- Stack: React, TypeScript, Bun\n- Readme: https://raw.github.com/...\n- Repo: https://github.com/...\n- Product: https://app-url.com"
+            }
+          </Code>
+          <P>
+            All fields are optional. You can skip any field you do not have data for. Add as many
+            projects as you like.
+          </P>
+
+          <HR />
+
+          <H2>tips</H2>
+          <P>
+            The preview on the right updates as you type so you can see exactly how things will
+            look.
+          </P>
+          <P>Use the save button in the sidebar to save your template and make it live.</P>
+          <P>Every save creates a history snapshot you can restore from later.</P>
+          <P>Click reset to boilerplate to start fresh with the default template.</P>
         </div>
       </div>
     </div>

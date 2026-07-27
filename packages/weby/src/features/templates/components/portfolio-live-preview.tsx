@@ -4,7 +4,6 @@ import { useTheme } from "#/shared/hooks/use-theme";
 import type { ExperienceItem, Link, Profile, Project } from "#/shared/types";
 import type { ParsedPortfolio } from "../lib/portfolio-markdown";
 import { markdownToHtml } from "#/features/blog/lib/markdown-to-html";
-import { useVideoThumbnail } from "#/shared/hooks/use-video-thumbnail";
 
 interface PortfolioLivePreviewProps {
   errors: string[];
@@ -212,11 +211,15 @@ export const PortfolioLivePreview = memo(
     const containerRef = useRef<HTMLDivElement>(null);
     const { experiences, profile, projects } = parsedData;
 
-    const lightVideoUrl = profile.lightVideo || "/footer.webm";
-    const darkVideoUrl = profile.darkVideo || "/header.webm";
+    const lightVideoUrl = profile.lightVideo || "https://img.przknv.cc/t/footer.mp4";
+    const darkVideoUrl = profile.darkVideo || "https://img.przknv.cc/t/header.mp4";
 
-    const lightThumb = useVideoThumbnail(lightVideoUrl);
-    const darkThumb = useVideoThumbnail(darkVideoUrl);
+    const lightThumb = lightVideoUrl
+      ? `/api/console/video-thumbnail?url=${encodeURIComponent(lightVideoUrl)}`
+      : undefined;
+    const darkThumb = darkVideoUrl
+      ? `/api/console/video-thumbnail?url=${encodeURIComponent(darkVideoUrl)}`
+      : undefined;
 
     const headerGradient = isDarkMode
       ? "linear-gradient(to bottom, transparent 0%, rgba(10, 10, 10, 0.4) 60%, #0a0a0a 100%)"

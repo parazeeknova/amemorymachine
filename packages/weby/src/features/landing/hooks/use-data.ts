@@ -82,20 +82,6 @@ export const useBlogManifest = () =>
     queryKey: ["blogManifest"],
   });
 
-interface TemplateInfo {
-  description: string;
-  icon: string;
-  id: string;
-  isDefault: boolean;
-  title: string;
-}
-
-export const useTemplates = () =>
-  useQuery<TemplateInfo[]>({
-    queryFn: ({ signal }) => fetchJson<TemplateInfo[]>("/api/console/templates", { signal }),
-    queryKey: ["console-templates"],
-  });
-
 export const useIsFetchingData = (): boolean => {
   const profile = useProfile();
   const experience = useExperience();

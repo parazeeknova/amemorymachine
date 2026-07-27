@@ -345,6 +345,7 @@ func main() {
 			// Templates
 			console.GET("/templates", h.GetTemplates)
 			console.POST("/templates/pin", h.PinPortfolioTemplate)
+			console.GET("/video-thumbnail", h.GetVideoThumbnail)
 
 			// Profile
 			profileHandlers.RegisterRoutes(console)

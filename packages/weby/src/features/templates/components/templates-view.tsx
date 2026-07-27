@@ -3,7 +3,7 @@ import { useEffect, useMemo, useRef } from "react";
 import { gsap } from "gsap";
 import { useTheme } from "#/shared/hooks/use-theme";
 import { useNavigate } from "@tanstack/react-router";
-import { useTemplates } from "#/features/landing";
+import { useTemplates } from "#/features/templates/hooks/use-templates";
 
 interface PortfolioTemplatePreviewProps {
   cardRef: React.RefObject<HTMLButtonElement | null>;

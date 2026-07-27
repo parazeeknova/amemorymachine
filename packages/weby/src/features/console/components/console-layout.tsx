@@ -29,6 +29,7 @@ import { SpaceSidebar } from "#/features/space/components/space-sidebar";
 import { useConsoleStore } from "#/features/console/stores/console-store";
 import { useConsoleBootstrap } from "#/features/console/hooks/use-console-bootstrap";
 import { FileTreeSidebar } from "./file-tree-sidebar";
+import { PortfolioEditorSidebar } from "#/features/templates/components/portfolio-editor-sidebar";
 import { useCreatePage } from "#/features/console/hooks/use-pages";
 
 const SIDEBAR_WIDTH = 280;
@@ -103,6 +104,7 @@ export const ConsoleLayout = () => {
   const isMembersRoute = routerState.location.pathname === "/settings/members";
   const isSpacesRoute = routerState.location.pathname === "/settings/spaces";
   const isGroupsRoute = routerState.location.pathname === "/settings/groups";
+  const isPortfolioRoute = routerState.location.pathname === "/home/templates/portfolio";
   const debugSelectedTable =
     ((routerState.location.search as Record<string, unknown> | undefined)?.table as string) ?? null;
   const debugSelectedTab =
@@ -277,6 +279,8 @@ export const ConsoleLayout = () => {
     );
   } else if (isSpaceRoute && currentSpace) {
     sidebarContent = <SpaceSidebar space={currentSpace} />;
+  } else if (isPortfolioRoute) {
+    sidebarContent = <PortfolioEditorSidebar />;
   } else {
     sidebarContent = (
       <div className="min-h-0 w-full flex-1 flex flex-col overflow-y-auto px-4">

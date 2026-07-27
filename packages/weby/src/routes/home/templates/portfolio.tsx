@@ -13,7 +13,7 @@ const PortfolioTemplateRoute = () => {
       initialExperiences={experience}
       initialProfile={profile}
       initialProjects={projects}
-      onPinComplete={() => navigate({ to: "/home/templates" })}
+      onBack={() => navigate({ to: "/home/templates" })}
     />
   );
 };
