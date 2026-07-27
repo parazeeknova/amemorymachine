@@ -9,142 +9,122 @@
 // Additionally, you should also exclude this file from your linter and/or formatter to prevent it from being checked or modified.
 
 import { Route as rootRouteImport } from './routes/__root'
-import { Route as SettingsRouteImport } from './routes/settings'
-import { Route as MfaChallengeRouteImport } from './routes/mfa-challenge'
-import { Route as HomeRouteImport } from './routes/home'
-import { Route as DesktopRouteImport } from './routes/desktop'
-import { Route as AboutRouteImport } from './routes/about'
-import { Route as SplatRouteImport } from './routes/$'
 import { Route as IndexRouteImport } from './routes/index'
-import { Route as HomeIndexRouteImport } from './routes/home/index'
-import { Route as ShareTokenRouteImport } from './routes/share/$token'
-import { Route as ShShortcodeRouteImport } from './routes/sh/$shortcode'
-import { Route as SettingsWorkspaceRouteImport } from './routes/settings/workspace'
-import { Route as SettingsSpacesRouteImport } from './routes/settings/spaces'
-import { Route as SettingsMembersRouteImport } from './routes/settings/members'
-import { Route as SettingsGroupsRouteImport } from './routes/settings/groups'
-import { Route as SSpaceSlugRouteImport } from './routes/s/$spaceSlug'
-import { Route as HomeTemplatesRouteImport } from './routes/home/templates'
-import { Route as HomeDebugRouteImport } from './routes/home/debug'
-import { Route as ApiStatsRouteImport } from './routes/api/stats'
-import { Route as ApiProjectsRouteImport } from './routes/api/projects'
-import { Route as ApiProfileRouteImport } from './routes/api/profile'
-import { Route as ApiExperienceRouteImport } from './routes/api/experience'
+import { Route as SplatRouteImport } from './routes/$'
+import { Route as AboutRouteImport } from './routes/about'
+import { Route as DesktopRouteImport } from './routes/desktop'
+import { Route as HomeRouteImport } from './routes/home'
+import { Route as MfaChallengeRouteImport } from './routes/mfa-challenge'
+import { Route as SettingsRouteImport } from './routes/settings'
 import { Route as ApiBlogsRouteImport } from './routes/api/blogs'
-import { Route as SSpaceSlugIndexRouteImport } from './routes/s/$spaceSlug/index'
-import { Route as HomeTemplatesIndexRouteImport } from './routes/home/templates/index'
-import { Route as SettingsSystemsDebugRouteImport } from './routes/settings/systems/debug'
-import { Route as SettingsAccountProfileRouteImport } from './routes/settings/account/profile'
-import { Route as SettingsAccountPreferencesRouteImport } from './routes/settings/account/preferences'
-import { Route as SSpaceSlugSettingsRouteImport } from './routes/s/$spaceSlug/settings'
-import { Route as HomeTemplatesPortfolioRouteImport } from './routes/home/templates/portfolio'
-import { Route as ApiShortShortcodeRouteImport } from './routes/api/short/$shortcode'
-import { Route as ApiSharesTokenRouteImport } from './routes/api/shares/$token'
-import { Route as ApiGithubStatsRouteImport } from './routes/api/github/stats'
-import { Route as ApiConsoleWorkspacesRouteImport } from './routes/api/console/workspaces'
-import { Route as ApiConsoleUsersRouteImport } from './routes/api/console/users'
-import { Route as ApiConsoleUploadRouteImport } from './routes/api/console/upload'
-import { Route as ApiConsoleTemplatesRouteImport } from './routes/api/console/templates'
-import { Route as ApiConsoleSystemSettingsRouteImport } from './routes/api/console/system-settings'
-import { Route as ApiConsoleSpacesRouteImport } from './routes/api/console/spaces'
-import { Route as ApiConsoleProfileRouteImport } from './routes/api/console/profile'
-import { Route as ApiConsolePagesRouteImport } from './routes/api/console/pages'
-import { Route as ApiConsoleNotificationsRouteImport } from './routes/api/console/notifications'
-import { Route as ApiBlogsSlugRouteImport } from './routes/api/blogs/$slug'
-import { Route as ApiAuthRefreshRouteImport } from './routes/api/auth/refresh'
-import { Route as ApiAuthMeRouteImport } from './routes/api/auth/me'
-import { Route as ApiAuthLogoutRouteImport } from './routes/api/auth/logout'
-import { Route as ApiAuthLoginRouteImport } from './routes/api/auth/login'
-import { Route as ApiAuthCollabTokenRouteImport } from './routes/api/auth/collab-token'
+import { Route as ApiExperienceRouteImport } from './routes/api/experience'
+import { Route as ApiProfileRouteImport } from './routes/api/profile'
+import { Route as ApiProjectsRouteImport } from './routes/api/projects'
+import { Route as ApiStatsRouteImport } from './routes/api/stats'
+import { Route as HomeIndexRouteImport } from './routes/home/index'
+import { Route as HomeDebugRouteImport } from './routes/home/debug'
+import { Route as HomeTemplatesRouteImport } from './routes/home/templates'
+import { Route as SSpaceSlugRouteImport } from './routes/s/$spaceSlug'
+import { Route as SettingsGroupsRouteImport } from './routes/settings/groups'
+import { Route as SettingsMembersRouteImport } from './routes/settings/members'
+import { Route as SettingsSpacesRouteImport } from './routes/settings/spaces'
+import { Route as SettingsWorkspaceRouteImport } from './routes/settings/workspace'
+import { Route as ShShortcodeRouteImport } from './routes/sh/$shortcode'
+import { Route as ShareTokenRouteImport } from './routes/share/$token'
 import { Route as ApiAuthBootstrapStateRouteImport } from './routes/api/auth/bootstrap-state'
-import { Route as SSpaceSlugPPageidRouteImport } from './routes/s/$spaceSlug/p/$pageid'
-import { Route as ApiSharesTokenPresenceRouteImport } from './routes/api/shares/$token/presence'
-import { Route as ApiConsoleWorkspacesIdRouteImport } from './routes/api/console/workspaces/$id'
-import { Route as ApiConsoleUsersIdRouteImport } from './routes/api/console/users/$id'
-import { Route as ApiConsoleUnsplashSearchRouteImport } from './routes/api/console/unsplash/search'
-import { Route as ApiConsoleSpacesFavoritesRouteImport } from './routes/api/console/spaces/favorites'
-import { Route as ApiConsoleSpacesIdRouteImport } from './routes/api/console/spaces/$id'
-import { Route as ApiConsolePushUnsubscribeRouteImport } from './routes/api/console/push/unsubscribe'
-import { Route as ApiConsolePushSubscribeRouteImport } from './routes/api/console/push/subscribe'
-import { Route as ApiConsolePushPublicKeyRouteImport } from './routes/api/console/push/public-key'
-import { Route as ApiConsoleProfileSessionRouteImport } from './routes/api/console/profile/session'
-import { Route as ApiConsoleProfilePasswordRouteImport } from './routes/api/console/profile/password'
-import { Route as ApiConsolePagesTreeRouteImport } from './routes/api/console/pages/tree'
-import { Route as ApiConsolePagesFavoritesRouteImport } from './routes/api/console/pages/favorites'
-import { Route as ApiConsolePagesIdRouteImport } from './routes/api/console/pages/$id'
-import { Route as ApiConsoleNotificationsUnreadCountRouteImport } from './routes/api/console/notifications/unread-count'
-import { Route as ApiConsoleNotificationsStreamRouteImport } from './routes/api/console/notifications/stream'
-import { Route as ApiConsoleNotificationsReadAllRouteImport } from './routes/api/console/notifications/read-all'
-import { Route as ApiConsoleNotificationsDismissAllRouteImport } from './routes/api/console/notifications/dismiss-all'
-import { Route as ApiConsoleNotificationsIdRouteImport } from './routes/api/console/notifications/$id'
-import { Route as ApiConsoleMfaStatusRouteImport } from './routes/api/console/mfa/status'
-import { Route as ApiConsoleMfaSetupRouteImport } from './routes/api/console/mfa/setup'
-import { Route as ApiConsoleMfaEnableRouteImport } from './routes/api/console/mfa/enable'
-import { Route as ApiConsoleMfaDisableRouteImport } from './routes/api/console/mfa/disable'
-import { Route as ApiConsoleMfaBackupCodesRouteImport } from './routes/api/console/mfa/backup-codes'
-import { Route as ApiConsoleGroupsIdRouteImport } from './routes/api/console/groups/$id'
-import { Route as ApiConsoleDebugTablesRouteImport } from './routes/api/console/debug/tables'
-import { Route as ApiConsoleCommentsIdRouteImport } from './routes/api/console/comments/$id'
-import { Route as ApiConsoleAuthCollabTokenRouteImport } from './routes/api/console/auth/collab-token'
+import { Route as ApiAuthCollabTokenRouteImport } from './routes/api/auth/collab-token'
+import { Route as ApiAuthLoginRouteImport } from './routes/api/auth/login'
+import { Route as ApiAuthLogoutRouteImport } from './routes/api/auth/logout'
+import { Route as ApiAuthMeRouteImport } from './routes/api/auth/me'
+import { Route as ApiAuthRefreshRouteImport } from './routes/api/auth/refresh'
+import { Route as ApiBlogsSlugRouteImport } from './routes/api/blogs/$slug'
+import { Route as ApiConsoleNotificationsRouteImport } from './routes/api/console/notifications'
+import { Route as ApiConsolePagesRouteImport } from './routes/api/console/pages'
+import { Route as ApiConsoleProfileRouteImport } from './routes/api/console/profile'
+import { Route as ApiConsoleSpacesRouteImport } from './routes/api/console/spaces'
+import { Route as ApiConsoleSystemSettingsRouteImport } from './routes/api/console/system-settings'
+import { Route as ApiConsoleTemplatesRouteImport } from './routes/api/console/templates'
+import { Route as ApiConsoleUploadRouteImport } from './routes/api/console/upload'
+import { Route as ApiConsoleUsersRouteImport } from './routes/api/console/users'
+import { Route as ApiConsoleWorkspacesRouteImport } from './routes/api/console/workspaces'
+import { Route as ApiGithubStatsRouteImport } from './routes/api/github/stats'
+import { Route as ApiSharesTokenRouteImport } from './routes/api/shares/$token'
+import { Route as ApiShortShortcodeRouteImport } from './routes/api/short/$shortcode'
+import { Route as HomeTemplatesIndexRouteImport } from './routes/home/templates/index'
+import { Route as HomeTemplatesPortfolioRouteImport } from './routes/home/templates/portfolio'
+import { Route as SSpaceSlugIndexRouteImport } from './routes/s/$spaceSlug/index'
+import { Route as SSpaceSlugSettingsRouteImport } from './routes/s/$spaceSlug/settings'
+import { Route as SettingsAccountPreferencesRouteImport } from './routes/settings/account/preferences'
+import { Route as SettingsAccountProfileRouteImport } from './routes/settings/account/profile'
+import { Route as SettingsSystemsDebugRouteImport } from './routes/settings/systems/debug'
 import { Route as ApiAuthMfaVerifyRouteImport } from './routes/api/auth/mfa/verify'
-import { Route as ApiConsoleWorkspacesIdGroupsRouteImport } from './routes/api/console/workspaces/$id/groups'
-import { Route as ApiConsoleUsersIdRoleRouteImport } from './routes/api/console/users/$id/role'
-import { Route as ApiConsoleUsersIdActiveRouteImport } from './routes/api/console/users/$id/active'
-import { Route as ApiConsoleSpacesBySlugSlugRouteImport } from './routes/api/console/spaces/by-slug/$slug'
-import { Route as ApiConsoleSpacesIdMembersRouteImport } from './routes/api/console/spaces/$id/members'
-import { Route as ApiConsoleSpacesIdFavoritedRouteImport } from './routes/api/console/spaces/$id/favorited'
-import { Route as ApiConsoleSpacesIdFavoriteRouteImport } from './routes/api/console/spaces/$id/favorite'
-import { Route as ApiConsoleProfileSessionRevokeRouteImport } from './routes/api/console/profile/session/revoke'
-import { Route as ApiConsolePagesIdWatchingRouteImport } from './routes/api/console/pages/$id/watching'
-import { Route as ApiConsolePagesIdWatchRouteImport } from './routes/api/console/pages/$id/watch'
-import { Route as ApiConsolePagesIdUnpublishRouteImport } from './routes/api/console/pages/$id/unpublish'
-import { Route as ApiConsolePagesIdShareRouteImport } from './routes/api/console/pages/$id/share'
-import { Route as ApiConsolePagesIdRestoreRouteImport } from './routes/api/console/pages/$id/restore'
-import { Route as ApiConsolePagesIdPublishRouteImport } from './routes/api/console/pages/$id/publish'
-import { Route as ApiConsolePagesIdPresenceRouteImport } from './routes/api/console/pages/$id/presence'
-import { Route as ApiConsolePagesIdMoveRouteImport } from './routes/api/console/pages/$id/move'
-import { Route as ApiConsolePagesIdHistoryRouteImport } from './routes/api/console/pages/$id/history'
-import { Route as ApiConsolePagesIdFavoritedRouteImport } from './routes/api/console/pages/$id/favorited'
-import { Route as ApiConsolePagesIdFavoriteRouteImport } from './routes/api/console/pages/$id/favorite'
-import { Route as ApiConsolePagesIdCommentsRouteImport } from './routes/api/console/pages/$id/comments'
-import { Route as ApiConsolePagesIdChildrenRouteImport } from './routes/api/console/pages/$id/children'
-import { Route as ApiConsoleNotificationsIdReadRouteImport } from './routes/api/console/notifications/$id/read'
-import { Route as ApiConsoleGroupsIdMembersRouteImport } from './routes/api/console/groups/$id/members'
-import { Route as ApiConsoleFilesBucketFilenameRouteImport } from './routes/api/console/files/$bucket/$filename'
-import { Route as ApiConsoleDebugTablesTableNameRouteImport } from './routes/api/console/debug/tables/$tableName'
+import { Route as ApiConsoleAuthCollabTokenRouteImport } from './routes/api/console/auth/collab-token'
+import { Route as ApiConsoleCommentsIdRouteImport } from './routes/api/console/comments/$id'
+import { Route as ApiConsoleDebugTablesRouteImport } from './routes/api/console/debug/tables'
+import { Route as ApiConsoleGroupsIdRouteImport } from './routes/api/console/groups/$id'
+import { Route as ApiConsoleMfaBackupCodesRouteImport } from './routes/api/console/mfa/backup-codes'
+import { Route as ApiConsoleMfaDisableRouteImport } from './routes/api/console/mfa/disable'
+import { Route as ApiConsoleMfaEnableRouteImport } from './routes/api/console/mfa/enable'
+import { Route as ApiConsoleMfaSetupRouteImport } from './routes/api/console/mfa/setup'
+import { Route as ApiConsoleMfaStatusRouteImport } from './routes/api/console/mfa/status'
+import { Route as ApiConsoleNotificationsIdRouteImport } from './routes/api/console/notifications/$id'
+import { Route as ApiConsoleNotificationsDismissAllRouteImport } from './routes/api/console/notifications/dismiss-all'
+import { Route as ApiConsoleNotificationsReadAllRouteImport } from './routes/api/console/notifications/read-all'
+import { Route as ApiConsoleNotificationsStreamRouteImport } from './routes/api/console/notifications/stream'
+import { Route as ApiConsoleNotificationsUnreadCountRouteImport } from './routes/api/console/notifications/unread-count'
+import { Route as ApiConsolePagesIdRouteImport } from './routes/api/console/pages/$id'
+import { Route as ApiConsolePagesFavoritesRouteImport } from './routes/api/console/pages/favorites'
+import { Route as ApiConsolePagesTreeRouteImport } from './routes/api/console/pages/tree'
+import { Route as ApiConsoleProfilePasswordRouteImport } from './routes/api/console/profile/password'
+import { Route as ApiConsoleProfileSessionRouteImport } from './routes/api/console/profile/session'
+import { Route as ApiConsolePushPublicKeyRouteImport } from './routes/api/console/push/public-key'
+import { Route as ApiConsolePushSubscribeRouteImport } from './routes/api/console/push/subscribe'
+import { Route as ApiConsolePushUnsubscribeRouteImport } from './routes/api/console/push/unsubscribe'
+import { Route as ApiConsoleSpacesIdRouteImport } from './routes/api/console/spaces/$id'
+import { Route as ApiConsoleSpacesFavoritesRouteImport } from './routes/api/console/spaces/favorites'
+import { Route as ApiConsoleUnsplashSearchRouteImport } from './routes/api/console/unsplash/search'
+import { Route as ApiConsoleUsersIdRouteImport } from './routes/api/console/users/$id'
+import { Route as ApiConsoleWorkspacesIdRouteImport } from './routes/api/console/workspaces/$id'
+import { Route as ApiSharesTokenPresenceRouteImport } from './routes/api/shares/$token/presence'
+import { Route as SSpaceSlugPPageidRouteImport } from './routes/s/$spaceSlug/p/$pageid'
 import { Route as ApiConsoleCommentsIdResolveRouteImport } from './routes/api/console/comments/$id/resolve'
-import { Route as ApiConsoleSpacesIdMembersUserIdRouteImport } from './routes/api/console/spaces/$id/members/$userId'
-import { Route as ApiConsoleSpacesIdGroupsGroupIdRouteImport } from './routes/api/console/spaces/$id/groups/$groupId'
-import { Route as ApiConsolePagesIdShareShortenRouteImport } from './routes/api/console/pages/$id/share/shorten'
-import { Route as ApiConsolePagesIdHistoryHistoryIdRouteImport } from './routes/api/console/pages/$id/history/$historyId'
-import { Route as ApiConsolePagesIdCommentsStreamRouteImport } from './routes/api/console/pages/$id/comments/stream'
-import { Route as ApiConsoleGroupsIdMembersUserIdRouteImport } from './routes/api/console/groups/$id/members/$userId'
+import { Route as ApiConsoleDebugTablesTableNameRouteImport } from './routes/api/console/debug/tables/$tableName'
+import { Route as ApiConsoleFilesBucketFilenameRouteImport } from './routes/api/console/files/$bucket/$filename'
+import { Route as ApiConsoleGroupsIdMembersRouteImport } from './routes/api/console/groups/$id/members'
+import { Route as ApiConsoleNotificationsIdReadRouteImport } from './routes/api/console/notifications/$id/read'
+import { Route as ApiConsolePagesIdChildrenRouteImport } from './routes/api/console/pages/$id/children'
+import { Route as ApiConsolePagesIdCommentsRouteImport } from './routes/api/console/pages/$id/comments'
+import { Route as ApiConsolePagesIdFavoriteRouteImport } from './routes/api/console/pages/$id/favorite'
+import { Route as ApiConsolePagesIdFavoritedRouteImport } from './routes/api/console/pages/$id/favorited'
+import { Route as ApiConsolePagesIdHistoryRouteImport } from './routes/api/console/pages/$id/history'
+import { Route as ApiConsolePagesIdMoveRouteImport } from './routes/api/console/pages/$id/move'
+import { Route as ApiConsolePagesIdPresenceRouteImport } from './routes/api/console/pages/$id/presence'
+import { Route as ApiConsolePagesIdPublishRouteImport } from './routes/api/console/pages/$id/publish'
+import { Route as ApiConsolePagesIdRestoreRouteImport } from './routes/api/console/pages/$id/restore'
+import { Route as ApiConsolePagesIdShareRouteImport } from './routes/api/console/pages/$id/share'
+import { Route as ApiConsolePagesIdUnpublishRouteImport } from './routes/api/console/pages/$id/unpublish'
+import { Route as ApiConsolePagesIdWatchRouteImport } from './routes/api/console/pages/$id/watch'
+import { Route as ApiConsolePagesIdWatchingRouteImport } from './routes/api/console/pages/$id/watching'
+import { Route as ApiConsoleProfileSessionRevokeRouteImport } from './routes/api/console/profile/session/revoke'
+import { Route as ApiConsoleSpacesIdFavoriteRouteImport } from './routes/api/console/spaces/$id/favorite'
+import { Route as ApiConsoleSpacesIdFavoritedRouteImport } from './routes/api/console/spaces/$id/favorited'
+import { Route as ApiConsoleSpacesIdMembersRouteImport } from './routes/api/console/spaces/$id/members'
+import { Route as ApiConsoleSpacesBySlugSlugRouteImport } from './routes/api/console/spaces/by-slug/$slug'
+import { Route as ApiConsoleUsersIdActiveRouteImport } from './routes/api/console/users/$id/active'
+import { Route as ApiConsoleUsersIdRoleRouteImport } from './routes/api/console/users/$id/role'
+import { Route as ApiConsoleWorkspacesIdGroupsRouteImport } from './routes/api/console/workspaces/$id/groups'
 import { Route as ApiConsoleDebugTablesTableNameRowsRouteImport } from './routes/api/console/debug/tables/$tableName/rows'
+import { Route as ApiConsoleGroupsIdMembersUserIdRouteImport } from './routes/api/console/groups/$id/members/$userId'
+import { Route as ApiConsolePagesIdCommentsStreamRouteImport } from './routes/api/console/pages/$id/comments/stream'
+import { Route as ApiConsolePagesIdHistoryHistoryIdRouteImport } from './routes/api/console/pages/$id/history/$historyId'
+import { Route as ApiConsolePagesIdShareShortenRouteImport } from './routes/api/console/pages/$id/share/shorten'
+import { Route as ApiConsoleSpacesIdGroupsGroupIdRouteImport } from './routes/api/console/spaces/$id/groups/$groupId'
+import { Route as ApiConsoleSpacesIdMembersUserIdRouteImport } from './routes/api/console/spaces/$id/members/$userId'
 import { Route as ApiConsoleSpacesSpaceIdPagesBySlugSlugIdRouteImport } from './routes/api/console/spaces/$spaceId/pages/by-slug/$slugId'
 
-const SettingsRoute = SettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const MfaChallengeRoute = MfaChallengeRouteImport.update({
-  id: '/mfa-challenge',
-  path: '/mfa-challenge',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const HomeRoute = HomeRouteImport.update({
-  id: '/home',
-  path: '/home',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const DesktopRoute = DesktopRouteImport.update({
-  id: '/desktop',
-  path: '/desktop',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const AboutRoute = AboutRouteImport.update({
-  id: '/about',
-  path: '/about',
+const IndexRoute = IndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SplatRoute = SplatRouteImport.update({
@@ -152,79 +132,29 @@ const SplatRoute = SplatRouteImport.update({
   path: '/$',
   getParentRoute: () => rootRouteImport,
 } as any)
-const IndexRoute = IndexRouteImport.update({
-  id: '/',
-  path: '/',
+const AboutRoute = AboutRouteImport.update({
+  id: '/about',
+  path: '/about',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HomeIndexRoute = HomeIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => HomeRoute,
-} as any)
-const ShareTokenRoute = ShareTokenRouteImport.update({
-  id: '/share/$token',
-  path: '/share/$token',
+const DesktopRoute = DesktopRouteImport.update({
+  id: '/desktop',
+  path: '/desktop',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ShShortcodeRoute = ShShortcodeRouteImport.update({
-  id: '/sh/$shortcode',
-  path: '/sh/$shortcode',
+const HomeRoute = HomeRouteImport.update({
+  id: '/home',
+  path: '/home',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SettingsWorkspaceRoute = SettingsWorkspaceRouteImport.update({
-  id: '/workspace',
-  path: '/workspace',
-  getParentRoute: () => SettingsRoute,
-} as any)
-const SettingsSpacesRoute = SettingsSpacesRouteImport.update({
-  id: '/spaces',
-  path: '/spaces',
-  getParentRoute: () => SettingsRoute,
-} as any)
-const SettingsMembersRoute = SettingsMembersRouteImport.update({
-  id: '/members',
-  path: '/members',
-  getParentRoute: () => SettingsRoute,
-} as any)
-const SettingsGroupsRoute = SettingsGroupsRouteImport.update({
-  id: '/groups',
-  path: '/groups',
-  getParentRoute: () => SettingsRoute,
-} as any)
-const SSpaceSlugRoute = SSpaceSlugRouteImport.update({
-  id: '/s/$spaceSlug',
-  path: '/s/$spaceSlug',
+const MfaChallengeRoute = MfaChallengeRouteImport.update({
+  id: '/mfa-challenge',
+  path: '/mfa-challenge',
   getParentRoute: () => rootRouteImport,
 } as any)
-const HomeTemplatesRoute = HomeTemplatesRouteImport.update({
-  id: '/templates',
-  path: '/templates',
-  getParentRoute: () => HomeRoute,
-} as any)
-const HomeDebugRoute = HomeDebugRouteImport.update({
-  id: '/debug',
-  path: '/debug',
-  getParentRoute: () => HomeRoute,
-} as any)
-const ApiStatsRoute = ApiStatsRouteImport.update({
-  id: '/api/stats',
-  path: '/api/stats',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiProjectsRoute = ApiProjectsRouteImport.update({
-  id: '/api/projects',
-  path: '/api/projects',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiProfileRoute = ApiProfileRouteImport.update({
-  id: '/api/profile',
-  path: '/api/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiExperienceRoute = ApiExperienceRouteImport.update({
-  id: '/api/experience',
-  path: '/api/experience',
+const SettingsRoute = SettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiBlogsRoute = ApiBlogsRouteImport.update({
@@ -232,75 +162,129 @@ const ApiBlogsRoute = ApiBlogsRouteImport.update({
   path: '/api/blogs',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SSpaceSlugIndexRoute = SSpaceSlugIndexRouteImport.update({
+const ApiExperienceRoute = ApiExperienceRouteImport.update({
+  id: '/api/experience',
+  path: '/api/experience',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiProfileRoute = ApiProfileRouteImport.update({
+  id: '/api/profile',
+  path: '/api/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiProjectsRoute = ApiProjectsRouteImport.update({
+  id: '/api/projects',
+  path: '/api/projects',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiStatsRoute = ApiStatsRouteImport.update({
+  id: '/api/stats',
+  path: '/api/stats',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const HomeIndexRoute = HomeIndexRouteImport.update({
   id: '/',
   path: '/',
-  getParentRoute: () => SSpaceSlugRoute,
+  getParentRoute: () => HomeRoute,
 } as any)
-const HomeTemplatesIndexRoute = HomeTemplatesIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => HomeTemplatesRoute,
+const HomeDebugRoute = HomeDebugRouteImport.update({
+  id: '/debug',
+  path: '/debug',
+  getParentRoute: () => HomeRoute,
 } as any)
-const SettingsSystemsDebugRoute = SettingsSystemsDebugRouteImport.update({
-  id: '/systems/debug',
-  path: '/systems/debug',
+const HomeTemplatesRoute = HomeTemplatesRouteImport.update({
+  id: '/templates',
+  path: '/templates',
+  getParentRoute: () => HomeRoute,
+} as any)
+const SSpaceSlugRoute = SSpaceSlugRouteImport.update({
+  id: '/s/$spaceSlug',
+  path: '/s/$spaceSlug',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SettingsGroupsRoute = SettingsGroupsRouteImport.update({
+  id: '/groups',
+  path: '/groups',
   getParentRoute: () => SettingsRoute,
 } as any)
-const SettingsAccountProfileRoute = SettingsAccountProfileRouteImport.update({
-  id: '/account/profile',
-  path: '/account/profile',
+const SettingsMembersRoute = SettingsMembersRouteImport.update({
+  id: '/members',
+  path: '/members',
   getParentRoute: () => SettingsRoute,
 } as any)
-const SettingsAccountPreferencesRoute =
-  SettingsAccountPreferencesRouteImport.update({
-    id: '/account/preferences',
-    path: '/account/preferences',
-    getParentRoute: () => SettingsRoute,
-  } as any)
-const SSpaceSlugSettingsRoute = SSpaceSlugSettingsRouteImport.update({
-  id: '/settings',
-  path: '/settings',
-  getParentRoute: () => SSpaceSlugRoute,
+const SettingsSpacesRoute = SettingsSpacesRouteImport.update({
+  id: '/spaces',
+  path: '/spaces',
+  getParentRoute: () => SettingsRoute,
 } as any)
-const HomeTemplatesPortfolioRoute = HomeTemplatesPortfolioRouteImport.update({
-  id: '/portfolio',
-  path: '/portfolio',
-  getParentRoute: () => HomeTemplatesRoute,
+const SettingsWorkspaceRoute = SettingsWorkspaceRouteImport.update({
+  id: '/workspace',
+  path: '/workspace',
+  getParentRoute: () => SettingsRoute,
 } as any)
-const ApiShortShortcodeRoute = ApiShortShortcodeRouteImport.update({
-  id: '/api/short/$shortcode',
-  path: '/api/short/$shortcode',
+const ShShortcodeRoute = ShShortcodeRouteImport.update({
+  id: '/sh/$shortcode',
+  path: '/sh/$shortcode',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiSharesTokenRoute = ApiSharesTokenRouteImport.update({
-  id: '/api/shares/$token',
-  path: '/api/shares/$token',
+const ShareTokenRoute = ShareTokenRouteImport.update({
+  id: '/share/$token',
+  path: '/share/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiGithubStatsRoute = ApiGithubStatsRouteImport.update({
-  id: '/api/github/stats',
-  path: '/api/github/stats',
+const ApiAuthBootstrapStateRoute = ApiAuthBootstrapStateRouteImport.update({
+  id: '/api/auth/bootstrap-state',
+  path: '/api/auth/bootstrap-state',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiConsoleWorkspacesRoute = ApiConsoleWorkspacesRouteImport.update({
-  id: '/api/console/workspaces',
-  path: '/api/console/workspaces',
+const ApiAuthCollabTokenRoute = ApiAuthCollabTokenRouteImport.update({
+  id: '/api/auth/collab-token',
+  path: '/api/auth/collab-token',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiConsoleUsersRoute = ApiConsoleUsersRouteImport.update({
-  id: '/api/console/users',
-  path: '/api/console/users',
+const ApiAuthLoginRoute = ApiAuthLoginRouteImport.update({
+  id: '/api/auth/login',
+  path: '/api/auth/login',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiConsoleUploadRoute = ApiConsoleUploadRouteImport.update({
-  id: '/api/console/upload',
-  path: '/api/console/upload',
+const ApiAuthLogoutRoute = ApiAuthLogoutRouteImport.update({
+  id: '/api/auth/logout',
+  path: '/api/auth/logout',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiConsoleTemplatesRoute = ApiConsoleTemplatesRouteImport.update({
-  id: '/api/console/templates',
-  path: '/api/console/templates',
+const ApiAuthMeRoute = ApiAuthMeRouteImport.update({
+  id: '/api/auth/me',
+  path: '/api/auth/me',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiAuthRefreshRoute = ApiAuthRefreshRouteImport.update({
+  id: '/api/auth/refresh',
+  path: '/api/auth/refresh',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiBlogsSlugRoute = ApiBlogsSlugRouteImport.update({
+  id: '/$slug',
+  path: '/$slug',
+  getParentRoute: () => ApiBlogsRoute,
+} as any)
+const ApiConsoleNotificationsRoute = ApiConsoleNotificationsRouteImport.update({
+  id: '/api/console/notifications',
+  path: '/api/console/notifications',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiConsolePagesRoute = ApiConsolePagesRouteImport.update({
+  id: '/api/console/pages',
+  path: '/api/console/pages',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiConsoleProfileRoute = ApiConsoleProfileRouteImport.update({
+  id: '/api/console/profile',
+  path: '/api/console/profile',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiConsoleSpacesRoute = ApiConsoleSpacesRouteImport.update({
+  id: '/api/console/spaces',
+  path: '/api/console/spaces',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiConsoleSystemSettingsRoute =
@@ -309,211 +293,80 @@ const ApiConsoleSystemSettingsRoute =
     path: '/api/console/system-settings',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiConsoleSpacesRoute = ApiConsoleSpacesRouteImport.update({
-  id: '/api/console/spaces',
-  path: '/api/console/spaces',
+const ApiConsoleTemplatesRoute = ApiConsoleTemplatesRouteImport.update({
+  id: '/api/console/templates',
+  path: '/api/console/templates',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiConsoleProfileRoute = ApiConsoleProfileRouteImport.update({
-  id: '/api/console/profile',
-  path: '/api/console/profile',
+const ApiConsoleUploadRoute = ApiConsoleUploadRouteImport.update({
+  id: '/api/console/upload',
+  path: '/api/console/upload',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiConsolePagesRoute = ApiConsolePagesRouteImport.update({
-  id: '/api/console/pages',
-  path: '/api/console/pages',
+const ApiConsoleUsersRoute = ApiConsoleUsersRouteImport.update({
+  id: '/api/console/users',
+  path: '/api/console/users',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiConsoleNotificationsRoute = ApiConsoleNotificationsRouteImport.update({
-  id: '/api/console/notifications',
-  path: '/api/console/notifications',
+const ApiConsoleWorkspacesRoute = ApiConsoleWorkspacesRouteImport.update({
+  id: '/api/console/workspaces',
+  path: '/api/console/workspaces',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiBlogsSlugRoute = ApiBlogsSlugRouteImport.update({
-  id: '/$slug',
-  path: '/$slug',
-  getParentRoute: () => ApiBlogsRoute,
-} as any)
-const ApiAuthRefreshRoute = ApiAuthRefreshRouteImport.update({
-  id: '/api/auth/refresh',
-  path: '/api/auth/refresh',
+const ApiGithubStatsRoute = ApiGithubStatsRouteImport.update({
+  id: '/api/github/stats',
+  path: '/api/github/stats',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiAuthMeRoute = ApiAuthMeRouteImport.update({
-  id: '/api/auth/me',
-  path: '/api/auth/me',
+const ApiSharesTokenRoute = ApiSharesTokenRouteImport.update({
+  id: '/api/shares/$token',
+  path: '/api/shares/$token',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiAuthLogoutRoute = ApiAuthLogoutRouteImport.update({
-  id: '/api/auth/logout',
-  path: '/api/auth/logout',
+const ApiShortShortcodeRoute = ApiShortShortcodeRouteImport.update({
+  id: '/api/short/$shortcode',
+  path: '/api/short/$shortcode',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiAuthLoginRoute = ApiAuthLoginRouteImport.update({
-  id: '/api/auth/login',
-  path: '/api/auth/login',
-  getParentRoute: () => rootRouteImport,
+const HomeTemplatesIndexRoute = HomeTemplatesIndexRouteImport.update({
+  id: '/',
+  path: '/',
+  getParentRoute: () => HomeTemplatesRoute,
 } as any)
-const ApiAuthCollabTokenRoute = ApiAuthCollabTokenRouteImport.update({
-  id: '/api/auth/collab-token',
-  path: '/api/auth/collab-token',
-  getParentRoute: () => rootRouteImport,
+const HomeTemplatesPortfolioRoute = HomeTemplatesPortfolioRouteImport.update({
+  id: '/portfolio',
+  path: '/portfolio',
+  getParentRoute: () => HomeTemplatesRoute,
 } as any)
-const ApiAuthBootstrapStateRoute = ApiAuthBootstrapStateRouteImport.update({
-  id: '/api/auth/bootstrap-state',
-  path: '/api/auth/bootstrap-state',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const SSpaceSlugPPageidRoute = SSpaceSlugPPageidRouteImport.update({
-  id: '/p/$pageid',
-  path: '/p/$pageid',
+const SSpaceSlugIndexRoute = SSpaceSlugIndexRouteImport.update({
+  id: '/',
+  path: '/',
   getParentRoute: () => SSpaceSlugRoute,
 } as any)
-const ApiSharesTokenPresenceRoute = ApiSharesTokenPresenceRouteImport.update({
-  id: '/presence',
-  path: '/presence',
-  getParentRoute: () => ApiSharesTokenRoute,
+const SSpaceSlugSettingsRoute = SSpaceSlugSettingsRouteImport.update({
+  id: '/settings',
+  path: '/settings',
+  getParentRoute: () => SSpaceSlugRoute,
 } as any)
-const ApiConsoleWorkspacesIdRoute = ApiConsoleWorkspacesIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => ApiConsoleWorkspacesRoute,
-} as any)
-const ApiConsoleUsersIdRoute = ApiConsoleUsersIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => ApiConsoleUsersRoute,
-} as any)
-const ApiConsoleUnsplashSearchRoute =
-  ApiConsoleUnsplashSearchRouteImport.update({
-    id: '/api/console/unsplash/search',
-    path: '/api/console/unsplash/search',
-    getParentRoute: () => rootRouteImport,
+const SettingsAccountPreferencesRoute =
+  SettingsAccountPreferencesRouteImport.update({
+    id: '/account/preferences',
+    path: '/account/preferences',
+    getParentRoute: () => SettingsRoute,
   } as any)
-const ApiConsoleSpacesFavoritesRoute =
-  ApiConsoleSpacesFavoritesRouteImport.update({
-    id: '/favorites',
-    path: '/favorites',
-    getParentRoute: () => ApiConsoleSpacesRoute,
-  } as any)
-const ApiConsoleSpacesIdRoute = ApiConsoleSpacesIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => ApiConsoleSpacesRoute,
+const SettingsAccountProfileRoute = SettingsAccountProfileRouteImport.update({
+  id: '/account/profile',
+  path: '/account/profile',
+  getParentRoute: () => SettingsRoute,
 } as any)
-const ApiConsolePushUnsubscribeRoute =
-  ApiConsolePushUnsubscribeRouteImport.update({
-    id: '/api/console/push/unsubscribe',
-    path: '/api/console/push/unsubscribe',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiConsolePushSubscribeRoute = ApiConsolePushSubscribeRouteImport.update({
-  id: '/api/console/push/subscribe',
-  path: '/api/console/push/subscribe',
-  getParentRoute: () => rootRouteImport,
+const SettingsSystemsDebugRoute = SettingsSystemsDebugRouteImport.update({
+  id: '/systems/debug',
+  path: '/systems/debug',
+  getParentRoute: () => SettingsRoute,
 } as any)
-const ApiConsolePushPublicKeyRoute = ApiConsolePushPublicKeyRouteImport.update({
-  id: '/api/console/push/public-key',
-  path: '/api/console/push/public-key',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiConsoleProfileSessionRoute =
-  ApiConsoleProfileSessionRouteImport.update({
-    id: '/session',
-    path: '/session',
-    getParentRoute: () => ApiConsoleProfileRoute,
-  } as any)
-const ApiConsoleProfilePasswordRoute =
-  ApiConsoleProfilePasswordRouteImport.update({
-    id: '/password',
-    path: '/password',
-    getParentRoute: () => ApiConsoleProfileRoute,
-  } as any)
-const ApiConsolePagesTreeRoute = ApiConsolePagesTreeRouteImport.update({
-  id: '/tree',
-  path: '/tree',
-  getParentRoute: () => ApiConsolePagesRoute,
-} as any)
-const ApiConsolePagesFavoritesRoute =
-  ApiConsolePagesFavoritesRouteImport.update({
-    id: '/favorites',
-    path: '/favorites',
-    getParentRoute: () => ApiConsolePagesRoute,
-  } as any)
-const ApiConsolePagesIdRoute = ApiConsolePagesIdRouteImport.update({
-  id: '/$id',
-  path: '/$id',
-  getParentRoute: () => ApiConsolePagesRoute,
-} as any)
-const ApiConsoleNotificationsUnreadCountRoute =
-  ApiConsoleNotificationsUnreadCountRouteImport.update({
-    id: '/unread-count',
-    path: '/unread-count',
-    getParentRoute: () => ApiConsoleNotificationsRoute,
-  } as any)
-const ApiConsoleNotificationsStreamRoute =
-  ApiConsoleNotificationsStreamRouteImport.update({
-    id: '/stream',
-    path: '/stream',
-    getParentRoute: () => ApiConsoleNotificationsRoute,
-  } as any)
-const ApiConsoleNotificationsReadAllRoute =
-  ApiConsoleNotificationsReadAllRouteImport.update({
-    id: '/read-all',
-    path: '/read-all',
-    getParentRoute: () => ApiConsoleNotificationsRoute,
-  } as any)
-const ApiConsoleNotificationsDismissAllRoute =
-  ApiConsoleNotificationsDismissAllRouteImport.update({
-    id: '/dismiss-all',
-    path: '/dismiss-all',
-    getParentRoute: () => ApiConsoleNotificationsRoute,
-  } as any)
-const ApiConsoleNotificationsIdRoute =
-  ApiConsoleNotificationsIdRouteImport.update({
-    id: '/$id',
-    path: '/$id',
-    getParentRoute: () => ApiConsoleNotificationsRoute,
-  } as any)
-const ApiConsoleMfaStatusRoute = ApiConsoleMfaStatusRouteImport.update({
-  id: '/api/console/mfa/status',
-  path: '/api/console/mfa/status',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiConsoleMfaSetupRoute = ApiConsoleMfaSetupRouteImport.update({
-  id: '/api/console/mfa/setup',
-  path: '/api/console/mfa/setup',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiConsoleMfaEnableRoute = ApiConsoleMfaEnableRouteImport.update({
-  id: '/api/console/mfa/enable',
-  path: '/api/console/mfa/enable',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiConsoleMfaDisableRoute = ApiConsoleMfaDisableRouteImport.update({
-  id: '/api/console/mfa/disable',
-  path: '/api/console/mfa/disable',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiConsoleMfaBackupCodesRoute =
-  ApiConsoleMfaBackupCodesRouteImport.update({
-    id: '/api/console/mfa/backup-codes',
-    path: '/api/console/mfa/backup-codes',
-    getParentRoute: () => rootRouteImport,
-  } as any)
-const ApiConsoleGroupsIdRoute = ApiConsoleGroupsIdRouteImport.update({
-  id: '/api/console/groups/$id',
-  path: '/api/console/groups/$id',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiConsoleDebugTablesRoute = ApiConsoleDebugTablesRouteImport.update({
-  id: '/api/console/debug/tables',
-  path: '/api/console/debug/tables',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiConsoleCommentsIdRoute = ApiConsoleCommentsIdRouteImport.update({
-  id: '/api/console/comments/$id',
-  path: '/api/console/comments/$id',
+const ApiAuthMfaVerifyRoute = ApiAuthMfaVerifyRouteImport.update({
+  id: '/api/auth/mfa/verify',
+  path: '/api/auth/mfa/verify',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiConsoleAuthCollabTokenRoute =
@@ -522,118 +375,192 @@ const ApiConsoleAuthCollabTokenRoute =
     path: '/api/console/auth/collab-token',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiAuthMfaVerifyRoute = ApiAuthMfaVerifyRouteImport.update({
-  id: '/api/auth/mfa/verify',
-  path: '/api/auth/mfa/verify',
+const ApiConsoleCommentsIdRoute = ApiConsoleCommentsIdRouteImport.update({
+  id: '/api/console/comments/$id',
+  path: '/api/console/comments/$id',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiConsoleWorkspacesIdGroupsRoute =
-  ApiConsoleWorkspacesIdGroupsRouteImport.update({
-    id: '/groups',
-    path: '/groups',
-    getParentRoute: () => ApiConsoleWorkspacesIdRoute,
+const ApiConsoleDebugTablesRoute = ApiConsoleDebugTablesRouteImport.update({
+  id: '/api/console/debug/tables',
+  path: '/api/console/debug/tables',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiConsoleGroupsIdRoute = ApiConsoleGroupsIdRouteImport.update({
+  id: '/api/console/groups/$id',
+  path: '/api/console/groups/$id',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiConsoleMfaBackupCodesRoute =
+  ApiConsoleMfaBackupCodesRouteImport.update({
+    id: '/api/console/mfa/backup-codes',
+    path: '/api/console/mfa/backup-codes',
+    getParentRoute: () => rootRouteImport,
   } as any)
-const ApiConsoleUsersIdRoleRoute = ApiConsoleUsersIdRoleRouteImport.update({
-  id: '/role',
-  path: '/role',
-  getParentRoute: () => ApiConsoleUsersIdRoute,
+const ApiConsoleMfaDisableRoute = ApiConsoleMfaDisableRouteImport.update({
+  id: '/api/console/mfa/disable',
+  path: '/api/console/mfa/disable',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const ApiConsoleUsersIdActiveRoute = ApiConsoleUsersIdActiveRouteImport.update({
-  id: '/active',
-  path: '/active',
-  getParentRoute: () => ApiConsoleUsersIdRoute,
+const ApiConsoleMfaEnableRoute = ApiConsoleMfaEnableRouteImport.update({
+  id: '/api/console/mfa/enable',
+  path: '/api/console/mfa/enable',
+  getParentRoute: () => rootRouteImport,
 } as any)
-const ApiConsoleSpacesBySlugSlugRoute =
-  ApiConsoleSpacesBySlugSlugRouteImport.update({
-    id: '/by-slug/$slug',
-    path: '/by-slug/$slug',
+const ApiConsoleMfaSetupRoute = ApiConsoleMfaSetupRouteImport.update({
+  id: '/api/console/mfa/setup',
+  path: '/api/console/mfa/setup',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiConsoleMfaStatusRoute = ApiConsoleMfaStatusRouteImport.update({
+  id: '/api/console/mfa/status',
+  path: '/api/console/mfa/status',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiConsoleNotificationsIdRoute =
+  ApiConsoleNotificationsIdRouteImport.update({
+    id: '/$id',
+    path: '/$id',
+    getParentRoute: () => ApiConsoleNotificationsRoute,
+  } as any)
+const ApiConsoleNotificationsDismissAllRoute =
+  ApiConsoleNotificationsDismissAllRouteImport.update({
+    id: '/dismiss-all',
+    path: '/dismiss-all',
+    getParentRoute: () => ApiConsoleNotificationsRoute,
+  } as any)
+const ApiConsoleNotificationsReadAllRoute =
+  ApiConsoleNotificationsReadAllRouteImport.update({
+    id: '/read-all',
+    path: '/read-all',
+    getParentRoute: () => ApiConsoleNotificationsRoute,
+  } as any)
+const ApiConsoleNotificationsStreamRoute =
+  ApiConsoleNotificationsStreamRouteImport.update({
+    id: '/stream',
+    path: '/stream',
+    getParentRoute: () => ApiConsoleNotificationsRoute,
+  } as any)
+const ApiConsoleNotificationsUnreadCountRoute =
+  ApiConsoleNotificationsUnreadCountRouteImport.update({
+    id: '/unread-count',
+    path: '/unread-count',
+    getParentRoute: () => ApiConsoleNotificationsRoute,
+  } as any)
+const ApiConsolePagesIdRoute = ApiConsolePagesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiConsolePagesRoute,
+} as any)
+const ApiConsolePagesFavoritesRoute =
+  ApiConsolePagesFavoritesRouteImport.update({
+    id: '/favorites',
+    path: '/favorites',
+    getParentRoute: () => ApiConsolePagesRoute,
+  } as any)
+const ApiConsolePagesTreeRoute = ApiConsolePagesTreeRouteImport.update({
+  id: '/tree',
+  path: '/tree',
+  getParentRoute: () => ApiConsolePagesRoute,
+} as any)
+const ApiConsoleProfilePasswordRoute =
+  ApiConsoleProfilePasswordRouteImport.update({
+    id: '/password',
+    path: '/password',
+    getParentRoute: () => ApiConsoleProfileRoute,
+  } as any)
+const ApiConsoleProfileSessionRoute =
+  ApiConsoleProfileSessionRouteImport.update({
+    id: '/session',
+    path: '/session',
+    getParentRoute: () => ApiConsoleProfileRoute,
+  } as any)
+const ApiConsolePushPublicKeyRoute = ApiConsolePushPublicKeyRouteImport.update({
+  id: '/api/console/push/public-key',
+  path: '/api/console/push/public-key',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiConsolePushSubscribeRoute = ApiConsolePushSubscribeRouteImport.update({
+  id: '/api/console/push/subscribe',
+  path: '/api/console/push/subscribe',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiConsolePushUnsubscribeRoute =
+  ApiConsolePushUnsubscribeRouteImport.update({
+    id: '/api/console/push/unsubscribe',
+    path: '/api/console/push/unsubscribe',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiConsoleSpacesIdRoute = ApiConsoleSpacesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiConsoleSpacesRoute,
+} as any)
+const ApiConsoleSpacesFavoritesRoute =
+  ApiConsoleSpacesFavoritesRouteImport.update({
+    id: '/favorites',
+    path: '/favorites',
     getParentRoute: () => ApiConsoleSpacesRoute,
   } as any)
-const ApiConsoleSpacesIdMembersRoute =
-  ApiConsoleSpacesIdMembersRouteImport.update({
+const ApiConsoleUnsplashSearchRoute =
+  ApiConsoleUnsplashSearchRouteImport.update({
+    id: '/api/console/unsplash/search',
+    path: '/api/console/unsplash/search',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiConsoleUsersIdRoute = ApiConsoleUsersIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiConsoleUsersRoute,
+} as any)
+const ApiConsoleWorkspacesIdRoute = ApiConsoleWorkspacesIdRouteImport.update({
+  id: '/$id',
+  path: '/$id',
+  getParentRoute: () => ApiConsoleWorkspacesRoute,
+} as any)
+const ApiSharesTokenPresenceRoute = ApiSharesTokenPresenceRouteImport.update({
+  id: '/presence',
+  path: '/presence',
+  getParentRoute: () => ApiSharesTokenRoute,
+} as any)
+const SSpaceSlugPPageidRoute = SSpaceSlugPPageidRouteImport.update({
+  id: '/p/$pageid',
+  path: '/p/$pageid',
+  getParentRoute: () => SSpaceSlugRoute,
+} as any)
+const ApiConsoleCommentsIdResolveRoute =
+  ApiConsoleCommentsIdResolveRouteImport.update({
+    id: '/resolve',
+    path: '/resolve',
+    getParentRoute: () => ApiConsoleCommentsIdRoute,
+  } as any)
+const ApiConsoleDebugTablesTableNameRoute =
+  ApiConsoleDebugTablesTableNameRouteImport.update({
+    id: '/$tableName',
+    path: '/$tableName',
+    getParentRoute: () => ApiConsoleDebugTablesRoute,
+  } as any)
+const ApiConsoleFilesBucketFilenameRoute =
+  ApiConsoleFilesBucketFilenameRouteImport.update({
+    id: '/api/console/files/$bucket/$filename',
+    path: '/api/console/files/$bucket/$filename',
+    getParentRoute: () => rootRouteImport,
+  } as any)
+const ApiConsoleGroupsIdMembersRoute =
+  ApiConsoleGroupsIdMembersRouteImport.update({
     id: '/members',
     path: '/members',
-    getParentRoute: () => ApiConsoleSpacesIdRoute,
+    getParentRoute: () => ApiConsoleGroupsIdRoute,
   } as any)
-const ApiConsoleSpacesIdFavoritedRoute =
-  ApiConsoleSpacesIdFavoritedRouteImport.update({
-    id: '/favorited',
-    path: '/favorited',
-    getParentRoute: () => ApiConsoleSpacesIdRoute,
+const ApiConsoleNotificationsIdReadRoute =
+  ApiConsoleNotificationsIdReadRouteImport.update({
+    id: '/read',
+    path: '/read',
+    getParentRoute: () => ApiConsoleNotificationsIdRoute,
   } as any)
-const ApiConsoleSpacesIdFavoriteRoute =
-  ApiConsoleSpacesIdFavoriteRouteImport.update({
-    id: '/favorite',
-    path: '/favorite',
-    getParentRoute: () => ApiConsoleSpacesIdRoute,
-  } as any)
-const ApiConsoleProfileSessionRevokeRoute =
-  ApiConsoleProfileSessionRevokeRouteImport.update({
-    id: '/revoke',
-    path: '/revoke',
-    getParentRoute: () => ApiConsoleProfileSessionRoute,
-  } as any)
-const ApiConsolePagesIdWatchingRoute =
-  ApiConsolePagesIdWatchingRouteImport.update({
-    id: '/watching',
-    path: '/watching',
-    getParentRoute: () => ApiConsolePagesIdRoute,
-  } as any)
-const ApiConsolePagesIdWatchRoute = ApiConsolePagesIdWatchRouteImport.update({
-  id: '/watch',
-  path: '/watch',
-  getParentRoute: () => ApiConsolePagesIdRoute,
-} as any)
-const ApiConsolePagesIdUnpublishRoute =
-  ApiConsolePagesIdUnpublishRouteImport.update({
-    id: '/unpublish',
-    path: '/unpublish',
-    getParentRoute: () => ApiConsolePagesIdRoute,
-  } as any)
-const ApiConsolePagesIdShareRoute = ApiConsolePagesIdShareRouteImport.update({
-  id: '/share',
-  path: '/share',
-  getParentRoute: () => ApiConsolePagesIdRoute,
-} as any)
-const ApiConsolePagesIdRestoreRoute =
-  ApiConsolePagesIdRestoreRouteImport.update({
-    id: '/restore',
-    path: '/restore',
-    getParentRoute: () => ApiConsolePagesIdRoute,
-  } as any)
-const ApiConsolePagesIdPublishRoute =
-  ApiConsolePagesIdPublishRouteImport.update({
-    id: '/publish',
-    path: '/publish',
-    getParentRoute: () => ApiConsolePagesIdRoute,
-  } as any)
-const ApiConsolePagesIdPresenceRoute =
-  ApiConsolePagesIdPresenceRouteImport.update({
-    id: '/presence',
-    path: '/presence',
-    getParentRoute: () => ApiConsolePagesIdRoute,
-  } as any)
-const ApiConsolePagesIdMoveRoute = ApiConsolePagesIdMoveRouteImport.update({
-  id: '/move',
-  path: '/move',
-  getParentRoute: () => ApiConsolePagesIdRoute,
-} as any)
-const ApiConsolePagesIdHistoryRoute =
-  ApiConsolePagesIdHistoryRouteImport.update({
-    id: '/history',
-    path: '/history',
-    getParentRoute: () => ApiConsolePagesIdRoute,
-  } as any)
-const ApiConsolePagesIdFavoritedRoute =
-  ApiConsolePagesIdFavoritedRouteImport.update({
-    id: '/favorited',
-    path: '/favorited',
-    getParentRoute: () => ApiConsolePagesIdRoute,
-  } as any)
-const ApiConsolePagesIdFavoriteRoute =
-  ApiConsolePagesIdFavoriteRouteImport.update({
-    id: '/favorite',
-    path: '/favorite',
+const ApiConsolePagesIdChildrenRoute =
+  ApiConsolePagesIdChildrenRouteImport.update({
+    id: '/children',
+    path: '/children',
     getParentRoute: () => ApiConsolePagesIdRoute,
   } as any)
 const ApiConsolePagesIdCommentsRoute =
@@ -642,71 +569,120 @@ const ApiConsolePagesIdCommentsRoute =
     path: '/comments',
     getParentRoute: () => ApiConsolePagesIdRoute,
   } as any)
-const ApiConsolePagesIdChildrenRoute =
-  ApiConsolePagesIdChildrenRouteImport.update({
-    id: '/children',
-    path: '/children',
+const ApiConsolePagesIdFavoriteRoute =
+  ApiConsolePagesIdFavoriteRouteImport.update({
+    id: '/favorite',
+    path: '/favorite',
     getParentRoute: () => ApiConsolePagesIdRoute,
   } as any)
-const ApiConsoleNotificationsIdReadRoute =
-  ApiConsoleNotificationsIdReadRouteImport.update({
-    id: '/read',
-    path: '/read',
-    getParentRoute: () => ApiConsoleNotificationsIdRoute,
+const ApiConsolePagesIdFavoritedRoute =
+  ApiConsolePagesIdFavoritedRouteImport.update({
+    id: '/favorited',
+    path: '/favorited',
+    getParentRoute: () => ApiConsolePagesIdRoute,
   } as any)
-const ApiConsoleGroupsIdMembersRoute =
-  ApiConsoleGroupsIdMembersRouteImport.update({
-    id: '/members',
-    path: '/members',
-    getParentRoute: () => ApiConsoleGroupsIdRoute,
+const ApiConsolePagesIdHistoryRoute =
+  ApiConsolePagesIdHistoryRouteImport.update({
+    id: '/history',
+    path: '/history',
+    getParentRoute: () => ApiConsolePagesIdRoute,
   } as any)
-const ApiConsoleFilesBucketFilenameRoute =
-  ApiConsoleFilesBucketFilenameRouteImport.update({
-    id: '/api/console/files/$bucket/$filename',
-    path: '/api/console/files/$bucket/$filename',
-    getParentRoute: () => rootRouteImport,
+const ApiConsolePagesIdMoveRoute = ApiConsolePagesIdMoveRouteImport.update({
+  id: '/move',
+  path: '/move',
+  getParentRoute: () => ApiConsolePagesIdRoute,
+} as any)
+const ApiConsolePagesIdPresenceRoute =
+  ApiConsolePagesIdPresenceRouteImport.update({
+    id: '/presence',
+    path: '/presence',
+    getParentRoute: () => ApiConsolePagesIdRoute,
   } as any)
-const ApiConsoleDebugTablesTableNameRoute =
-  ApiConsoleDebugTablesTableNameRouteImport.update({
-    id: '/$tableName',
-    path: '/$tableName',
-    getParentRoute: () => ApiConsoleDebugTablesRoute,
+const ApiConsolePagesIdPublishRoute =
+  ApiConsolePagesIdPublishRouteImport.update({
+    id: '/publish',
+    path: '/publish',
+    getParentRoute: () => ApiConsolePagesIdRoute,
   } as any)
-const ApiConsoleCommentsIdResolveRoute =
-  ApiConsoleCommentsIdResolveRouteImport.update({
-    id: '/resolve',
-    path: '/resolve',
-    getParentRoute: () => ApiConsoleCommentsIdRoute,
+const ApiConsolePagesIdRestoreRoute =
+  ApiConsolePagesIdRestoreRouteImport.update({
+    id: '/restore',
+    path: '/restore',
+    getParentRoute: () => ApiConsolePagesIdRoute,
   } as any)
-const ApiConsoleSpacesIdMembersUserIdRoute =
-  ApiConsoleSpacesIdMembersUserIdRouteImport.update({
-    id: '/$userId',
-    path: '/$userId',
-    getParentRoute: () => ApiConsoleSpacesIdMembersRoute,
+const ApiConsolePagesIdShareRoute = ApiConsolePagesIdShareRouteImport.update({
+  id: '/share',
+  path: '/share',
+  getParentRoute: () => ApiConsolePagesIdRoute,
+} as any)
+const ApiConsolePagesIdUnpublishRoute =
+  ApiConsolePagesIdUnpublishRouteImport.update({
+    id: '/unpublish',
+    path: '/unpublish',
+    getParentRoute: () => ApiConsolePagesIdRoute,
   } as any)
-const ApiConsoleSpacesIdGroupsGroupIdRoute =
-  ApiConsoleSpacesIdGroupsGroupIdRouteImport.update({
-    id: '/groups/$groupId',
-    path: '/groups/$groupId',
+const ApiConsolePagesIdWatchRoute = ApiConsolePagesIdWatchRouteImport.update({
+  id: '/watch',
+  path: '/watch',
+  getParentRoute: () => ApiConsolePagesIdRoute,
+} as any)
+const ApiConsolePagesIdWatchingRoute =
+  ApiConsolePagesIdWatchingRouteImport.update({
+    id: '/watching',
+    path: '/watching',
+    getParentRoute: () => ApiConsolePagesIdRoute,
+  } as any)
+const ApiConsoleProfileSessionRevokeRoute =
+  ApiConsoleProfileSessionRevokeRouteImport.update({
+    id: '/revoke',
+    path: '/revoke',
+    getParentRoute: () => ApiConsoleProfileSessionRoute,
+  } as any)
+const ApiConsoleSpacesIdFavoriteRoute =
+  ApiConsoleSpacesIdFavoriteRouteImport.update({
+    id: '/favorite',
+    path: '/favorite',
     getParentRoute: () => ApiConsoleSpacesIdRoute,
   } as any)
-const ApiConsolePagesIdShareShortenRoute =
-  ApiConsolePagesIdShareShortenRouteImport.update({
-    id: '/shorten',
-    path: '/shorten',
-    getParentRoute: () => ApiConsolePagesIdShareRoute,
+const ApiConsoleSpacesIdFavoritedRoute =
+  ApiConsoleSpacesIdFavoritedRouteImport.update({
+    id: '/favorited',
+    path: '/favorited',
+    getParentRoute: () => ApiConsoleSpacesIdRoute,
   } as any)
-const ApiConsolePagesIdHistoryHistoryIdRoute =
-  ApiConsolePagesIdHistoryHistoryIdRouteImport.update({
-    id: '/$historyId',
-    path: '/$historyId',
-    getParentRoute: () => ApiConsolePagesIdHistoryRoute,
+const ApiConsoleSpacesIdMembersRoute =
+  ApiConsoleSpacesIdMembersRouteImport.update({
+    id: '/members',
+    path: '/members',
+    getParentRoute: () => ApiConsoleSpacesIdRoute,
   } as any)
-const ApiConsolePagesIdCommentsStreamRoute =
-  ApiConsolePagesIdCommentsStreamRouteImport.update({
-    id: '/stream',
-    path: '/stream',
-    getParentRoute: () => ApiConsolePagesIdCommentsRoute,
+const ApiConsoleSpacesBySlugSlugRoute =
+  ApiConsoleSpacesBySlugSlugRouteImport.update({
+    id: '/by-slug/$slug',
+    path: '/by-slug/$slug',
+    getParentRoute: () => ApiConsoleSpacesRoute,
+  } as any)
+const ApiConsoleUsersIdActiveRoute = ApiConsoleUsersIdActiveRouteImport.update({
+  id: '/active',
+  path: '/active',
+  getParentRoute: () => ApiConsoleUsersIdRoute,
+} as any)
+const ApiConsoleUsersIdRoleRoute = ApiConsoleUsersIdRoleRouteImport.update({
+  id: '/role',
+  path: '/role',
+  getParentRoute: () => ApiConsoleUsersIdRoute,
+} as any)
+const ApiConsoleWorkspacesIdGroupsRoute =
+  ApiConsoleWorkspacesIdGroupsRouteImport.update({
+    id: '/groups',
+    path: '/groups',
+    getParentRoute: () => ApiConsoleWorkspacesIdRoute,
+  } as any)
+const ApiConsoleDebugTablesTableNameRowsRoute =
+  ApiConsoleDebugTablesTableNameRowsRouteImport.update({
+    id: '/rows',
+    path: '/rows',
+    getParentRoute: () => ApiConsoleDebugTablesTableNameRoute,
   } as any)
 const ApiConsoleGroupsIdMembersUserIdRoute =
   ApiConsoleGroupsIdMembersUserIdRouteImport.update({
@@ -714,11 +690,35 @@ const ApiConsoleGroupsIdMembersUserIdRoute =
     path: '/$userId',
     getParentRoute: () => ApiConsoleGroupsIdMembersRoute,
   } as any)
-const ApiConsoleDebugTablesTableNameRowsRoute =
-  ApiConsoleDebugTablesTableNameRowsRouteImport.update({
-    id: '/rows',
-    path: '/rows',
-    getParentRoute: () => ApiConsoleDebugTablesTableNameRoute,
+const ApiConsolePagesIdCommentsStreamRoute =
+  ApiConsolePagesIdCommentsStreamRouteImport.update({
+    id: '/stream',
+    path: '/stream',
+    getParentRoute: () => ApiConsolePagesIdCommentsRoute,
+  } as any)
+const ApiConsolePagesIdHistoryHistoryIdRoute =
+  ApiConsolePagesIdHistoryHistoryIdRouteImport.update({
+    id: '/$historyId',
+    path: '/$historyId',
+    getParentRoute: () => ApiConsolePagesIdHistoryRoute,
+  } as any)
+const ApiConsolePagesIdShareShortenRoute =
+  ApiConsolePagesIdShareShortenRouteImport.update({
+    id: '/shorten',
+    path: '/shorten',
+    getParentRoute: () => ApiConsolePagesIdShareRoute,
+  } as any)
+const ApiConsoleSpacesIdGroupsGroupIdRoute =
+  ApiConsoleSpacesIdGroupsGroupIdRouteImport.update({
+    id: '/groups/$groupId',
+    path: '/groups/$groupId',
+    getParentRoute: () => ApiConsoleSpacesIdRoute,
+  } as any)
+const ApiConsoleSpacesIdMembersUserIdRoute =
+  ApiConsoleSpacesIdMembersUserIdRouteImport.update({
+    id: '/$userId',
+    path: '/$userId',
+    getParentRoute: () => ApiConsoleSpacesIdMembersRoute,
   } as any)
 const ApiConsoleSpacesSpaceIdPagesBySlugSlugIdRoute =
   ApiConsoleSpacesSpaceIdPagesBySlugSlugIdRouteImport.update({
@@ -1462,39 +1462,11 @@ export interface RootRouteChildren {
 
 declare module '@tanstack/react-router' {
   interface FileRoutesByPath {
-    '/settings': {
-      id: '/settings'
-      path: '/settings'
-      fullPath: '/settings'
-      preLoaderRoute: typeof SettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/mfa-challenge': {
-      id: '/mfa-challenge'
-      path: '/mfa-challenge'
-      fullPath: '/mfa-challenge'
-      preLoaderRoute: typeof MfaChallengeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/home': {
-      id: '/home'
-      path: '/home'
-      fullPath: '/home'
-      preLoaderRoute: typeof HomeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/desktop': {
-      id: '/desktop'
-      path: '/desktop'
-      fullPath: '/desktop'
-      preLoaderRoute: typeof DesktopRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/about': {
-      id: '/about'
-      path: '/about'
-      fullPath: '/about'
-      preLoaderRoute: typeof AboutRouteImport
+    '/': {
+      id: '/'
+      path: '/'
+      fullPath: '/'
+      preLoaderRoute: typeof IndexRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/$': {
@@ -1504,109 +1476,39 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SplatRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/': {
-      id: '/'
-      path: '/'
-      fullPath: '/'
-      preLoaderRoute: typeof IndexRouteImport
+    '/about': {
+      id: '/about'
+      path: '/about'
+      fullPath: '/about'
+      preLoaderRoute: typeof AboutRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/home/': {
-      id: '/home/'
-      path: '/'
-      fullPath: '/home/'
-      preLoaderRoute: typeof HomeIndexRouteImport
-      parentRoute: typeof HomeRoute
-    }
-    '/share/$token': {
-      id: '/share/$token'
-      path: '/share/$token'
-      fullPath: '/share/$token'
-      preLoaderRoute: typeof ShareTokenRouteImport
+    '/desktop': {
+      id: '/desktop'
+      path: '/desktop'
+      fullPath: '/desktop'
+      preLoaderRoute: typeof DesktopRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sh/$shortcode': {
-      id: '/sh/$shortcode'
-      path: '/sh/$shortcode'
-      fullPath: '/sh/$shortcode'
-      preLoaderRoute: typeof ShShortcodeRouteImport
+    '/home': {
+      id: '/home'
+      path: '/home'
+      fullPath: '/home'
+      preLoaderRoute: typeof HomeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/settings/workspace': {
-      id: '/settings/workspace'
-      path: '/workspace'
-      fullPath: '/settings/workspace'
-      preLoaderRoute: typeof SettingsWorkspaceRouteImport
-      parentRoute: typeof SettingsRoute
-    }
-    '/settings/spaces': {
-      id: '/settings/spaces'
-      path: '/spaces'
-      fullPath: '/settings/spaces'
-      preLoaderRoute: typeof SettingsSpacesRouteImport
-      parentRoute: typeof SettingsRoute
-    }
-    '/settings/members': {
-      id: '/settings/members'
-      path: '/members'
-      fullPath: '/settings/members'
-      preLoaderRoute: typeof SettingsMembersRouteImport
-      parentRoute: typeof SettingsRoute
-    }
-    '/settings/groups': {
-      id: '/settings/groups'
-      path: '/groups'
-      fullPath: '/settings/groups'
-      preLoaderRoute: typeof SettingsGroupsRouteImport
-      parentRoute: typeof SettingsRoute
-    }
-    '/s/$spaceSlug': {
-      id: '/s/$spaceSlug'
-      path: '/s/$spaceSlug'
-      fullPath: '/s/$spaceSlug'
-      preLoaderRoute: typeof SSpaceSlugRouteImport
+    '/mfa-challenge': {
+      id: '/mfa-challenge'
+      path: '/mfa-challenge'
+      fullPath: '/mfa-challenge'
+      preLoaderRoute: typeof MfaChallengeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/home/templates': {
-      id: '/home/templates'
-      path: '/templates'
-      fullPath: '/home/templates'
-      preLoaderRoute: typeof HomeTemplatesRouteImport
-      parentRoute: typeof HomeRoute
-    }
-    '/home/debug': {
-      id: '/home/debug'
-      path: '/debug'
-      fullPath: '/home/debug'
-      preLoaderRoute: typeof HomeDebugRouteImport
-      parentRoute: typeof HomeRoute
-    }
-    '/api/stats': {
-      id: '/api/stats'
-      path: '/api/stats'
-      fullPath: '/api/stats'
-      preLoaderRoute: typeof ApiStatsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/projects': {
-      id: '/api/projects'
-      path: '/api/projects'
-      fullPath: '/api/projects'
-      preLoaderRoute: typeof ApiProjectsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/profile': {
-      id: '/api/profile'
-      path: '/api/profile'
-      fullPath: '/api/profile'
-      preLoaderRoute: typeof ApiProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/experience': {
-      id: '/api/experience'
-      path: '/api/experience'
-      fullPath: '/api/experience'
-      preLoaderRoute: typeof ApiExperienceRouteImport
+    '/settings': {
+      id: '/settings'
+      path: '/settings'
+      fullPath: '/settings'
+      preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/blogs': {
@@ -1616,179 +1518,102 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiBlogsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/s/$spaceSlug/': {
-      id: '/s/$spaceSlug/'
+    '/api/experience': {
+      id: '/api/experience'
+      path: '/api/experience'
+      fullPath: '/api/experience'
+      preLoaderRoute: typeof ApiExperienceRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/profile': {
+      id: '/api/profile'
+      path: '/api/profile'
+      fullPath: '/api/profile'
+      preLoaderRoute: typeof ApiProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/projects': {
+      id: '/api/projects'
+      path: '/api/projects'
+      fullPath: '/api/projects'
+      preLoaderRoute: typeof ApiProjectsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/stats': {
+      id: '/api/stats'
+      path: '/api/stats'
+      fullPath: '/api/stats'
+      preLoaderRoute: typeof ApiStatsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home/': {
+      id: '/home/'
       path: '/'
-      fullPath: '/s/$spaceSlug/'
-      preLoaderRoute: typeof SSpaceSlugIndexRouteImport
-      parentRoute: typeof SSpaceSlugRoute
+      fullPath: '/home/'
+      preLoaderRoute: typeof HomeIndexRouteImport
+      parentRoute: typeof HomeRoute
     }
-    '/home/templates/': {
-      id: '/home/templates/'
-      path: '/'
-      fullPath: '/home/templates/'
-      preLoaderRoute: typeof HomeTemplatesIndexRouteImport
-      parentRoute: typeof HomeTemplatesRoute
+    '/home/debug': {
+      id: '/home/debug'
+      path: '/debug'
+      fullPath: '/home/debug'
+      preLoaderRoute: typeof HomeDebugRouteImport
+      parentRoute: typeof HomeRoute
     }
-    '/settings/systems/debug': {
-      id: '/settings/systems/debug'
-      path: '/systems/debug'
-      fullPath: '/settings/systems/debug'
-      preLoaderRoute: typeof SettingsSystemsDebugRouteImport
+    '/home/templates': {
+      id: '/home/templates'
+      path: '/templates'
+      fullPath: '/home/templates'
+      preLoaderRoute: typeof HomeTemplatesRouteImport
+      parentRoute: typeof HomeRoute
+    }
+    '/s/$spaceSlug': {
+      id: '/s/$spaceSlug'
+      path: '/s/$spaceSlug'
+      fullPath: '/s/$spaceSlug'
+      preLoaderRoute: typeof SSpaceSlugRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/settings/groups': {
+      id: '/settings/groups'
+      path: '/groups'
+      fullPath: '/settings/groups'
+      preLoaderRoute: typeof SettingsGroupsRouteImport
       parentRoute: typeof SettingsRoute
     }
-    '/settings/account/profile': {
-      id: '/settings/account/profile'
-      path: '/account/profile'
-      fullPath: '/settings/account/profile'
-      preLoaderRoute: typeof SettingsAccountProfileRouteImport
+    '/settings/members': {
+      id: '/settings/members'
+      path: '/members'
+      fullPath: '/settings/members'
+      preLoaderRoute: typeof SettingsMembersRouteImport
       parentRoute: typeof SettingsRoute
     }
-    '/settings/account/preferences': {
-      id: '/settings/account/preferences'
-      path: '/account/preferences'
-      fullPath: '/settings/account/preferences'
-      preLoaderRoute: typeof SettingsAccountPreferencesRouteImport
+    '/settings/spaces': {
+      id: '/settings/spaces'
+      path: '/spaces'
+      fullPath: '/settings/spaces'
+      preLoaderRoute: typeof SettingsSpacesRouteImport
       parentRoute: typeof SettingsRoute
     }
-    '/s/$spaceSlug/settings': {
-      id: '/s/$spaceSlug/settings'
-      path: '/settings'
-      fullPath: '/s/$spaceSlug/settings'
-      preLoaderRoute: typeof SSpaceSlugSettingsRouteImport
-      parentRoute: typeof SSpaceSlugRoute
+    '/settings/workspace': {
+      id: '/settings/workspace'
+      path: '/workspace'
+      fullPath: '/settings/workspace'
+      preLoaderRoute: typeof SettingsWorkspaceRouteImport
+      parentRoute: typeof SettingsRoute
     }
-    '/home/templates/portfolio': {
-      id: '/home/templates/portfolio'
-      path: '/portfolio'
-      fullPath: '/home/templates/portfolio'
-      preLoaderRoute: typeof HomeTemplatesPortfolioRouteImport
-      parentRoute: typeof HomeTemplatesRoute
-    }
-    '/api/short/$shortcode': {
-      id: '/api/short/$shortcode'
-      path: '/api/short/$shortcode'
-      fullPath: '/api/short/$shortcode'
-      preLoaderRoute: typeof ApiShortShortcodeRouteImport
+    '/sh/$shortcode': {
+      id: '/sh/$shortcode'
+      path: '/sh/$shortcode'
+      fullPath: '/sh/$shortcode'
+      preLoaderRoute: typeof ShShortcodeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/shares/$token': {
-      id: '/api/shares/$token'
-      path: '/api/shares/$token'
-      fullPath: '/api/shares/$token'
-      preLoaderRoute: typeof ApiSharesTokenRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/github/stats': {
-      id: '/api/github/stats'
-      path: '/api/github/stats'
-      fullPath: '/api/github/stats'
-      preLoaderRoute: typeof ApiGithubStatsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/console/workspaces': {
-      id: '/api/console/workspaces'
-      path: '/api/console/workspaces'
-      fullPath: '/api/console/workspaces'
-      preLoaderRoute: typeof ApiConsoleWorkspacesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/console/users': {
-      id: '/api/console/users'
-      path: '/api/console/users'
-      fullPath: '/api/console/users'
-      preLoaderRoute: typeof ApiConsoleUsersRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/console/upload': {
-      id: '/api/console/upload'
-      path: '/api/console/upload'
-      fullPath: '/api/console/upload'
-      preLoaderRoute: typeof ApiConsoleUploadRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/console/templates': {
-      id: '/api/console/templates'
-      path: '/api/console/templates'
-      fullPath: '/api/console/templates'
-      preLoaderRoute: typeof ApiConsoleTemplatesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/console/system-settings': {
-      id: '/api/console/system-settings'
-      path: '/api/console/system-settings'
-      fullPath: '/api/console/system-settings'
-      preLoaderRoute: typeof ApiConsoleSystemSettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/console/spaces': {
-      id: '/api/console/spaces'
-      path: '/api/console/spaces'
-      fullPath: '/api/console/spaces'
-      preLoaderRoute: typeof ApiConsoleSpacesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/console/profile': {
-      id: '/api/console/profile'
-      path: '/api/console/profile'
-      fullPath: '/api/console/profile'
-      preLoaderRoute: typeof ApiConsoleProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/console/pages': {
-      id: '/api/console/pages'
-      path: '/api/console/pages'
-      fullPath: '/api/console/pages'
-      preLoaderRoute: typeof ApiConsolePagesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/console/notifications': {
-      id: '/api/console/notifications'
-      path: '/api/console/notifications'
-      fullPath: '/api/console/notifications'
-      preLoaderRoute: typeof ApiConsoleNotificationsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/blogs/$slug': {
-      id: '/api/blogs/$slug'
-      path: '/$slug'
-      fullPath: '/api/blogs/$slug'
-      preLoaderRoute: typeof ApiBlogsSlugRouteImport
-      parentRoute: typeof ApiBlogsRoute
-    }
-    '/api/auth/refresh': {
-      id: '/api/auth/refresh'
-      path: '/api/auth/refresh'
-      fullPath: '/api/auth/refresh'
-      preLoaderRoute: typeof ApiAuthRefreshRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/auth/me': {
-      id: '/api/auth/me'
-      path: '/api/auth/me'
-      fullPath: '/api/auth/me'
-      preLoaderRoute: typeof ApiAuthMeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/auth/logout': {
-      id: '/api/auth/logout'
-      path: '/api/auth/logout'
-      fullPath: '/api/auth/logout'
-      preLoaderRoute: typeof ApiAuthLogoutRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/auth/login': {
-      id: '/api/auth/login'
-      path: '/api/auth/login'
-      fullPath: '/api/auth/login'
-      preLoaderRoute: typeof ApiAuthLoginRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/auth/collab-token': {
-      id: '/api/auth/collab-token'
-      path: '/api/auth/collab-token'
-      fullPath: '/api/auth/collab-token'
-      preLoaderRoute: typeof ApiAuthCollabTokenRouteImport
+    '/share/$token': {
+      id: '/share/$token'
+      path: '/share/$token'
+      fullPath: '/share/$token'
+      preLoaderRoute: typeof ShareTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/auth/bootstrap-state': {
@@ -1798,200 +1623,186 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiAuthBootstrapStateRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/s/$spaceSlug/p/$pageid': {
-      id: '/s/$spaceSlug/p/$pageid'
-      path: '/p/$pageid'
-      fullPath: '/s/$spaceSlug/p/$pageid'
-      preLoaderRoute: typeof SSpaceSlugPPageidRouteImport
+    '/api/auth/collab-token': {
+      id: '/api/auth/collab-token'
+      path: '/api/auth/collab-token'
+      fullPath: '/api/auth/collab-token'
+      preLoaderRoute: typeof ApiAuthCollabTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/login': {
+      id: '/api/auth/login'
+      path: '/api/auth/login'
+      fullPath: '/api/auth/login'
+      preLoaderRoute: typeof ApiAuthLoginRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/logout': {
+      id: '/api/auth/logout'
+      path: '/api/auth/logout'
+      fullPath: '/api/auth/logout'
+      preLoaderRoute: typeof ApiAuthLogoutRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/me': {
+      id: '/api/auth/me'
+      path: '/api/auth/me'
+      fullPath: '/api/auth/me'
+      preLoaderRoute: typeof ApiAuthMeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/auth/refresh': {
+      id: '/api/auth/refresh'
+      path: '/api/auth/refresh'
+      fullPath: '/api/auth/refresh'
+      preLoaderRoute: typeof ApiAuthRefreshRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/blogs/$slug': {
+      id: '/api/blogs/$slug'
+      path: '/$slug'
+      fullPath: '/api/blogs/$slug'
+      preLoaderRoute: typeof ApiBlogsSlugRouteImport
+      parentRoute: typeof ApiBlogsRoute
+    }
+    '/api/console/notifications': {
+      id: '/api/console/notifications'
+      path: '/api/console/notifications'
+      fullPath: '/api/console/notifications'
+      preLoaderRoute: typeof ApiConsoleNotificationsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/console/pages': {
+      id: '/api/console/pages'
+      path: '/api/console/pages'
+      fullPath: '/api/console/pages'
+      preLoaderRoute: typeof ApiConsolePagesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/console/profile': {
+      id: '/api/console/profile'
+      path: '/api/console/profile'
+      fullPath: '/api/console/profile'
+      preLoaderRoute: typeof ApiConsoleProfileRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/console/spaces': {
+      id: '/api/console/spaces'
+      path: '/api/console/spaces'
+      fullPath: '/api/console/spaces'
+      preLoaderRoute: typeof ApiConsoleSpacesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/console/system-settings': {
+      id: '/api/console/system-settings'
+      path: '/api/console/system-settings'
+      fullPath: '/api/console/system-settings'
+      preLoaderRoute: typeof ApiConsoleSystemSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/console/templates': {
+      id: '/api/console/templates'
+      path: '/api/console/templates'
+      fullPath: '/api/console/templates'
+      preLoaderRoute: typeof ApiConsoleTemplatesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/console/upload': {
+      id: '/api/console/upload'
+      path: '/api/console/upload'
+      fullPath: '/api/console/upload'
+      preLoaderRoute: typeof ApiConsoleUploadRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/console/users': {
+      id: '/api/console/users'
+      path: '/api/console/users'
+      fullPath: '/api/console/users'
+      preLoaderRoute: typeof ApiConsoleUsersRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/console/workspaces': {
+      id: '/api/console/workspaces'
+      path: '/api/console/workspaces'
+      fullPath: '/api/console/workspaces'
+      preLoaderRoute: typeof ApiConsoleWorkspacesRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/github/stats': {
+      id: '/api/github/stats'
+      path: '/api/github/stats'
+      fullPath: '/api/github/stats'
+      preLoaderRoute: typeof ApiGithubStatsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/shares/$token': {
+      id: '/api/shares/$token'
+      path: '/api/shares/$token'
+      fullPath: '/api/shares/$token'
+      preLoaderRoute: typeof ApiSharesTokenRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/short/$shortcode': {
+      id: '/api/short/$shortcode'
+      path: '/api/short/$shortcode'
+      fullPath: '/api/short/$shortcode'
+      preLoaderRoute: typeof ApiShortShortcodeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/home/templates/': {
+      id: '/home/templates/'
+      path: '/'
+      fullPath: '/home/templates/'
+      preLoaderRoute: typeof HomeTemplatesIndexRouteImport
+      parentRoute: typeof HomeTemplatesRoute
+    }
+    '/home/templates/portfolio': {
+      id: '/home/templates/portfolio'
+      path: '/portfolio'
+      fullPath: '/home/templates/portfolio'
+      preLoaderRoute: typeof HomeTemplatesPortfolioRouteImport
+      parentRoute: typeof HomeTemplatesRoute
+    }
+    '/s/$spaceSlug/': {
+      id: '/s/$spaceSlug/'
+      path: '/'
+      fullPath: '/s/$spaceSlug/'
+      preLoaderRoute: typeof SSpaceSlugIndexRouteImport
       parentRoute: typeof SSpaceSlugRoute
     }
-    '/api/shares/$token/presence': {
-      id: '/api/shares/$token/presence'
-      path: '/presence'
-      fullPath: '/api/shares/$token/presence'
-      preLoaderRoute: typeof ApiSharesTokenPresenceRouteImport
-      parentRoute: typeof ApiSharesTokenRoute
+    '/s/$spaceSlug/settings': {
+      id: '/s/$spaceSlug/settings'
+      path: '/settings'
+      fullPath: '/s/$spaceSlug/settings'
+      preLoaderRoute: typeof SSpaceSlugSettingsRouteImport
+      parentRoute: typeof SSpaceSlugRoute
     }
-    '/api/console/workspaces/$id': {
-      id: '/api/console/workspaces/$id'
-      path: '/$id'
-      fullPath: '/api/console/workspaces/$id'
-      preLoaderRoute: typeof ApiConsoleWorkspacesIdRouteImport
-      parentRoute: typeof ApiConsoleWorkspacesRoute
+    '/settings/account/preferences': {
+      id: '/settings/account/preferences'
+      path: '/account/preferences'
+      fullPath: '/settings/account/preferences'
+      preLoaderRoute: typeof SettingsAccountPreferencesRouteImport
+      parentRoute: typeof SettingsRoute
     }
-    '/api/console/users/$id': {
-      id: '/api/console/users/$id'
-      path: '/$id'
-      fullPath: '/api/console/users/$id'
-      preLoaderRoute: typeof ApiConsoleUsersIdRouteImport
-      parentRoute: typeof ApiConsoleUsersRoute
+    '/settings/account/profile': {
+      id: '/settings/account/profile'
+      path: '/account/profile'
+      fullPath: '/settings/account/profile'
+      preLoaderRoute: typeof SettingsAccountProfileRouteImport
+      parentRoute: typeof SettingsRoute
     }
-    '/api/console/unsplash/search': {
-      id: '/api/console/unsplash/search'
-      path: '/api/console/unsplash/search'
-      fullPath: '/api/console/unsplash/search'
-      preLoaderRoute: typeof ApiConsoleUnsplashSearchRouteImport
-      parentRoute: typeof rootRouteImport
+    '/settings/systems/debug': {
+      id: '/settings/systems/debug'
+      path: '/systems/debug'
+      fullPath: '/settings/systems/debug'
+      preLoaderRoute: typeof SettingsSystemsDebugRouteImport
+      parentRoute: typeof SettingsRoute
     }
-    '/api/console/spaces/favorites': {
-      id: '/api/console/spaces/favorites'
-      path: '/favorites'
-      fullPath: '/api/console/spaces/favorites'
-      preLoaderRoute: typeof ApiConsoleSpacesFavoritesRouteImport
-      parentRoute: typeof ApiConsoleSpacesRoute
-    }
-    '/api/console/spaces/$id': {
-      id: '/api/console/spaces/$id'
-      path: '/$id'
-      fullPath: '/api/console/spaces/$id'
-      preLoaderRoute: typeof ApiConsoleSpacesIdRouteImport
-      parentRoute: typeof ApiConsoleSpacesRoute
-    }
-    '/api/console/push/unsubscribe': {
-      id: '/api/console/push/unsubscribe'
-      path: '/api/console/push/unsubscribe'
-      fullPath: '/api/console/push/unsubscribe'
-      preLoaderRoute: typeof ApiConsolePushUnsubscribeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/console/push/subscribe': {
-      id: '/api/console/push/subscribe'
-      path: '/api/console/push/subscribe'
-      fullPath: '/api/console/push/subscribe'
-      preLoaderRoute: typeof ApiConsolePushSubscribeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/console/push/public-key': {
-      id: '/api/console/push/public-key'
-      path: '/api/console/push/public-key'
-      fullPath: '/api/console/push/public-key'
-      preLoaderRoute: typeof ApiConsolePushPublicKeyRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/console/profile/session': {
-      id: '/api/console/profile/session'
-      path: '/session'
-      fullPath: '/api/console/profile/session'
-      preLoaderRoute: typeof ApiConsoleProfileSessionRouteImport
-      parentRoute: typeof ApiConsoleProfileRoute
-    }
-    '/api/console/profile/password': {
-      id: '/api/console/profile/password'
-      path: '/password'
-      fullPath: '/api/console/profile/password'
-      preLoaderRoute: typeof ApiConsoleProfilePasswordRouteImport
-      parentRoute: typeof ApiConsoleProfileRoute
-    }
-    '/api/console/pages/tree': {
-      id: '/api/console/pages/tree'
-      path: '/tree'
-      fullPath: '/api/console/pages/tree'
-      preLoaderRoute: typeof ApiConsolePagesTreeRouteImport
-      parentRoute: typeof ApiConsolePagesRoute
-    }
-    '/api/console/pages/favorites': {
-      id: '/api/console/pages/favorites'
-      path: '/favorites'
-      fullPath: '/api/console/pages/favorites'
-      preLoaderRoute: typeof ApiConsolePagesFavoritesRouteImport
-      parentRoute: typeof ApiConsolePagesRoute
-    }
-    '/api/console/pages/$id': {
-      id: '/api/console/pages/$id'
-      path: '/$id'
-      fullPath: '/api/console/pages/$id'
-      preLoaderRoute: typeof ApiConsolePagesIdRouteImport
-      parentRoute: typeof ApiConsolePagesRoute
-    }
-    '/api/console/notifications/unread-count': {
-      id: '/api/console/notifications/unread-count'
-      path: '/unread-count'
-      fullPath: '/api/console/notifications/unread-count'
-      preLoaderRoute: typeof ApiConsoleNotificationsUnreadCountRouteImport
-      parentRoute: typeof ApiConsoleNotificationsRoute
-    }
-    '/api/console/notifications/stream': {
-      id: '/api/console/notifications/stream'
-      path: '/stream'
-      fullPath: '/api/console/notifications/stream'
-      preLoaderRoute: typeof ApiConsoleNotificationsStreamRouteImport
-      parentRoute: typeof ApiConsoleNotificationsRoute
-    }
-    '/api/console/notifications/read-all': {
-      id: '/api/console/notifications/read-all'
-      path: '/read-all'
-      fullPath: '/api/console/notifications/read-all'
-      preLoaderRoute: typeof ApiConsoleNotificationsReadAllRouteImport
-      parentRoute: typeof ApiConsoleNotificationsRoute
-    }
-    '/api/console/notifications/dismiss-all': {
-      id: '/api/console/notifications/dismiss-all'
-      path: '/dismiss-all'
-      fullPath: '/api/console/notifications/dismiss-all'
-      preLoaderRoute: typeof ApiConsoleNotificationsDismissAllRouteImport
-      parentRoute: typeof ApiConsoleNotificationsRoute
-    }
-    '/api/console/notifications/$id': {
-      id: '/api/console/notifications/$id'
-      path: '/$id'
-      fullPath: '/api/console/notifications/$id'
-      preLoaderRoute: typeof ApiConsoleNotificationsIdRouteImport
-      parentRoute: typeof ApiConsoleNotificationsRoute
-    }
-    '/api/console/mfa/status': {
-      id: '/api/console/mfa/status'
-      path: '/api/console/mfa/status'
-      fullPath: '/api/console/mfa/status'
-      preLoaderRoute: typeof ApiConsoleMfaStatusRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/console/mfa/setup': {
-      id: '/api/console/mfa/setup'
-      path: '/api/console/mfa/setup'
-      fullPath: '/api/console/mfa/setup'
-      preLoaderRoute: typeof ApiConsoleMfaSetupRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/console/mfa/enable': {
-      id: '/api/console/mfa/enable'
-      path: '/api/console/mfa/enable'
-      fullPath: '/api/console/mfa/enable'
-      preLoaderRoute: typeof ApiConsoleMfaEnableRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/console/mfa/disable': {
-      id: '/api/console/mfa/disable'
-      path: '/api/console/mfa/disable'
-      fullPath: '/api/console/mfa/disable'
-      preLoaderRoute: typeof ApiConsoleMfaDisableRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/console/mfa/backup-codes': {
-      id: '/api/console/mfa/backup-codes'
-      path: '/api/console/mfa/backup-codes'
-      fullPath: '/api/console/mfa/backup-codes'
-      preLoaderRoute: typeof ApiConsoleMfaBackupCodesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/console/groups/$id': {
-      id: '/api/console/groups/$id'
-      path: '/api/console/groups/$id'
-      fullPath: '/api/console/groups/$id'
-      preLoaderRoute: typeof ApiConsoleGroupsIdRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/console/debug/tables': {
-      id: '/api/console/debug/tables'
-      path: '/api/console/debug/tables'
-      fullPath: '/api/console/debug/tables'
-      preLoaderRoute: typeof ApiConsoleDebugTablesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/console/comments/$id': {
-      id: '/api/console/comments/$id'
-      path: '/api/console/comments/$id'
-      fullPath: '/api/console/comments/$id'
-      preLoaderRoute: typeof ApiConsoleCommentsIdRouteImport
+    '/api/auth/mfa/verify': {
+      id: '/api/auth/mfa/verify'
+      path: '/api/auth/mfa/verify'
+      fullPath: '/api/auth/mfa/verify'
+      preLoaderRoute: typeof ApiAuthMfaVerifyRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/console/auth/collab-token': {
@@ -2001,144 +1812,242 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiConsoleAuthCollabTokenRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/auth/mfa/verify': {
-      id: '/api/auth/mfa/verify'
-      path: '/api/auth/mfa/verify'
-      fullPath: '/api/auth/mfa/verify'
-      preLoaderRoute: typeof ApiAuthMfaVerifyRouteImport
+    '/api/console/comments/$id': {
+      id: '/api/console/comments/$id'
+      path: '/api/console/comments/$id'
+      fullPath: '/api/console/comments/$id'
+      preLoaderRoute: typeof ApiConsoleCommentsIdRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/console/workspaces/$id/groups': {
-      id: '/api/console/workspaces/$id/groups'
-      path: '/groups'
-      fullPath: '/api/console/workspaces/$id/groups'
-      preLoaderRoute: typeof ApiConsoleWorkspacesIdGroupsRouteImport
-      parentRoute: typeof ApiConsoleWorkspacesIdRoute
+    '/api/console/debug/tables': {
+      id: '/api/console/debug/tables'
+      path: '/api/console/debug/tables'
+      fullPath: '/api/console/debug/tables'
+      preLoaderRoute: typeof ApiConsoleDebugTablesRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/api/console/users/$id/role': {
-      id: '/api/console/users/$id/role'
-      path: '/role'
-      fullPath: '/api/console/users/$id/role'
-      preLoaderRoute: typeof ApiConsoleUsersIdRoleRouteImport
-      parentRoute: typeof ApiConsoleUsersIdRoute
+    '/api/console/groups/$id': {
+      id: '/api/console/groups/$id'
+      path: '/api/console/groups/$id'
+      fullPath: '/api/console/groups/$id'
+      preLoaderRoute: typeof ApiConsoleGroupsIdRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/api/console/users/$id/active': {
-      id: '/api/console/users/$id/active'
-      path: '/active'
-      fullPath: '/api/console/users/$id/active'
-      preLoaderRoute: typeof ApiConsoleUsersIdActiveRouteImport
-      parentRoute: typeof ApiConsoleUsersIdRoute
+    '/api/console/mfa/backup-codes': {
+      id: '/api/console/mfa/backup-codes'
+      path: '/api/console/mfa/backup-codes'
+      fullPath: '/api/console/mfa/backup-codes'
+      preLoaderRoute: typeof ApiConsoleMfaBackupCodesRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/api/console/spaces/by-slug/$slug': {
-      id: '/api/console/spaces/by-slug/$slug'
-      path: '/by-slug/$slug'
-      fullPath: '/api/console/spaces/by-slug/$slug'
-      preLoaderRoute: typeof ApiConsoleSpacesBySlugSlugRouteImport
+    '/api/console/mfa/disable': {
+      id: '/api/console/mfa/disable'
+      path: '/api/console/mfa/disable'
+      fullPath: '/api/console/mfa/disable'
+      preLoaderRoute: typeof ApiConsoleMfaDisableRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/console/mfa/enable': {
+      id: '/api/console/mfa/enable'
+      path: '/api/console/mfa/enable'
+      fullPath: '/api/console/mfa/enable'
+      preLoaderRoute: typeof ApiConsoleMfaEnableRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/console/mfa/setup': {
+      id: '/api/console/mfa/setup'
+      path: '/api/console/mfa/setup'
+      fullPath: '/api/console/mfa/setup'
+      preLoaderRoute: typeof ApiConsoleMfaSetupRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/console/mfa/status': {
+      id: '/api/console/mfa/status'
+      path: '/api/console/mfa/status'
+      fullPath: '/api/console/mfa/status'
+      preLoaderRoute: typeof ApiConsoleMfaStatusRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/console/notifications/$id': {
+      id: '/api/console/notifications/$id'
+      path: '/$id'
+      fullPath: '/api/console/notifications/$id'
+      preLoaderRoute: typeof ApiConsoleNotificationsIdRouteImport
+      parentRoute: typeof ApiConsoleNotificationsRoute
+    }
+    '/api/console/notifications/dismiss-all': {
+      id: '/api/console/notifications/dismiss-all'
+      path: '/dismiss-all'
+      fullPath: '/api/console/notifications/dismiss-all'
+      preLoaderRoute: typeof ApiConsoleNotificationsDismissAllRouteImport
+      parentRoute: typeof ApiConsoleNotificationsRoute
+    }
+    '/api/console/notifications/read-all': {
+      id: '/api/console/notifications/read-all'
+      path: '/read-all'
+      fullPath: '/api/console/notifications/read-all'
+      preLoaderRoute: typeof ApiConsoleNotificationsReadAllRouteImport
+      parentRoute: typeof ApiConsoleNotificationsRoute
+    }
+    '/api/console/notifications/stream': {
+      id: '/api/console/notifications/stream'
+      path: '/stream'
+      fullPath: '/api/console/notifications/stream'
+      preLoaderRoute: typeof ApiConsoleNotificationsStreamRouteImport
+      parentRoute: typeof ApiConsoleNotificationsRoute
+    }
+    '/api/console/notifications/unread-count': {
+      id: '/api/console/notifications/unread-count'
+      path: '/unread-count'
+      fullPath: '/api/console/notifications/unread-count'
+      preLoaderRoute: typeof ApiConsoleNotificationsUnreadCountRouteImport
+      parentRoute: typeof ApiConsoleNotificationsRoute
+    }
+    '/api/console/pages/$id': {
+      id: '/api/console/pages/$id'
+      path: '/$id'
+      fullPath: '/api/console/pages/$id'
+      preLoaderRoute: typeof ApiConsolePagesIdRouteImport
+      parentRoute: typeof ApiConsolePagesRoute
+    }
+    '/api/console/pages/favorites': {
+      id: '/api/console/pages/favorites'
+      path: '/favorites'
+      fullPath: '/api/console/pages/favorites'
+      preLoaderRoute: typeof ApiConsolePagesFavoritesRouteImport
+      parentRoute: typeof ApiConsolePagesRoute
+    }
+    '/api/console/pages/tree': {
+      id: '/api/console/pages/tree'
+      path: '/tree'
+      fullPath: '/api/console/pages/tree'
+      preLoaderRoute: typeof ApiConsolePagesTreeRouteImport
+      parentRoute: typeof ApiConsolePagesRoute
+    }
+    '/api/console/profile/password': {
+      id: '/api/console/profile/password'
+      path: '/password'
+      fullPath: '/api/console/profile/password'
+      preLoaderRoute: typeof ApiConsoleProfilePasswordRouteImport
+      parentRoute: typeof ApiConsoleProfileRoute
+    }
+    '/api/console/profile/session': {
+      id: '/api/console/profile/session'
+      path: '/session'
+      fullPath: '/api/console/profile/session'
+      preLoaderRoute: typeof ApiConsoleProfileSessionRouteImport
+      parentRoute: typeof ApiConsoleProfileRoute
+    }
+    '/api/console/push/public-key': {
+      id: '/api/console/push/public-key'
+      path: '/api/console/push/public-key'
+      fullPath: '/api/console/push/public-key'
+      preLoaderRoute: typeof ApiConsolePushPublicKeyRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/console/push/subscribe': {
+      id: '/api/console/push/subscribe'
+      path: '/api/console/push/subscribe'
+      fullPath: '/api/console/push/subscribe'
+      preLoaderRoute: typeof ApiConsolePushSubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/console/push/unsubscribe': {
+      id: '/api/console/push/unsubscribe'
+      path: '/api/console/push/unsubscribe'
+      fullPath: '/api/console/push/unsubscribe'
+      preLoaderRoute: typeof ApiConsolePushUnsubscribeRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/console/spaces/$id': {
+      id: '/api/console/spaces/$id'
+      path: '/$id'
+      fullPath: '/api/console/spaces/$id'
+      preLoaderRoute: typeof ApiConsoleSpacesIdRouteImport
       parentRoute: typeof ApiConsoleSpacesRoute
     }
-    '/api/console/spaces/$id/members': {
-      id: '/api/console/spaces/$id/members'
-      path: '/members'
-      fullPath: '/api/console/spaces/$id/members'
-      preLoaderRoute: typeof ApiConsoleSpacesIdMembersRouteImport
-      parentRoute: typeof ApiConsoleSpacesIdRoute
+    '/api/console/spaces/favorites': {
+      id: '/api/console/spaces/favorites'
+      path: '/favorites'
+      fullPath: '/api/console/spaces/favorites'
+      preLoaderRoute: typeof ApiConsoleSpacesFavoritesRouteImport
+      parentRoute: typeof ApiConsoleSpacesRoute
     }
-    '/api/console/spaces/$id/favorited': {
-      id: '/api/console/spaces/$id/favorited'
-      path: '/favorited'
-      fullPath: '/api/console/spaces/$id/favorited'
-      preLoaderRoute: typeof ApiConsoleSpacesIdFavoritedRouteImport
-      parentRoute: typeof ApiConsoleSpacesIdRoute
+    '/api/console/unsplash/search': {
+      id: '/api/console/unsplash/search'
+      path: '/api/console/unsplash/search'
+      fullPath: '/api/console/unsplash/search'
+      preLoaderRoute: typeof ApiConsoleUnsplashSearchRouteImport
+      parentRoute: typeof rootRouteImport
     }
-    '/api/console/spaces/$id/favorite': {
-      id: '/api/console/spaces/$id/favorite'
-      path: '/favorite'
-      fullPath: '/api/console/spaces/$id/favorite'
-      preLoaderRoute: typeof ApiConsoleSpacesIdFavoriteRouteImport
-      parentRoute: typeof ApiConsoleSpacesIdRoute
+    '/api/console/users/$id': {
+      id: '/api/console/users/$id'
+      path: '/$id'
+      fullPath: '/api/console/users/$id'
+      preLoaderRoute: typeof ApiConsoleUsersIdRouteImport
+      parentRoute: typeof ApiConsoleUsersRoute
     }
-    '/api/console/profile/session/revoke': {
-      id: '/api/console/profile/session/revoke'
-      path: '/revoke'
-      fullPath: '/api/console/profile/session/revoke'
-      preLoaderRoute: typeof ApiConsoleProfileSessionRevokeRouteImport
-      parentRoute: typeof ApiConsoleProfileSessionRoute
+    '/api/console/workspaces/$id': {
+      id: '/api/console/workspaces/$id'
+      path: '/$id'
+      fullPath: '/api/console/workspaces/$id'
+      preLoaderRoute: typeof ApiConsoleWorkspacesIdRouteImport
+      parentRoute: typeof ApiConsoleWorkspacesRoute
     }
-    '/api/console/pages/$id/watching': {
-      id: '/api/console/pages/$id/watching'
-      path: '/watching'
-      fullPath: '/api/console/pages/$id/watching'
-      preLoaderRoute: typeof ApiConsolePagesIdWatchingRouteImport
-      parentRoute: typeof ApiConsolePagesIdRoute
-    }
-    '/api/console/pages/$id/watch': {
-      id: '/api/console/pages/$id/watch'
-      path: '/watch'
-      fullPath: '/api/console/pages/$id/watch'
-      preLoaderRoute: typeof ApiConsolePagesIdWatchRouteImport
-      parentRoute: typeof ApiConsolePagesIdRoute
-    }
-    '/api/console/pages/$id/unpublish': {
-      id: '/api/console/pages/$id/unpublish'
-      path: '/unpublish'
-      fullPath: '/api/console/pages/$id/unpublish'
-      preLoaderRoute: typeof ApiConsolePagesIdUnpublishRouteImport
-      parentRoute: typeof ApiConsolePagesIdRoute
-    }
-    '/api/console/pages/$id/share': {
-      id: '/api/console/pages/$id/share'
-      path: '/share'
-      fullPath: '/api/console/pages/$id/share'
-      preLoaderRoute: typeof ApiConsolePagesIdShareRouteImport
-      parentRoute: typeof ApiConsolePagesIdRoute
-    }
-    '/api/console/pages/$id/restore': {
-      id: '/api/console/pages/$id/restore'
-      path: '/restore'
-      fullPath: '/api/console/pages/$id/restore'
-      preLoaderRoute: typeof ApiConsolePagesIdRestoreRouteImport
-      parentRoute: typeof ApiConsolePagesIdRoute
-    }
-    '/api/console/pages/$id/publish': {
-      id: '/api/console/pages/$id/publish'
-      path: '/publish'
-      fullPath: '/api/console/pages/$id/publish'
-      preLoaderRoute: typeof ApiConsolePagesIdPublishRouteImport
-      parentRoute: typeof ApiConsolePagesIdRoute
-    }
-    '/api/console/pages/$id/presence': {
-      id: '/api/console/pages/$id/presence'
+    '/api/shares/$token/presence': {
+      id: '/api/shares/$token/presence'
       path: '/presence'
-      fullPath: '/api/console/pages/$id/presence'
-      preLoaderRoute: typeof ApiConsolePagesIdPresenceRouteImport
-      parentRoute: typeof ApiConsolePagesIdRoute
+      fullPath: '/api/shares/$token/presence'
+      preLoaderRoute: typeof ApiSharesTokenPresenceRouteImport
+      parentRoute: typeof ApiSharesTokenRoute
     }
-    '/api/console/pages/$id/move': {
-      id: '/api/console/pages/$id/move'
-      path: '/move'
-      fullPath: '/api/console/pages/$id/move'
-      preLoaderRoute: typeof ApiConsolePagesIdMoveRouteImport
-      parentRoute: typeof ApiConsolePagesIdRoute
+    '/s/$spaceSlug/p/$pageid': {
+      id: '/s/$spaceSlug/p/$pageid'
+      path: '/p/$pageid'
+      fullPath: '/s/$spaceSlug/p/$pageid'
+      preLoaderRoute: typeof SSpaceSlugPPageidRouteImport
+      parentRoute: typeof SSpaceSlugRoute
     }
-    '/api/console/pages/$id/history': {
-      id: '/api/console/pages/$id/history'
-      path: '/history'
-      fullPath: '/api/console/pages/$id/history'
-      preLoaderRoute: typeof ApiConsolePagesIdHistoryRouteImport
-      parentRoute: typeof ApiConsolePagesIdRoute
+    '/api/console/comments/$id/resolve': {
+      id: '/api/console/comments/$id/resolve'
+      path: '/resolve'
+      fullPath: '/api/console/comments/$id/resolve'
+      preLoaderRoute: typeof ApiConsoleCommentsIdResolveRouteImport
+      parentRoute: typeof ApiConsoleCommentsIdRoute
     }
-    '/api/console/pages/$id/favorited': {
-      id: '/api/console/pages/$id/favorited'
-      path: '/favorited'
-      fullPath: '/api/console/pages/$id/favorited'
-      preLoaderRoute: typeof ApiConsolePagesIdFavoritedRouteImport
-      parentRoute: typeof ApiConsolePagesIdRoute
+    '/api/console/debug/tables/$tableName': {
+      id: '/api/console/debug/tables/$tableName'
+      path: '/$tableName'
+      fullPath: '/api/console/debug/tables/$tableName'
+      preLoaderRoute: typeof ApiConsoleDebugTablesTableNameRouteImport
+      parentRoute: typeof ApiConsoleDebugTablesRoute
     }
-    '/api/console/pages/$id/favorite': {
-      id: '/api/console/pages/$id/favorite'
-      path: '/favorite'
-      fullPath: '/api/console/pages/$id/favorite'
-      preLoaderRoute: typeof ApiConsolePagesIdFavoriteRouteImport
+    '/api/console/files/$bucket/$filename': {
+      id: '/api/console/files/$bucket/$filename'
+      path: '/api/console/files/$bucket/$filename'
+      fullPath: '/api/console/files/$bucket/$filename'
+      preLoaderRoute: typeof ApiConsoleFilesBucketFilenameRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/console/groups/$id/members': {
+      id: '/api/console/groups/$id/members'
+      path: '/members'
+      fullPath: '/api/console/groups/$id/members'
+      preLoaderRoute: typeof ApiConsoleGroupsIdMembersRouteImport
+      parentRoute: typeof ApiConsoleGroupsIdRoute
+    }
+    '/api/console/notifications/$id/read': {
+      id: '/api/console/notifications/$id/read'
+      path: '/read'
+      fullPath: '/api/console/notifications/$id/read'
+      preLoaderRoute: typeof ApiConsoleNotificationsIdReadRouteImport
+      parentRoute: typeof ApiConsoleNotificationsIdRoute
+    }
+    '/api/console/pages/$id/children': {
+      id: '/api/console/pages/$id/children'
+      path: '/children'
+      fullPath: '/api/console/pages/$id/children'
+      preLoaderRoute: typeof ApiConsolePagesIdChildrenRouteImport
       parentRoute: typeof ApiConsolePagesIdRoute
     }
     '/api/console/pages/$id/comments': {
@@ -2148,82 +2057,145 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiConsolePagesIdCommentsRouteImport
       parentRoute: typeof ApiConsolePagesIdRoute
     }
-    '/api/console/pages/$id/children': {
-      id: '/api/console/pages/$id/children'
-      path: '/children'
-      fullPath: '/api/console/pages/$id/children'
-      preLoaderRoute: typeof ApiConsolePagesIdChildrenRouteImport
+    '/api/console/pages/$id/favorite': {
+      id: '/api/console/pages/$id/favorite'
+      path: '/favorite'
+      fullPath: '/api/console/pages/$id/favorite'
+      preLoaderRoute: typeof ApiConsolePagesIdFavoriteRouteImport
       parentRoute: typeof ApiConsolePagesIdRoute
     }
-    '/api/console/notifications/$id/read': {
-      id: '/api/console/notifications/$id/read'
-      path: '/read'
-      fullPath: '/api/console/notifications/$id/read'
-      preLoaderRoute: typeof ApiConsoleNotificationsIdReadRouteImport
-      parentRoute: typeof ApiConsoleNotificationsIdRoute
+    '/api/console/pages/$id/favorited': {
+      id: '/api/console/pages/$id/favorited'
+      path: '/favorited'
+      fullPath: '/api/console/pages/$id/favorited'
+      preLoaderRoute: typeof ApiConsolePagesIdFavoritedRouteImport
+      parentRoute: typeof ApiConsolePagesIdRoute
     }
-    '/api/console/groups/$id/members': {
-      id: '/api/console/groups/$id/members'
-      path: '/members'
-      fullPath: '/api/console/groups/$id/members'
-      preLoaderRoute: typeof ApiConsoleGroupsIdMembersRouteImport
-      parentRoute: typeof ApiConsoleGroupsIdRoute
+    '/api/console/pages/$id/history': {
+      id: '/api/console/pages/$id/history'
+      path: '/history'
+      fullPath: '/api/console/pages/$id/history'
+      preLoaderRoute: typeof ApiConsolePagesIdHistoryRouteImport
+      parentRoute: typeof ApiConsolePagesIdRoute
     }
-    '/api/console/files/$bucket/$filename': {
-      id: '/api/console/files/$bucket/$filename'
-      path: '/api/console/files/$bucket/$filename'
-      fullPath: '/api/console/files/$bucket/$filename'
-      preLoaderRoute: typeof ApiConsoleFilesBucketFilenameRouteImport
-      parentRoute: typeof rootRouteImport
+    '/api/console/pages/$id/move': {
+      id: '/api/console/pages/$id/move'
+      path: '/move'
+      fullPath: '/api/console/pages/$id/move'
+      preLoaderRoute: typeof ApiConsolePagesIdMoveRouteImport
+      parentRoute: typeof ApiConsolePagesIdRoute
     }
-    '/api/console/debug/tables/$tableName': {
-      id: '/api/console/debug/tables/$tableName'
-      path: '/$tableName'
-      fullPath: '/api/console/debug/tables/$tableName'
-      preLoaderRoute: typeof ApiConsoleDebugTablesTableNameRouteImport
-      parentRoute: typeof ApiConsoleDebugTablesRoute
+    '/api/console/pages/$id/presence': {
+      id: '/api/console/pages/$id/presence'
+      path: '/presence'
+      fullPath: '/api/console/pages/$id/presence'
+      preLoaderRoute: typeof ApiConsolePagesIdPresenceRouteImport
+      parentRoute: typeof ApiConsolePagesIdRoute
     }
-    '/api/console/comments/$id/resolve': {
-      id: '/api/console/comments/$id/resolve'
-      path: '/resolve'
-      fullPath: '/api/console/comments/$id/resolve'
-      preLoaderRoute: typeof ApiConsoleCommentsIdResolveRouteImport
-      parentRoute: typeof ApiConsoleCommentsIdRoute
+    '/api/console/pages/$id/publish': {
+      id: '/api/console/pages/$id/publish'
+      path: '/publish'
+      fullPath: '/api/console/pages/$id/publish'
+      preLoaderRoute: typeof ApiConsolePagesIdPublishRouteImport
+      parentRoute: typeof ApiConsolePagesIdRoute
     }
-    '/api/console/spaces/$id/members/$userId': {
-      id: '/api/console/spaces/$id/members/$userId'
-      path: '/$userId'
-      fullPath: '/api/console/spaces/$id/members/$userId'
-      preLoaderRoute: typeof ApiConsoleSpacesIdMembersUserIdRouteImport
-      parentRoute: typeof ApiConsoleSpacesIdMembersRoute
+    '/api/console/pages/$id/restore': {
+      id: '/api/console/pages/$id/restore'
+      path: '/restore'
+      fullPath: '/api/console/pages/$id/restore'
+      preLoaderRoute: typeof ApiConsolePagesIdRestoreRouteImport
+      parentRoute: typeof ApiConsolePagesIdRoute
     }
-    '/api/console/spaces/$id/groups/$groupId': {
-      id: '/api/console/spaces/$id/groups/$groupId'
-      path: '/groups/$groupId'
-      fullPath: '/api/console/spaces/$id/groups/$groupId'
-      preLoaderRoute: typeof ApiConsoleSpacesIdGroupsGroupIdRouteImport
+    '/api/console/pages/$id/share': {
+      id: '/api/console/pages/$id/share'
+      path: '/share'
+      fullPath: '/api/console/pages/$id/share'
+      preLoaderRoute: typeof ApiConsolePagesIdShareRouteImport
+      parentRoute: typeof ApiConsolePagesIdRoute
+    }
+    '/api/console/pages/$id/unpublish': {
+      id: '/api/console/pages/$id/unpublish'
+      path: '/unpublish'
+      fullPath: '/api/console/pages/$id/unpublish'
+      preLoaderRoute: typeof ApiConsolePagesIdUnpublishRouteImport
+      parentRoute: typeof ApiConsolePagesIdRoute
+    }
+    '/api/console/pages/$id/watch': {
+      id: '/api/console/pages/$id/watch'
+      path: '/watch'
+      fullPath: '/api/console/pages/$id/watch'
+      preLoaderRoute: typeof ApiConsolePagesIdWatchRouteImport
+      parentRoute: typeof ApiConsolePagesIdRoute
+    }
+    '/api/console/pages/$id/watching': {
+      id: '/api/console/pages/$id/watching'
+      path: '/watching'
+      fullPath: '/api/console/pages/$id/watching'
+      preLoaderRoute: typeof ApiConsolePagesIdWatchingRouteImport
+      parentRoute: typeof ApiConsolePagesIdRoute
+    }
+    '/api/console/profile/session/revoke': {
+      id: '/api/console/profile/session/revoke'
+      path: '/revoke'
+      fullPath: '/api/console/profile/session/revoke'
+      preLoaderRoute: typeof ApiConsoleProfileSessionRevokeRouteImport
+      parentRoute: typeof ApiConsoleProfileSessionRoute
+    }
+    '/api/console/spaces/$id/favorite': {
+      id: '/api/console/spaces/$id/favorite'
+      path: '/favorite'
+      fullPath: '/api/console/spaces/$id/favorite'
+      preLoaderRoute: typeof ApiConsoleSpacesIdFavoriteRouteImport
       parentRoute: typeof ApiConsoleSpacesIdRoute
     }
-    '/api/console/pages/$id/share/shorten': {
-      id: '/api/console/pages/$id/share/shorten'
-      path: '/shorten'
-      fullPath: '/api/console/pages/$id/share/shorten'
-      preLoaderRoute: typeof ApiConsolePagesIdShareShortenRouteImport
-      parentRoute: typeof ApiConsolePagesIdShareRoute
+    '/api/console/spaces/$id/favorited': {
+      id: '/api/console/spaces/$id/favorited'
+      path: '/favorited'
+      fullPath: '/api/console/spaces/$id/favorited'
+      preLoaderRoute: typeof ApiConsoleSpacesIdFavoritedRouteImport
+      parentRoute: typeof ApiConsoleSpacesIdRoute
     }
-    '/api/console/pages/$id/history/$historyId': {
-      id: '/api/console/pages/$id/history/$historyId'
-      path: '/$historyId'
-      fullPath: '/api/console/pages/$id/history/$historyId'
-      preLoaderRoute: typeof ApiConsolePagesIdHistoryHistoryIdRouteImport
-      parentRoute: typeof ApiConsolePagesIdHistoryRoute
+    '/api/console/spaces/$id/members': {
+      id: '/api/console/spaces/$id/members'
+      path: '/members'
+      fullPath: '/api/console/spaces/$id/members'
+      preLoaderRoute: typeof ApiConsoleSpacesIdMembersRouteImport
+      parentRoute: typeof ApiConsoleSpacesIdRoute
     }
-    '/api/console/pages/$id/comments/stream': {
-      id: '/api/console/pages/$id/comments/stream'
-      path: '/stream'
-      fullPath: '/api/console/pages/$id/comments/stream'
-      preLoaderRoute: typeof ApiConsolePagesIdCommentsStreamRouteImport
-      parentRoute: typeof ApiConsolePagesIdCommentsRoute
+    '/api/console/spaces/by-slug/$slug': {
+      id: '/api/console/spaces/by-slug/$slug'
+      path: '/by-slug/$slug'
+      fullPath: '/api/console/spaces/by-slug/$slug'
+      preLoaderRoute: typeof ApiConsoleSpacesBySlugSlugRouteImport
+      parentRoute: typeof ApiConsoleSpacesRoute
+    }
+    '/api/console/users/$id/active': {
+      id: '/api/console/users/$id/active'
+      path: '/active'
+      fullPath: '/api/console/users/$id/active'
+      preLoaderRoute: typeof ApiConsoleUsersIdActiveRouteImport
+      parentRoute: typeof ApiConsoleUsersIdRoute
+    }
+    '/api/console/users/$id/role': {
+      id: '/api/console/users/$id/role'
+      path: '/role'
+      fullPath: '/api/console/users/$id/role'
+      preLoaderRoute: typeof ApiConsoleUsersIdRoleRouteImport
+      parentRoute: typeof ApiConsoleUsersIdRoute
+    }
+    '/api/console/workspaces/$id/groups': {
+      id: '/api/console/workspaces/$id/groups'
+      path: '/groups'
+      fullPath: '/api/console/workspaces/$id/groups'
+      preLoaderRoute: typeof ApiConsoleWorkspacesIdGroupsRouteImport
+      parentRoute: typeof ApiConsoleWorkspacesIdRoute
+    }
+    '/api/console/debug/tables/$tableName/rows': {
+      id: '/api/console/debug/tables/$tableName/rows'
+      path: '/rows'
+      fullPath: '/api/console/debug/tables/$tableName/rows'
+      preLoaderRoute: typeof ApiConsoleDebugTablesTableNameRowsRouteImport
+      parentRoute: typeof ApiConsoleDebugTablesTableNameRoute
     }
     '/api/console/groups/$id/members/$userId': {
       id: '/api/console/groups/$id/members/$userId'
@@ -2232,12 +2204,40 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiConsoleGroupsIdMembersUserIdRouteImport
       parentRoute: typeof ApiConsoleGroupsIdMembersRoute
     }
-    '/api/console/debug/tables/$tableName/rows': {
-      id: '/api/console/debug/tables/$tableName/rows'
-      path: '/rows'
-      fullPath: '/api/console/debug/tables/$tableName/rows'
-      preLoaderRoute: typeof ApiConsoleDebugTablesTableNameRowsRouteImport
-      parentRoute: typeof ApiConsoleDebugTablesTableNameRoute
+    '/api/console/pages/$id/comments/stream': {
+      id: '/api/console/pages/$id/comments/stream'
+      path: '/stream'
+      fullPath: '/api/console/pages/$id/comments/stream'
+      preLoaderRoute: typeof ApiConsolePagesIdCommentsStreamRouteImport
+      parentRoute: typeof ApiConsolePagesIdCommentsRoute
+    }
+    '/api/console/pages/$id/history/$historyId': {
+      id: '/api/console/pages/$id/history/$historyId'
+      path: '/$historyId'
+      fullPath: '/api/console/pages/$id/history/$historyId'
+      preLoaderRoute: typeof ApiConsolePagesIdHistoryHistoryIdRouteImport
+      parentRoute: typeof ApiConsolePagesIdHistoryRoute
+    }
+    '/api/console/pages/$id/share/shorten': {
+      id: '/api/console/pages/$id/share/shorten'
+      path: '/shorten'
+      fullPath: '/api/console/pages/$id/share/shorten'
+      preLoaderRoute: typeof ApiConsolePagesIdShareShortenRouteImport
+      parentRoute: typeof ApiConsolePagesIdShareRoute
+    }
+    '/api/console/spaces/$id/groups/$groupId': {
+      id: '/api/console/spaces/$id/groups/$groupId'
+      path: '/groups/$groupId'
+      fullPath: '/api/console/spaces/$id/groups/$groupId'
+      preLoaderRoute: typeof ApiConsoleSpacesIdGroupsGroupIdRouteImport
+      parentRoute: typeof ApiConsoleSpacesIdRoute
+    }
+    '/api/console/spaces/$id/members/$userId': {
+      id: '/api/console/spaces/$id/members/$userId'
+      path: '/$userId'
+      fullPath: '/api/console/spaces/$id/members/$userId'
+      preLoaderRoute: typeof ApiConsoleSpacesIdMembersUserIdRouteImport
+      parentRoute: typeof ApiConsoleSpacesIdMembersRoute
     }
     '/api/console/spaces/$spaceId/pages/by-slug/$slugId': {
       id: '/api/console/spaces/$spaceId/pages/by-slug/$slugId'

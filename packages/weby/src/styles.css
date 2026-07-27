@@ -253,7 +253,8 @@ button {
   border: none !important;
   box-shadow: none !important;
   min-height: 100%;
-  line-height: normal;
+  font-size: 0.8125rem;
+  line-height: 1.4;
 }
 
 .blog-reader-prose .tiptap .ProseMirror:focus,
@@ -291,7 +292,6 @@ button {
   color: var(--color-text);
   scroll-margin-top: 2rem;
   font-weight: 600;
-  line-height: 1.4;
 }
 
 .blog-reader-prose h1 {
@@ -310,7 +310,6 @@ button {
 .blog-reader-prose blockquote,
 .blog-reader-prose pre {
   margin-bottom: 0.5rem;
-  line-height: 1.4;
 }
 
 .blog-reader-prose ul:not([data-type="taskList"]) {

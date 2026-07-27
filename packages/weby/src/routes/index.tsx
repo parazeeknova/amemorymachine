@@ -183,21 +183,32 @@ const Home = function Home() {
   const videoActiveNext = useRef(false);
 
   useEffect(() => {
-    const src = isDarkMode
-      ? "https://img.przknv.cc/t/header.mp4"
-      : "https://img.przknv.cc/t/footer.mp4";
+    const src = isDarkMode ? "/header.webm" : "/footer.webm";
+    const safePlay = async (video: HTMLVideoElement) => {
+      try {
+        await video.play();
+      } catch {
+        // Ignore autoplay errors
+      }
+    };
     if (videoActiveNext.current) {
       if (nextVideoRef.current) {
-        nextVideoRef.current.src = src;
+        if (nextVideoRef.current.getAttribute("src") !== src) {
+          nextVideoRef.current.src = src;
+        }
         nextVideoRef.current.style.opacity = "1";
+        void safePlay(nextVideoRef.current);
       }
       if (videoRef.current) {
         videoRef.current.style.opacity = "0";
       }
     } else {
       if (videoRef.current) {
-        videoRef.current.src = src;
+        if (videoRef.current.getAttribute("src") !== src) {
+          videoRef.current.src = src;
+        }
         videoRef.current.style.opacity = "1";
+        void safePlay(videoRef.current);
       }
       if (nextVideoRef.current) {
         nextVideoRef.current.style.opacity = "0";
@@ -211,9 +222,7 @@ const Home = function Home() {
 
   const animatedToggleTheme = useCallback(() => {
     const nextDark = !isDarkMode;
-    const nextSrc = nextDark
-      ? "https://img.przknv.cc/t/header.mp4"
-      : "https://img.przknv.cc/t/footer.mp4";
+    const nextSrc = nextDark ? "/header.webm" : "/footer.webm";
     const fromRef = videoActiveNext.current ? nextVideoRef : videoRef;
     const toRef = videoActiveNext.current ? videoRef : nextVideoRef;
 
@@ -332,7 +341,7 @@ const Home = function Home() {
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
           style={{ opacity: 0 }}
-          src="https://img.przknv.cc/t/footer.mp4"
+          src="/footer.webm"
         />
         <video
           ref={videoRef}
@@ -341,7 +350,7 @@ const Home = function Home() {
           muted
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
-          src="https://img.przknv.cc/t/header.mp4"
+          src="/header.webm"
         />
         <div
           ref={gradientRef}

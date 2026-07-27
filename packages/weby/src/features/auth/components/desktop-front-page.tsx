@@ -92,9 +92,7 @@ export const DesktopFrontPage = () => {
 
   const animatedToggleTheme = useCallback(() => {
     const nextDark = !isDarkMode;
-    const nextSrc = nextDark
-      ? "https://img.przknv.cc/t/header.mp4"
-      : "https://img.przknv.cc/t/footer.mp4";
+    const nextSrc = nextDark ? "/header.webm" : "/footer.webm";
     const fromRef = videoActiveNext.current ? nextVideoRef : videoRef;
     const toRef = videoActiveNext.current ? videoRef : nextVideoRef;
     crossfadeVideo(fromRef, toRef, nextSrc, () => {
@@ -104,21 +102,32 @@ export const DesktopFrontPage = () => {
   }, [isDarkMode, toggleTheme]);
 
   useEffect(() => {
-    const src = isDarkMode
-      ? "https://img.przknv.cc/t/header.mp4"
-      : "https://img.przknv.cc/t/footer.mp4";
+    const src = isDarkMode ? "/header.webm" : "/footer.webm";
+    const safePlay = async (video: HTMLVideoElement) => {
+      try {
+        await video.play();
+      } catch {
+        // Ignore autoplay errors
+      }
+    };
     if (videoActiveNext.current) {
       if (nextVideoRef.current) {
-        nextVideoRef.current.src = src;
+        if (nextVideoRef.current.getAttribute("src") !== src) {
+          nextVideoRef.current.src = src;
+        }
         nextVideoRef.current.style.opacity = "1";
+        void safePlay(nextVideoRef.current);
       }
       if (videoRef.current) {
         videoRef.current.style.opacity = "0";
       }
     } else {
       if (videoRef.current) {
-        videoRef.current.src = src;
+        if (videoRef.current.getAttribute("src") !== src) {
+          videoRef.current.src = src;
+        }
         videoRef.current.style.opacity = "1";
+        void safePlay(videoRef.current);
       }
       if (nextVideoRef.current) {
         nextVideoRef.current.style.opacity = "0";
@@ -177,6 +186,7 @@ export const DesktopFrontPage = () => {
         return;
       }
       void navigate({ replace: true, to: "/home" });
+      // eslint-disable-next-line no-shadow -- catch parameter shadows state for clean error extraction
     } catch (error) {
       setError(error instanceof Error ? error.message : "Login failed");
       setLoading(false);
@@ -194,6 +204,7 @@ export const DesktopFrontPage = () => {
     try {
       await login(username, password, email, name);
       void navigate({ replace: true, to: "/home" });
+      // eslint-disable-next-line no-shadow
     } catch (error) {
       setError(error instanceof Error ? error.message : "Setup failed");
       setLoading(false);
@@ -403,7 +414,7 @@ export const DesktopFrontPage = () => {
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
           style={{ opacity: 0 }}
-          src="https://img.przknv.cc/t/footer.mp4"
+          src="/footer.webm"
         />
         <video
           ref={videoRef}
@@ -412,7 +423,7 @@ export const DesktopFrontPage = () => {
           muted
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
-          src="https://img.przknv.cc/t/header.mp4"
+          src="/header.webm"
         />
         <div
           ref={gradientRef}

@@ -250,6 +250,7 @@ export const GroupDetailSidebar = ({ group, isOpen, onClose }: GroupDetailSideba
   return (
     <div className="fixed inset-0 z-50 flex justify-end">
       <button
+        aria-label="Close sidebar"
         className="absolute inset-0 appearance-none border-none cursor-default bg-black/20"
         onClick={onClose}
         type="button"

@@ -543,6 +543,7 @@ export const LoginPopup = ({ isDarkMode, isAtBottom = false }: LoginPopupProps) 
       </button>
 
       {open && (
+        // eslint-disable-next-line jsx-a11y/prefer-tag-over-role
         <div aria-label="Login" aria-modal="true" className="fixed inset-0 z-50" role="dialog">
           <div
             className="absolute inset-0 bg-black/40"

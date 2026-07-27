@@ -212,8 +212,8 @@ export const PortfolioLivePreview = memo(
     const containerRef = useRef<HTMLDivElement>(null);
     const { experiences, profile, projects } = parsedData;
 
-    const lightVideoUrl = profile.lightVideo || "https://img.przknv.cc/t/footer.mp4";
-    const darkVideoUrl = profile.darkVideo || "https://img.przknv.cc/t/header.mp4";
+    const lightVideoUrl = profile.lightVideo || "/footer.webm";
+    const darkVideoUrl = profile.darkVideo || "/header.webm";
 
     const lightThumb = useVideoThumbnail(lightVideoUrl);
     const darkThumb = useVideoThumbnail(darkVideoUrl);

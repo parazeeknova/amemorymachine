@@ -152,12 +152,15 @@ export const QuickActions = () => {
       </div>
 
       {showNewPage && (
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
         <div
           className="fixed inset-0 z-50 flex items-start justify-center pt-20"
           onClick={() => setShowNewPage(false)}
           onKeyDown={(e) => e.key === "Escape" && setShowNewPage(false)}
+          // eslint-disable-next-line jsx-a11y/prefer-tag-over-role
           role="dialog"
         >
+          {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
           <div
             className={`border w-80 shadow-lg ${t("border-border-dark bg-bg-dark", "border-border-light bg-bg-light")}`}
             onClick={(e) => e.stopPropagation()}

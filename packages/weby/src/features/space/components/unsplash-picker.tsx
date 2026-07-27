@@ -226,7 +226,7 @@ export const UnsplashPicker = ({ onClose, onSelect }: UnsplashPickerProps) => {
   };
 
   return (
-    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions
+    // eslint-disable-next-line jsx-a11y/click-events-have-key-events, jsx-a11y/no-static-element-interactions, jsx-a11y/no-noninteractive-element-interactions
     <div
       className="fixed inset-0 z-50 flex items-center justify-center"
       onClick={(e) => {
@@ -234,6 +234,7 @@ export const UnsplashPicker = ({ onClose, onSelect }: UnsplashPickerProps) => {
           onClose();
         }
       }}
+      // eslint-disable-next-line jsx-a11y/prefer-tag-over-role
       role="dialog"
       aria-modal="true"
       aria-label="unsplash search"

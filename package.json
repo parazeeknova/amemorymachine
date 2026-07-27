@@ -1,7 +1,7 @@
 {
   "$schema": "https://raw.githubusercontent.com/SchemaStore/schemastore/refs/heads/master/src/schemas/json/package.json",
   "name": "verso",
-  "version": "0.5.75",
+  "version": "0.5.78",
   "private": true,
   "workspaces": [
     "packages/*"
@@ -28,10 +28,10 @@
     "al": "bun run check-types && bun run check && bun run test"
   },
   "devDependencies": {
-    "lefthook": "^2.1.6",
+    "lefthook": "^2.1.10",
     "lerna": "^9.0.7",
     "oxfmt": "^0.46.0",
-    "oxlint": "^1.61.0",
+    "oxlint": "^1.75.0",
     "ultracite": "7.6.1"
   },
   "overrides": {

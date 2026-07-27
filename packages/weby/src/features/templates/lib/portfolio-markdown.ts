@@ -15,8 +15,8 @@ export const generatePortfolioMarkdown = (
   const pTagline = profile?.tagline ?? "designer portfolio";
   const pUsername = profile?.username ?? "parazeeknova";
   const pEmail = profile?.email ?? "harsh@itssingularity.com";
-  const lightVideo = profile?.lightVideo ?? "https://img.przknv.cc/t/footer.mp4";
-  const darkVideo = profile?.darkVideo ?? "https://img.przknv.cc/t/header.mp4";
+  const lightVideo = profile?.lightVideo ?? "/footer.webm";
+  const darkVideo = profile?.darkVideo ?? "/header.webm";
   const pDesc =
     profile?.description ??
     "Engineer and founder, building systems, infrastructure, and tools. Author of [asocialmedia](https://www.asocialmedia.cc). Runs [Singularity Works](https://www.itsingularity.com), an opinionated product studio.";

@@ -332,8 +332,11 @@ export const DebugTable = ({ tableName }: DebugTableProps) => {
                             : flexRender(header.column.columnDef.header, header.getContext())}
                         </span>
                         {header.column.getCanResize() && (
+                          // eslint-disable-next-line jsx-a11y/prefer-tag-over-role
                           <div
+                            tabIndex={0}
                             aria-label="Resize column"
+                            // eslint-disable-next-line jsx-a11y/prefer-tag-over-role
                             role="separator"
                             className={`absolute right-0 top-0 h-full w-1 cursor-col-resize select-none touch-none transition-colors ${
                               header.column.getIsResizing()

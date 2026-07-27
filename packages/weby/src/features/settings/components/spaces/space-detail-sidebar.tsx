@@ -1071,6 +1071,7 @@ export const SpaceDetailSidebar = ({
     <div className="fixed inset-0 z-50 flex justify-end">
       {/* Backdrop */}
       <button
+        aria-label="Close sidebar"
         className="absolute inset-0 bg-black/20 appearance-none border-none cursor-default"
         onClick={onClose}
         type="button"

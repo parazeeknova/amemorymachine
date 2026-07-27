@@ -16,6 +16,7 @@ import {
   WifiSlashIcon,
   UsersIcon,
   ChatCircleDotsIcon,
+  CodeIcon,
 } from "@phosphor-icons/react";
 import { CommentSidebar, CommentDialog, useComments, useCommentStream } from "#/features/comment";
 import { BubbleMenu } from "./toolbar/bubble-menu";
@@ -46,6 +47,8 @@ import { useIsPageWatching, useWatchPage } from "#/features/console/hooks/use-pa
 import { useUpdatePage, usePageShare } from "#/features/console/hooks/use-pages";
 import { getGuestPokemon, getPokemonDetails } from "#/features/editor/lib/pokemon-avatars";
 import type { CollaboratorAwarenessUser } from "#/features/editor/lib/collaboration-presence";
+import { tiptapToMarkdown } from "#/features/editor/lib/tiptap-to-markdown";
+import { markdownToTiptap } from "#/features/editor/lib/markdown-to-tiptap";
 import { TableMenu } from "./table/table-menu";
 import { ColumnsMenu } from "./columns/columns-menu";
 import { CalloutMenu } from "./callout/callout-menu";
@@ -361,8 +364,10 @@ const usePageEditorInstance = (
       editable,
       editorProps: {
         attributes: {
-          class: "outline-none border-none focus:outline-none focus:border-none focus:ring-0",
+          "aria-label": "Page content",
         },
+        scrollMargin: 80,
+        scrollThreshold: 80,
       },
       extensions,
       immediatelyRender: false,
@@ -1226,9 +1231,11 @@ const TableOfContentsModal = ({
   }, [tocOpen]);
 
   return (
+    // eslint-disable-next-line jsx-a11y/prefer-tag-over-role
     <div
       ref={containerRef}
       className="fixed inset-0 z-80 pointer-events-none"
+      // eslint-disable-next-line jsx-a11y/prefer-tag-over-role
       role="dialog"
       aria-modal="true"
     >
@@ -1613,6 +1620,22 @@ export const PageEditor = ({
 
   const [fullWidth, setFullWidth] = useState(getInitialFullWidth);
   const [commentsOpen, setCommentsOpen] = useState(false);
+  const [isRawMode, setIsRawMode] = useState(false);
+  const [rawContent, setRawContent] = useState("");
+  const textareaRef = useRef<HTMLTextAreaElement>(null);
+
+  const handleToggleRawMode = useCallback(() => {
+    if (isRawMode) {
+      // Switching back to WYSIWYG: parse markdown and set on editor
+      const parsed = markdownToTiptap(rawContent);
+      editor?.commands.setContent(parsed);
+      setIsRawMode(false);
+    } else {
+      // Switching to raw: serialize current editor content to markdown
+      setRawContent(editor ? tiptapToMarkdown(editor.getJSON(), localTitle) : "");
+      setIsRawMode(true);
+    }
+  }, [editor, isRawMode, localTitle, rawContent]);
   const [inlineCommentState, setInlineCommentState] = useState<{ selectedText: string } | null>(
     null,
   );
@@ -1782,6 +1805,15 @@ export const PageEditor = ({
               {getSaveStatusText(isSaving, dirty, lastSaved, now)}
             </span>
           )}
+          <button
+            aria-label={isRawMode ? "Switch to WYSIWYG mode" : "Switch to raw markdown mode"}
+            className={`flex items-center gap-1 px-1.5 py-0.5 border text-[10px] lowercase transition-colors ${isRawMode ? t("border-purple-500/40 bg-purple-500/10 text-purple-400", "border-purple-600/40 bg-purple-500/10 text-purple-700") : t("border-border-dark/60 text-text-dark/40 hover:text-text-dark hover:border-purple-500/40", "border-border-light/60 text-text-light/40 hover:text-text-light hover:border-purple-600/40")}`}
+            onClick={handleToggleRawMode}
+            type="button"
+          >
+            <CodeIcon size={11} />
+            <span>{isRawMode ? "wysiwyg" : "raw"}</span>
+          </button>
           {editable && (
             <div
               className={`hidden sm:flex items-center gap-0.5 p-0 rounded-none border ${t("bg-neutral-800/10 border-border-dark", "bg-neutral-100 border-border-light")}`}
@@ -1904,6 +1936,7 @@ export const PageEditor = ({
       </div>
 
       <div className="flex flex-1 min-h-0 w-full overflow-hidden relative">
+        {/* eslint-disable-next-line jsx-a11y/prefer-tag-over-role */}
         <div
           ref={contentRef}
           className={`w-full blog-reader-prose flex-1 min-h-0 overflow-y-auto pb-32 ${fullWidth ? "px-8 md:px-16 lg:px-24" : "px-4 mx-auto max-w-2xl"}`}
@@ -1915,6 +1948,7 @@ export const PageEditor = ({
           }}
           aria-label="page content"
           aria-multiline="true"
+          // eslint-disable-next-line jsx-a11y/prefer-tag-over-role
           role="textbox"
           tabIndex={0}
         >
@@ -1930,19 +1964,34 @@ export const PageEditor = ({
             disabled={!effectiveEditable}
           />
           <CreatorByline creator={creator} t={t} />
-          <EditorContent editor={editor} />
-          {editor && effectiveEditable && (
+          {isRawMode ? (
+            <textarea
+              ref={textareaRef}
+              aria-label="Raw markdown editor"
+              className={`w-full flex-1 min-h-[60vh] resize-none bg-transparent border-none outline-none focus:outline-none focus:ring-0 font-mono text-xs leading-relaxed p-0 ${t("text-text-dark placeholder-neutral-700", "text-text-light placeholder-neutral-300")}`}
+              placeholder="Write markdown..."
+              spellCheck={false}
+              value={rawContent}
+              onChange={(e) => setRawContent(e.target.value)}
+              disabled={!effectiveEditable}
+            />
+          ) : (
             <>
-              <BubbleMenu editor={editor} onAddComment={handleOpenInlineComment} />
-              <TableMenu editor={editor} />
-              <ColumnsMenu editor={editor} />
-              <CalloutMenu editor={editor} />
-              <ImageMenu editor={editor} />
-              <VideoMenu editor={editor} />
-              <AudioMenu editor={editor} />
-              <PdfMenu editor={editor} />
-              <YoutubeMenu editor={editor} />
-              <TableHandlesLayer editor={editor} />
+              <EditorContent editor={editor} />
+              {editor && effectiveEditable && (
+                <>
+                  <BubbleMenu editor={editor} onAddComment={handleOpenInlineComment} />
+                  <TableMenu editor={editor} />
+                  <ColumnsMenu editor={editor} />
+                  <CalloutMenu editor={editor} />
+                  <ImageMenu editor={editor} />
+                  <VideoMenu editor={editor} />
+                  <AudioMenu editor={editor} />
+                  <PdfMenu editor={editor} />
+                  <YoutubeMenu editor={editor} />
+                  <TableHandlesLayer editor={editor} />
+                </>
+              )}
             </>
           )}
         </div>
