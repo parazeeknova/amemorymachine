@@ -49,9 +49,9 @@ export const GithubConfigModal = ({ isOpen, onClose }: GithubConfigModalProps) =
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+    <div className="fixed inset-0 z-50 flex justify-center pt-16 p-4 bg-black/60 backdrop-blur-xs">
       <div
-        className={`w-full max-w-md border ${t("bg-bg-dark border-border-dark text-text-dark", "bg-bg-light border-border-light text-text-light")}`}
+        className={`w-full max-w-sm border ${t("bg-bg-dark border-border-dark text-text-dark", "bg-bg-light border-border-light text-text-light")}`}
       >
         <div className="p-3 space-y-3 text-left">
           {/* Toggle + Close */}
