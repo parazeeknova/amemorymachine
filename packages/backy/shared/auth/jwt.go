@@ -151,7 +151,7 @@ func GenerateSecret() (string, error) {
 func getAccessTokenTTL() time.Duration {
 	ttl := os.Getenv("ACCESS_TOKEN_TTL")
 	if ttl == "" {
-		ttl = "15m"
+		ttl = "4h"
 	}
 	d, err := parseDuration(ttl)
 	if err != nil {
@@ -253,7 +253,7 @@ func GenerateCollabToken(userID uuid.UUID, workspaceID string) (string, error) {
 	audience := getJWTAudience()
 
 	now := time.Now()
-	ttl := 15 * time.Minute
+	ttl := getAccessTokenTTL()
 
 	claims := CollabTokenClaims{
 		RegisteredClaims: jwt.RegisteredClaims{
