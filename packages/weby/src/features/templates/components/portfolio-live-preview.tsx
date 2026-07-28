@@ -3,6 +3,7 @@ import { useTheme } from "#/shared/hooks/use-theme";
 import type { ExperienceItem, Link, Profile, Project } from "#/shared/types";
 import type { ParsedPortfolio, ValidationError } from "../lib/portfolio-markdown";
 import { markdownToHtml } from "#/features/blog/lib/markdown-to-html";
+import { useGitHubSettings } from "../hooks/use-github-settings";
 
 interface PortfolioLivePreviewProps {
   errors: ValidationError[];
@@ -209,6 +210,7 @@ export const PortfolioLivePreview = memo(
     const { isDarkMode } = useTheme();
     const containerRef = useRef<HTMLDivElement>(null);
     const { experiences, profile, projects } = parsedData;
+    const { data: ghSettings } = useGitHubSettings();
 
     const lightVideoUrl = profile.lightVideo || "https://img.przknv.cc/t/footer.mp4";
     const darkVideoUrl = profile.darkVideo || "https://img.przknv.cc/t/header.mp4";
@@ -304,6 +306,23 @@ export const PortfolioLivePreview = memo(
           <PreviewProfileSection profile={profile} />
           <PreviewExperienceSection experiences={experiences} />
           <PreviewProjectsSection projects={projects} />
+          {ghSettings?.enabled && (
+            <div className="border-t border-border-dark/20 pt-4">
+              <div className="flex items-center gap-2 mb-3">
+                <span className="text-[10px] uppercase tracking-wider opacity-40">
+                  github activity
+                </span>
+              </div>
+              <div
+                className={`p-4 border border-dashed text-center ${isDarkMode ? "border-border-dark/30 text-text-dark/25" : "border-border-light/30 text-text-light/25"}`}
+              >
+                <p className="text-[10px] lowercase">
+                  contribution graph &amp; stats —{" "}
+                  {ghSettings.hasToken ? "private repos included" : "public data"}
+                </p>
+              </div>
+            </div>
+          )}
           <PreviewSocialLinks links={profile.links} isDarkMode={isDarkMode} />
 
           <div className="flex justify-end pt-4 pb-2">
