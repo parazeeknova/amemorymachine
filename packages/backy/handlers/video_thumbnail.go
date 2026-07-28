@@ -1,38 +1,22 @@
 package handlers
 
 import (
+	"crypto/sha256"
+	"encoding/hex"
 	"fmt"
 	"io"
 	"net/http"
 	"os"
 	"os/exec"
-	"sync"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog/log"
 )
 
-type videoThumbnailCache struct {
-	mu    sync.RWMutex
-	items map[string][]byte
-}
+const thumbnailBucket = "video-thumbnails"
 
-var thumbnailCache = &videoThumbnailCache{
-	items: make(map[string][]byte),
-}
-
-func (c *videoThumbnailCache) get(key string) ([]byte, bool) {
-	c.mu.RLock()
-	defer c.mu.RUnlock()
-	data, ok := c.items[key]
-	return data, ok
-}
-
-func (c *videoThumbnailCache) set(key string, data []byte) {
-	c.mu.Lock()
-	defer c.mu.Unlock()
-	c.items[key] = data
-}
-
+// GetVideoThumbnail extracts a frame from a video URL and serves it as a JPEG.
+// Thumbnails are cached in RustFS for permanent storage across server restarts.
 func (h *Handlers) GetVideoThumbnail(c *gin.Context) {
 	videoURL := c.Query("url")
 	if videoURL == "" {
@@ -40,10 +24,21 @@ func (h *Handlers) GetVideoThumbnail(c *gin.Context) {
 		return
 	}
 
-	// Check in-memory cache first
-	if cached, ok := thumbnailCache.get(videoURL); ok {
-		c.Data(http.StatusOK, "image/jpeg", cached)
-		return
+	// Derive a stable key from the video URL hash
+	hash := sha256.Sum256([]byte(videoURL))
+	key := hex.EncodeToString(hash[:]) + ".jpg"
+
+	// Check if thumbnail already exists in RustFS
+	if h.storageClient != nil {
+		exists, err := h.storageClient.ObjectExists(c.Request.Context(), thumbnailBucket, key)
+		if err == nil && exists {
+			data, err := h.storageClient.GetObject(c.Request.Context(), thumbnailBucket, key)
+			if err == nil {
+				c.Data(http.StatusOK, "image/jpeg", data)
+				return
+			}
+			log.Warn().Err(err).Str("key", key).Msg("failed to read cached thumbnail, will regenerate")
+		}
 	}
 
 	// Download video to temp file
@@ -94,8 +89,12 @@ func (h *Handlers) GetVideoThumbnail(c *gin.Context) {
 		return
 	}
 
-	// Cache the result
-	thumbnailCache.set(videoURL, thumbData)
+	// Store in RustFS for future requests
+	if h.storageClient != nil {
+		if err := h.storageClient.PutObject(c.Request.Context(), thumbnailBucket, key, thumbData, "image/jpeg"); err != nil {
+			log.Warn().Err(err).Str("key", key).Msg("failed to cache thumbnail in RustFS")
+		}
+	}
 
 	c.Data(http.StatusOK, "image/jpeg", thumbData)
 }

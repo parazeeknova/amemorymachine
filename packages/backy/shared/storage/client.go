@@ -1,9 +1,11 @@
 package storage
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 
@@ -21,6 +23,7 @@ var defaultBuckets = []string{
 	"avatars-workspaces",
 	"avatars-spaces",
 	"avatars-profiles",
+	"video-thumbnails",
 }
 
 // Client wraps an S3 client configured for RustFS.
@@ -106,6 +109,46 @@ func (c *Client) ensureBucket(ctx context.Context, bucket string) error {
 // S3 returns the underlying S3 client.
 func (c *Client) S3() *s3.Client {
 	return c.s3
+}
+
+// ObjectExists checks whether a key exists in the given bucket.
+func (c *Client) ObjectExists(ctx context.Context, bucket, key string) (bool, error) {
+	_, err := c.s3.HeadObject(ctx, &s3.HeadObjectInput{
+		Bucket: aws.String(bucket),
+		Key:    aws.String(key),
+	})
+	if err != nil {
+		var apiErr smithy.APIError
+		if errors.As(err, &apiErr) && apiErr.ErrorCode() == "NotFound" {
+			return false, nil
+		}
+		return false, err
+	}
+	return true, nil
+}
+
+// PutObject uploads data to the given bucket and key.
+func (c *Client) PutObject(ctx context.Context, bucket, key string, data []byte, contentType string) error {
+	_, err := c.s3.PutObject(ctx, &s3.PutObjectInput{
+		Bucket:      aws.String(bucket),
+		Key:         aws.String(key),
+		Body:        bytes.NewReader(data),
+		ContentType: aws.String(contentType),
+	})
+	return err
+}
+
+// GetObject downloads the object data from the given bucket and key.
+func (c *Client) GetObject(ctx context.Context, bucket, key string) ([]byte, error) {
+	out, err := c.s3.GetObject(ctx, &s3.GetObjectInput{
+		Bucket: aws.String(bucket),
+		Key:    aws.String(key),
+	})
+	if err != nil {
+		return nil, err
+	}
+	defer out.Body.Close()
+	return io.ReadAll(out.Body)
 }
 
 // DeleteBucketAndObjects deletes all objects in the bucket, then deletes the bucket itself.
