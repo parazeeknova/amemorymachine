@@ -317,7 +317,7 @@ export const PortfolioLivePreview = memo(
               </div>
               <div className="scale-75 origin-top-left">
                 <GitHubActivity username={ghSettings.username || "parazeeknova"} />
-                <GitHubStats />
+                {ghSettings?.hasToken && <GitHubStats />}
               </div>
             </div>
           )}
