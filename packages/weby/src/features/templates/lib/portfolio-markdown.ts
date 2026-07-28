@@ -342,41 +342,68 @@ export const parsePortfolioMarkdown = (markdown: string): ParsedPortfolio => {
   return { experiences, profile, projects };
 };
 
+export interface ValidationError {
+  message: string;
+  line?: number;
+  fix?: string;
+}
+
 export interface ValidationResult {
-  errors: string[];
+  errors: ValidationError[];
   isValid: boolean;
   parsed: ParsedPortfolio;
 }
 
 export const validatePortfolioMarkdown = (markdown: string): ValidationResult => {
-  const errors: string[] = [];
+  const errors: ValidationError[] = [];
   const lines = markdown.split("\n");
 
-  const hasProfileSection = lines.some((l) => l.includes("## PROFILE"));
-  const hasExperienceSection = lines.some((l) => l.includes("## EXPERIENCE"));
-  const hasProjectsSection = lines.some((l) => l.includes("## PROJECTS"));
+  const profileIdx = lines.findIndex((l) => l.includes("## PROFILE"));
+  const experienceIdx = lines.findIndex((l) => l.includes("## EXPERIENCE"));
+  const projectsIdx = lines.findIndex((l) => l.includes("## PROJECTS"));
 
-  if (!hasProfileSection) {
-    errors.push("Missing section header: ## PROFILE");
+  if (profileIdx === -1) {
+    errors.push({
+      fix: "add '## PROFILE' on its own line",
+      message: "missing section: ## PROFILE",
+    });
   }
-  if (!hasExperienceSection) {
-    errors.push("Missing section header: ## EXPERIENCE");
+  if (experienceIdx === -1) {
+    errors.push({
+      fix: "add '## EXPERIENCE' on its own line",
+      message: "missing section: ## EXPERIENCE",
+    });
   }
-  if (!hasProjectsSection) {
-    errors.push("Missing section header: ## PROJECTS");
+  if (projectsIdx === -1) {
+    errors.push({
+      fix: "add '## PROJECTS' on its own line",
+      message: "missing section: ## PROJECTS",
+    });
   }
 
   const parsed = parsePortfolioMarkdown(markdown);
 
-  if (hasProfileSection) {
+  if (profileIdx !== -1) {
     if (!parsed.profile.name) {
-      errors.push("Profile section is missing 'Name:' field");
+      errors.push({
+        fix: "add 'Name: Your Name' under ## PROFILE",
+        line: profileIdx + 1,
+        message: "missing field: Name:",
+      });
     }
     if (!parsed.profile.username) {
-      errors.push("Profile section is missing 'Username:' field");
+      errors.push({
+        fix: "add 'Username: yourhandle' under ## PROFILE",
+        line: profileIdx + 1,
+        message: "missing field: Username:",
+      });
     }
     if (!parsed.profile.email) {
-      errors.push("Profile section is missing 'Email:' field");
+      errors.push({
+        fix: "add 'Email: you@domain.com' under ## PROFILE",
+        line: profileIdx + 1,
+        message: "missing field: Email:",
+      });
     }
   }
 

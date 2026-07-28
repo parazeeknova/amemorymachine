@@ -1,11 +1,11 @@
 import { memo, useMemo, useRef } from "react";
 import { useTheme } from "#/shared/hooks/use-theme";
 import type { ExperienceItem, Link, Profile, Project } from "#/shared/types";
-import type { ParsedPortfolio } from "../lib/portfolio-markdown";
+import type { ParsedPortfolio, ValidationError } from "../lib/portfolio-markdown";
 import { markdownToHtml } from "#/features/blog/lib/markdown-to-html";
 
 interface PortfolioLivePreviewProps {
-  errors: string[];
+  errors: ValidationError[];
   isValid: boolean;
   parsedData: ParsedPortfolio;
 }
@@ -227,14 +227,20 @@ export const PortfolioLivePreview = memo(
     if (!isValid) {
       return (
         <div className="flex flex-col h-full">
-          <div className="px-2 py-1 border-b border-rose-500/20 bg-rose-500/5 text-[10px] font-mono text-rose-400">
+          <div className="px-3 py-2 border-b border-amber-500/15 bg-amber-500/[0.03] text-[10px] font-mono space-y-2">
             {errors.map((err, idx) => (
-              <div key={`${err}-${idx}`}>{err}</div>
+              <div key={`${err.message}-${idx}`}>
+                <div className="flex items-baseline gap-2">
+                  {err.line && <span className="shrink-0 text-amber-500/40">L{err.line}</span>}
+                  <span className="text-amber-400/80">{err.message}</span>
+                </div>
+                {err.fix && <div className="mt-0.5 text-text-dark/25 italic">&rarr; {err.fix}</div>}
+              </div>
             ))}
           </div>
           <div className="flex-1 flex items-center justify-center">
             <span
-              className={`text-[10px] lowercase ${isDarkMode ? "text-text-dark/25" : "text-text-light/25"}`}
+              className={`text-[10px] lowercase ${isDarkMode ? "text-text-dark/20" : "text-text-light/20"}`}
             >
               fix errors to restore preview
             </span>

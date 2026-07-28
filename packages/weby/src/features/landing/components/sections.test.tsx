@@ -108,10 +108,10 @@ describe("ProfileSection", () => {
     expect(screen.queryByRole("heading", { level: 1 })).toBeNull();
   });
 
-  it("renders portfolio link", () => {
+  it("renders portfolio link with tagline", () => {
     render(<ProfileSection profile={mockProfile} isMobile={false} isPending={false} />);
     const link = screen.getByText(
-      (c, el) => c.includes("Portfolio") && el?.tagName.toLowerCase() === "a",
+      (c, el) => c.includes("test tagline") && el?.tagName.toLowerCase() === "a",
     );
     expect(link).toBeDefined();
     expect(link.closest("a")?.getAttribute("href")).toBe("https://example.com");
