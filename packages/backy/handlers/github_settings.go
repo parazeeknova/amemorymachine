@@ -17,7 +17,7 @@ import (
 func deriveKey() *[32]byte {
 	secret := os.Getenv("ENCRYPTION_SECRET")
 	if secret == "" {
-		secret = "verso-dev-key-change-me-in-production"
+		secret = "verso-dev-encryption-key-change-me"
 	}
 	hash := sha256.Sum256([]byte(secret))
 	var key [32]byte
