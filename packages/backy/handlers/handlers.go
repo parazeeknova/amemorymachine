@@ -193,7 +193,7 @@ func (h *Handlers) GetGitHubStats(c *gin.Context) {
 	token := h.config.GitHubToken
 	username := h.config.GitHubUsername
 
-	if pool := database.GetPool(); pool != nil {
+	if pool := database.PoolAvailable(); pool != nil {
 		var dbEnabled bool
 		var dbUsername string
 		var dbTokenEncrypted []byte

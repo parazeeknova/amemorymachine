@@ -174,8 +174,8 @@ func TestGetGitHubStats_NoToken(t *testing.T) {
 		t.Fatalf("Failed to unmarshal response: %v", err)
 	}
 
-	if response["error"] != "GITHUB_TOKEN not configured" {
-		t.Errorf("error = %s, want GITHUB_TOKEN not configured", response["error"])
+	if response["error"] != "GitHub token not configured" {
+		t.Errorf("error = %s, want GitHub token not configured", response["error"])
 	}
 }
 

@@ -74,7 +74,7 @@ type GitHubSettings struct {
 }
 
 func (h *Handlers) GetGitHubSettings(c *gin.Context) {
-	pool := database.GetPool()
+	pool := database.PoolAvailable()
 	var enabled bool
 	var username string
 	var tokenEncrypted []byte
@@ -101,7 +101,7 @@ type updateGitHubSettingsRequest struct {
 }
 
 func (h *Handlers) UpdateGitHubSettings(c *gin.Context) {
-	pool := database.GetPool()
+	pool := database.PoolAvailable()
 	if pool == nil {
 		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "database unavailable"})
 		return
@@ -177,7 +177,7 @@ func (h *Handlers) UpdateGitHubSettings(c *gin.Context) {
 
 // GetGitHubEnabledStatus returns whether GitHub integration is enabled (public endpoint).
 func (h *Handlers) GetGitHubEnabledStatus(c *gin.Context) {
-	pool := database.GetPool()
+	pool := database.PoolAvailable()
 	if pool == nil {
 		c.JSON(http.StatusOK, gin.H{"enabled": true})
 		return

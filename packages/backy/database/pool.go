@@ -21,6 +21,11 @@ func GetPool() *pgxpool.Pool {
 	return globalPool
 }
 
+// PoolAvailable returns the pool if initialized, nil otherwise (safe for graceful degradation).
+func PoolAvailable() *pgxpool.Pool {
+	return globalPool
+}
+
 // InitPool creates, validates, and stores a global pgxpool connection pool.
 func InitPool(ctx context.Context, cfg Config) error {
 	pool, err := NewPool(ctx, cfg)
