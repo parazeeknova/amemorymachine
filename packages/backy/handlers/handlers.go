@@ -223,7 +223,7 @@ func (h *Handlers) GetGitHubStats(c *gin.Context) {
 	}
 
 	result, err, _ := h.statsGroup.Do(username, func() (interface{}, error) {
-		stats, computeErr := h.githubService.ComputeStats(c.Request.Context(), h.config.GitHubToken, username)
+		stats, computeErr := h.githubService.ComputeStats(c.Request.Context(), token, username)
 		if computeErr != nil {
 			return nil, computeErr
 		}
