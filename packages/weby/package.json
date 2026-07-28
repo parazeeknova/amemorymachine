@@ -1,6 +1,6 @@
 {
   "name": "@verso/weby",
-  "version": "0.5.88",
+  "version": "0.5.90",
   "private": true,
   "type": "module",
   "imports": {
@@ -63,6 +63,7 @@
     "diff": "^9.0.0",
     "gsap": "^3.15.0",
     "i18next": "^26.3.6",
+    "idb-keyval": "^6.3.0",
     "katex": "^0.17.0",
     "lowlight": "^3.3.0",
     "marked": "^18.0.7",

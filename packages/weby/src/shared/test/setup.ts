@@ -85,3 +85,21 @@ vi.stubGlobal("ResizeObserver", MockResizeObserver);
 
 // Mock environment variables
 vi.stubEnv("VITE_GITHUB_USERNAME", "testuser");
+
+// Mock idb-keyval with an in-memory Map (avoids IndexedDB dependency in jsdom)
+const { idbStore } = vi.hoisted(() => ({ idbStore: new Map<string, unknown>() }));
+vi.mock("idb-keyval", () => ({
+  clear: () => {
+    idbStore.clear();
+  },
+  del: (key: string) => {
+    idbStore.delete(key);
+  },
+  get: (key: string) => {
+    const value = idbStore.get(key);
+    return value === undefined ? undefined : value;
+  },
+  set: (key: string, value: unknown) => {
+    idbStore.set(key, value);
+  },
+}));

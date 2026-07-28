@@ -1,24 +1,29 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { get as idbGet, set as idbSet, del as idbDel } from "idb-keyval";
 
-const safeStorage = {
-  getItem: (name: string) => {
+// Async IndexedDB storage for Zustand persist middleware.
+// Uses idb-keyval (battle-tested wrapper) over native IndexedDB —
+// non-blocking, no size limit, survives native app restarts.
+const indexedDBStorage = {
+  getItem: async (name: string) => {
     try {
-      return localStorage.getItem(name);
+      const value = await idbGet(name);
+      return value ?? null;
     } catch {
       return null;
     }
   },
-  removeItem: (name: string) => {
+  removeItem: async (name: string) => {
     try {
-      localStorage.removeItem(name);
+      await idbDel(name);
     } catch {
       /* unavailable */
     }
   },
-  setItem: (name: string, value: string) => {
+  setItem: async (name: string, value: string) => {
     try {
-      localStorage.setItem(name, value);
+      await idbSet(name, value);
     } catch {
       /* unavailable */
     }
@@ -90,7 +95,7 @@ export const usePortfolioStore = create<PortfolioState & PortfolioActions>()(
         history: state.history,
         lastSavedMarkdown: state.lastSavedMarkdown,
       }),
-      storage: createJSONStorage(() => safeStorage),
+      storage: createJSONStorage(() => indexedDBStorage),
     },
   ),
 );

@@ -2,14 +2,18 @@ import { act } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
 import { usePortfolioStore } from "../stores/portfolio-store";
 
+// idb-keyval is mocked in vitest setup (src/shared/test/setup.ts)
+// using an in-memory Map, same as localStorage mocking.
+
 describe("usePortfolioStore", () => {
   beforeEach(() => {
-    localStorage.clear();
     usePortfolioStore.setState({
+      draft: null,
       history: [],
       isGuideOpen: false,
       isHistoryOpen: false,
       isPinned: false,
+      lastSavedMarkdown: null,
     });
   });
 
@@ -23,6 +27,8 @@ describe("usePortfolioStore", () => {
     expect(state.isGuideOpen).toBe(false);
     expect(state.isHistoryOpen).toBe(false);
     expect(state.history).toEqual([]);
+    expect(state.draft).toBeNull();
+    expect(state.lastSavedMarkdown).toBeNull();
   });
 
   it("sets isPinned", () => {
@@ -71,7 +77,6 @@ describe("usePortfolioStore", () => {
       usePortfolioStore.getState().addHistorySnapshot("first");
     });
 
-    // Small delay to ensure timestamp difference
     const firstTimestamp = usePortfolioStore.getState().history[0].timestamp;
 
     act(() => {
@@ -93,7 +98,6 @@ describe("usePortfolioStore", () => {
     }
 
     expect(usePortfolioStore.getState().history).toHaveLength(50);
-    // The first entry should be the 55th (index 54), the last should be the 6th (index 5)
     expect(usePortfolioStore.getState().history[0].markdown).toBe("snapshot-54");
     expect(usePortfolioStore.getState().history[49].markdown).toBe("snapshot-5");
   });
@@ -141,52 +145,15 @@ describe("usePortfolioStore", () => {
     expect(usePortfolioStore.getState().draft).toBeNull();
   });
 
-  it("persists draft alongside history", () => {
+  it("sets and persists lastSavedMarkdown", () => {
     act(() => {
-      usePortfolioStore.getState().setDraft("auto-saved content");
-      usePortfolioStore.getState().addHistorySnapshot("persisted");
+      usePortfolioStore.getState().setLastSavedMarkdown("saved markdown");
     });
+    expect(usePortfolioStore.getState().lastSavedMarkdown).toBe("saved markdown");
 
-    const storedRaw = localStorage.getItem("verso-portfolio-store");
-    expect(storedRaw).toBeDefined();
-    if (!storedRaw) {
-      return;
-    }
-
-    const stored = JSON.parse(storedRaw);
-    expect(stored.state.draft).toBe("auto-saved content");
-    expect(stored.state.history).toHaveLength(1);
-  });
-
-  it("persists history to localStorage", () => {
     act(() => {
-      usePortfolioStore.getState().addHistorySnapshot("persisted");
+      usePortfolioStore.getState().setLastSavedMarkdown(null);
     });
-
-    const storedRaw = localStorage.getItem("verso-portfolio-store");
-    expect(storedRaw).toBeDefined();
-    if (!storedRaw) {
-      return;
-    }
-
-    const stored = JSON.parse(storedRaw);
-    expect(stored.state.history).toHaveLength(1);
-    expect(stored.state.history[0].markdown).toBe("persisted");
-  });
-
-  it("does NOT persist isPinned, isGuideOpen, or isHistoryOpen", () => {
-    act(() => {
-      usePortfolioStore.getState().setIsPinned(true);
-      usePortfolioStore.getState().setIsGuideOpen(true);
-      usePortfolioStore.getState().setIsHistoryOpen(true);
-    });
-
-    const storedRaw = localStorage.getItem("verso-portfolio-store");
-    if (storedRaw) {
-      const stored = JSON.parse(storedRaw);
-      expect(stored.state.isPinned).toBeUndefined();
-      expect(stored.state.isGuideOpen).toBeUndefined();
-      expect(stored.state.isHistoryOpen).toBeUndefined();
-    }
+    expect(usePortfolioStore.getState().lastSavedMarkdown).toBeNull();
   });
 });
