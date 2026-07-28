@@ -13,6 +13,7 @@ import { ProjectList } from "#/features/landing/components/projects";
 import { BlogReaderPanel } from "#/features/blog/components/blog-reader-panel";
 import { LoginPopup } from "#/features/auth/components/login-popup";
 import { useIsDesktop } from "#/shared/lib/desktop";
+import { logger } from "#/shared/lib/logger";
 import { DesktopFrontPage } from "#/features/auth/components/desktop-front-page";
 import {
   useBlogManifest,
@@ -142,6 +143,12 @@ const Home = function Home() {
   const { data: profile } = useProfile();
   const { data: experience } = useExperience();
   const { data: projects } = useProjects();
+
+  useEffect(() => {
+    if (profile) {
+      logger.info({ name: profile.name, tagline: profile.tagline }, "landing page profile data");
+    }
+  }, [profile]);
   const { data: manifest = [] } = useBlogManifest();
   const isPending = useIsFetchingData();
 
