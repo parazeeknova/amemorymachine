@@ -53,6 +53,11 @@ export const PortfolioEditor = ({
     redoStack.current = [];
   }, []);
 
+  // Seed undo stack with initial content so first undo works
+  useEffect(() => {
+    pushUndo(rawMarkdown);
+  }, []); // eslint-disable-line react-hooks/exhaustive-deps
+
   const handleChange = useCallback(
     (value: string) => {
       setRawMarkdown(value);

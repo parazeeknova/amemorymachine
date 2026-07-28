@@ -1,4 +1,5 @@
 import type { ExperienceItem, Profile, Project } from "#/shared/types";
+import { z } from "zod";
 
 export interface ParsedPortfolio {
   experiences: ExperienceItem[];
@@ -398,12 +399,35 @@ export const validatePortfolioMarkdown = (markdown: string): ValidationResult =>
         message: "missing field: Username:",
       });
     }
-    if (!parsed.profile.email) {
+
+    // Validate email format
+    if (parsed.profile.email) {
+      const emailResult = z.string().email().safeParse(parsed.profile.email);
+      if (!emailResult.success) {
+        errors.push({
+          fix: "use a valid email like you@domain.com",
+          line: profileIdx + 1,
+          message: `invalid email: ${parsed.profile.email}`,
+        });
+      }
+    } else {
       errors.push({
         fix: "add 'Email: you@domain.com' under ## PROFILE",
         line: profileIdx + 1,
         message: "missing field: Email:",
       });
+    }
+
+    // Validate link URLs
+    const urlSchema = z.string().url();
+    for (const [, link] of Object.entries(parsed.profile.links)) {
+      if (link.url && !urlSchema.safeParse(link.url).success) {
+        errors.push({
+          fix: `use a valid URL for '${link.label}' (e.g. https://example.com)`,
+          line: profileIdx + 1,
+          message: `invalid URL for ${link.label}: ${link.url}`,
+        });
+      }
     }
   }
 
