@@ -1,4 +1,4 @@
-import { GithubLogoIcon, XIcon } from "@phosphor-icons/react";
+import { GithubLogoIcon, PencilSimpleIcon, XIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTheme } from "#/shared/hooks/use-theme";
 import { GitHubStats } from "#/features/github/components/stats";
@@ -28,6 +28,9 @@ const relativeTime = (iso?: string) => {
   return `${Math.floor(hours / 24)}d ago`;
 };
 
+const underlineInput = (t: (d: string, l: string) => string) =>
+  `w-full px-0 py-0.5 text-[10px] font-mono outline-none bg-transparent border-0 border-b ${t("border-text-dark/20 focus:border-text-dark/40 placeholder:text-text-dark/15", "border-text-light/20 focus:border-text-light/40 placeholder:text-text-light/15")}`;
+
 // eslint-disable-next-line complexity
 export const GithubConfigModal = ({ isOpen, onClose }: GithubConfigModalProps) => {
   const { isDarkMode } = useTheme();
@@ -36,7 +39,8 @@ export const GithubConfigModal = ({ isOpen, onClose }: GithubConfigModalProps) =
   const updateSettings = useUpdateGitHubSettings();
   const [token, setToken] = useState("");
   const [username, setUsername] = useState("");
-  const [showTokenInput, setShowTokenInput] = useState(false);
+  const [editingUsername, setEditingUsername] = useState(false);
+  const [editingToken, setEditingToken] = useState(false);
 
   if (!isOpen) {
     return null;
@@ -48,13 +52,41 @@ export const GithubConfigModal = ({ isOpen, onClose }: GithubConfigModalProps) =
     }
   };
 
+  const saveUsername = () => {
+    if (username.trim()) {
+      updateSettings.mutate(
+        { username: username.trim() },
+        {
+          onSuccess: () => {
+            setUsername("");
+            setEditingUsername(false);
+          },
+        },
+      );
+    }
+  };
+
+  const saveToken = () => {
+    if (token.trim()) {
+      updateSettings.mutate(
+        { token: token.trim() },
+        {
+          onSuccess: () => {
+            setToken("");
+            setEditingToken(false);
+          },
+        },
+      );
+    }
+  };
+
   return (
     <div className="fixed inset-0 z-50 bg-black/60 backdrop-blur-xs">
       <div className="flex justify-center pt-16">
         <div
           className={`border ${t("bg-bg-dark border-border-dark text-text-dark", "bg-bg-light border-border-light text-text-light")}`}
         >
-          <div className="p-3 space-y-2 text-left w-72">
+          <div className="p-3 space-y-3 text-left w-72">
             {/* Toggle + Close */}
             <div className="flex items-center justify-between">
               <div className="flex items-center gap-2">
@@ -95,36 +127,48 @@ export const GithubConfigModal = ({ isOpen, onClose }: GithubConfigModalProps) =
                 <div>
                   <div className="flex items-center gap-2">
                     <span className="text-[10px] lowercase opacity-50">username</span>
-                    <span className="text-[10px] font-mono">
-                      {settings?.username || "parazeeknova"}
-                    </span>
-                    <input
-                      className={`w-24 px-1.5 py-0.5 text-[10px] font-mono border outline-none bg-transparent ${t("border-border-dark focus:border-text-dark/30 placeholder:text-text-dark/15", "border-border-light focus:border-text-light/30 placeholder:text-text-light/15")}`}
-                      onChange={(e) => setUsername(e.target.value)}
-                      onKeyDown={(e) => {
-                        if (e.key === "Enter" && username.trim()) {
-                          updateSettings.mutate(
-                            { username: username.trim() },
-                            { onSuccess: () => setUsername("") },
-                          );
-                        }
-                      }}
-                      placeholder="change"
-                      value={username}
-                    />
-                    {username.trim() && (
-                      <button
-                        className="text-[10px] lowercase opacity-50 hover:opacity-100"
-                        onClick={() => {
-                          updateSettings.mutate(
-                            { username: username.trim() },
-                            { onSuccess: () => setUsername("") },
-                          );
-                        }}
-                        type="button"
-                      >
-                        save
-                      </button>
+                    {editingUsername ? (
+                      <div className="flex items-center gap-1 flex-1">
+                        <input
+                          className={underlineInput(t)}
+                          autoFocus
+                          onChange={(e) => setUsername(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              saveUsername();
+                            }
+                          }}
+                          placeholder={settings?.username || "parazeeknova"}
+                          value={username}
+                        />
+                        <button
+                          className="text-[10px] lowercase opacity-50 hover:opacity-100"
+                          onClick={saveUsername}
+                          type="button"
+                        >
+                          save
+                        </button>
+                        <button
+                          className="text-[10px] lowercase opacity-30 hover:opacity-100"
+                          onClick={() => setEditingUsername(false)}
+                          type="button"
+                        >
+                          cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        <span className="text-[10px] font-mono">
+                          {settings?.username || "parazeeknova"}
+                        </span>
+                        <button
+                          className="opacity-30 hover:opacity-100"
+                          onClick={() => setEditingUsername(true)}
+                          type="button"
+                        >
+                          <PencilSimpleIcon size={10} />
+                        </button>
+                      </>
                     )}
                   </div>
                 </div>
@@ -132,57 +176,65 @@ export const GithubConfigModal = ({ isOpen, onClose }: GithubConfigModalProps) =
                 {/* API Key */}
                 <div>
                   <div className="flex items-center gap-2">
-                    <button
-                      className="text-[10px] lowercase opacity-50 hover:opacity-100"
-                      onClick={() => setShowTokenInput(!showTokenInput)}
-                      type="button"
-                    >
-                      api key
-                    </button>
-                    <span
-                      className={`text-[10px] ${settings?.hasToken ? "text-emerald-400" : "opacity-30"}`}
-                    >
-                      {settings?.hasToken
-                        ? `ghp_**** · ${relativeTime(settings.tokenUpdatedAt)}`
-                        : "not set"}
-                    </span>
-                  </div>
-
-                  {showTokenInput && (
-                    <div className="flex gap-1.5 mt-1.5">
-                      <input
-                        className={`flex-1 px-2 py-0.5 text-[10px] font-mono border outline-none bg-transparent ${t("border-border-dark focus:border-text-dark/30 placeholder:text-text-dark/15", "border-border-light focus:border-text-light/30 placeholder:text-text-light/15")}`}
-                        onChange={(e) => setToken(e.target.value)}
-                        placeholder={settings?.hasToken ? "••••••••" : "ghp_..."}
-                        type="password"
-                        value={token}
-                      />
-                      <button
-                        className={`px-2 py-0.5 text-[10px] lowercase border transition-colors ${t("border-border-dark hover:bg-white/5", "border-border-light hover:bg-black/5")}`}
-                        disabled={!token.trim()}
-                        onClick={() => {
-                          if (token.trim()) {
-                            updateSettings.mutate(
-                              { token: token.trim() },
-                              { onSuccess: () => setToken("") },
-                            );
-                          }
-                        }}
-                        type="button"
-                      >
-                        save
-                      </button>
-                      {settings?.hasToken && (
+                    <span className="text-[10px] lowercase opacity-50">api key</span>
+                    {editingToken ? (
+                      <div className="flex items-center gap-1 flex-1">
+                        <input
+                          className={underlineInput(t)}
+                          autoFocus
+                          onChange={(e) => setToken(e.target.value)}
+                          onKeyDown={(e) => {
+                            if (e.key === "Enter") {
+                              saveToken();
+                            }
+                          }}
+                          placeholder={settings?.hasToken ? "••••••••" : "ghp_..."}
+                          type="password"
+                          value={token}
+                        />
                         <button
-                          className={`px-2 py-0.5 text-[10px] lowercase border transition-colors ${t("border-rose-500/20 text-rose-400 hover:bg-rose-500/10", "border-rose-600/20 text-rose-600 hover:bg-rose-500/10")}`}
-                          onClick={() => updateSettings.mutate({ token: "" })}
+                          className="text-[10px] lowercase opacity-50 hover:opacity-100"
+                          onClick={saveToken}
                           type="button"
                         >
-                          clear
+                          save
                         </button>
-                      )}
-                    </div>
-                  )}
+                        <button
+                          className="text-[10px] lowercase opacity-30 hover:opacity-100"
+                          onClick={() => setEditingToken(false)}
+                          type="button"
+                        >
+                          cancel
+                        </button>
+                      </div>
+                    ) : (
+                      <>
+                        <span
+                          className={`text-[10px] ${settings?.hasToken ? "text-emerald-400" : "opacity-30"}`}
+                        >
+                          {settings?.hasToken
+                            ? `ghp_**** · ${relativeTime(settings.tokenUpdatedAt)}`
+                            : "not set"}
+                        </span>
+                        <button
+                          className="opacity-30 hover:opacity-100"
+                          onClick={() => setEditingToken(true)}
+                          type="button"
+                        >
+                          <PencilSimpleIcon size={10} />
+                        </button>
+                        {settings?.hasToken && (
+                          <button
+                            className="text-[10px] lowercase opacity-30 hover:opacity-100"
+                            onClick={() => updateSettings.mutate({ token: "" })}
+                            type="button"
+                          >
+                            clear
+                          </button>
+                        )}
+                      </>
+                    )}
+                  </div>
                 </div>
 
                 {/* Preview */}
