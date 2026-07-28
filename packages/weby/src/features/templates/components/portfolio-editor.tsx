@@ -3,6 +3,7 @@ import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import type { ExperienceItem, Profile, Project } from "#/shared/types";
 import { useTheme } from "#/shared/hooks/use-theme";
+import { logger } from "#/shared/lib/logger";
 import { setFlashToast } from "#/features/console/components/flash-toast";
 import { generatePortfolioMarkdown, validatePortfolioMarkdown } from "../lib/portfolio-markdown";
 import { usePortfolioStore } from "../stores/portfolio-store";
@@ -161,6 +162,7 @@ export const PortfolioEditor = ({
       return;
     }
 
+    logger.info({ name: current.parsed.profile.name }, "saving portfolio template");
     const { parsed } = current;
     pinTemplate.mutate(
       {
@@ -176,9 +178,11 @@ export const PortfolioEditor = ({
       {
         onError: (error) => {
           const msg = error instanceof Error ? error.message : String(error);
+          logger.error({ error: msg }, "failed to save portfolio template");
           setFlashToast(`failed to pin portfolio template: ${msg}`);
         },
         onSuccess: () => {
+          logger.info("portfolio template saved successfully");
           addHistorySnapshot(rawMarkdown);
           setDraft(null);
           setLastSavedMarkdown(rawMarkdown);

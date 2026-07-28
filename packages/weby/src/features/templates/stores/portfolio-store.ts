@@ -1,43 +1,29 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
-import { isDesktopApp } from "#/shared/lib/desktop";
 
-const memoryStore = new Map<string, string>();
-const inMemoryStorage = {
-  getItem: (name: string) => memoryStore.get(name) ?? null,
+const safeStorage = {
+  getItem: (name: string) => {
+    try {
+      return localStorage.getItem(name);
+    } catch {
+      return null;
+    }
+  },
   removeItem: (name: string) => {
-    memoryStore.delete(name);
+    try {
+      localStorage.removeItem(name);
+    } catch {
+      /* unavailable */
+    }
   },
   setItem: (name: string, value: string) => {
-    memoryStore.set(name, value);
+    try {
+      localStorage.setItem(name, value);
+    } catch {
+      /* unavailable */
+    }
   },
 };
-
-const safeStorage = isDesktopApp()
-  ? inMemoryStorage
-  : {
-      getItem: (name: string) => {
-        try {
-          return localStorage.getItem(name);
-        } catch {
-          return null;
-        }
-      },
-      removeItem: (name: string) => {
-        try {
-          localStorage.removeItem(name);
-        } catch {
-          /* unavailable */
-        }
-      },
-      setItem: (name: string, value: string) => {
-        try {
-          localStorage.setItem(name, value);
-        } catch {
-          /* unavailable */
-        }
-      },
-    };
 
 export interface TemplateSnapshot {
   id: string;
