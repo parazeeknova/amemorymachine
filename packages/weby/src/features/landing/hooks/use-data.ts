@@ -1,7 +1,6 @@
 import type { BlogManifestSection, ExperienceItem, Profile, Project } from "#/shared/types";
 import { useQuery } from "@tanstack/react-query";
 import { useEffect, useState } from "react";
-import { isDesktopApp } from "#/shared/lib/desktop";
 
 const fetchJson = async <T>(url: string, init?: RequestInit): Promise<T> => {
   const res = await fetch(url, init);
@@ -20,8 +19,7 @@ export const useIsMounted = (): boolean => {
 };
 
 const getInitialFromStorage = <T>(key: string): T | undefined => {
-  // WebKit (Electrobun) has very slow sync localStorage — skip placeholder reads
-  if (typeof window === "undefined" || isDesktopApp()) {
+  if (typeof window === "undefined") {
     return undefined;
   }
   try {
@@ -33,7 +31,7 @@ const getInitialFromStorage = <T>(key: string): T | undefined => {
 };
 
 const saveToStorage = <T>(key: string, data: T): void => {
-  if (typeof window === "undefined" || isDesktopApp()) {
+  if (typeof window === "undefined") {
     return;
   }
   try {
