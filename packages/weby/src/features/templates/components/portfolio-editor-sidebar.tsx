@@ -67,8 +67,8 @@ export const PortfolioEditorSidebar = () => {
         </p>
 
         <button
-          className={`flex w-full items-center gap-2 px-1 py-1.5 text-left text-[11px] lowercase ${navItemClass(false)}`}
-          disabled={ctrl.isSaving}
+          className={`flex w-full items-center gap-2 px-1 py-1.5 text-left text-[11px] lowercase ${ctrl.isSaving || !ctrl.hasChanges ? `cursor-not-allowed opacity-40 ${t("text-text-dark/50", "text-text-light/50")}` : navItemClass(false)}`}
+          disabled={ctrl.isSaving || !ctrl.hasChanges}
           onClick={ctrl.handlePin}
           type="button"
         >

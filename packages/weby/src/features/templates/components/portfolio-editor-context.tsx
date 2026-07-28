@@ -4,6 +4,7 @@ import { usePortfolioStore } from "../stores/portfolio-store";
 export interface PortfolioEditorControls {
   handlePin: () => void;
   handleReset: () => void;
+  hasChanges: boolean;
   isPinned: boolean;
   isSaving: boolean;
   onBack: () => void;

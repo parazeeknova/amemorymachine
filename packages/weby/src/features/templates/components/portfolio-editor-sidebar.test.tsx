@@ -9,6 +9,7 @@ const setMockControls = (overrides: Partial<PortfolioEditorControls> = {}) => {
   setPortfolioEditorControls({
     handlePin: vi.fn(),
     handleReset: vi.fn(),
+    hasChanges: true,
     isPinned: false,
     isSaving: false,
     onBack: vi.fn(),

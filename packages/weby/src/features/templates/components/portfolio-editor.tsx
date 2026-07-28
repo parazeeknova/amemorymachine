@@ -74,7 +74,11 @@ export const PortfolioEditor = ({
   const setIsPinned = usePortfolioStore((s) => s.setIsPinned);
   const addHistorySnapshot = usePortfolioStore((s) => s.addHistorySnapshot);
   const setDraft = usePortfolioStore((s) => s.setDraft);
+  const lastSavedMarkdown = usePortfolioStore((s) => s.lastSavedMarkdown);
+  const setLastSavedMarkdown = usePortfolioStore((s) => s.setLastSavedMarkdown);
   const queryClient = useQueryClient();
+
+  const hasChanges = rawMarkdown !== (lastSavedMarkdown ?? "");
 
   const { data: templates } = useTemplates();
   const isPinned = templates?.some((tmpl) => tmpl.isDefault) ?? false;
@@ -146,6 +150,11 @@ export const PortfolioEditor = ({
   };
 
   const handlePin = useCallback(() => {
+    if (rawMarkdown === (lastSavedMarkdown ?? "")) {
+      setFlashToast("no changes to save");
+      return;
+    }
+
     const current = validatePortfolioMarkdown(rawMarkdown);
     if (!current.isValid) {
       setFlashToast("cannot pin template: fix syntax errors first");
@@ -172,6 +181,7 @@ export const PortfolioEditor = ({
         onSuccess: () => {
           addHistorySnapshot(rawMarkdown);
           setDraft(null);
+          setLastSavedMarkdown(rawMarkdown);
           queryClient.setQueryData(["profile"], parsed.profile);
           queryClient.setQueryData(["experience"], parsed.experiences);
           queryClient.setQueryData(["projects"], parsed.projects);
@@ -186,29 +196,39 @@ export const PortfolioEditor = ({
         },
       },
     );
-  }, [rawMarkdown, pinTemplate, addHistorySnapshot, setDraft, queryClient]);
+  }, [
+    rawMarkdown,
+    lastSavedMarkdown,
+    pinTemplate,
+    addHistorySnapshot,
+    setDraft,
+    setLastSavedMarkdown,
+    queryClient,
+  ]);
 
   const handleReset = useCallback(() => {
     const boilerplate = generatePortfolioMarkdown();
     setRawMarkdown(boilerplate);
     setDraft(null);
+    setLastSavedMarkdown(null);
     undoStack.current = [];
     redoStack.current = [];
     lastPushed.current = "";
     setFlashToast("template reset to boilerplate");
-  }, [setDraft]);
+  }, [setDraft, setLastSavedMarkdown]);
 
   const handleHistoryRestore = useCallback(
     (markdown: string) => {
       setRawMarkdown(markdown);
       setDraft(markdown);
+      setLastSavedMarkdown(null);
       undoStack.current = [];
       redoStack.current = [];
       lastPushed.current = "";
       setIsHistoryOpen(false);
       setFlashToast("restored template from history");
     },
-    [setDraft, setIsHistoryOpen],
+    [setDraft, setLastSavedMarkdown, setIsHistoryOpen],
   );
 
   // Expose controls to the sidebar via external store
@@ -216,11 +236,12 @@ export const PortfolioEditor = ({
     setPortfolioEditorControls({
       handlePin,
       handleReset,
+      hasChanges,
       isPinned,
       isSaving: pinTemplate.isPending,
       onBack: () => onBack?.(),
     });
-  }, [handlePin, handleReset, isPinned, pinTemplate.isPending, onBack]);
+  }, [handlePin, handleReset, hasChanges, isPinned, pinTemplate.isPending, onBack]);
 
   useEffect(() => () => setPortfolioEditorControls(null), []);
 
