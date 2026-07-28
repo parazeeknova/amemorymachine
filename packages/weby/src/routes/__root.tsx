@@ -6,7 +6,6 @@ import { useState } from "react";
 import { createTheme, MantineProvider } from "@mantine/core";
 
 import { useTheme } from "#/shared/hooks/use-theme";
-import { isDesktopApp } from "#/shared/lib/desktop";
 import { setAuthCache } from "#/features/auth/lib/auth-cache";
 import "#/shared/lib/i18n";
 
@@ -61,10 +60,6 @@ const RootComponent = () => {
 
   const [persister] = useState(() => {
     if (typeof window === "undefined") {
-      return;
-    }
-    // WebKit (Electrobun) has very slow sync localStorage — skip persistence entirely
-    if (isDesktopApp()) {
       return;
     }
     return createSyncStoragePersister({
