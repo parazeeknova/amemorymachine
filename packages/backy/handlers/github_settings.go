@@ -1,50 +1,13 @@
 package handlers
 
 import (
-	"crypto/rand"
-	"crypto/sha256"
-	"encoding/hex"
 	"net/http"
-	"os"
 	"time"
 
 	"verso/backy/database"
 
 	"github.com/gin-gonic/gin"
-	"golang.org/x/crypto/nacl/secretbox"
 )
-
-func deriveKey() *[32]byte {
-	secret := os.Getenv("ENCRYPTION_SECRET")
-	if secret == "" {
-		secret = "verso-dev-encryption-key-change-me"
-	}
-	hash := sha256.Sum256([]byte(secret))
-	var key [32]byte
-	copy(key[:], hash[:])
-	return &key
-}
-
-func encryptToken(plaintext string) ([]byte, error) {
-	key := deriveKey()
-	var nonce [24]byte
-	if _, err := rand.Read(nonce[:]); err != nil {
-		return nil, err
-	}
-	encrypted := secretbox.Seal(nonce[:], []byte(plaintext), &nonce, key)
-	return encrypted, nil
-}
-
-func decryptToken(encrypted []byte) (string, error) {
-	key := deriveKey()
-	var nonce [24]byte
-	copy(nonce[:], encrypted[:24])
-	decrypted, ok := secretbox.Open(nil, encrypted[24:], &nonce, key)
-	if !ok {
-		return "", hex.ErrLength
-	}
-	return string(decrypted), nil
-}
 
 type GitHubSettings struct {
 	Enabled        bool    `json:"enabled"`
@@ -57,12 +20,12 @@ func (h *Handlers) GetGitHubSettings(c *gin.Context) {
 	pool := database.PoolAvailable()
 	var enabled bool
 	var username string
-	var tokenEncrypted []byte
+	var token *string
 	var tokenUpdatedAt *time.Time
 
 	err := pool.QueryRow(c.Request.Context(),
-		`SELECT enabled, username, token_encrypted, token_updated_at FROM github_settings ORDER BY created_at LIMIT 1`,
-	).Scan(&enabled, &username, &tokenEncrypted, &tokenUpdatedAt)
+		`SELECT enabled, username, token, token_updated_at FROM github_settings ORDER BY created_at LIMIT 1`,
+	).Scan(&enabled, &username, &token, &tokenUpdatedAt)
 	if err != nil {
 		c.JSON(http.StatusOK, GitHubSettings{Enabled: true, Username: "parazeeknova"})
 		return
@@ -77,7 +40,7 @@ func (h *Handlers) GetGitHubSettings(c *gin.Context) {
 	c.JSON(http.StatusOK, GitHubSettings{
 		Enabled:        enabled,
 		Username:       username,
-		HasToken:       len(tokenEncrypted) > 0,
+		HasToken:       token != nil && *token != "",
 		TokenUpdatedAt: tokenUpdatedAtStr,
 	})
 }
@@ -103,11 +66,11 @@ func (h *Handlers) UpdateGitHubSettings(c *gin.Context) {
 
 	var currentEnabled bool
 	var currentUsername string
-	var currentTokenEncrypted []byte
+	var currentToken *string
 
 	err := pool.QueryRow(c.Request.Context(),
-		`SELECT enabled, username, token_encrypted FROM github_settings ORDER BY created_at LIMIT 1`,
-	).Scan(&currentEnabled, &currentUsername, &currentTokenEncrypted)
+		`SELECT enabled, username, token FROM github_settings ORDER BY created_at LIMIT 1`,
+	).Scan(&currentEnabled, &currentUsername, &currentToken)
 	if err != nil {
 		_, err = pool.Exec(c.Request.Context(),
 			`INSERT INTO github_settings (enabled, username) VALUES (true, 'parazeeknova')`)
@@ -121,7 +84,7 @@ func (h *Handlers) UpdateGitHubSettings(c *gin.Context) {
 
 	enabled := currentEnabled
 	username := currentUsername
-	var tokenBytes []byte = currentTokenEncrypted
+	var tokenVal *string = currentToken
 
 	if req.Enabled != nil {
 		enabled = *req.Enabled
@@ -134,14 +97,9 @@ func (h *Handlers) UpdateGitHubSettings(c *gin.Context) {
 	if req.Token != nil {
 		tokenChanged = true
 		if *req.Token == "" {
-			tokenBytes = nil
+			tokenVal = nil
 		} else {
-			encrypted, encErr := encryptToken(*req.Token)
-			if encErr != nil {
-				c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to encrypt token"})
-				return
-			}
-			tokenBytes = encrypted
+			tokenVal = req.Token
 		}
 	}
 
@@ -151,8 +109,8 @@ func (h *Handlers) UpdateGitHubSettings(c *gin.Context) {
 	}
 
 	_, err = pool.Exec(c.Request.Context(),
-		`UPDATE github_settings SET enabled = $1, username = $2, token_encrypted = $3, updated_at = NOW()`+tokenUpdatedAtUpdate,
-		enabled, username, tokenBytes,
+		`UPDATE github_settings SET enabled = $1, username = $2, token = $3, updated_at = NOW()`+tokenUpdatedAtUpdate,
+		enabled, username, tokenVal,
 	)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to update settings"})
@@ -178,12 +136,11 @@ func (h *Handlers) UpdateGitHubSettings(c *gin.Context) {
 	c.JSON(http.StatusOK, GitHubSettings{
 		Enabled:        enabled,
 		Username:       username,
-		HasToken:       len(tokenBytes) > 0,
+		HasToken:       tokenVal != nil && *tokenVal != "",
 		TokenUpdatedAt: updatedAtStr,
 	})
 }
 
-// GetGitHubEnabledStatus returns whether GitHub integration is enabled (public endpoint).
 func (h *Handlers) GetGitHubEnabledStatus(c *gin.Context) {
 	pool := database.PoolAvailable()
 	if pool == nil {
