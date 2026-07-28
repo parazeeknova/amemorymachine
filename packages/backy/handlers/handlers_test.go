@@ -35,6 +35,10 @@ func (m *mockPortfolioRepo) SaveAndPinPortfolio(_ context.Context, _ *string, _ 
 	return nil
 }
 
+func (m *mockPortfolioRepo) UnpinPortfolio(_ context.Context) error {
+	return nil
+}
+
 func setupRouter() (*gin.Engine, *Handlers) {
 	gin.SetMode(gin.TestMode)
 	r := gin.New()

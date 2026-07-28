@@ -8,6 +8,7 @@ import {
 import { useMemo } from "react";
 import { useTheme } from "#/shared/hooks/use-theme";
 import { usePortfolioStore } from "../stores/portfolio-store";
+import { useClearPortfolio } from "../hooks/use-templates";
 import type { TemplateSnapshot } from "../stores/portfolio-store";
 
 interface TemplateHistoryModalProps {
@@ -62,6 +63,12 @@ export const TemplateHistoryModal = ({ isOpen, onClose, onRestore }: TemplateHis
   const t = (dark: string, light: string) => (isDarkMode ? dark : light);
   const history = usePortfolioStore((s) => s.history);
   const clearHistory = usePortfolioStore((s) => s.clearHistory);
+  const clearPortfolio = useClearPortfolio();
+
+  const handleClearAll = () => {
+    clearHistory();
+    clearPortfolio.mutate();
+  };
 
   const diffs = useMemo(() => {
     const reversed = [...history].toReversed();
@@ -104,7 +111,7 @@ export const TemplateHistoryModal = ({ isOpen, onClose, onRestore }: TemplateHis
             {history.length > 0 && (
               <button
                 className={`px-2 py-0.5 text-[10px] lowercase transition-colors flex items-center gap-1 ${t("text-text-dark/30 hover:text-rose-400", "text-text-light/30 hover:text-rose-600")}`}
-                onClick={clearHistory}
+                onClick={handleClearAll}
                 type="button"
               >
                 <TrashIcon size={11} />

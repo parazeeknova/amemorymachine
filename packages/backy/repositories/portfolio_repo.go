@@ -152,3 +152,8 @@ func (r *PortfolioRepo) SaveAndPinPortfolio(ctx context.Context, userID *string,
 
 	return tx.Commit(ctx)
 }
+
+func (r *PortfolioRepo) UnpinPortfolio(ctx context.Context) error {
+	_, err := r.pool.Exec(ctx, `UPDATE portfolio_profiles SET is_pinned = false WHERE is_pinned = true`)
+	return err
+}

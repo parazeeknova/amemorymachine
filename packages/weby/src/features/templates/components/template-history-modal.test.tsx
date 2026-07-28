@@ -1,7 +1,18 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { createWrapper } from "#/shared/test/utils";
 import { TemplateHistoryModal } from "./template-history-modal";
 import { usePortfolioStore } from "../stores/portfolio-store";
+
+const renderModal = (props: { isOpen: boolean; onClose: () => void; onRestore: () => void }) =>
+  render(
+    <TemplateHistoryModal
+      isOpen={props.isOpen}
+      onClose={props.onClose}
+      onRestore={props.onRestore}
+    />,
+    { wrapper: createWrapper() },
+  );
 
 describe("TemplateHistoryModal", () => {
   beforeEach(() => {
@@ -22,16 +33,14 @@ describe("TemplateHistoryModal", () => {
   it("renders nothing when not open", () => {
     const onClose = vi.fn();
     const onRestore = vi.fn();
-    const { container } = render(
-      <TemplateHistoryModal isOpen={false} onClose={onClose} onRestore={onRestore} />,
-    );
+    const { container } = renderModal({ isOpen: false, onClose, onRestore });
     expect(container.innerHTML).toBe("");
   });
 
   it("shows empty state when no history exists", () => {
     const onClose = vi.fn();
     const onRestore = vi.fn();
-    render(<TemplateHistoryModal isOpen={true} onClose={onClose} onRestore={onRestore} />);
+    renderModal({ isOpen: true, onClose, onRestore });
 
     expect(screen.getByText("history")).toBeDefined();
     expect(screen.getByText("no history")).toBeDefined();
@@ -50,9 +59,8 @@ describe("TemplateHistoryModal", () => {
 
     const onClose = vi.fn();
     const onRestore = vi.fn();
-    render(<TemplateHistoryModal isOpen={true} onClose={onClose} onRestore={onRestore} />);
+    renderModal({ isOpen: true, onClose, onRestore });
 
-    // Should show count in header
     expect(screen.getByText("1")).toBeDefined();
   });
 
@@ -71,12 +79,9 @@ describe("TemplateHistoryModal", () => {
     const onClose = vi.fn();
     const onRestore = vi.fn();
 
-    render(<TemplateHistoryModal isOpen={true} onClose={onClose} onRestore={onRestore} />);
+    renderModal({ isOpen: true, onClose, onRestore });
 
-    // Click the first button in the grid (snapshot box)
     const buttons = screen.getAllByRole("button");
-    // First buttons are: clear (if history > 0), X close, then snapshot boxes
-    // Actually: clear, X close, then the grid button
     const snapshotBtn = buttons.find((b) => b.querySelector(".font-mono"));
     expect(snapshotBtn).toBeDefined();
     if (snapshotBtn) {
@@ -86,7 +91,7 @@ describe("TemplateHistoryModal", () => {
     expect(onRestore).toHaveBeenCalledWith(testMarkdown);
   });
 
-  it("clears history when clear all is clicked", () => {
+  it("clears local history and calls API when clear all is clicked", () => {
     usePortfolioStore.setState({
       history: [
         {
@@ -100,7 +105,7 @@ describe("TemplateHistoryModal", () => {
     const onClose = vi.fn();
     const onRestore = vi.fn();
 
-    render(<TemplateHistoryModal isOpen={true} onClose={onClose} onRestore={onRestore} />);
+    renderModal({ isOpen: true, onClose, onRestore });
 
     fireEvent.click(screen.getByText("clear all"));
 
@@ -111,9 +116,8 @@ describe("TemplateHistoryModal", () => {
     const onClose = vi.fn();
     const onRestore = vi.fn();
 
-    render(<TemplateHistoryModal isOpen={true} onClose={onClose} onRestore={onRestore} />);
+    renderModal({ isOpen: true, onClose, onRestore });
 
-    // Find the X button (it's the one without text)
     const buttons = screen.getAllByRole("button");
     const xButton = buttons.find((b) => b.querySelector("svg") && !b.textContent);
     expect(xButton).toBeDefined();

@@ -32,6 +32,7 @@ type PortfolioRepoer interface {
 	GetPinnedExperiences(ctx context.Context) ([]models.ExperienceItem, error)
 	GetPinnedProjects(ctx context.Context) ([]models.Project, error)
 	SaveAndPinPortfolio(ctx context.Context, userID *string, profile models.Profile, experiences []models.ExperienceItem, projects []models.Project) error
+	UnpinPortfolio(ctx context.Context) error
 }
 
 // Handlers holds all HTTP handlers
@@ -1448,6 +1449,22 @@ func (h *Handlers) PinPortfolioTemplate(c *gin.Context) {
 	}
 
 	c.JSON(http.StatusOK, gin.H{"status": "ok", "message": "Portfolio pinned to / route successfully"})
+}
+
+// UnpinPortfolioTemplate unpins all portfolio profiles so the / route shows default content.
+func (h *Handlers) UnpinPortfolioTemplate(c *gin.Context) {
+	if h.portfolioRepo == nil {
+		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "portfolio repository unavailable"})
+		return
+	}
+
+	if err := h.portfolioRepo.UnpinPortfolio(c.Request.Context()); err != nil {
+		logger.Log.Error().Err(err).Msg("unpin portfolio failed")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to unpin portfolio"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": "ok", "message": "Portfolio template cleared"})
 }
 
 // GetPublicShort handles GET /api/short/:shortCode.

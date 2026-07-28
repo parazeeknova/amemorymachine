@@ -51,3 +51,19 @@ export const usePinTemplate = () => {
     },
   });
 };
+
+export const useClearPortfolio = () => {
+  const queryClient = useQueryClient();
+  return useMutation({
+    mutationFn: () =>
+      fetchJson<{ message: string; status: string }>("/api/console/templates", {
+        method: "DELETE",
+      }),
+    onSuccess: () => {
+      queryClient.invalidateQueries({ queryKey: ["console-templates"] });
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+      queryClient.invalidateQueries({ queryKey: ["experience"] });
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
+    },
+  });
+};
