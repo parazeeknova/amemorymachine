@@ -1,8 +1,8 @@
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
 import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import { createRootRoute, HeadContent, Outlet, Scripts, useRouter } from "@tanstack/react-router";
-import { useEffect, useState } from "react";
+import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
+import { useState } from "react";
 import { createTheme, MantineProvider } from "@mantine/core";
 
 import { useTheme } from "#/shared/hooks/use-theme";
@@ -12,15 +12,6 @@ import "#/shared/lib/i18n";
 
 import mantineCss from "@mantine/core/styles.css?url";
 import appCss from "../styles.css?url";
-
-let globalNavigate: ((opts: { replace: boolean; to: string }) => void | Promise<void>) | null =
-  null;
-
-export const setGlobalNavigate = (
-  fn: ((opts: { replace: boolean; to: string }) => void | Promise<void>) | null,
-) => {
-  globalNavigate = fn;
-};
 
 const isAuthError = (error: unknown): boolean => {
   if (error instanceof Error && error.message.includes("HTTP 401")) {
@@ -48,9 +39,6 @@ const createQueryClient = () =>
       onError: (error) => {
         if (isAuthError(error)) {
           setAuthCache("unauthenticated");
-          if (globalNavigate) {
-            globalNavigate({ replace: true, to: "/" });
-          }
         }
       },
     }),
@@ -58,9 +46,6 @@ const createQueryClient = () =>
       onError: (error) => {
         if (isAuthError(error)) {
           setAuthCache("unauthenticated");
-          if (globalNavigate) {
-            globalNavigate({ replace: true, to: "/" });
-          }
         }
       },
     }),
@@ -73,12 +58,6 @@ const theme = createTheme({
 
 const RootComponent = () => {
   const [queryClient] = useState(createQueryClient);
-  const router = useRouter();
-
-  useEffect(() => {
-    setGlobalNavigate((opts) => router.navigate(opts));
-    return () => setGlobalNavigate(null);
-  }, [router]);
 
   const [persister] = useState(() => {
     if (typeof window === "undefined") {
