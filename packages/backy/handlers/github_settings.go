@@ -1,77 +1,49 @@
 package handlers
 
 import (
-	"crypto/aes"
-	"crypto/cipher"
 	"crypto/rand"
 	"crypto/sha256"
-	"fmt"
-	"io"
+	"encoding/hex"
 	"net/http"
 	"os"
-	"strings"
 	"time"
 
 	"verso/backy/database"
 
 	"github.com/gin-gonic/gin"
-	"github.com/rs/zerolog/log"
+	"golang.org/x/crypto/nacl/secretbox"
 )
 
-func deriveEncryptionKey() []byte {
+func deriveKey() *[32]byte {
 	secret := os.Getenv("ENCRYPTION_SECRET")
-	source := "ENCRYPTION_SECRET env"
 	if secret == "" {
-		if machineID, err := os.ReadFile("/etc/machine-id"); err == nil {
-			secret = strings.TrimSpace(string(machineID))
-			source = "/etc/machine-id"
-		} else {
-			secret = "verso-dev-key-change-me"
-			source = "hardcoded fallback"
-		}
+		secret = "verso-dev-key-change-me-in-production"
 	}
 	hash := sha256.Sum256([]byte(secret))
-	log.Info().Str("source", source).Str("key_prefix", fmt.Sprintf("%x", hash[:4])).Msg("derived encryption key")
-	return hash[:]
+	var key [32]byte
+	copy(key[:], hash[:])
+	return &key
 }
 
 func encryptToken(plaintext string) ([]byte, error) {
-	key := deriveEncryptionKey()
-	block, err := aes.NewCipher(key)
-	if err != nil {
+	key := deriveKey()
+	var nonce [24]byte
+	if _, err := rand.Read(nonce[:]); err != nil {
 		return nil, err
 	}
-	aesGCM, err := cipher.NewGCM(block)
-	if err != nil {
-		return nil, err
-	}
-	nonce := make([]byte, aesGCM.NonceSize())
-	if _, err := io.ReadFull(rand.Reader, nonce); err != nil {
-		return nil, err
-	}
-	return aesGCM.Seal(nonce, nonce, []byte(plaintext), nil), nil
+	encrypted := secretbox.Seal(nonce[:], []byte(plaintext), &nonce, key)
+	return encrypted, nil
 }
 
-func decryptToken(ciphertext []byte) (string, error) {
-	key := deriveEncryptionKey()
-	block, err := aes.NewCipher(key)
-	if err != nil {
-		return "", err
+func decryptToken(encrypted []byte) (string, error) {
+	key := deriveKey()
+	var nonce [24]byte
+	copy(nonce[:], encrypted[:24])
+	decrypted, ok := secretbox.Open(nil, encrypted[24:], &nonce, key)
+	if !ok {
+		return "", hex.ErrLength
 	}
-	aesGCM, err := cipher.NewGCM(block)
-	if err != nil {
-		return "", err
-	}
-	nonceSize := aesGCM.NonceSize()
-	if len(ciphertext) < nonceSize {
-		return "", io.ErrUnexpectedEOF
-	}
-	nonce, ct := ciphertext[:nonceSize], ciphertext[nonceSize:]
-	plaintext, err := aesGCM.Open(nil, nonce, ct, nil)
-	if err != nil {
-		return "", err
-	}
-	return string(plaintext), nil
+	return string(decrypted), nil
 }
 
 type GitHubSettings struct {
@@ -137,7 +109,6 @@ func (h *Handlers) UpdateGitHubSettings(c *gin.Context) {
 		`SELECT enabled, username, token_encrypted FROM github_settings ORDER BY created_at LIMIT 1`,
 	).Scan(&currentEnabled, &currentUsername, &currentTokenEncrypted)
 	if err != nil {
-		// Insert initial row
 		_, err = pool.Exec(c.Request.Context(),
 			`INSERT INTO github_settings (enabled, username) VALUES (true, 'parazeeknova')`)
 		if err != nil {
@@ -158,14 +129,15 @@ func (h *Handlers) UpdateGitHubSettings(c *gin.Context) {
 	if req.Username != nil {
 		username = *req.Username
 	}
+
 	var tokenChanged bool
 	if req.Token != nil {
 		tokenChanged = true
 		if *req.Token == "" {
 			tokenBytes = nil
 		} else {
-			encrypted, err := encryptToken(*req.Token)
-			if err != nil {
+			encrypted, encErr := encryptToken(*req.Token)
+			if encErr != nil {
 				c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to encrypt token"})
 				return
 			}
