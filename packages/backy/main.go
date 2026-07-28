@@ -346,6 +346,8 @@ func main() {
 			console.GET("/templates", h.GetTemplates)
 			console.POST("/templates/pin", h.PinPortfolioTemplate)
 			console.DELETE("/templates", h.UnpinPortfolioTemplate)
+			console.GET("/github-settings", h.GetGitHubSettings)
+			console.POST("/github-settings", h.UpdateGitHubSettings)
 			console.GET("/video-thumbnail", h.GetVideoThumbnail)
 			console.DELETE("/video-thumbnails", h.DeleteVideoThumbnails)
 

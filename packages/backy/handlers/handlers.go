@@ -12,6 +12,7 @@ import (
 	"github.com/google/uuid"
 	"golang.org/x/sync/singleflight"
 
+	"verso/backy/database"
 	"verso/backy/database/models"
 	ghfeat "verso/backy/features/github"
 	groupfeat "verso/backy/features/group"
@@ -188,12 +189,36 @@ func (h *Handlers) GetBlogManifest(c *gin.Context) {
 
 // GetGitHubStats returns GitHub statistics with caching
 func (h *Handlers) GetGitHubStats(c *gin.Context) {
-	if h.config.GitHubToken == "" {
-		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "GITHUB_TOKEN not configured"})
-		return
+	// Check DB settings first, fall back to env config
+	token := h.config.GitHubToken
+	username := h.config.GitHubUsername
+
+	if pool := database.GetPool(); pool != nil {
+		var dbEnabled bool
+		var dbUsername string
+		var dbTokenEncrypted []byte
+		err := pool.QueryRow(c.Request.Context(),
+			`SELECT enabled, username, token_encrypted FROM github_settings ORDER BY created_at LIMIT 1`,
+		).Scan(&dbEnabled, &dbUsername, &dbTokenEncrypted)
+		if err == nil {
+			if !dbEnabled {
+				c.JSON(http.StatusServiceUnavailable, gin.H{"error": "GitHub integration is disabled"})
+				return
+			}
+			username = dbUsername
+			if len(dbTokenEncrypted) > 0 {
+				decrypted, decErr := decryptToken(dbTokenEncrypted)
+				if decErr == nil {
+					token = decrypted
+				}
+			}
+		}
 	}
 
-	username := h.config.GitHubUsername
+	if token == "" {
+		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "GitHub token not configured"})
+		return
+	}
 
 	if cached, ok := h.statsCache.Get(username); ok {
 		c.JSON(http.StatusOK, cached)
