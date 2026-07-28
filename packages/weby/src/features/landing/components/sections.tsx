@@ -100,10 +100,6 @@ export const ProfileSection = ({ profile, isPending }: ProfileSectionProps) => {
         </h1>
       )}
 
-      {profile?.tagline && (
-        <p className="mb-2 text-base opacity-60 lowercase pl-2">{profile.tagline}</p>
-      )}
-
       {(portfolio || profile?.email) && (
         <p className="mb-6 text-sm sm:mb-8 sm:text-base">
           {portfolio && (
