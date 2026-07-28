@@ -1,13 +1,48 @@
 package handlers
 
 import (
+	"crypto/rand"
+	"crypto/sha256"
 	"net/http"
+	"os"
 	"time"
 
 	"verso/backy/database"
 
 	"github.com/gin-gonic/gin"
+	"golang.org/x/crypto/nacl/secretbox"
 )
+
+func deriveKey() *[32]byte {
+	secret := os.Getenv("ENCRYPTION_SECRET")
+	if secret == "" {
+		secret = "verso-dev-encryption-key-change-me"
+	}
+	hash := sha256.Sum256([]byte(secret))
+	var key [32]byte
+	copy(key[:], hash[:])
+	return &key
+}
+
+func encryptToken(plaintext string) ([]byte, error) {
+	key := deriveKey()
+	var nonce [24]byte
+	if _, err := rand.Read(nonce[:]); err != nil {
+		return nil, err
+	}
+	return secretbox.Seal(nonce[:], []byte(plaintext), &nonce, key), nil
+}
+
+func decryptToken(encrypted []byte) (string, error) {
+	key := deriveKey()
+	var nonce [24]byte
+	copy(nonce[:], encrypted[:24])
+	decrypted, ok := secretbox.Open(nil, encrypted[24:], &nonce, key)
+	if !ok {
+		return "", os.ErrInvalid
+	}
+	return string(decrypted), nil
+}
 
 type GitHubSettings struct {
 	Enabled        bool    `json:"enabled"`
@@ -20,12 +55,12 @@ func (h *Handlers) GetGitHubSettings(c *gin.Context) {
 	pool := database.PoolAvailable()
 	var enabled bool
 	var username string
-	var token *string
+	var tokenEncrypted []byte
 	var tokenUpdatedAt *time.Time
 
 	err := pool.QueryRow(c.Request.Context(),
-		`SELECT enabled, username, token, token_updated_at FROM github_settings ORDER BY created_at LIMIT 1`,
-	).Scan(&enabled, &username, &token, &tokenUpdatedAt)
+		`SELECT enabled, username, token_encrypted, token_updated_at FROM github_settings ORDER BY created_at LIMIT 1`,
+	).Scan(&enabled, &username, &tokenEncrypted, &tokenUpdatedAt)
 	if err != nil {
 		c.JSON(http.StatusOK, GitHubSettings{Enabled: true, Username: "parazeeknova"})
 		return
@@ -40,7 +75,7 @@ func (h *Handlers) GetGitHubSettings(c *gin.Context) {
 	c.JSON(http.StatusOK, GitHubSettings{
 		Enabled:        enabled,
 		Username:       username,
-		HasToken:       token != nil && *token != "",
+		HasToken:       len(tokenEncrypted) > 0,
 		TokenUpdatedAt: tokenUpdatedAtStr,
 	})
 }
@@ -66,11 +101,11 @@ func (h *Handlers) UpdateGitHubSettings(c *gin.Context) {
 
 	var currentEnabled bool
 	var currentUsername string
-	var currentToken *string
+	var currentTokenEncrypted []byte
 
 	err := pool.QueryRow(c.Request.Context(),
-		`SELECT enabled, username, token FROM github_settings ORDER BY created_at LIMIT 1`,
-	).Scan(&currentEnabled, &currentUsername, &currentToken)
+		`SELECT enabled, username, token_encrypted FROM github_settings ORDER BY created_at LIMIT 1`,
+	).Scan(&currentEnabled, &currentUsername, &currentTokenEncrypted)
 	if err != nil {
 		_, err = pool.Exec(c.Request.Context(),
 			`INSERT INTO github_settings (enabled, username) VALUES (true, 'parazeeknova')`)
@@ -84,7 +119,7 @@ func (h *Handlers) UpdateGitHubSettings(c *gin.Context) {
 
 	enabled := currentEnabled
 	username := currentUsername
-	var tokenVal *string = currentToken
+	var tokenBytes []byte = currentTokenEncrypted
 
 	if req.Enabled != nil {
 		enabled = *req.Enabled
@@ -97,20 +132,25 @@ func (h *Handlers) UpdateGitHubSettings(c *gin.Context) {
 	if req.Token != nil {
 		tokenChanged = true
 		if *req.Token == "" {
-			tokenVal = nil
+			tokenBytes = nil
 		} else {
-			tokenVal = req.Token
+			encrypted, encErr := encryptToken(*req.Token)
+			if encErr != nil {
+				c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to encrypt token"})
+				return
+			}
+			tokenBytes = encrypted
 		}
 	}
 
-	var tokenUpdatedAtUpdate string
+	var tokenUpdatedAtSQL string
 	if tokenChanged {
-		tokenUpdatedAtUpdate = ", token_updated_at = NOW()"
+		tokenUpdatedAtSQL = ", token_updated_at = NOW()"
 	}
 
 	_, err = pool.Exec(c.Request.Context(),
-		`UPDATE github_settings SET enabled = $1, username = $2, token = $3, updated_at = NOW()`+tokenUpdatedAtUpdate,
-		enabled, username, tokenVal,
+		`UPDATE github_settings SET enabled = $1, username = $2, token_encrypted = $3, updated_at = NOW()`+tokenUpdatedAtSQL,
+		enabled, username, tokenBytes,
 	)
 	if err != nil {
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to update settings"})
@@ -136,7 +176,7 @@ func (h *Handlers) UpdateGitHubSettings(c *gin.Context) {
 	c.JSON(http.StatusOK, GitHubSettings{
 		Enabled:        enabled,
 		Username:       username,
-		HasToken:       tokenVal != nil && *tokenVal != "",
+		HasToken:       len(tokenBytes) > 0,
 		TokenUpdatedAt: updatedAtStr,
 	})
 }

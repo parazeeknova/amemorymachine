@@ -196,18 +196,21 @@ func (h *Handlers) GetGitHubStats(c *gin.Context) {
 	if pool := database.PoolAvailable(); pool != nil {
 		var dbEnabled bool
 		var dbUsername string
-		var dbToken *string
+		var dbTokenEncrypted []byte
 		err := pool.QueryRow(c.Request.Context(),
-			`SELECT enabled, username, token FROM github_settings ORDER BY created_at LIMIT 1`,
-		).Scan(&dbEnabled, &dbUsername, &dbToken)
+			`SELECT enabled, username, token_encrypted FROM github_settings ORDER BY created_at LIMIT 1`,
+		).Scan(&dbEnabled, &dbUsername, &dbTokenEncrypted)
 		if err == nil {
 			if !dbEnabled {
 				c.JSON(http.StatusServiceUnavailable, gin.H{"error": "GitHub integration is disabled"})
 				return
 			}
 			username = dbUsername
-			if dbToken != nil && *dbToken != "" {
-				token = *dbToken
+			if len(dbTokenEncrypted) > 0 {
+				decrypted, decErr := decryptToken(dbTokenEncrypted)
+				if decErr == nil {
+					token = decrypted
+				}
 			}
 		}
 	}
