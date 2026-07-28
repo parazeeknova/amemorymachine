@@ -320,7 +320,9 @@ export const PortfolioEditor = ({
           )}`}
         >
           {!validation.isValid && (
-            <div className="px-2 py-1 border-b border-rose-500/20 bg-rose-500/5 text-[10px] font-mono text-rose-400 shrink-0">
+            <div
+              className={`px-2 py-1 border-b border-rose-500/20 bg-rose-500/5 text-[10px] font-mono shrink-0 ${t("text-rose-400", "text-rose-600")}`}
+            >
               {validation.errors.map((err, idx) => (
                 <div key={`${err.message}-${idx}`}>{err.message}</div>
               ))}

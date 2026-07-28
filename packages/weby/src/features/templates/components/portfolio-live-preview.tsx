@@ -226,24 +226,31 @@ export const PortfolioLivePreview = memo(
 
     if (!isValid) {
       return (
-        <div className="flex flex-col h-full">
-          <div className="px-3 py-2 border-b border-amber-500/15 bg-amber-500/[0.03] text-[10px] font-mono space-y-2">
+        <div className="flex flex-col items-center justify-center h-full px-4">
+          <div className="text-[10px] font-mono space-y-2 max-w-full">
             {errors.map((err, idx) => (
               <div key={`${err.message}-${idx}`}>
                 <div className="flex items-baseline gap-2">
-                  {err.line && <span className="shrink-0 text-amber-500/40">L{err.line}</span>}
-                  <span className="text-amber-400/80">{err.message}</span>
+                  {err.line && (
+                    <span
+                      className={`shrink-0 ${isDarkMode ? "text-amber-500/40" : "text-amber-600/50"}`}
+                    >
+                      L{err.line}
+                    </span>
+                  )}
+                  <span className={isDarkMode ? "text-amber-400/80" : "text-amber-700/80"}>
+                    {err.message}
+                  </span>
                 </div>
-                {err.fix && <div className="mt-0.5 text-text-dark/25 italic">&rarr; {err.fix}</div>}
+                {err.fix && (
+                  <div
+                    className={`mt-0.5 italic ${isDarkMode ? "text-text-dark/25" : "text-text-light/40"}`}
+                  >
+                    &rarr; {err.fix}
+                  </div>
+                )}
               </div>
             ))}
-          </div>
-          <div className="flex-1 flex items-center justify-center">
-            <span
-              className={`text-[10px] lowercase ${isDarkMode ? "text-text-dark/20" : "text-text-light/20"}`}
-            >
-              fix errors to restore preview
-            </span>
           </div>
         </div>
       );
