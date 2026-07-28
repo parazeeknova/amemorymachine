@@ -1,4 +1,3 @@
-import { WarningCircleIcon } from "@phosphor-icons/react";
 import { memo, useMemo, useRef } from "react";
 import { useTheme } from "#/shared/hooks/use-theme";
 import type { ExperienceItem, Link, Profile, Project } from "#/shared/types";
@@ -227,30 +226,18 @@ export const PortfolioLivePreview = memo(
 
     if (!isValid) {
       return (
-        <div className="flex flex-col items-center justify-center h-full p-6 text-center">
-          <div className="p-3 mb-3 rounded-full bg-rose-500/10 text-rose-400 border border-rose-500/20">
-            <WarningCircleIcon size={24} />
-          </div>
-          <h4
-            className={`text-sm font-medium lowercase ${isDarkMode ? "text-text-dark/80" : "text-text-light/80"}`}
-          >
-            syntax error in template
-          </h4>
-          <p
-            className={`mt-1 text-[11px] max-w-xs leading-relaxed ${isDarkMode ? "text-text-dark/40" : "text-text-light/40"}`}
-          >
-            fix the markdown structure errors to restore live preview:
-          </p>
-
-          <div className="w-full max-w-xs mt-4 space-y-1.5 text-left">
+        <div className="flex flex-col h-full">
+          <div className="px-2 py-1 border-b border-rose-500/20 bg-rose-500/5 text-[10px] font-mono text-rose-400">
             {errors.map((err, idx) => (
-              <div
-                key={`${err}-${idx}`}
-                className="p-2 text-[10px] font-mono border rounded border-rose-500/30 bg-rose-500/5 text-rose-400"
-              >
-                • {err}
-              </div>
+              <div key={`${err}-${idx}`}>{err}</div>
             ))}
+          </div>
+          <div className="flex-1 flex items-center justify-center">
+            <span
+              className={`text-[10px] lowercase ${isDarkMode ? "text-text-dark/25" : "text-text-light/25"}`}
+            >
+              fix errors to restore preview
+            </span>
           </div>
         </div>
       );
