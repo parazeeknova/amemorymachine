@@ -5,6 +5,7 @@ import (
 	"crypto/cipher"
 	"crypto/rand"
 	"crypto/sha256"
+	"fmt"
 	"io"
 	"net/http"
 	"os"
@@ -14,18 +15,23 @@ import (
 	"verso/backy/database"
 
 	"github.com/gin-gonic/gin"
+	"github.com/rs/zerolog/log"
 )
 
 func deriveEncryptionKey() []byte {
 	secret := os.Getenv("ENCRYPTION_SECRET")
+	source := "ENCRYPTION_SECRET env"
 	if secret == "" {
 		if machineID, err := os.ReadFile("/etc/machine-id"); err == nil {
 			secret = strings.TrimSpace(string(machineID))
+			source = "/etc/machine-id"
 		} else {
 			secret = "verso-dev-key-change-me"
+			source = "hardcoded fallback"
 		}
 	}
 	hash := sha256.Sum256([]byte(secret))
+	log.Info().Str("source", source).Str("key_prefix", fmt.Sprintf("%x", hash[:4])).Msg("derived encryption key")
 	return hash[:]
 }
 
