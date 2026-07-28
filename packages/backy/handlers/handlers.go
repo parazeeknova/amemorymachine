@@ -210,6 +210,8 @@ func (h *Handlers) GetGitHubStats(c *gin.Context) {
 				decrypted, decErr := decryptToken(dbTokenEncrypted)
 				if decErr == nil {
 					token = decrypted
+				} else {
+					logger.Log.Warn().Err(decErr).Msg("failed to decrypt github token")
 				}
 			}
 		}
