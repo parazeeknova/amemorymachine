@@ -9,6 +9,7 @@ import { useMemo } from "react";
 import { useTheme } from "#/shared/hooks/use-theme";
 import { usePortfolioStore } from "../stores/portfolio-store";
 import { useClearPortfolio } from "../hooks/use-templates";
+import { generatePortfolioMarkdown } from "../lib/portfolio-markdown";
 import type { TemplateSnapshot } from "../stores/portfolio-store";
 
 interface TemplateHistoryModalProps {
@@ -68,6 +69,7 @@ export const TemplateHistoryModal = ({ isOpen, onClose, onRestore }: TemplateHis
   const handleClearAll = () => {
     clearHistory();
     clearPortfolio.mutate();
+    onRestore(generatePortfolioMarkdown());
   };
 
   const diffs = useMemo(() => {
