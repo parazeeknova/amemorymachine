@@ -169,7 +169,7 @@ export const PortfolioEditor = ({
           const msg = error instanceof Error ? error.message : String(error);
           setFlashToast(`failed to pin portfolio template: ${msg}`);
         },
-        onSuccess: async () => {
+        onSuccess: () => {
           addHistorySnapshot(rawMarkdown);
           setDraft(null);
           queryClient.setQueryData(["profile"], parsed.profile);
@@ -179,9 +179,8 @@ export const PortfolioEditor = ({
             localStorage.setItem("verso_cache_profile", JSON.stringify(parsed.profile));
             localStorage.setItem("verso_cache_experience", JSON.stringify(parsed.experiences));
             localStorage.setItem("verso_cache_projects", JSON.stringify(parsed.projects));
-            await fetch("/api/console/video-thumbnails", { method: "DELETE" });
           } catch {
-            // ignore storage quota errors or non-critical cleanup failures
+            // ignore storage quota errors
           }
           setFlashToast("portfolio template pinned to / route");
         },
