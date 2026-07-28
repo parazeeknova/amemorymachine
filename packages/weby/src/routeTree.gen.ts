@@ -38,6 +38,7 @@ import { Route as ApiAuthLogoutRouteImport } from './routes/api/auth/logout'
 import { Route as ApiAuthMeRouteImport } from './routes/api/auth/me'
 import { Route as ApiAuthRefreshRouteImport } from './routes/api/auth/refresh'
 import { Route as ApiBlogsSlugRouteImport } from './routes/api/blogs/$slug'
+import { Route as ApiConsoleGithubSettingsRouteImport } from './routes/api/console/github-settings'
 import { Route as ApiConsoleNotificationsRouteImport } from './routes/api/console/notifications'
 import { Route as ApiConsolePagesRouteImport } from './routes/api/console/pages'
 import { Route as ApiConsoleProfileRouteImport } from './routes/api/console/profile'
@@ -267,6 +268,12 @@ const ApiBlogsSlugRoute = ApiBlogsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => ApiBlogsRoute,
 } as any)
+const ApiConsoleGithubSettingsRoute =
+  ApiConsoleGithubSettingsRouteImport.update({
+    id: '/api/console/github-settings',
+    path: '/api/console/github-settings',
+    getParentRoute: () => rootRouteImport,
+  } as any)
 const ApiConsoleNotificationsRoute = ApiConsoleNotificationsRouteImport.update({
   id: '/api/console/notifications',
   path: '/api/console/notifications',
@@ -757,6 +764,7 @@ export interface FileRoutesByFullPath {
   '/api/auth/me': typeof ApiAuthMeRoute
   '/api/auth/refresh': typeof ApiAuthRefreshRoute
   '/api/blogs/$slug': typeof ApiBlogsSlugRoute
+  '/api/console/github-settings': typeof ApiConsoleGithubSettingsRoute
   '/api/console/notifications': typeof ApiConsoleNotificationsRouteWithChildren
   '/api/console/pages': typeof ApiConsolePagesRouteWithChildren
   '/api/console/profile': typeof ApiConsoleProfileRouteWithChildren
@@ -868,6 +876,7 @@ export interface FileRoutesByTo {
   '/api/auth/me': typeof ApiAuthMeRoute
   '/api/auth/refresh': typeof ApiAuthRefreshRoute
   '/api/blogs/$slug': typeof ApiBlogsSlugRoute
+  '/api/console/github-settings': typeof ApiConsoleGithubSettingsRoute
   '/api/console/notifications': typeof ApiConsoleNotificationsRouteWithChildren
   '/api/console/pages': typeof ApiConsolePagesRouteWithChildren
   '/api/console/profile': typeof ApiConsoleProfileRouteWithChildren
@@ -983,6 +992,7 @@ export interface FileRoutesById {
   '/api/auth/me': typeof ApiAuthMeRoute
   '/api/auth/refresh': typeof ApiAuthRefreshRoute
   '/api/blogs/$slug': typeof ApiBlogsSlugRoute
+  '/api/console/github-settings': typeof ApiConsoleGithubSettingsRoute
   '/api/console/notifications': typeof ApiConsoleNotificationsRouteWithChildren
   '/api/console/pages': typeof ApiConsolePagesRouteWithChildren
   '/api/console/profile': typeof ApiConsoleProfileRouteWithChildren
@@ -1099,6 +1109,7 @@ export interface FileRouteTypes {
     | '/api/auth/me'
     | '/api/auth/refresh'
     | '/api/blogs/$slug'
+    | '/api/console/github-settings'
     | '/api/console/notifications'
     | '/api/console/pages'
     | '/api/console/profile'
@@ -1210,6 +1221,7 @@ export interface FileRouteTypes {
     | '/api/auth/me'
     | '/api/auth/refresh'
     | '/api/blogs/$slug'
+    | '/api/console/github-settings'
     | '/api/console/notifications'
     | '/api/console/pages'
     | '/api/console/profile'
@@ -1324,6 +1336,7 @@ export interface FileRouteTypes {
     | '/api/auth/me'
     | '/api/auth/refresh'
     | '/api/blogs/$slug'
+    | '/api/console/github-settings'
     | '/api/console/notifications'
     | '/api/console/pages'
     | '/api/console/profile'
@@ -1431,6 +1444,7 @@ export interface RootRouteChildren {
   ApiAuthLogoutRoute: typeof ApiAuthLogoutRoute
   ApiAuthMeRoute: typeof ApiAuthMeRoute
   ApiAuthRefreshRoute: typeof ApiAuthRefreshRoute
+  ApiConsoleGithubSettingsRoute: typeof ApiConsoleGithubSettingsRoute
   ApiConsoleNotificationsRoute: typeof ApiConsoleNotificationsRouteWithChildren
   ApiConsolePagesRoute: typeof ApiConsolePagesRouteWithChildren
   ApiConsoleProfileRoute: typeof ApiConsoleProfileRouteWithChildren
@@ -1664,6 +1678,13 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/blogs/$slug'
       preLoaderRoute: typeof ApiBlogsSlugRouteImport
       parentRoute: typeof ApiBlogsRoute
+    }
+    '/api/console/github-settings': {
+      id: '/api/console/github-settings'
+      path: '/api/console/github-settings'
+      fullPath: '/api/console/github-settings'
+      preLoaderRoute: typeof ApiConsoleGithubSettingsRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/console/notifications': {
       id: '/api/console/notifications'
@@ -2686,6 +2707,7 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAuthLogoutRoute: ApiAuthLogoutRoute,
   ApiAuthMeRoute: ApiAuthMeRoute,
   ApiAuthRefreshRoute: ApiAuthRefreshRoute,
+  ApiConsoleGithubSettingsRoute: ApiConsoleGithubSettingsRoute,
   ApiConsoleNotificationsRoute: ApiConsoleNotificationsRouteWithChildren,
   ApiConsolePagesRoute: ApiConsolePagesRouteWithChildren,
   ApiConsoleProfileRoute: ApiConsoleProfileRouteWithChildren,

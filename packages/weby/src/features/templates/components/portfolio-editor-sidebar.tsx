@@ -9,6 +9,7 @@ import {
 } from "@phosphor-icons/react";
 import { useTheme } from "#/shared/hooks/use-theme";
 import { SidebarTooltip } from "#/features/console/components/sidebar-tooltip";
+import { useGitHubSettings } from "../hooks/use-github-settings";
 import { usePortfolioEditorControls, usePortfolioStore } from "./portfolio-editor-context";
 
 export const PortfolioEditorSidebar = () => {
@@ -19,7 +20,9 @@ export const PortfolioEditorSidebar = () => {
   const setIsGuideOpen = usePortfolioStore((s) => s.setIsGuideOpen);
   const setIsHistoryOpen = usePortfolioStore((s) => s.setIsHistoryOpen);
   const setIsGithubConfigOpen = usePortfolioStore((s) => s.setIsGithubConfigOpen);
+  
   const history = usePortfolioStore((s) => s.history);
+  const { data: gitHubSettings } = useGitHubSettings();
 
   const navItemClass = (isActive: boolean) =>
     isActive
@@ -121,7 +124,10 @@ export const PortfolioEditorSidebar = () => {
           type="button"
         >
           <GithubLogoIcon size={12} />
-          github config
+          <span className="flex-1">github config</span>
+          <span
+            className={`w-1.5 h-1.5 ${gitHubSettings?.enabled ? "bg-emerald-400" : t("bg-text-dark/20", "bg-text-light/20")}`}
+          />
         </button>
 
         <SidebarTooltip label="coming soon">

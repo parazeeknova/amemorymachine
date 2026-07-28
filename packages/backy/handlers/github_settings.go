@@ -174,3 +174,21 @@ func (h *Handlers) UpdateGitHubSettings(c *gin.Context) {
 		HasToken: len(tokenBytes) > 0,
 	})
 }
+
+// GetGitHubEnabledStatus returns whether GitHub integration is enabled (public endpoint).
+func (h *Handlers) GetGitHubEnabledStatus(c *gin.Context) {
+	pool := database.GetPool()
+	if pool == nil {
+		c.JSON(http.StatusOK, gin.H{"enabled": true})
+		return
+	}
+	var enabled bool
+	err := pool.QueryRow(c.Request.Context(),
+		`SELECT enabled FROM github_settings ORDER BY created_at LIMIT 1`,
+	).Scan(&enabled)
+	if err != nil {
+		c.JSON(http.StatusOK, gin.H{"enabled": true})
+		return
+	}
+	c.JSON(http.StatusOK, gin.H{"enabled": enabled})
+}

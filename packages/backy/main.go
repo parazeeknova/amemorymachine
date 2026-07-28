@@ -298,6 +298,7 @@ func main() {
 		api.GET("/experience", h.GetExperience)
 		api.GET("/projects", h.GetProjects)
 		api.GET("/github/stats", h.GetGitHubStats)
+		api.GET("/github/enabled", h.GetGitHubEnabledStatus)
 		api.GET("/stats", h.GetStats)
 		api.GET("/blogs", h.GetBlogManifest)
 		api.GET("/blogs/:slug", h.GetBlogPost)
