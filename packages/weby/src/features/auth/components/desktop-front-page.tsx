@@ -1,5 +1,5 @@
 // oxlint-disable no-shadow: fak this shi
-import { useState, useEffect, useLayoutEffect, useRef, useCallback } from "react";
+import { useState, useEffect, useRef, useCallback } from "react";
 import { useNavigate } from "@tanstack/react-router";
 import {
   ArrowRightIcon,
@@ -15,7 +15,6 @@ import { useIsBootstrapped, useBootstrapState } from "#/features/auth/hooks/use-
 
 import { useTheme } from "#/shared/hooks/use-theme";
 import { crossfadeVideo, getHeaderGradient } from "#/shared/lib/video-helpers";
-import { hasCachedSession } from "#/shared/lib/native-storage";
 
 interface GradientTextProps {
   as?: "h1" | "h2" | "h3" | "span";
@@ -136,19 +135,12 @@ export const DesktopFrontPage = () => {
   }, [isDarkMode]);
 
   // If user is already logged in, automatically navigate to console.
-  // Also handle instant redirect from native cached session.
   const isLoggedIn = user !== null;
   useEffect(() => {
     if (isLoggedIn) {
       void navigate({ replace: true, to: "/home" });
     }
   }, [isLoggedIn, navigate]);
-
-  useLayoutEffect(() => {
-    if (hasCachedSession()) {
-      void navigate({ replace: true, to: "/home" });
-    }
-  }, [navigate]);
 
   // Dismiss login dialog on Escape key
   useEffect(() => {
@@ -211,7 +203,7 @@ export const DesktopFrontPage = () => {
     }
   };
 
-  if ((isAuthLoading || isBootstrapLoading) && !hasCachedSession()) {
+  if (isAuthLoading || isBootstrapLoading) {
     return (
       <div
         className={`min-h-screen w-full flex items-center justify-center ${

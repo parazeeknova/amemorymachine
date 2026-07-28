@@ -50,6 +50,7 @@ interface PortfolioState {
   isGuideOpen: boolean;
   isHistoryOpen: boolean;
   history: TemplateSnapshot[];
+  draft: string | null;
 }
 
 interface PortfolioActions {
@@ -58,10 +59,12 @@ interface PortfolioActions {
   setIsHistoryOpen: (v: boolean) => void;
   addHistorySnapshot: (markdown: string) => void;
   clearHistory: () => void;
+  setDraft: (markdown: string | null) => void;
   reset: () => void;
 }
 
 const initialState: PortfolioState = {
+  draft: null,
   history: [],
   isGuideOpen: false,
   isHistoryOpen: false,
@@ -85,6 +88,7 @@ export const usePortfolioStore = create<PortfolioState & PortfolioActions>()(
         })),
       clearHistory: () => set({ history: [] }),
       reset: () => set(initialState),
+      setDraft: (markdown: string | null) => set({ draft: markdown }),
       setIsGuideOpen: (v: boolean) => set({ isGuideOpen: v }),
       setIsHistoryOpen: (v: boolean) => set({ isHistoryOpen: v }),
       setIsPinned: (v: boolean) => set({ isPinned: v }),
@@ -92,6 +96,7 @@ export const usePortfolioStore = create<PortfolioState & PortfolioActions>()(
     {
       name: "verso-portfolio-store",
       partialize: (state) => ({
+        draft: state.draft,
         history: state.history,
       }),
       storage: createJSONStorage(() => safeStorage),

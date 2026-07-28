@@ -129,6 +129,35 @@ describe("usePortfolioStore", () => {
     expect(state.history).toEqual([]);
   });
 
+  it("sets and clears draft", () => {
+    act(() => {
+      usePortfolioStore.getState().setDraft("my draft content");
+    });
+    expect(usePortfolioStore.getState().draft).toBe("my draft content");
+
+    act(() => {
+      usePortfolioStore.getState().setDraft(null);
+    });
+    expect(usePortfolioStore.getState().draft).toBeNull();
+  });
+
+  it("persists draft alongside history", () => {
+    act(() => {
+      usePortfolioStore.getState().setDraft("auto-saved content");
+      usePortfolioStore.getState().addHistorySnapshot("persisted");
+    });
+
+    const storedRaw = localStorage.getItem("verso-portfolio-store");
+    expect(storedRaw).toBeDefined();
+    if (!storedRaw) {
+      return;
+    }
+
+    const stored = JSON.parse(storedRaw);
+    expect(stored.state.draft).toBe("auto-saved content");
+    expect(stored.state.history).toHaveLength(1);
+  });
+
   it("persists history to localStorage", () => {
     act(() => {
       usePortfolioStore.getState().addHistorySnapshot("persisted");
@@ -136,7 +165,9 @@ describe("usePortfolioStore", () => {
 
     const storedRaw = localStorage.getItem("verso-portfolio-store");
     expect(storedRaw).toBeDefined();
-    if (!storedRaw) {return;}
+    if (!storedRaw) {
+      return;
+    }
 
     const stored = JSON.parse(storedRaw);
     expect(stored.state.history).toHaveLength(1);

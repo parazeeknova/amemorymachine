@@ -1,7 +1,7 @@
 import type { AuthUser } from "#/shared/types";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchProtected } from "./fetch-protected";
-import { setAuthCache } from "#/features/auth/lib/auth-cache";
+import { isSessionCacheStale, setAuthCache } from "#/features/auth/lib/auth-cache";
 import { useConsoleStore } from "#/features/console/stores/console-store";
 import { getCachedAuth } from "#/shared/lib/native-storage";
 
@@ -22,7 +22,9 @@ export const useAuth = () => {
   return useQuery<AuthUser | null>({
     queryFn: async ({ signal }) => {
       try {
-        return await fetchProtected<AuthUser>("/api/auth/me", { signal });
+        const user = await fetchProtected<AuthUser>("/api/auth/me", { signal });
+        setAuthCache("authenticated");
+        return user;
       } catch (error) {
         if (error instanceof DOMException && error.name === "AbortError") {
           throw error;
@@ -40,9 +42,9 @@ export const useAuth = () => {
       }
     },
     queryKey: ["auth"],
-    refetchOnMount: hasValidCache,
+    refetchOnMount: hasValidCache || isSessionCacheStale(),
     retry: false,
-    staleTime: hasValidCache ? 0 : 30 * 60 * 1000,
+    staleTime: 5 * 60 * 1000,
     ...(hasValidCache && cachedAuth?.user ? { initialData: cachedAuth.user as AuthUser } : {}),
   });
 };
@@ -87,6 +89,7 @@ export const useAuthActions = () => {
       return data;
     }
 
+    setAuthCache("authenticated");
     await queryClient.invalidateQueries({ queryKey: ["auth"] });
     await queryClient.invalidateQueries({ queryKey: ["bootstrapState"] });
     return data;

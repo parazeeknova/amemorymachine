@@ -1,4 +1,5 @@
 import { WarningCircleIcon } from "@phosphor-icons/react";
+import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import type { ExperienceItem, Profile, Project } from "#/shared/types";
 import { useTheme } from "#/shared/hooks/use-theme";
@@ -27,9 +28,13 @@ export const PortfolioEditor = ({
   const { isDarkMode } = useTheme();
   const t = (dark: string, light: string) => (isDarkMode ? dark : light);
 
-  const [rawMarkdown, setRawMarkdown] = useState(() =>
-    generatePortfolioMarkdown(initialProfile, initialExperiences, initialProjects),
-  );
+  const [rawMarkdown, setRawMarkdown] = useState(() => {
+    const savedDraft = usePortfolioStore.getState().draft;
+    if (savedDraft) {
+      return savedDraft;
+    }
+    return generatePortfolioMarkdown(initialProfile, initialExperiences, initialProjects);
+  });
 
   const undoStack = useRef<string[]>([]);
   const redoStack = useRef<string[]>([]);
@@ -56,6 +61,7 @@ export const PortfolioEditor = ({
       }
       batchTimer.current = setTimeout(() => {
         pushUndo(value);
+        usePortfolioStore.getState().setDraft(value);
       }, 300);
     },
     [pushUndo],
@@ -67,6 +73,8 @@ export const PortfolioEditor = ({
   const setIsHistoryOpen = usePortfolioStore((s) => s.setIsHistoryOpen);
   const setIsPinned = usePortfolioStore((s) => s.setIsPinned);
   const addHistorySnapshot = usePortfolioStore((s) => s.addHistorySnapshot);
+  const setDraft = usePortfolioStore((s) => s.setDraft);
+  const queryClient = useQueryClient();
 
   const { data: templates } = useTemplates();
   const isPinned = templates?.some((tmpl) => tmpl.isDefault) ?? false;
@@ -138,12 +146,13 @@ export const PortfolioEditor = ({
   };
 
   const handlePin = useCallback(() => {
-    if (!validation.isValid) {
+    const current = validatePortfolioMarkdown(rawMarkdown);
+    if (!current.isValid) {
       setFlashToast("cannot pin template: fix syntax errors first");
       return;
     }
 
-    const { parsed } = validation;
+    const { parsed } = current;
     pinTemplate.mutate(
       {
         description: parsed.profile.description,
@@ -162,31 +171,45 @@ export const PortfolioEditor = ({
         },
         onSuccess: () => {
           addHistorySnapshot(rawMarkdown);
+          setDraft(null);
+          queryClient.setQueryData(["profile"], parsed.profile);
+          queryClient.setQueryData(["experience"], parsed.experiences);
+          queryClient.setQueryData(["projects"], parsed.projects);
+          // Also update localStorage caches that the landing page uses as placeholderData
+          try {
+            localStorage.setItem("verso_cache_profile", JSON.stringify(parsed.profile));
+            localStorage.setItem("verso_cache_experience", JSON.stringify(parsed.experiences));
+            localStorage.setItem("verso_cache_projects", JSON.stringify(parsed.projects));
+          } catch {
+            // ignore storage quota errors
+          }
           setFlashToast("portfolio template pinned to / route");
         },
       },
     );
-  }, [validation, pinTemplate, rawMarkdown, addHistorySnapshot]);
+  }, [rawMarkdown, pinTemplate, addHistorySnapshot, setDraft, queryClient]);
 
   const handleReset = useCallback(() => {
     const boilerplate = generatePortfolioMarkdown();
     setRawMarkdown(boilerplate);
+    setDraft(null);
     undoStack.current = [];
     redoStack.current = [];
     lastPushed.current = "";
     setFlashToast("template reset to boilerplate");
-  }, []);
+  }, [setDraft]);
 
   const handleHistoryRestore = useCallback(
     (markdown: string) => {
       setRawMarkdown(markdown);
+      setDraft(markdown);
       undoStack.current = [];
       redoStack.current = [];
       lastPushed.current = "";
       setIsHistoryOpen(false);
       setFlashToast("restored template from history");
     },
-    [setIsHistoryOpen],
+    [setDraft, setIsHistoryOpen],
   );
 
   // Expose controls to the sidebar via external store
