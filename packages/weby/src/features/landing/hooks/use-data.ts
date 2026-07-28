@@ -50,6 +50,8 @@ export const useProfile = () =>
       return data;
     },
     queryKey: ["profile"],
+    refetchOnMount: true,
+    staleTime: 1000 * 30,
   });
 
 export const useExperience = () =>
@@ -61,6 +63,8 @@ export const useExperience = () =>
       return data;
     },
     queryKey: ["experience"],
+    refetchOnMount: true,
+    staleTime: 1000 * 30,
   });
 
 export const useProjects = () =>
@@ -72,6 +76,8 @@ export const useProjects = () =>
       return data;
     },
     queryKey: ["projects"],
+    refetchOnMount: true,
+    staleTime: 1000 * 30,
   });
 
 export const useBlogManifest = () =>
