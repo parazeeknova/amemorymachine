@@ -169,19 +169,19 @@ export const PortfolioEditor = ({
           const msg = error instanceof Error ? error.message : String(error);
           setFlashToast(`failed to pin portfolio template: ${msg}`);
         },
-        onSuccess: () => {
+        onSuccess: async () => {
           addHistorySnapshot(rawMarkdown);
           setDraft(null);
           queryClient.setQueryData(["profile"], parsed.profile);
           queryClient.setQueryData(["experience"], parsed.experiences);
           queryClient.setQueryData(["projects"], parsed.projects);
-          // Also update localStorage caches that the landing page uses as placeholderData
           try {
             localStorage.setItem("verso_cache_profile", JSON.stringify(parsed.profile));
             localStorage.setItem("verso_cache_experience", JSON.stringify(parsed.experiences));
             localStorage.setItem("verso_cache_projects", JSON.stringify(parsed.projects));
+            await fetch("/api/console/video-thumbnails", { method: "DELETE" });
           } catch {
-            // ignore storage quota errors
+            // ignore storage quota errors or non-critical cleanup failures
           }
           setFlashToast("portfolio template pinned to / route");
         },
@@ -255,7 +255,7 @@ export const PortfolioEditor = ({
           <div className="flex-1 relative overflow-hidden bg-transparent">
             <textarea
               aria-label="Portfolio Template Markdown Editor"
-              className={`w-full h-full py-4 px-4 bg-transparent outline-none overflow-auto whitespace-pre-wrap break-words resize-none font-mono text-[12px] ${t(
+              className={`w-full h-full py-4 px-4 bg-transparent outline-none overflow-auto whitespace-pre-wrap wrap-break-word resize-none font-mono text-[12px] ${t(
                 "text-text-dark caret-white placeholder:text-text-dark/20",
                 "text-text-light caret-black placeholder:text-text-light/20",
               )}`}

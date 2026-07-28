@@ -98,3 +98,16 @@ func (h *Handlers) GetVideoThumbnail(c *gin.Context) {
 
 	c.Data(http.StatusOK, "image/jpeg", thumbData)
 }
+
+// DeleteVideoThumbnails removes all cached video thumbnails from RustFS.
+// Called after a template save to clean up stale thumbnails from old video URLs.
+func (h *Handlers) DeleteVideoThumbnails(c *gin.Context) {
+	if h.storageClient != nil {
+		if err := h.storageClient.ClearObjects(c.Request.Context(), thumbnailBucket); err != nil {
+			log.Error().Err(err).Msg("failed to clear video thumbnails")
+			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to clear thumbnails"})
+			return
+		}
+	}
+	c.JSON(http.StatusOK, gin.H{"status": "ok", "message": "video thumbnails cleared"})
+}
