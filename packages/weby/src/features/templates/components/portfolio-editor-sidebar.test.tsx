@@ -1,5 +1,6 @@
 import { fireEvent, render, screen } from "@testing-library/react";
 import { afterEach, beforeEach, describe, expect, it, vi } from "vitest";
+import { createWrapper } from "#/shared/test/utils";
 import { PortfolioEditorSidebar } from "./portfolio-editor-sidebar";
 import { usePortfolioStore } from "../stores/portfolio-store";
 import { setPortfolioEditorControls } from "./portfolio-editor-context";
@@ -16,6 +17,8 @@ const setMockControls = (overrides: Partial<PortfolioEditorControls> = {}) => {
     ...overrides,
   });
 };
+
+const renderSidebar = () => render(<PortfolioEditorSidebar />, { wrapper: createWrapper() });
 
 describe("PortfolioEditorSidebar", () => {
   beforeEach(() => {
@@ -35,13 +38,13 @@ describe("PortfolioEditorSidebar", () => {
   });
 
   it("renders loading state when no controls are set", () => {
-    render(<PortfolioEditorSidebar />);
+    renderSidebar();
     expect(screen.getByText("loading...")).toBeDefined();
   });
 
   it("renders all sidebar options when controls are set", () => {
     setMockControls();
-    render(<PortfolioEditorSidebar />);
+    renderSidebar();
 
     expect(screen.getByText("back")).toBeDefined();
     expect(screen.getByText("portfolio")).toBeDefined();
@@ -55,7 +58,7 @@ describe("PortfolioEditorSidebar", () => {
 
   it("shows active in accent color when template is pinned", () => {
     setMockControls({ isPinned: true });
-    render(<PortfolioEditorSidebar />);
+    renderSidebar();
 
     const activeEl = screen.getByText("active");
     expect(activeEl).toBeDefined();
@@ -64,7 +67,7 @@ describe("PortfolioEditorSidebar", () => {
 
   it("shows inactive state when template is not pinned", () => {
     setMockControls();
-    render(<PortfolioEditorSidebar />);
+    renderSidebar();
 
     expect(screen.getByText("inactive")).toBeDefined();
   });
@@ -80,7 +83,7 @@ describe("PortfolioEditorSidebar", () => {
       ],
     });
     setMockControls();
-    render(<PortfolioEditorSidebar />);
+    renderSidebar();
 
     // The badge in the save button shows the history count
     const badge = screen.getByText("1");
@@ -92,7 +95,7 @@ describe("PortfolioEditorSidebar", () => {
     const handlePin = vi.fn();
     setMockControls({ handlePin });
 
-    render(<PortfolioEditorSidebar />);
+    renderSidebar();
     fireEvent.click(screen.getByText("save"));
 
     expect(handlePin).toHaveBeenCalledOnce();
@@ -102,7 +105,7 @@ describe("PortfolioEditorSidebar", () => {
     const handleReset = vi.fn();
     setMockControls({ handleReset });
 
-    render(<PortfolioEditorSidebar />);
+    renderSidebar();
     fireEvent.click(screen.getByText("reset to boilerplate"));
 
     expect(handleReset).toHaveBeenCalledOnce();
@@ -111,7 +114,7 @@ describe("PortfolioEditorSidebar", () => {
   it("opens format guide when format guide button is clicked", () => {
     setMockControls();
 
-    render(<PortfolioEditorSidebar />);
+    renderSidebar();
     fireEvent.click(screen.getByText("format guide"));
 
     expect(usePortfolioStore.getState().isGuideOpen).toBe(true);
@@ -119,7 +122,7 @@ describe("PortfolioEditorSidebar", () => {
 
   it("disables template history when no history exists", () => {
     setMockControls();
-    render(<PortfolioEditorSidebar />);
+    renderSidebar();
 
     const historyBtn = screen.getByText("template history").closest("button");
     expect(historyBtn).toBeDefined();
@@ -137,7 +140,7 @@ describe("PortfolioEditorSidebar", () => {
       ],
     });
     setMockControls();
-    render(<PortfolioEditorSidebar />);
+    renderSidebar();
 
     const historyBtn = screen.getByText("template history").closest("button");
     expect(historyBtn).toBeDefined();
@@ -146,7 +149,7 @@ describe("PortfolioEditorSidebar", () => {
 
   it("disables save button while saving", () => {
     setMockControls({ isSaving: true });
-    render(<PortfolioEditorSidebar />);
+    renderSidebar();
 
     const saveBtn = screen.getByText("save").closest("button");
     expect(saveBtn?.disabled).toBe(true);
@@ -156,7 +159,7 @@ describe("PortfolioEditorSidebar", () => {
     const onBack = vi.fn();
     setMockControls({ onBack });
 
-    render(<PortfolioEditorSidebar />);
+    renderSidebar();
     fireEvent.click(screen.getByText("back"));
 
     expect(onBack).toHaveBeenCalledOnce();
@@ -164,7 +167,7 @@ describe("PortfolioEditorSidebar", () => {
 
   it("disables presets button", () => {
     setMockControls();
-    render(<PortfolioEditorSidebar />);
+    renderSidebar();
 
     const presetsBtn = screen.getByText("presets").closest("button");
     expect(presetsBtn).toBeDefined();

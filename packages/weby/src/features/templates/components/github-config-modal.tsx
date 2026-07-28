@@ -121,8 +121,12 @@ export const GithubConfigModal = ({ isOpen, onClose }: GithubConfigModalProps) =
                 type="button"
               >
                 {(() => {
-                  if (showTokenInput) {return "hide";}
-                  if (settings?.hasToken) {return "manage";}
+                  if (showTokenInput) {
+                    return "hide";
+                  }
+                  if (settings?.hasToken) {
+                    return "manage";
+                  }
                   return "add";
                 })()}
               </button>

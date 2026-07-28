@@ -20,7 +20,7 @@ export const PortfolioEditorSidebar = () => {
   const setIsGuideOpen = usePortfolioStore((s) => s.setIsGuideOpen);
   const setIsHistoryOpen = usePortfolioStore((s) => s.setIsHistoryOpen);
   const setIsGithubConfigOpen = usePortfolioStore((s) => s.setIsGithubConfigOpen);
-  
+
   const history = usePortfolioStore((s) => s.history);
   const { data: gitHubSettings } = useGitHubSettings();
 
