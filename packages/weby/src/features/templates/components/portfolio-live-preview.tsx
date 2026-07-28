@@ -4,6 +4,7 @@ import type { ExperienceItem, Link, Profile, Project } from "#/shared/types";
 import type { ParsedPortfolio, ValidationError } from "../lib/portfolio-markdown";
 import { markdownToHtml } from "#/features/blog/lib/markdown-to-html";
 import { GitHubActivity } from "#/features/github/components/calendar";
+import { GitHubStats } from "#/features/github/components/stats";
 import { useGitHubSettings } from "../hooks/use-github-settings";
 
 interface PortfolioLivePreviewProps {
@@ -316,6 +317,7 @@ export const PortfolioLivePreview = memo(
               </div>
               <div className="scale-75 origin-top-left">
                 <GitHubActivity username={ghSettings.username || "parazeeknova"} />
+                <GitHubStats />
               </div>
             </div>
           )}
