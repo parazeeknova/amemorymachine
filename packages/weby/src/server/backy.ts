@@ -943,3 +943,9 @@ export const pinTemplate = (body: unknown, cookieHeader?: string | null) =>
     },
     method: "POST",
   });
+
+export const unpinTemplate = (cookieHeader?: string | null) =>
+  fetchBacky<{ message: string; status: string }>("console/templates", {
+    headers: cookieHeader ? { Cookie: cookieHeader } : {},
+    method: "DELETE",
+  });
