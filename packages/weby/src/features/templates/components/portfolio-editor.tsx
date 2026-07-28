@@ -94,62 +94,6 @@ export const PortfolioEditor = ({
   const deferredMarkdown = useDeferredValue(rawMarkdown);
   const validation = useMemo(() => validatePortfolioMarkdown(deferredMarkdown), [deferredMarkdown]);
 
-  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
-    if (e.key === "Tab") {
-      e.preventDefault();
-      const target = e.currentTarget;
-      const start = target.selectionStart;
-      const end = target.selectionEnd;
-      const val = target.value;
-      const updated = `${val.slice(0, start)}  ${val.slice(end)}`;
-      setRawMarkdown(updated);
-      pushUndo(updated);
-      redoStack.current = [];
-      setTimeout(() => {
-        target.selectionStart = start + 2;
-        target.selectionEnd = start + 2;
-      }, 0);
-      return;
-    }
-
-    if ((e.metaKey || e.ctrlKey) && e.key === "z" && !e.shiftKey) {
-      e.preventDefault();
-      if (batchTimer.current) {
-        clearTimeout(batchTimer.current);
-        batchTimer.current = null;
-        pushUndo(e.currentTarget.value);
-      }
-      if (undoStack.current.length > 0) {
-        const current = e.currentTarget.value;
-        const prev = undoStack.current.pop();
-        if (prev) {
-          redoStack.current.push(current);
-          setRawMarkdown(prev);
-          lastPushed.current = prev;
-        }
-      }
-      return;
-    }
-
-    if ((e.metaKey || e.ctrlKey) && (e.key === "y" || (e.key === "z" && e.shiftKey))) {
-      e.preventDefault();
-      if (batchTimer.current) {
-        clearTimeout(batchTimer.current);
-        batchTimer.current = null;
-        pushUndo(e.currentTarget.value);
-      }
-      if (redoStack.current.length > 0) {
-        const current = e.currentTarget.value;
-        const next = redoStack.current.pop();
-        if (next) {
-          undoStack.current.push(current);
-          setRawMarkdown(next);
-          lastPushed.current = next;
-        }
-      }
-    }
-  };
-
   const handlePin = useCallback(() => {
     if (rawMarkdown === (lastSavedMarkdown ?? "")) {
       setFlashToast("no changes to save");
@@ -209,6 +153,68 @@ export const PortfolioEditor = ({
     setLastSavedMarkdown,
     queryClient,
   ]);
+
+  const handleKeyDown = (e: React.KeyboardEvent<HTMLTextAreaElement>) => {
+    if (e.key === "Tab") {
+      e.preventDefault();
+      const target = e.currentTarget;
+      const start = target.selectionStart;
+      const end = target.selectionEnd;
+      const val = target.value;
+      const updated = `${val.slice(0, start)}  ${val.slice(end)}`;
+      setRawMarkdown(updated);
+      pushUndo(updated);
+      redoStack.current = [];
+      setTimeout(() => {
+        target.selectionStart = start + 2;
+        target.selectionEnd = start + 2;
+      }, 0);
+      return;
+    }
+
+    if ((e.metaKey || e.ctrlKey) && e.key === "s") {
+      e.preventDefault();
+      handlePin();
+      return;
+    }
+
+    if ((e.metaKey || e.ctrlKey) && e.key === "z" && !e.shiftKey) {
+      e.preventDefault();
+      if (batchTimer.current) {
+        clearTimeout(batchTimer.current);
+        batchTimer.current = null;
+        pushUndo(e.currentTarget.value);
+      }
+      if (undoStack.current.length > 0) {
+        const current = e.currentTarget.value;
+        const prev = undoStack.current.pop();
+        if (prev) {
+          redoStack.current.push(current);
+          setRawMarkdown(prev);
+          lastPushed.current = prev;
+        }
+      }
+      return;
+    }
+
+    if ((e.metaKey || e.ctrlKey) && (e.key === "y" || (e.key === "z" && e.shiftKey))) {
+      e.preventDefault();
+      if (batchTimer.current) {
+        clearTimeout(batchTimer.current);
+        batchTimer.current = null;
+        pushUndo(e.currentTarget.value);
+      }
+      if (redoStack.current.length > 0) {
+        const current = e.currentTarget.value;
+        const next = redoStack.current.pop();
+        if (next) {
+          undoStack.current.push(current);
+          setRawMarkdown(next);
+          lastPushed.current = next;
+        }
+      }
+    }
+  };
 
   const handleReset = useCallback(() => {
     const boilerplate = generatePortfolioMarkdown();
