@@ -235,9 +235,60 @@ export const PortfolioEditor = ({
       redoStack.current = [];
       lastPushed.current = "";
       setIsHistoryOpen(false);
-      setFlashToast("restored template from history");
+
+      const parsed = validatePortfolioMarkdown(markdown);
+      if (parsed.isValid) {
+        pinTemplate.mutate(
+          {
+            description: parsed.parsed.profile.description,
+            email: parsed.parsed.profile.email ?? "",
+            experiences: parsed.parsed.experiences,
+            links: parsed.parsed.profile.links,
+            name: parsed.parsed.profile.name,
+            projects: parsed.parsed.projects,
+            tagline: parsed.parsed.profile.tagline,
+            username: parsed.parsed.profile.username ?? "",
+          },
+          {
+            onError: (error) => {
+              const msg = error instanceof Error ? error.message : String(error);
+              setFlashToast(`restored but failed to save: ${msg}`);
+            },
+            onSuccess: () => {
+              addHistorySnapshot(markdown);
+              setLastSavedMarkdown(markdown);
+              queryClient.setQueryData(["profile"], parsed.parsed.profile);
+              queryClient.setQueryData(["experience"], parsed.parsed.experiences);
+              queryClient.setQueryData(["projects"], parsed.parsed.projects);
+              try {
+                localStorage.setItem("verso_cache_profile", JSON.stringify(parsed.parsed.profile));
+                localStorage.setItem(
+                  "verso_cache_experience",
+                  JSON.stringify(parsed.parsed.experiences),
+                );
+                localStorage.setItem(
+                  "verso_cache_projects",
+                  JSON.stringify(parsed.parsed.projects),
+                );
+              } catch {
+                // ignore storage quota errors
+              }
+              setFlashToast("restored and saved template from history");
+            },
+          },
+        );
+      } else {
+        setFlashToast("restored template from history (fix errors to save)");
+      }
     },
-    [setDraft, setLastSavedMarkdown, setIsHistoryOpen],
+    [
+      setDraft,
+      setLastSavedMarkdown,
+      setIsHistoryOpen,
+      pinTemplate,
+      addHistorySnapshot,
+      queryClient,
+    ],
   );
 
   // Expose controls to the sidebar via external store
