@@ -104,7 +104,7 @@ export const ProfileSection = ({ profile, isPending }: ProfileSectionProps) => {
         <p className="mb-6 text-sm sm:mb-8 sm:text-base">
           {portfolio && (
             <AnimatedLink href={portfolio.url} rel="noopener noreferrer" target="_blank">
-              {portfolio.label}
+              {profile?.tagline || portfolio.label}
             </AnimatedLink>
           )}
           {portfolio && profile?.email && " · "}
