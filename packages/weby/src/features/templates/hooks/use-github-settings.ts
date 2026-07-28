@@ -4,6 +4,7 @@ interface GitHubSettings {
   enabled: boolean;
   username: string;
   hasToken: boolean;
+  tokenUpdatedAt?: string;
 }
 
 const fetchJson = async <T>(url: string, init?: RequestInit): Promise<T> => {

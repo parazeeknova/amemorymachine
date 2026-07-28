@@ -4,6 +4,7 @@ CREATE TABLE IF NOT EXISTS github_settings (
     enabled BOOLEAN NOT NULL DEFAULT true,
     token_encrypted BYTEA,
     username TEXT NOT NULL DEFAULT 'parazeeknova',
+    token_updated_at TIMESTAMPTZ,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
 );

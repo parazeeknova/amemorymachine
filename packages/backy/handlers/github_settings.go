@@ -9,6 +9,7 @@ import (
 	"net/http"
 	"os"
 	"strings"
+	"time"
 
 	"verso/backy/database"
 
@@ -68,9 +69,10 @@ func decryptToken(ciphertext []byte) (string, error) {
 }
 
 type GitHubSettings struct {
-	Enabled  bool   `json:"enabled"`
-	Username string `json:"username"`
-	HasToken bool   `json:"hasToken"`
+	Enabled        bool    `json:"enabled"`
+	Username       string  `json:"username"`
+	HasToken       bool    `json:"hasToken"`
+	TokenUpdatedAt *string `json:"tokenUpdatedAt,omitempty"`
 }
 
 func (h *Handlers) GetGitHubSettings(c *gin.Context) {
@@ -78,19 +80,27 @@ func (h *Handlers) GetGitHubSettings(c *gin.Context) {
 	var enabled bool
 	var username string
 	var tokenEncrypted []byte
+	var tokenUpdatedAt *time.Time
 
 	err := pool.QueryRow(c.Request.Context(),
-		`SELECT enabled, username, token_encrypted FROM github_settings ORDER BY created_at LIMIT 1`,
-	).Scan(&enabled, &username, &tokenEncrypted)
+		`SELECT enabled, username, token_encrypted, token_updated_at FROM github_settings ORDER BY created_at LIMIT 1`,
+	).Scan(&enabled, &username, &tokenEncrypted, &tokenUpdatedAt)
 	if err != nil {
 		c.JSON(http.StatusOK, GitHubSettings{Enabled: true, Username: "parazeeknova"})
 		return
 	}
 
+	var tokenUpdatedAtStr *string
+	if tokenUpdatedAt != nil {
+		s := tokenUpdatedAt.Format(time.RFC3339)
+		tokenUpdatedAtStr = &s
+	}
+
 	c.JSON(http.StatusOK, GitHubSettings{
-		Enabled:  enabled,
-		Username: username,
-		HasToken: len(tokenEncrypted) > 0,
+		Enabled:        enabled,
+		Username:       username,
+		HasToken:       len(tokenEncrypted) > 0,
+		TokenUpdatedAt: tokenUpdatedAtStr,
 	})
 }
 
@@ -142,7 +152,9 @@ func (h *Handlers) UpdateGitHubSettings(c *gin.Context) {
 	if req.Username != nil {
 		username = *req.Username
 	}
+	var tokenChanged bool
 	if req.Token != nil {
+		tokenChanged = true
 		if *req.Token == "" {
 			tokenBytes = nil
 		} else {
@@ -155,8 +167,13 @@ func (h *Handlers) UpdateGitHubSettings(c *gin.Context) {
 		}
 	}
 
+	var tokenUpdatedAtUpdate string
+	if tokenChanged {
+		tokenUpdatedAtUpdate = ", token_updated_at = NOW()"
+	}
+
 	_, err = pool.Exec(c.Request.Context(),
-		`UPDATE github_settings SET enabled = $1, username = $2, token_encrypted = $3, updated_at = NOW()`,
+		`UPDATE github_settings SET enabled = $1, username = $2, token_encrypted = $3, updated_at = NOW()`+tokenUpdatedAtUpdate,
 		enabled, username, tokenBytes,
 	)
 	if err != nil {
@@ -168,10 +185,23 @@ func (h *Handlers) UpdateGitHubSettings(c *gin.Context) {
 		h.statsCache.Clear()
 	}
 
+	var updatedAt *time.Time
+	var updatedAtStr *string
+	if tokenChanged {
+		_ = pool.QueryRow(c.Request.Context(),
+			`SELECT token_updated_at FROM github_settings ORDER BY created_at LIMIT 1`,
+		).Scan(&updatedAt)
+		if updatedAt != nil {
+			s := updatedAt.Format(time.RFC3339)
+			updatedAtStr = &s
+		}
+	}
+
 	c.JSON(http.StatusOK, GitHubSettings{
-		Enabled:  enabled,
-		Username: username,
-		HasToken: len(tokenBytes) > 0,
+		Enabled:        enabled,
+		Username:       username,
+		HasToken:       len(tokenBytes) > 0,
+		TokenUpdatedAt: updatedAtStr,
 	})
 }
 

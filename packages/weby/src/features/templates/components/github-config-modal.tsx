@@ -1,6 +1,7 @@
 import { GithubLogoIcon, XIcon } from "@phosphor-icons/react";
 import { useState } from "react";
 import { useTheme } from "#/shared/hooks/use-theme";
+import { GitHubStats } from "#/features/github/components/stats";
 import { useGitHubSettings, useUpdateGitHubSettings } from "../hooks/use-github-settings";
 
 interface GithubConfigModalProps {
@@ -8,6 +9,18 @@ interface GithubConfigModalProps {
   onClose: () => void;
 }
 
+const relativeTime = (iso?: string) => {
+  if (!iso) {return "";}
+  const diff = Date.now() - new Date(iso).getTime();
+  const mins = Math.floor(diff / 60_000);
+  if (mins < 1) {return "just now";}
+  if (mins < 60) {return `${mins}m ago`;}
+  const hours = Math.floor(mins / 60);
+  if (hours < 24) {return `${hours}h ago`;}
+  return `${Math.floor(hours / 24)}d ago`;
+};
+
+// eslint-disable-next-line complexity
 export const GithubConfigModal = ({ isOpen, onClose }: GithubConfigModalProps) => {
   const { isDarkMode } = useTheme();
   const t = (dark: string, light: string) => (isDarkMode ? dark : light);
@@ -133,8 +146,8 @@ export const GithubConfigModal = ({ isOpen, onClose }: GithubConfigModalProps) =
             </div>
             <p className={`text-[10px] ${t("text-text-dark/40", "text-text-light/40")}`}>
               {settings?.hasToken
-                ? "api key configured &bull; private repos included"
-                : "no key &bull; public data only"}
+                ? `ghp_**** · valid · ${relativeTime(settings.tokenUpdatedAt)}`
+                : "no key · public data only"}
             </p>
 
             {showTokenInput && (
@@ -171,6 +184,18 @@ export const GithubConfigModal = ({ isOpen, onClose }: GithubConfigModalProps) =
               </>
             )}
           </div>
+
+          {settings?.hasToken && (
+            <>
+              <div className={`border-t ${t("border-border-dark", "border-border-light")}`} />
+              <div>
+                <span className="text-[11px] font-medium lowercase">preview</span>
+                <div className="mt-2 scale-75 origin-top-left">
+                  <GitHubStats />
+                </div>
+              </div>
+            </>
+          )}
         </div>
       </div>
     </div>
