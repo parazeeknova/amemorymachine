@@ -146,7 +146,7 @@ const Home = function Home() {
 
   useEffect(() => {
     if (profile) {
-      logger.info({ name: profile.name, tagline: profile.tagline }, "landing page profile data");
+      logger.info(profile, "landing page profile data");
     }
   }, [profile]);
   const { data: manifest = [] } = useBlogManifest();
