@@ -3,6 +3,7 @@ import { useTheme } from "#/shared/hooks/use-theme";
 import type { ExperienceItem, Link, Profile, Project } from "#/shared/types";
 import type { ParsedPortfolio, ValidationError } from "../lib/portfolio-markdown";
 import { markdownToHtml } from "#/features/blog/lib/markdown-to-html";
+import { GitHubActivity } from "#/features/github/components/calendar";
 import { useGitHubSettings } from "../hooks/use-github-settings";
 
 interface PortfolioLivePreviewProps {
@@ -313,13 +314,8 @@ export const PortfolioLivePreview = memo(
                   github activity
                 </span>
               </div>
-              <div
-                className={`p-4 border border-dashed text-center ${isDarkMode ? "border-border-dark/30 text-text-dark/25" : "border-border-light/30 text-text-light/25"}`}
-              >
-                <p className="text-[10px] lowercase">
-                  contribution graph &amp; stats —{" "}
-                  {ghSettings.hasToken ? "private repos included" : "public data"}
-                </p>
+              <div className="scale-75 origin-top-left">
+                <GitHubActivity username={ghSettings.username || "parazeeknova"} />
               </div>
             </div>
           )}
