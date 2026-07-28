@@ -1,4 +1,3 @@
-import { WarningCircleIcon } from "@phosphor-icons/react";
 import { useQueryClient } from "@tanstack/react-query";
 import { useCallback, useDeferredValue, useEffect, useMemo, useRef, useState } from "react";
 import type { ExperienceItem, Profile, Project } from "#/shared/types";
@@ -270,14 +269,9 @@ export const PortfolioEditor = ({
           )}`}
         >
           {!validation.isValid && (
-            <div className="p-2 border-b border-rose-500/20 bg-rose-500/5 text-[10px] font-mono text-rose-400 space-y-0.5 shrink-0">
-              <div className="font-semibold flex items-center gap-1">
-                <WarningCircleIcon size={11} /> syntax error in template format:
-              </div>
+            <div className="px-2 py-1 border-b border-rose-500/20 bg-rose-500/5 text-[10px] font-mono text-rose-400 shrink-0">
               {validation.errors.map((err, idx) => (
-                <div key={`${err}-${idx}`} className="pl-3">
-                  &bull; {err}
-                </div>
+                <div key={`${err}-${idx}`}>{err}</div>
               ))}
             </div>
           )}
