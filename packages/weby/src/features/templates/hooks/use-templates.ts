@@ -45,6 +45,9 @@ export const usePinTemplate = () => {
       }),
     onSuccess: () => {
       queryClient.invalidateQueries({ queryKey: ["console-templates"] });
+      queryClient.invalidateQueries({ queryKey: ["profile"] });
+      queryClient.invalidateQueries({ queryKey: ["experience"] });
+      queryClient.invalidateQueries({ queryKey: ["projects"] });
     },
   });
 };
