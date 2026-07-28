@@ -4,6 +4,7 @@ import {
   BookOpenIcon,
   ClockCounterClockwiseIcon,
   FloppyDiskIcon,
+  GithubLogoIcon,
   ShapesIcon,
 } from "@phosphor-icons/react";
 import { useTheme } from "#/shared/hooks/use-theme";
@@ -17,6 +18,7 @@ export const PortfolioEditorSidebar = () => {
   const isPinned = ctrl?.isPinned ?? false;
   const setIsGuideOpen = usePortfolioStore((s) => s.setIsGuideOpen);
   const setIsHistoryOpen = usePortfolioStore((s) => s.setIsHistoryOpen);
+  const setIsGithubConfigOpen = usePortfolioStore((s) => s.setIsGithubConfigOpen);
   const history = usePortfolioStore((s) => s.history);
 
   const navItemClass = (isActive: boolean) =>
@@ -112,6 +114,15 @@ export const PortfolioEditorSidebar = () => {
             template history
           </button>
         </SidebarTooltip>
+
+        <button
+          className={`flex w-full items-center gap-2 px-1 py-1.5 text-left text-[11px] lowercase ${navItemClass(false)}`}
+          onClick={() => setIsGithubConfigOpen(true)}
+          type="button"
+        >
+          <GithubLogoIcon size={12} />
+          github config
+        </button>
 
         <SidebarTooltip label="coming soon">
           <button

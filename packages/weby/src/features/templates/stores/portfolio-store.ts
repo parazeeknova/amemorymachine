@@ -40,6 +40,7 @@ interface PortfolioState {
   isPinned: boolean;
   isGuideOpen: boolean;
   isHistoryOpen: boolean;
+  isGithubConfigOpen: boolean;
   history: TemplateSnapshot[];
   draft: string | null;
   lastSavedMarkdown: string | null;
@@ -49,6 +50,7 @@ interface PortfolioActions {
   setIsPinned: (v: boolean) => void;
   setIsGuideOpen: (v: boolean) => void;
   setIsHistoryOpen: (v: boolean) => void;
+  setIsGithubConfigOpen: (v: boolean) => void;
   addHistorySnapshot: (markdown: string) => void;
   clearHistory: () => void;
   setDraft: (markdown: string | null) => void;
@@ -59,6 +61,7 @@ interface PortfolioActions {
 const initialState: PortfolioState = {
   draft: null,
   history: [],
+  isGithubConfigOpen: false,
   isGuideOpen: false,
   isHistoryOpen: false,
   isPinned: false,
@@ -83,6 +86,7 @@ export const usePortfolioStore = create<PortfolioState & PortfolioActions>()(
       clearHistory: () => set({ history: [] }),
       reset: () => set(initialState),
       setDraft: (markdown: string | null) => set({ draft: markdown }),
+      setIsGithubConfigOpen: (v: boolean) => set({ isGithubConfigOpen: v }),
       setIsGuideOpen: (v: boolean) => set({ isGuideOpen: v }),
       setIsHistoryOpen: (v: boolean) => set({ isHistoryOpen: v }),
       setIsPinned: (v: boolean) => set({ isPinned: v }),

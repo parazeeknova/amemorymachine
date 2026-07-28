@@ -8,6 +8,7 @@ import { generatePortfolioMarkdown, validatePortfolioMarkdown } from "../lib/por
 import { usePortfolioStore } from "../stores/portfolio-store";
 import { setPortfolioEditorControls } from "./portfolio-editor-context";
 import { FormatGuideModal } from "./format-guide-modal";
+import { GithubConfigModal } from "./github-config-modal";
 import { TemplateHistoryModal } from "./template-history-modal";
 import { PortfolioLivePreview } from "./portfolio-live-preview";
 import { usePinTemplate, useTemplates } from "../hooks/use-templates";
@@ -76,6 +77,8 @@ export const PortfolioEditor = ({
   const setIsGuideOpen = usePortfolioStore((s) => s.setIsGuideOpen);
   const isHistoryOpen = usePortfolioStore((s) => s.isHistoryOpen);
   const setIsHistoryOpen = usePortfolioStore((s) => s.setIsHistoryOpen);
+  const isGithubConfigOpen = usePortfolioStore((s) => s.isGithubConfigOpen);
+  const setIsGithubConfigOpen = usePortfolioStore((s) => s.setIsGithubConfigOpen);
   const setIsPinned = usePortfolioStore((s) => s.setIsPinned);
   const addHistorySnapshot = usePortfolioStore((s) => s.addHistorySnapshot);
   const setDraft = usePortfolioStore((s) => s.setDraft);
@@ -366,6 +369,7 @@ export const PortfolioEditor = ({
         onClose={() => setIsHistoryOpen(false)}
         onRestore={handleHistoryRestore}
       />
+      <GithubConfigModal isOpen={isGithubConfigOpen} onClose={() => setIsGithubConfigOpen(false)} />
     </div>
   );
 };
