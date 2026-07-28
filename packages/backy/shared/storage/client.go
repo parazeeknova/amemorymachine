@@ -36,7 +36,7 @@ type Client struct {
 func NewClient() (*Client, error) {
 	endpoint := os.Getenv("RUSTFS_ENDPOINT")
 	if endpoint == "" {
-		endpoint = "http://localhost:90000"
+		endpoint = "http://localhost:6000"
 	}
 
 	accessKey := os.Getenv("RUSTFS_ACCESS_KEY")

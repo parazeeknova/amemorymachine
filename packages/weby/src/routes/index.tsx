@@ -183,7 +183,9 @@ const Home = function Home() {
   const videoActiveNext = useRef(false);
 
   useEffect(() => {
-    const src = isDarkMode ? "/header.webm" : "/footer.webm";
+    const darkSrc = profile?.darkVideo || "/header.webm";
+    const lightSrc = profile?.lightVideo || "/footer.webm";
+    const src = isDarkMode ? darkSrc : lightSrc;
     const safePlay = async (video: HTMLVideoElement) => {
       try {
         await video.play();
@@ -214,7 +216,7 @@ const Home = function Home() {
         nextVideoRef.current.style.opacity = "0";
       }
     }
-  }, [isDarkMode]);
+  }, [isDarkMode, profile?.darkVideo, profile?.lightVideo]);
 
   const toggleTheme = useCallback(() => {
     toggleThemeStore();
@@ -222,7 +224,9 @@ const Home = function Home() {
 
   const animatedToggleTheme = useCallback(() => {
     const nextDark = !isDarkMode;
-    const nextSrc = nextDark ? "/header.webm" : "/footer.webm";
+    const darkSrc = profile?.darkVideo || "/header.webm";
+    const lightSrc = profile?.lightVideo || "/footer.webm";
+    const nextSrc = nextDark ? darkSrc : lightSrc;
     const fromRef = videoActiveNext.current ? nextVideoRef : videoRef;
     const toRef = videoActiveNext.current ? videoRef : nextVideoRef;
 
@@ -230,7 +234,7 @@ const Home = function Home() {
       videoActiveNext.current = !videoActiveNext.current;
       toggleTheme();
     });
-  }, [isDarkMode, toggleTheme]);
+  }, [isDarkMode, profile?.darkVideo, profile?.lightVideo, toggleTheme]);
 
   const handleProjectDetail = useCallback(
     (project: { productUrl?: string; readmeUrl?: string; repoUrl?: string; title: string }) => {
@@ -341,7 +345,7 @@ const Home = function Home() {
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
           style={{ opacity: 0 }}
-          src="/footer.webm"
+          src={profile?.lightVideo || "/footer.webm"}
         />
         <video
           ref={videoRef}
@@ -350,7 +354,7 @@ const Home = function Home() {
           muted
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
-          src="/header.webm"
+          src={profile?.darkVideo || "/header.webm"}
         />
         <div
           ref={gradientRef}
