@@ -3,6 +3,8 @@ import { gsap } from "gsap";
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
 import { GitHubActivity } from "#/features/github/components/calendar";
 import { GitHubStats } from "#/features/github/components/stats";
+import { CodeforcesCard } from "#/features/codeforces/components/card";
+import { useCFSettings } from "#/features/templates/hooks/use-cf-settings";
 import {
   ExperienceSection,
   ProfileSection,
@@ -97,6 +99,7 @@ const useThemeButtonHover = (): ThemeButtonRefs => {
   return { buttonRef, indicatorRef };
 };
 
+// eslint-disable-next-line complexity
 const Home = function Home() {
   const isDesktop = useIsDesktop();
   const { isDarkMode, toggleTheme: toggleThemeStore } = useTheme();
@@ -278,6 +281,17 @@ const Home = function Home() {
     return "parazeeknova";
   })();
 
+  const { data: cfSettings } = useCFSettings();
+
+  useEffect(() => {
+    if (cfSettings) {
+      logger.info(
+        { enabled: cfSettings.enabled, username: cfSettings.username },
+        "landing: cf settings loaded",
+      );
+    }
+  }, [cfSettings]);
+
   if (viewMode === "blogs") {
     const activeSlug = selectedBlogSlug ?? firstPostSlug ?? "";
     return (
@@ -416,6 +430,12 @@ const Home = function Home() {
             <GitHubStats />
           </GitHubActivity>
         </ClientOnly>
+
+        {cfSettings?.enabled && (
+          <ClientOnly>
+            <CodeforcesCard username={cfSettings?.username || "parazeeknova"} />
+          </ClientOnly>
+        )}
 
         <div className="shrink-0 flex items-center justify-between pt-2">
           <SocialLinks profile={profile} />

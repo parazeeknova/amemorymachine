@@ -48,28 +48,28 @@ func (h *Handlers) GetVideoThumbnail(c *gin.Context) {
 		return
 	}
 	tmpPath := tmpFile.Name()
-	defer os.Remove(tmpPath)
+	defer func() { _ = os.Remove(tmpPath) }()
 
 	resp, err := http.Get(videoURL)
 	if err != nil {
-		tmpFile.Close()
+		_ = tmpFile.Close()
 		c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("failed to fetch video: %v", err)})
 		return
 	}
-	defer resp.Body.Close()
+	defer func() { _ = resp.Body.Close() }()
 
 	if resp.StatusCode != http.StatusOK {
-		tmpFile.Close()
+		_ = tmpFile.Close()
 		c.JSON(http.StatusBadRequest, gin.H{"error": fmt.Sprintf("video fetch returned status %d", resp.StatusCode)})
 		return
 	}
 
 	if _, err := io.Copy(tmpFile, resp.Body); err != nil {
-		tmpFile.Close()
+		_ = tmpFile.Close()
 		c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("failed to download video: %v", err)})
 		return
 	}
-	tmpFile.Close()
+	_ = tmpFile.Close()
 
 	// Extract thumbnail frame at 1 second using ffmpeg, pipe JPEG to stdout
 	cmd := exec.Command("ffmpeg",

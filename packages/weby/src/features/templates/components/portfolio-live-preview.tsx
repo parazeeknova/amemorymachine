@@ -6,6 +6,8 @@ import { markdownToHtml } from "#/features/blog/lib/markdown-to-html";
 import { GitHubActivity } from "#/features/github/components/calendar";
 import { GitHubStats } from "#/features/github/components/stats";
 import { useGitHubSettings } from "../hooks/use-github-settings";
+import { useCFSettings } from "../hooks/use-cf-settings";
+import { CodeforcesCard } from "#/features/codeforces/components/card";
 
 interface PortfolioLivePreviewProps {
   errors: ValidationError[];
@@ -208,11 +210,13 @@ const PreviewSocialLinks = memo(
 );
 
 export const PortfolioLivePreview = memo(
+  // eslint-disable-next-line complexity
   ({ errors, isValid, parsedData }: PortfolioLivePreviewProps) => {
     const { isDarkMode } = useTheme();
     const containerRef = useRef<HTMLDivElement>(null);
     const { experiences, profile, projects } = parsedData;
     const { data: ghSettings } = useGitHubSettings();
+    const { data: cfSettings } = useCFSettings();
 
     const lightVideoUrl = profile.lightVideo || "https://img.przknv.cc/t/footer.mp4";
     const darkVideoUrl = profile.darkVideo || "https://img.przknv.cc/t/header.mp4";
@@ -308,17 +312,20 @@ export const PortfolioLivePreview = memo(
           <PreviewProfileSection profile={profile} />
           <PreviewExperienceSection experiences={experiences} />
           <PreviewProjectsSection projects={projects} />
-          {ghSettings?.enabled && (
+          {(ghSettings?.enabled || cfSettings?.enabled) && (
             <div className="border-t border-border-dark/20 pt-4">
               <div className="flex items-center gap-2 mb-3">
-                <span className="text-[10px] uppercase tracking-wider opacity-40">
-                  github activity
-                </span>
+                <span className="text-[10px] uppercase tracking-wider opacity-40">activity</span>
               </div>
-              <div className="scale-75 origin-top-left">
-                <GitHubActivity username={ghSettings.username || "parazeeknova"} />
-                {ghSettings?.hasToken && <GitHubStats />}
-              </div>
+              {ghSettings?.enabled && (
+                <div className="scale-75 origin-top-left mb-2">
+                  <GitHubActivity username={ghSettings.username || "parazeeknova"} />
+                  {ghSettings?.hasToken && <GitHubStats />}
+                </div>
+              )}
+              {cfSettings?.enabled && (
+                <CodeforcesCard username={cfSettings.username || "parazeeknova"} />
+              )}
             </div>
           )}
           <PreviewSocialLinks links={profile.links} isDarkMode={isDarkMode} />

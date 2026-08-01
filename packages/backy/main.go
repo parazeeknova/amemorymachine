@@ -299,6 +299,8 @@ func main() {
 		api.GET("/projects", h.GetProjects)
 		api.GET("/github/stats", h.GetGitHubStats)
 		api.GET("/github/enabled", h.GetGitHubEnabledStatus)
+		api.GET("/cf/enabled", h.GetCFEnabledStatus)
+		api.GET("/cf/settings", h.GetCFSettings)
 		api.GET("/stats", h.GetStats)
 		api.GET("/blogs", h.GetBlogManifest)
 		api.GET("/blogs/:slug", h.GetBlogPost)
@@ -349,6 +351,8 @@ func main() {
 			console.DELETE("/templates", h.UnpinPortfolioTemplate)
 			console.GET("/github-settings", h.GetGitHubSettings)
 			console.POST("/github-settings", h.UpdateGitHubSettings)
+			console.GET("/cf-settings", h.GetCFSettings)
+			console.POST("/cf-settings", h.UpdateCFSettings)
 			console.GET("/video-thumbnail", h.GetVideoThumbnail)
 			console.DELETE("/video-thumbnails", h.DeleteVideoThumbnails)
 

@@ -53,14 +53,29 @@ const config = defineConfig(async ({ mode }) => {
             on: (event: string, handler: (...args: unknown[]) => void) => void;
           }) => {
             proxy.on("error", (_err: unknown, _req: unknown, res: unknown) => {
-              const response = res as {
+              // When backend is unreachable, res may be a net.Socket, not ServerResponse.
+              // Try ServerResponse path first, then fall back to raw socket write.
+              const sr = res as {
                 writeHead?: (code: number, headers: Record<string, string>) => void;
                 end?: (body: string) => void;
                 writableEnded?: boolean;
               };
-              if (response?.writeHead && !response.writableEnded) {
-                response.writeHead(502, { "Content-Type": "application/json" });
-                response.end?.(JSON.stringify({ error: "Backend unavailable" }));
+              const body = JSON.stringify({ error: "Backend unavailable" });
+              if (sr.writeHead && !sr.writableEnded && sr.end) {
+                sr.writeHead(502, { "Content-Type": "application/json" });
+                sr.end(body);
+              } else {
+                const sock = res as {
+                  writable?: boolean;
+                  write?: (d: string) => void;
+                  end?: () => void;
+                };
+                if (sock.writable && sock.write) {
+                  sock.write(
+                    `HTTP/1.1 502 Bad Gateway\r\nContent-Type: application/json\r\nContent-Length: ${body.length}\r\nConnection: close\r\n\r\n${body}`,
+                  );
+                  sock.end?.();
+                }
               }
             });
           },

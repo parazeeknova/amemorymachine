@@ -1,11 +1,13 @@
 import {
+  CaretLeftIcon,
+  CaretRightIcon,
   ClockCounterClockwiseIcon,
   MinusIcon,
   PlusIcon,
   TrashIcon,
   XIcon,
 } from "@phosphor-icons/react";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 import { useTheme } from "#/shared/hooks/use-theme";
 import { usePortfolioStore } from "../stores/portfolio-store";
 import { useClearPortfolio } from "../hooks/use-templates";
@@ -17,6 +19,8 @@ interface TemplateHistoryModalProps {
   onClose: () => void;
   onRestore: (markdown: string) => void;
 }
+
+const PAGE_SIZE = 12;
 
 const formatTimestamp = (ts: number) => {
   const date = new Date(ts);
@@ -41,22 +45,19 @@ const formatTimestamp = (ts: number) => {
   return date.toLocaleDateString("en-US", { day: "numeric", month: "short" });
 };
 
-const formatTime = (ts: number) => {
-  const date = new Date(ts);
-  return date.toLocaleTimeString("en-US", { hour: "2-digit", hour12: false, minute: "2-digit" });
-};
+const formatTime = (ts: number) =>
+  new Date(ts).toLocaleTimeString("en-US", { hour: "2-digit", hour12: false, minute: "2-digit" });
 
 const computeDiff = (current: string, previous: string | null) => {
   const currentLines = current.trim().split("\n").filter(Boolean);
   if (!previous) {
     return { added: currentLines.length, removed: 0 };
   }
-
   const prevLines = previous.trim().split("\n").filter(Boolean);
-  const added = currentLines.filter((l) => !prevLines.includes(l)).length;
-  const removed = prevLines.filter((l) => !currentLines.includes(l)).length;
-
-  return { added, removed };
+  return {
+    added: currentLines.filter((l) => !prevLines.includes(l)).length,
+    removed: prevLines.filter((l) => !currentLines.includes(l)).length,
+  };
 };
 
 export const TemplateHistoryModal = ({ isOpen, onClose, onRestore }: TemplateHistoryModalProps) => {
@@ -65,6 +66,10 @@ export const TemplateHistoryModal = ({ isOpen, onClose, onRestore }: TemplateHis
   const history = usePortfolioStore((s) => s.history);
   const clearHistory = usePortfolioStore((s) => s.clearHistory);
   const clearPortfolio = useClearPortfolio();
+  const [page, setPage] = useState(0);
+
+  const totalPages = Math.ceil(history.length / PAGE_SIZE);
+  const paged = history.slice(page * PAGE_SIZE, (page + 1) * PAGE_SIZE);
 
   const handleClearAll = () => {
     clearHistory();
@@ -139,43 +144,72 @@ export const TemplateHistoryModal = ({ isOpen, onClose, onRestore }: TemplateHis
               <span className="text-[10px] lowercase">no history</span>
             </div>
           ) : (
-            <div className="grid grid-cols-3 gap-2">
-              {history.map((snapshot: TemplateSnapshot) => {
-                const diff = diffs[snapshot.id];
-                return (
+            <>
+              <div className="grid grid-cols-4 gap-1.5">
+                {paged.map((snapshot: TemplateSnapshot, idx: number) => {
+                  const diff = diffs[snapshot.id];
+                  return (
+                    <button
+                      key={snapshot.id}
+                      className={`border flex flex-col items-center justify-center gap-0.5 p-1.5 transition-colors animate-fade-in ${t(
+                        "border-border-dark hover:bg-white/5",
+                        "border-border-light hover:bg-black/3",
+                      )}`}
+                      onClick={() => onRestore(snapshot.markdown)}
+                      style={{ animationDelay: `${idx * 40}ms`, aspectRatio: "1" }}
+                      type="button"
+                    >
+                      <span className="text-[10px] font-mono lowercase">
+                        {formatTimestamp(snapshot.timestamp)}
+                      </span>
+                      <span
+                        className={`text-[8px] font-mono ${t("text-text-dark/25", "text-text-light/25")}`}
+                      >
+                        {formatTime(snapshot.timestamp)}
+                      </span>
+                      {diff && (diff.added > 0 || diff.removed > 0) && (
+                        <div className="flex items-center gap-1 mt-0.5">
+                          <span className="flex items-center gap-0.5 text-[8px] text-emerald-400 font-mono">
+                            <PlusIcon size={8} weight="bold" />
+                            {diff.added}
+                          </span>
+                          <span className="flex items-center gap-0.5 text-[8px] text-rose-400 font-mono">
+                            <MinusIcon size={8} weight="bold" />
+                            {diff.removed}
+                          </span>
+                        </div>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+
+              {totalPages > 1 && (
+                <div className="flex items-center justify-center gap-3 mt-3">
                   <button
-                    key={snapshot.id}
-                    className={`aspect-square border flex flex-col items-center justify-center gap-0.5 p-2 transition-colors ${t(
-                      "border-border-dark hover:bg-white/5",
-                      "border-border-light hover:bg-black/3",
-                    )}`}
-                    onClick={() => onRestore(snapshot.markdown)}
+                    className={`p-0.5 transition-colors ${page === 0 ? "opacity-20" : t("text-text-dark/40 hover:text-text-dark", "text-text-light/40 hover:text-text-light")}`}
+                    disabled={page === 0}
+                    onClick={() => setPage((p) => p - 1)}
                     type="button"
                   >
-                    <span className="text-[11px] font-mono lowercase">
-                      {formatTimestamp(snapshot.timestamp)}
-                    </span>
-                    <span
-                      className={`text-[9px] font-mono ${t("text-text-dark/25", "text-text-light/25")}`}
-                    >
-                      {formatTime(snapshot.timestamp)}
-                    </span>
-                    {diff && (diff.added > 0 || diff.removed > 0) && (
-                      <div className="flex items-center gap-1.5 mt-0.5">
-                        <span className="flex items-center gap-0.5 text-[9px] text-emerald-400 font-mono">
-                          <PlusIcon size={9} weight="bold" />
-                          {diff.added}
-                        </span>
-                        <span className="flex items-center gap-0.5 text-[9px] text-rose-400 font-mono">
-                          <MinusIcon size={9} weight="bold" />
-                          {diff.removed}
-                        </span>
-                      </div>
-                    )}
+                    <CaretLeftIcon size={12} />
                   </button>
-                );
-              })}
-            </div>
+                  <span
+                    className={`text-[10px] font-mono ${t("text-text-dark/30", "text-text-light/30")}`}
+                  >
+                    {page + 1}/{totalPages}
+                  </span>
+                  <button
+                    className={`p-0.5 transition-colors ${page >= totalPages - 1 ? "opacity-20" : t("text-text-dark/40 hover:text-text-dark", "text-text-light/40 hover:text-text-light")}`}
+                    disabled={page >= totalPages - 1}
+                    onClick={() => setPage((p) => p + 1)}
+                    type="button"
+                  >
+                    <CaretRightIcon size={12} />
+                  </button>
+                </div>
+              )}
+            </>
           )}
         </div>
       </div>

@@ -3,6 +3,7 @@ import {
   ArrowLeftIcon,
   BookOpenIcon,
   ClockCounterClockwiseIcon,
+  Code,
   FloppyDiskIcon,
   GithubLogoIcon,
   ShapesIcon,
@@ -10,6 +11,7 @@ import {
 import { useTheme } from "#/shared/hooks/use-theme";
 import { SidebarTooltip } from "#/features/console/components/sidebar-tooltip";
 import { useGitHubSettings } from "../hooks/use-github-settings";
+import { useCFSettings } from "../hooks/use-cf-settings";
 import { usePortfolioEditorControls, usePortfolioStore } from "./portfolio-editor-context";
 
 export const PortfolioEditorSidebar = () => {
@@ -20,9 +22,11 @@ export const PortfolioEditorSidebar = () => {
   const setIsGuideOpen = usePortfolioStore((s) => s.setIsGuideOpen);
   const setIsHistoryOpen = usePortfolioStore((s) => s.setIsHistoryOpen);
   const setIsGithubConfigOpen = usePortfolioStore((s) => s.setIsGithubConfigOpen);
+  const setIsCfConfigOpen = usePortfolioStore((s) => s.setIsCfConfigOpen);
 
   const history = usePortfolioStore((s) => s.history);
   const { data: gitHubSettings } = useGitHubSettings();
+  const { data: cfSettings } = useCFSettings();
 
   const navItemClass = (isActive: boolean) =>
     isActive
@@ -127,6 +131,18 @@ export const PortfolioEditorSidebar = () => {
           <span className="flex-1">github config</span>
           <span
             className={`w-1.5 h-1.5 ${gitHubSettings?.enabled ? "bg-emerald-400" : t("bg-text-dark/20", "bg-text-light/20")}`}
+          />
+        </button>
+
+        <button
+          className={`flex w-full items-center gap-2 px-1 py-1.5 text-left text-[11px] lowercase ${navItemClass(false)}`}
+          onClick={() => setIsCfConfigOpen(true)}
+          type="button"
+        >
+          <Code size={12} />
+          <span className="flex-1">codeforces config</span>
+          <span
+            className={`w-1.5 h-1.5 ${cfSettings?.enabled ? "bg-amber-400" : t("bg-text-dark/20", "bg-text-light/20")}`}
           />
         </button>
 

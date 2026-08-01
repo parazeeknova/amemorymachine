@@ -119,7 +119,7 @@ func (h *Handlers) UpdateGitHubSettings(c *gin.Context) {
 
 	enabled := currentEnabled
 	username := currentUsername
-	var tokenBytes []byte = currentTokenEncrypted
+	tokenBytes := currentTokenEncrypted
 
 	if req.Enabled != nil {
 		enabled = *req.Enabled

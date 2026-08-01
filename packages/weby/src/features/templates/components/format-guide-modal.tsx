@@ -1,4 +1,6 @@
 import { XIcon } from "@phosphor-icons/react";
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
 import { useTheme } from "#/shared/hooks/use-theme";
 
 interface FormatGuideModalProps {
@@ -27,14 +29,61 @@ const HR = () => <div className="my-2 border-t border-border-dark/15" />;
 export const FormatGuideModal = ({ isOpen, onClose }: FormatGuideModalProps) => {
   const { isDarkMode } = useTheme();
   const t = (dark: string, light: string) => (isDarkMode ? dark : light);
+  const [visible, setVisible] = useState(false);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
 
-  if (!isOpen) {
+  useEffect(() => {
+    if (!isOpen) {
+      setVisible(false);
+      return;
+    }
+    setVisible(true);
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!visible) {
+      return;
+    }
+    const ctx = gsap.context(() => {
+      if (overlayRef.current) {
+        gsap.fromTo(overlayRef.current, { opacity: 0 }, { duration: 0.15, opacity: 1 });
+      }
+      if (cardRef.current) {
+        gsap.fromTo(
+          cardRef.current,
+          { opacity: 0, scale: 0.97, y: -8 },
+          { duration: 0.2, ease: "power2.out", opacity: 1, scale: 1, y: 0 },
+        );
+      }
+    });
+    return () => ctx.revert();
+  }, [visible]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [isOpen, onClose]);
+
+  if (!visible) {
     return null;
   }
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
+    <div
+      ref={overlayRef}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs"
+    >
       <div
+        ref={cardRef}
         className={`w-full max-w-xl max-h-[85vh] flex flex-col border ${t("bg-bg-dark border-border-dark text-text-dark", "bg-bg-light border-border-light text-text-light")}`}
       >
         <div

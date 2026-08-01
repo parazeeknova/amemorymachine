@@ -9,6 +9,7 @@ import { usePortfolioStore } from "../stores/portfolio-store";
 import { setPortfolioEditorControls } from "./portfolio-editor-context";
 import { FormatGuideModal } from "./format-guide-modal";
 import { GithubConfigModal } from "./github-config-modal";
+import { CFConfigModal } from "./cf-config-modal";
 import { TemplateHistoryModal } from "./template-history-modal";
 import { PortfolioLivePreview } from "./portfolio-live-preview";
 import { usePinTemplate, useTemplates } from "../hooks/use-templates";
@@ -79,6 +80,8 @@ export const PortfolioEditor = ({
   const setIsHistoryOpen = usePortfolioStore((s) => s.setIsHistoryOpen);
   const isGithubConfigOpen = usePortfolioStore((s) => s.isGithubConfigOpen);
   const setIsGithubConfigOpen = usePortfolioStore((s) => s.setIsGithubConfigOpen);
+  const isCfConfigOpen = usePortfolioStore((s) => s.isCfConfigOpen);
+  const setIsCfConfigOpen = usePortfolioStore((s) => s.setIsCfConfigOpen);
   const setIsPinned = usePortfolioStore((s) => s.setIsPinned);
   const addHistorySnapshot = usePortfolioStore((s) => s.addHistorySnapshot);
   const setDraft = usePortfolioStore((s) => s.setDraft);
@@ -370,6 +373,7 @@ export const PortfolioEditor = ({
         onRestore={handleHistoryRestore}
       />
       <GithubConfigModal isOpen={isGithubConfigOpen} onClose={() => setIsGithubConfigOpen(false)} />
+      <CFConfigModal isOpen={isCfConfigOpen} onClose={() => setIsCfConfigOpen(false)} />
     </div>
   );
 };
