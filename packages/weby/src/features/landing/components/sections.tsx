@@ -210,22 +210,28 @@ export const ExperienceTabBar = memo(
       if (!btn || !indicator) {
         return;
       }
-      gsap.set(indicator, { left: btn.offsetLeft, width: btn.offsetWidth });
       if (isFirstRender.current) {
         isFirstRender.current = false;
+        gsap.set(indicator, { left: btn.offsetLeft, width: btn.offsetWidth });
         return;
       }
       gsap.killTweensOf(indicator);
-      // the squiggle is reborn under the new tab, no traveling between tabs
+      // the squiggle is reborn under the new tab: it draws in left to right
+      // (width grows from 0) while the wave bulges and wobbles as it lands
+      gsap.set(indicator, { left: btn.offsetLeft, width: 0 });
+      gsap.to(indicator, {
+        duration: 0.5,
+        ease: "power3.out",
+        width: btn.offsetWidth,
+      });
       gsap.fromTo(
         indicator,
-        { opacity: 0, rotation: -3, scaleX: 0.2, scaleY: 2 },
+        { opacity: 0.4, rotation: -3, scaleY: 2 },
         {
-          duration: 0.55,
+          duration: 0.6,
           ease: "elastic.out(1.1, 0.4)",
           opacity: 1,
           rotation: 0,
-          scaleX: 1,
           scaleY: 1,
           transformOrigin: "50% 100%",
         },
