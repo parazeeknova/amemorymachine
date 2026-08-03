@@ -1,6 +1,14 @@
 import { ClientOnly, createFileRoute } from "@tanstack/react-router";
 import { gsap } from "gsap";
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
 import type { BlogManifestSection, ExperienceItem, Profile, Project } from "#/shared/types";
 import { GitHubActivity } from "#/features/github/components/calendar";
 import { GitHubStats } from "#/features/github/components/stats";
@@ -219,7 +227,35 @@ const Home = function Home() {
   const videoRef = useRef<HTMLVideoElement>(null);
   const nextVideoRef = useRef<HTMLVideoElement>(null);
   const gradientRef = useRef<HTMLDivElement>(null);
+  const videoHeaderRef = useRef<HTMLDivElement>(null);
   const videoActiveNext = useRef(false);
+
+  // Reveal the header video with the same blur-fade the content below uses,
+  // so the whole first screen animates in as one. The container itself is
+  // faded (not the <video> children, which keep their own opacity logic for
+  // theme crossfades).
+  useLayoutEffect(() => {
+    if (isPending) {
+      return;
+    }
+    const el = videoHeaderRef.current;
+    if (!el) {
+      return;
+    }
+    gsap.killTweensOf(el);
+    gsap.fromTo(
+      el,
+      { filter: "blur(12px)", opacity: 0, scale: 1.02, y: -8 },
+      {
+        duration: 0.8,
+        ease: "power2.out",
+        filter: "blur(0px)",
+        opacity: 1,
+        scale: 1,
+        y: 0,
+      },
+    );
+  }, [isPending]);
 
   useEffect(() => {
     const darkSrc = profile?.darkVideo || "/header.webm";
@@ -386,7 +422,11 @@ const Home = function Home() {
       }`}
     >
       {/* Header Video */}
-      <div className="relative mx-auto w-full max-w-3xl h-48 sm:h-64 overflow-hidden">
+      <div
+        ref={videoHeaderRef}
+        className="relative mx-auto w-full max-w-3xl h-48 sm:h-64 overflow-hidden"
+        style={{ opacity: 0 }}
+      >
         <video
           ref={nextVideoRef}
           autoPlay
