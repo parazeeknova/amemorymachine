@@ -96,6 +96,7 @@ export const generatePortfolioMarkdown = (
         readmeUrl:
           "https://raw.githubusercontent.com/parazeeknova/doty/refs/heads/main/.github/README.md",
         repoUrl: "https://github.com/parazeeknova/doty",
+        section: "personal",
         stack:
           "Nix, NixOS, Hyprland, Quickshell, Qt, QML, Rust, Matugen, Waydroid, Distrobox, Home Manager",
         title: "Doty is an over-configured nix flake for opinionated developers",
@@ -107,6 +108,7 @@ export const generatePortfolioMarkdown = (
         readmeUrl:
           "https://raw.githubusercontent.com/parazeeknova/gitcha/refs/heads/main/.github/README.md",
         repoUrl: "https://github.com/parazeeknova/gitcha",
+        section: "prod",
         stack:
           "Rust, egui, eframe, git2, libgit2, diffy, similar, syntect, egui-arbor, egui-phosphor",
         title:
@@ -119,6 +121,7 @@ export const generatePortfolioMarkdown = (
         readmeUrl:
           "https://raw.githubusercontent.com/singularityworks-xyz/lumen/refs/heads/origin/.github/README.md",
         repoUrl: "https://github.com/singularityworks-xyz/lumen",
+        section: "prod",
         stack:
           "Next.js, Elysia, Elixir, Typescript, Bun, PostgreSQL, Redis, Yjs, Zustand, Tailwind, Tauri, CRDTs, Docker, Playwright, Bun Test, K6 and more",
         title: "Lumen is a spatial system for organizing work.",
@@ -130,6 +133,7 @@ export const generatePortfolioMarkdown = (
         readmeUrl:
           "https://raw.githubusercontent.com/asocialmedia/social/refs/heads/main/.github/README.md",
         repoUrl: "https://github.com/asocialmedia/social",
+        section: "prod",
         stack:
           "Next.js, React, Elysia, Elixir, TypeScript, Tailwind CSS, PostgreSQL, Redis, RustFS, RabbitMQ, MeiliSearch, AI-sdk, Docker and more",
         title:
@@ -142,6 +146,7 @@ export const generatePortfolioMarkdown = (
         readmeUrl:
           "https://raw.githubusercontent.com/parazeeknova/papyrus/refs/heads/main/.github/README.md",
         repoUrl: "https://github.com/parazeeknova/papyrus",
+        section: "prod",
         stack:
           "Next.js, Elixir, TypeScript, Bun, Firestore, Yjs, Zustand, Tailwind CSS, CRDTs, Docker and more",
         title: "Papyrus is a realtime collaborative spreadsheet",
@@ -153,6 +158,7 @@ export const generatePortfolioMarkdown = (
         readmeUrl:
           "https://raw.githubusercontent.com/parazeeknova/verso/refs/heads/main/.github/README.md",
         repoUrl: "https://github.com/parazeeknova/verso",
+        section: "prod",
         stack:
           "Tanstack Start, Vite, Vitest, Golang, TypeScript, Postgres, TipTap, CRDTs, Tailwind CSS, Cloudflare, Docker and more",
         title: "Personal knowledge base and folio, blog for public face & private brain, one app",
@@ -164,6 +170,7 @@ export const generatePortfolioMarkdown = (
         readmeUrl:
           "https://raw.githubusercontent.com/parazeeknova/snix/refs/heads/main/.github/README.md",
         repoUrl: "https://github.com/parazeeknova/snix",
+        section: "personal",
         stack: "Rust, Ratatui",
         title: "Snix is a Terminal snippet manager",
       },
@@ -174,6 +181,7 @@ export const generatePortfolioMarkdown = (
         readmeUrl:
           "https://raw.githubusercontent.com/parazeeknova/nyxtext-zenith/refs/heads/main/.github/README.md",
         repoUrl: "https://github.com/parazeeknova/nyxtext-zenith",
+        section: "personal",
         stack: "Python, PyQt, QScintilla",
         title: "Nyxtext Zenith is a Keyboard-first code editor",
       },
@@ -181,7 +189,7 @@ export const generatePortfolioMarkdown = (
   )
     .map(
       (proj) =>
-        `### ${proj.title}\n- Desc: ${proj.desc}\n- Image: ${proj.image || ""}\n- Stack: ${proj.stack || ""}\n- Readme: ${proj.readmeUrl || ""}\n- Repo: ${proj.repoUrl || ""}\n- Product: ${proj.productUrl || ""}`,
+        `### ${proj.title}\n- Desc: ${proj.desc}\n- Image: ${proj.image || ""}\n- Stack: ${proj.stack || ""}\n- Readme: ${proj.readmeUrl || ""}\n- Repo: ${proj.repoUrl || ""}\n- Product: ${proj.productUrl || ""}\n- Section: ${proj.section ?? "prod"}`,
     )
     .join("\n\n");
 
@@ -289,6 +297,7 @@ const parseProjectLine = (
       productUrl: "",
       readmeUrl: "",
       repoUrl: "",
+      section: "prod",
       stack: "",
       title: line.slice(4).trim(),
     };
@@ -311,6 +320,8 @@ const parseProjectLine = (
         currentProjItem.repoUrl = val;
       } else if (fieldKey === "product" || fieldKey === "producturl") {
         currentProjItem.productUrl = val;
+      } else if (fieldKey === "section") {
+        currentProjItem.section = val.toLowerCase().startsWith("personal") ? "personal" : "prod";
       }
     }
   }

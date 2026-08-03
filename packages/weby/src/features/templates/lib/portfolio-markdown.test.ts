@@ -1,5 +1,9 @@
 import { describe, expect, it } from "vitest";
-import { generatePortfolioMarkdown, validatePortfolioMarkdown } from "../lib/portfolio-markdown";
+import {
+  generatePortfolioMarkdown,
+  parsePortfolioMarkdown,
+  validatePortfolioMarkdown,
+} from "../lib/portfolio-markdown";
 
 describe("generatePortfolioMarkdown boilerplate", () => {
   it("generates valid boilerplate markdown when called with no arguments", () => {
@@ -41,6 +45,32 @@ describe("generatePortfolioMarkdown boilerplate", () => {
 
     expect(markdown).toContain("Doty");
     expect(markdown).toContain("over-configured nix flake");
+    // project section field: prod vs personal
+    expect(markdown).toContain("- Section: prod");
+    expect(markdown).toContain("- Section: personal");
+  });
+
+  it("round-trips project section fields", () => {
+    const markdown = generatePortfolioMarkdown(undefined, undefined, [
+      {
+        desc: "prod project",
+        section: "prod",
+        stack: "Rust",
+        title: "Prod App",
+      },
+      {
+        desc: "personal project",
+        section: "personal",
+        stack: "Python",
+        title: "Personal App",
+      },
+    ]);
+
+    const parsed = parsePortfolioMarkdown(markdown);
+    const prod = parsed.projects.find((p) => p.title === "Prod App");
+    const personal = parsed.projects.find((p) => p.title === "Personal App");
+    expect(prod?.section).toBe("prod");
+    expect(personal?.section).toBe("personal");
   });
 
   it("merges custom data with defaults when partial profile is provided", () => {

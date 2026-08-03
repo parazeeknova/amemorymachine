@@ -40,6 +40,7 @@ type Project struct {
 	RepoURL    string `json:"repoUrl,omitempty"`
 	ProductURL string `json:"productUrl,omitempty"`
 	Stack      string `json:"stack"`
+	Section    string `json:"section"`
 }
 
 // GitHubOrg represents a GitHub organization

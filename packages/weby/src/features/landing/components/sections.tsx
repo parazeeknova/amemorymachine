@@ -1,5 +1,5 @@
 import { memo, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
-import type { ExperienceItem, Link, Profile } from "#/shared/types";
+import type { ExperienceItem, Link, Profile, Project } from "#/shared/types";
 import { gsap } from "gsap";
 import { useTheme } from "#/shared/hooks/use-theme";
 import {
@@ -174,13 +174,11 @@ interface ExperienceSectionProps {
 
 export type ExperienceTabKey = "professional" | "university clubs";
 
-export interface ExperienceTabGroup {
-  key: ExperienceTabKey;
+export interface TabGroup {
+  key: string;
 }
 
-export const getExperienceGroups = (
-  experience: ExperienceItem[] | undefined,
-): ExperienceTabGroup[] => {
+export const getExperienceGroups = (experience: ExperienceItem[] | undefined): TabGroup[] => {
   const professional = (experience ?? []).filter((e) => e.section !== "university clubs");
   const clubs = (experience ?? []).filter((e) => e.section === "university clubs");
   return [
@@ -189,19 +187,28 @@ export const getExperienceGroups = (
   ];
 };
 
-export const ExperienceTabBar = memo(
+export const getProjectGroups = (projects: Project[] | undefined): TabGroup[] => {
+  const prod = (projects ?? []).filter((p) => p.section !== "personal");
+  const personal = (projects ?? []).filter((p) => p.section === "personal");
+  return [
+    ...(prod.length > 0 ? [{ key: "prod" as const }] : []),
+    ...(personal.length > 0 ? [{ key: "personal" as const }] : []),
+  ];
+};
+
+export const TabBar = memo(
   ({
     groups,
     active,
     onSelect,
   }: {
-    groups: ExperienceTabGroup[];
-    active: ExperienceTabKey;
-    onSelect: (key: ExperienceTabKey) => void;
+    groups: TabGroup[];
+    active: string;
+    onSelect: (key: string) => void;
   }) => {
     const { isDarkMode } = useTheme();
     const indicatorRef = useRef<HTMLDivElement>(null);
-    const tabRefs = useRef<Partial<Record<ExperienceTabKey, HTMLButtonElement | null>>>({});
+    const tabRefs = useRef<Partial<Record<string, HTMLButtonElement | null>>>({});
     const isFirstRender = useRef(true);
 
     useLayoutEffect(() => {
@@ -317,13 +324,15 @@ export const ExperienceSection = ({ experience, isPending }: ExperienceSectionPr
   const visibleItems = hasMore ? professional.slice(0, 3) : activeItems;
   const extraItems = hasMore ? professional.slice(3) : [];
 
-  const handleTabSelect = (next: ExperienceTabKey) => {
-    if (next === activeTab) {
+  const handleTabSelect = (next: string) => {
+    const target: ExperienceTabKey =
+      next === "professional" || next === "university clubs" ? next : "professional";
+    if (target === activeTab) {
       return;
     }
     const el = listRef.current;
     if (!el) {
-      setActiveTab(next);
+      setActiveTab(target);
       return;
     }
     gsap.killTweensOf(el.children);
@@ -333,7 +342,7 @@ export const ExperienceSection = ({ experience, isPending }: ExperienceSectionPr
       filter: "blur(6px)",
       onComplete: () => {
         setIsExpanded(false);
-        setActiveTab(next);
+        setActiveTab(target);
       },
       opacity: 0,
       stagger: 0.02,
@@ -489,7 +498,7 @@ export const ExperienceSection = ({ experience, isPending }: ExperienceSectionPr
     <div className="shrink-0 space-y-6">
       <h3 className="font-medium text-base lowercase">work i did</h3>
       {groups.length > 1 && (
-        <ExperienceTabBar groups={groups} active={activeTab} onSelect={handleTabSelect} />
+        <TabBar groups={groups} active={activeTab} onSelect={handleTabSelect} />
       )}
       <div ref={listRef} className="relative space-y-3 sm:space-y-4" style={{ perspective: 1000 }}>
         {visibleItems.map((item) => (

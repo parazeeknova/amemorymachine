@@ -144,7 +144,8 @@ export const FormatGuideModal = ({ isOpen, onClose }: FormatGuideModalProps) => 
           </Code>
           <P>
             You can add as many experience entries as you want. Just repeat the pattern for each
-            role.
+            role. Add - Section: university clubs to a role to move it into the university clubs
+            tab; everything else lands under professional.
           </P>
 
           <HR />
@@ -156,12 +157,13 @@ export const FormatGuideModal = ({ isOpen, onClose }: FormatGuideModalProps) => 
           </P>
           <Code>
             {
-              "### Project Name\n- Desc: Project description\n- Image: https://img-url.png\n- Stack: React, TypeScript, Bun\n- Readme: https://raw.github.com/...\n- Repo: https://github.com/...\n- Product: https://app-url.com"
+              "### Project Name\n- Desc: Project description\n- Image: https://img-url.png\n- Stack: React, TypeScript, Bun\n- Readme: https://raw.github.com/...\n- Repo: https://github.com/...\n- Product: https://app-url.com\n- Section: prod"
             }
           </Code>
           <P>
-            All fields are optional. You can skip any field you do not have data for. Add as many
-            projects as you like.
+            All fields are optional. You can skip any field you do not have data for. The Section
+            field groups projects into the prod or personal tabs (anything other than "personal"
+            becomes prod). Add as many projects as you like.
           </P>
 
           <HR />

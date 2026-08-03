@@ -25,12 +25,15 @@ export interface ExperienceItem {
   title: string;
 }
 
+export type ProjectSection = "prod" | "personal";
+
 export interface Project {
   desc: string;
   image?: string;
   productUrl?: string;
   readmeUrl?: string;
   repoUrl?: string;
+  section?: ProjectSection;
   stack: string;
   title: string;
 }

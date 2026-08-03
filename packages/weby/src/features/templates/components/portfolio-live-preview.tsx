@@ -8,9 +8,10 @@ import { markdownToHtml } from "#/features/blog/lib/markdown-to-html";
 import { GitHubActivity } from "#/features/github/components/calendar";
 import { GitHubStats } from "#/features/github/components/stats";
 import {
-  ExperienceTabBar,
   getExperienceGroups,
+  getProjectGroups,
   SocialLinks,
+  TabBar,
 } from "#/features/landing/components/sections";
 import type { ExperienceTabKey } from "#/features/landing/components/sections";
 import { IframeModal } from "#/shared/components/iframe-modal";
@@ -116,13 +117,15 @@ const PreviewExperienceSection = memo(({ experiences }: { experiences: Experienc
     : (groups[0]?.key ?? "professional");
   const activeItems = resolvedTab === "professional" ? professional : clubs;
 
-  const handleTabSelect = (next: ExperienceTabKey) => {
-    if (next === activeTab) {
+  const handleTabSelect = (next: string) => {
+    const target: ExperienceTabKey =
+      next === "professional" || next === "university clubs" ? next : "professional";
+    if (target === activeTab) {
       return;
     }
     const el = listRef.current;
     if (!el) {
-      setActiveTab(next);
+      setActiveTab(target);
       return;
     }
     gsap.killTweensOf(el.children);
@@ -130,7 +133,7 @@ const PreviewExperienceSection = memo(({ experiences }: { experiences: Experienc
       duration: 0.16,
       ease: "power2.in",
       filter: "blur(6px)",
-      onComplete: () => setActiveTab(next),
+      onComplete: () => setActiveTab(target),
       opacity: 0,
       stagger: 0.02,
       y: -8,
@@ -179,7 +182,7 @@ const PreviewExperienceSection = memo(({ experiences }: { experiences: Experienc
     <div className="shrink-0 space-y-4">
       <h3 className="font-medium text-base lowercase">work i did</h3>
       {groups.length > 1 && (
-        <ExperienceTabBar groups={groups} active={activeTab} onSelect={handleTabSelect} />
+        <TabBar groups={groups} active={activeTab} onSelect={handleTabSelect} />
       )}
       <div ref={listRef} className="relative space-y-4">
         {activeItems.map((item, idx) => (
@@ -201,6 +204,74 @@ const PreviewExperienceSection = memo(({ experiences }: { experiences: Experienc
 });
 
 const PreviewProjectsSection = memo(({ projects }: { projects: Project[] }) => {
+  const [activeTab, setActiveTab] = useState<"prod" | "personal">("prod");
+  const listRef = useRef<HTMLDivElement>(null);
+  const isTabFirstRender = useRef(true);
+
+  const groups = getProjectGroups(projects);
+  const resolvedTab = groups.some((g) => g.key === activeTab)
+    ? activeTab
+    : (groups[0]?.key ?? "prod");
+  const filtered = projects.filter((p) =>
+    resolvedTab === "personal" ? p.section === "personal" : p.section !== "personal",
+  );
+
+  const handleTabSelect = (next: string) => {
+    const target: "prod" | "personal" = next === "personal" ? "personal" : "prod";
+    if (target === activeTab) {
+      return;
+    }
+    const el = listRef.current;
+    if (!el) {
+      setActiveTab(target);
+      return;
+    }
+    gsap.killTweensOf(el.children);
+    gsap.to([...el.children], {
+      duration: 0.16,
+      ease: "power2.in",
+      filter: "blur(6px)",
+      onComplete: () => setActiveTab(target),
+      opacity: 0,
+      stagger: 0.02,
+      y: -8,
+    });
+  };
+
+  useLayoutEffect(() => {
+    if (isTabFirstRender.current) {
+      isTabFirstRender.current = false;
+      return;
+    }
+    const el = listRef.current;
+    if (!el) {
+      return;
+    }
+    const items = [...el.children];
+    if (items.length === 0) {
+      return;
+    }
+    gsap.killTweensOf(items);
+    gsap.fromTo(
+      items,
+      {
+        filter: "blur(12px)",
+        opacity: 0,
+        scale: 0.98,
+        y: 14,
+      },
+      {
+        duration: 0.5,
+        ease: "power2.out",
+        filter: "blur(0px)",
+        opacity: 1,
+        scale: 1,
+        stagger: 0.06,
+        y: 0,
+      },
+    );
+  }, [activeTab]);
+
   if (projects.length === 0) {
     return null;
   }
@@ -208,8 +279,11 @@ const PreviewProjectsSection = memo(({ projects }: { projects: Project[] }) => {
   return (
     <div className="shrink-0 space-y-3 text-left">
       <h3 className="font-medium text-base lowercase">voo look what i made</h3>
-      <div className="space-y-6 pt-1">
-        {projects.map((proj, idx) => {
+      {groups.length > 1 && (
+        <TabBar groups={groups} active={resolvedTab} onSelect={handleTabSelect} />
+      )}
+      <div ref={listRef} className="space-y-6 pt-1">
+        {filtered.map((proj, idx) => {
           const isEven = idx % 2 === 0;
           const linkUrl = proj.productUrl || proj.repoUrl;
           return (

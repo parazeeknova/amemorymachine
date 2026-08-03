@@ -3,8 +3,9 @@ import { createPortal } from "react-dom";
 import { useProjects } from "../hooks/use-data";
 import { gsap } from "gsap";
 import { ArrowUpRightIcon } from "@phosphor-icons/react";
-import type { Project } from "#/shared/types";
+import type { Project, ProjectSection } from "#/shared/types";
 import { SkeletonBar, SkeletonThumb } from "#/shared/components/skeleton";
+import { getProjectGroups, TabBar } from "./sections";
 
 interface ProjectCardProps {
   index: number;
@@ -262,7 +263,73 @@ interface ProjectListProps {
 
 export const ProjectList = ({ initialData, onDetail }: ProjectListProps) => {
   const { data: projectData, isPending } = useProjects(initialData);
+  const [activeTab, setActiveTab] = useState<ProjectSection>("prod");
   const listRef = useRef<HTMLDivElement>(null);
+  const isTabFirstRender = useRef(true);
+
+  const groups = getProjectGroups(projectData);
+  const resolvedTab = groups.some((g) => g.key === activeTab)
+    ? activeTab
+    : (groups[0]?.key ?? "prod");
+  const filtered = (projectData ?? []).filter((p) =>
+    resolvedTab === "personal" ? p.section === "personal" : p.section !== "personal",
+  );
+
+  const handleTabSelect = (next: string) => {
+    const target: ProjectSection = next === "personal" ? "personal" : "prod";
+    if (target === activeTab) {
+      return;
+    }
+    const el = listRef.current;
+    if (!el) {
+      setActiveTab(target);
+      return;
+    }
+    gsap.killTweensOf(el.children);
+    gsap.to([...el.children], {
+      duration: 0.16,
+      ease: "power2.in",
+      filter: "blur(6px)",
+      onComplete: () => setActiveTab(target),
+      opacity: 0,
+      stagger: 0.02,
+      y: -8,
+    });
+  };
+
+  useLayoutEffect(() => {
+    if (isTabFirstRender.current) {
+      isTabFirstRender.current = false;
+      return;
+    }
+    const el = listRef.current;
+    if (!el) {
+      return;
+    }
+    const items = [...el.children];
+    if (items.length === 0) {
+      return;
+    }
+    gsap.killTweensOf(items);
+    gsap.fromTo(
+      items,
+      {
+        filter: "blur(12px)",
+        opacity: 0,
+        scale: 0.98,
+        y: 14,
+      },
+      {
+        duration: 0.5,
+        ease: "power2.out",
+        filter: "blur(0px)",
+        opacity: 1,
+        scale: 1,
+        stagger: 0.06,
+        y: 0,
+      },
+    );
+  }, [activeTab]);
 
   useLayoutEffect(() => {
     if (isPending || !projectData || projectData.length === 0) {
@@ -300,28 +367,33 @@ export const ProjectList = ({ initialData, onDetail }: ProjectListProps) => {
   }, [isPending, projectData]);
 
   return (
-    <div className="space-y-3 sm:space-y-4" ref={listRef} style={{ perspective: 1000 }}>
-      {isPending ? (
-        <div className="skeleton-shimmer" aria-hidden>
-          {[0, 1, 2].map((i) => (
-            <div
-              className={`flex items-center gap-3 sm:gap-4 ${i % 2 === 1 ? "flex-row-reverse" : ""}`}
-              key={i}
-            >
-              <SkeletonThumb className="w-20 h-20 sm:w-28 sm:h-28" />
-              <div className="flex-1 min-w-0 space-y-2">
-                <SkeletonBar className="h-3.5 w-2/3" />
-                <SkeletonBar className="h-3 w-full" />
-                <SkeletonBar className="h-3 w-4/5" />
-              </div>
-            </div>
-          ))}
-        </div>
-      ) : (
-        projectData?.map((project, index) => (
-          <ProjectCard key={project.title} index={index} onDetail={onDetail} project={project} />
-        ))
+    <div className="space-y-3 sm:space-y-4">
+      {!isPending && groups.length > 1 && (
+        <TabBar groups={groups} active={resolvedTab} onSelect={handleTabSelect} />
       )}
+      <div className="space-y-3 sm:space-y-4" ref={listRef} style={{ perspective: 1000 }}>
+        {isPending ? (
+          <div className="skeleton-shimmer" aria-hidden>
+            {[0, 1, 2].map((i) => (
+              <div
+                className={`flex items-center gap-3 sm:gap-4 ${i % 2 === 1 ? "flex-row-reverse" : ""}`}
+                key={i}
+              >
+                <SkeletonThumb className="w-20 h-20 sm:w-28 sm:h-28" />
+                <div className="flex-1 min-w-0 space-y-2">
+                  <SkeletonBar className="h-3.5 w-2/3" />
+                  <SkeletonBar className="h-3 w-full" />
+                  <SkeletonBar className="h-3 w-4/5" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          filtered.map((project, index) => (
+            <ProjectCard key={project.title} index={index} onDetail={onDetail} project={project} />
+          ))
+        )}
+      </div>
     </div>
   );
 };
@@ -333,11 +405,80 @@ interface MobileProjectListProps {
 
 export const MobileProjectList = ({ initialData, onDetail }: MobileProjectListProps) => {
   const { data: projectData, isPending } = useProjects(initialData);
+  const [activeTab, setActiveTab] = useState<ProjectSection>("prod");
   const [isExpanded, setIsExpanded] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
   const extraRef = useRef<HTMLDivElement>(null);
   const fadeRef = useRef<HTMLDivElement>(null);
   const isFirstRender = useRef(true);
+  const isTabFirstRender = useRef(true);
+
+  const groups = getProjectGroups(projectData);
+  const resolvedTab = groups.some((g) => g.key === activeTab)
+    ? activeTab
+    : (groups[0]?.key ?? "prod");
+  const filtered = (projectData ?? []).filter((p) =>
+    resolvedTab === "personal" ? p.section === "personal" : p.section !== "personal",
+  );
+
+  const handleTabSelect = (next: string) => {
+    const target: ProjectSection = next === "personal" ? "personal" : "prod";
+    if (target === activeTab) {
+      return;
+    }
+    const el = listRef.current;
+    if (!el) {
+      setActiveTab(target);
+      return;
+    }
+    gsap.killTweensOf(el.children);
+    gsap.to([...el.children], {
+      duration: 0.16,
+      ease: "power2.in",
+      filter: "blur(6px)",
+      onComplete: () => {
+        setIsExpanded(false);
+        setActiveTab(target);
+      },
+      opacity: 0,
+      stagger: 0.02,
+      y: -8,
+    });
+  };
+
+  useLayoutEffect(() => {
+    if (isTabFirstRender.current) {
+      isTabFirstRender.current = false;
+      return;
+    }
+    const el = listRef.current;
+    if (!el) {
+      return;
+    }
+    const items = [...el.querySelectorAll(".project-card-visible")];
+    if (items.length === 0) {
+      return;
+    }
+    gsap.killTweensOf(items);
+    gsap.fromTo(
+      items,
+      {
+        filter: "blur(12px)",
+        opacity: 0,
+        scale: 0.98,
+        y: 14,
+      },
+      {
+        duration: 0.5,
+        ease: "power2.out",
+        filter: "blur(0px)",
+        opacity: 1,
+        scale: 1,
+        stagger: 0.06,
+        y: 0,
+      },
+    );
+  }, [activeTab]);
 
   useLayoutEffect(() => {
     if (isPending || !projectData || projectData.length === 0) {
@@ -455,12 +596,15 @@ export const MobileProjectList = ({ initialData, onDetail }: MobileProjectListPr
     return null;
   }
 
-  const hasMore = projectData.length > 3;
+  const hasMore = filtered.length > 3;
 
   return (
-    <div>
+    <div className="space-y-3">
+      {groups.length > 1 && (
+        <TabBar groups={groups} active={resolvedTab} onSelect={handleTabSelect} />
+      )}
       <div className="relative space-y-3 sm:space-y-4" ref={listRef} style={{ perspective: 1000 }}>
-        {projectData.slice(0, 3).map((project, index) => (
+        {filtered.slice(0, 3).map((project, index) => (
           <div key={project.title} className="project-card-visible">
             <ProjectCard index={index} onDetail={onDetail} project={project} />
           </div>
@@ -472,7 +616,7 @@ export const MobileProjectList = ({ initialData, onDetail }: MobileProjectListPr
             ref={extraRef}
             style={{ height: 0, opacity: 0 }}
           >
-            {projectData.slice(3).map((project, index) => (
+            {filtered.slice(3).map((project, index) => (
               <ProjectCard
                 key={project.title}
                 index={index + 3}
