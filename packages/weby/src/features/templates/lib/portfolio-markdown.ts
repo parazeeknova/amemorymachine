@@ -90,6 +90,44 @@ export const generatePortfolioMarkdown = (
   const projsArr = (
     projects ?? [
       {
+        desc: "A social platform that brings your entire internet into one place. Unified feed, communities, real-time chat, rich media and tipping all tied together by Aura, a reputation system that grows with you, and Zeph, an AI companion that actually remembers you. Built by one person. Slightly unhinged in ambition.",
+        image: "https://img.przknv.cc/t/Gk8Fy0aaMAARWSc.jpg",
+        productUrl: "https://asocialmedia.cc",
+        readmeUrl:
+          "https://raw.githubusercontent.com/asocialmedia/social/refs/heads/main/.github/README.md",
+        repoUrl: "https://github.com/asocialmedia/social",
+        section: "prod",
+        stack:
+          "Next.js, React, Elysia, Elixir, TypeScript, Tailwind CSS, PostgreSQL, Redis, RustFS, RabbitMQ, MeiliSearch, AI-sdk, Docker and more",
+        title:
+          "asocialmedia formerly zephyr is the last social platform you'll ever need. Open source, cozy, and slightly unhinged.",
+      },
+      {
+        desc: "Personal knowledge base and folio, blog for public face & private brain, one app that doesn't apologize for being both. the left side is where i exist as a person (public face): my projects, my work, my contribution graph. the right side is where i think out loud (private brain): notes, docs, blog posts, half-baked ideas.",
+        image: "",
+        productUrl: "https://amemorymachine.cc",
+        readmeUrl:
+          "https://raw.githubusercontent.com/parazeeknova/verso/refs/heads/main/.github/README.md",
+        repoUrl: "https://github.com/parazeeknova/verso",
+        section: "prod",
+        stack:
+          "Tanstack Start, Vite, Vitest, Golang, TypeScript, Postgres, TipTap, CRDTs, Tailwind CSS, Cloudflare, Docker and more",
+        title:
+          "amemorymachine is a personal knowledge base and folio, blog for public face & private brain, one app",
+      },
+      {
+        desc: "A local-first spatial workspace for free-form kanban, structured tasks, durable offline work, and realtime collaboration with other goodies.",
+        image: "https://img.przknv.cc/t/Screenshot_2026-07-08_22.51.03.png",
+        productUrl: "https://lumen.itssingularity.com",
+        readmeUrl:
+          "https://raw.githubusercontent.com/singularityworks-xyz/lumen/refs/heads/origin/.github/README.md",
+        repoUrl: "https://github.com/singularityworks-xyz/lumen",
+        section: "prod",
+        stack:
+          "Next.js, Elysia, Elixir, Typescript, Bun, PostgreSQL, Redis, Yjs, Zustand, Tailwind, Tauri, CRDTs, Docker, Playwright, Bun Test, K6 and more",
+        title: "Lumen is a spatial system for organizing work.",
+      },
+      {
         desc: "A fully declarative, highly opinionated, and reproducible NixOS/Hyprland desktop environment. Equipped with a custom Rust-based daemon (wabi), interactive QML-based Quickshell widgets, and dynamic Material You color schemes generated from your wallpapers via Matugen. Includes local AI workflows (OCR, Speech-to-Text, and LLMs) along with Waydroid virtualization and Cockpit server panel integration out of the box. Designed to look gorgeous without bloated overhead.",
         image: "https://img.przknv.cc/t/doty.png",
         productUrl: "https://github.com/parazeeknova/doty",
@@ -115,31 +153,6 @@ export const generatePortfolioMarkdown = (
           "Gitcha is a native git GUI written in rust to be blazing fast and light that goes brr",
       },
       {
-        desc: "A local-first spatial workspace for free-form kanban, structured tasks, durable offline work, and realtime collaboration with other goodies.",
-        image: "https://img.przknv.cc/t/Screenshot_2026-07-08_22.51.03.png",
-        productUrl: "https://lumen.itssingularity.com",
-        readmeUrl:
-          "https://raw.githubusercontent.com/singularityworks-xyz/lumen/refs/heads/origin/.github/README.md",
-        repoUrl: "https://github.com/singularityworks-xyz/lumen",
-        section: "prod",
-        stack:
-          "Next.js, Elysia, Elixir, Typescript, Bun, PostgreSQL, Redis, Yjs, Zustand, Tailwind, Tauri, CRDTs, Docker, Playwright, Bun Test, K6 and more",
-        title: "Lumen is a spatial system for organizing work.",
-      },
-      {
-        desc: "A social platform that brings your entire internet into one place. Unified feed, communities, real-time chat, rich media and tipping all tied together by Aura, a reputation system that grows with you, and Zeph, an AI companion that actually remembers you. Built by one person. Slightly unhinged in ambition.",
-        image: "https://img.przknv.cc/t/Gk8Fy0aaMAARWSc.jpg",
-        productUrl: "https://asocialmedia.cc",
-        readmeUrl:
-          "https://raw.githubusercontent.com/asocialmedia/social/refs/heads/main/.github/README.md",
-        repoUrl: "https://github.com/asocialmedia/social",
-        section: "prod",
-        stack:
-          "Next.js, React, Elysia, Elixir, TypeScript, Tailwind CSS, PostgreSQL, Redis, RustFS, RabbitMQ, MeiliSearch, AI-sdk, Docker and more",
-        title:
-          "asocialmedia formerly zephyr is the last social platform you'll ever need. Open source, cozy, and slightly unhinged.",
-      },
-      {
         desc: "Realtime collaborative spreadsheet with a local-first document model, CRDT-based syncing, worker-driven evaluation, and a virtualized grid built to stay responsive on 10K+ row datasets.",
         image: "",
         productUrl: "https://sheets.przknv.cc",
@@ -150,18 +163,6 @@ export const generatePortfolioMarkdown = (
         stack:
           "Next.js, Elixir, TypeScript, Bun, Firestore, Yjs, Zustand, Tailwind CSS, CRDTs, Docker and more",
         title: "Papyrus is a realtime collaborative spreadsheet",
-      },
-      {
-        desc: "Personal knowledge base and folio, blog for public face & private brain, one app that doesn't apologize for being both. the left side is where i exist as a person (public face): my projects, my work, my contribution graph. the right side is where i think out loud (private brain): notes, docs, blog posts, half-baked ideas.",
-        image: "",
-        productUrl: "https://www.przknv.cc",
-        readmeUrl:
-          "https://raw.githubusercontent.com/parazeeknova/verso/refs/heads/main/.github/README.md",
-        repoUrl: "https://github.com/parazeeknova/verso",
-        section: "prod",
-        stack:
-          "Tanstack Start, Vite, Vitest, Golang, TypeScript, Postgres, TipTap, CRDTs, Tailwind CSS, Cloudflare, Docker and more",
-        title: "Personal knowledge base and folio, blog for public face & private brain, one app",
       },
       {
         desc: "Fast TUI with hierarchical notebooks, fuzzy search, syntax highlighting for 25+ languages, and versioned storage.",
