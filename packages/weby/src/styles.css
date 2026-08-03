@@ -853,10 +853,17 @@ button {
   position: relative;
   /* Room below the text for the squiggle, with a gap between word and wave. */
   padding-bottom: 7px;
-  /* Squiggle draw progress (0 hidden -> 100 fully drawn), animated by GSAP.
-     Defaults to 100 (drawn) so GSAP reverting inline styles after a tween
-     lands on the drawn state instead of snapping the wave off. */
+}
+
+/* Description links keep the wave drawn by default (re-animated on hover);
+   standalone .squiggle-link elements (portfolio / resume) stay hidden until
+   hovered. Both animate via --squiggle-progress (0 hidden -> 100 drawn). */
+.prose-desc a {
   --squiggle-progress: 100;
+}
+
+.squiggle-link {
+  --squiggle-progress: 0;
 }
 
 /* Curved squiggly underline in the accent purple. Drawn as an inline SVG

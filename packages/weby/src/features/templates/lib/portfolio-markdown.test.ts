@@ -54,7 +54,7 @@ describe("generatePortfolioMarkdown boilerplate", () => {
     expect(markdown).toContain("Description: Custom bio");
     // Default username/email/resume should be used since not provided
     expect(markdown).toContain("parazeeknova");
-    expect(markdown).toContain("Resume: http://f.przknv.cc/u/XghaIR.pdf");
+    expect(markdown).toContain("Resume: https://f.przknv.cc/raw/XghaIR.pdf");
   });
 });
 

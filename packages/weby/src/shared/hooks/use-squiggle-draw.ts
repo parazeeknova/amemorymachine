@@ -10,17 +10,18 @@ interface SquiggleOptions {
 }
 
 const SQUIGGLE_SELECTOR = ".prose-desc a, .squiggle-link";
+const LOAD_DRAW_SELECTOR = ".prose-desc a";
 
-// useSquiggleDraw animates the purple squiggly underlines inside a
-// .prose-desc block, drawing each wave in left-to-right via the
+// useSquiggleDraw animates the purple squiggly underlines via the
 // --squiggle-progress CSS var (see styles.css).
 //
 // Two behaviors:
-//  - On load (isReady flips true) the waves draw in once after the parent
-//    content reveal.
-//  - On hover each link's wave re-generates from left to right, and reverses
-//    back when the pointer leaves, so the underline feels alive. Handlers are
-//    delegated on the container so they survive re-renders of the links.
+//  - On load (isReady flips true) the description-link waves draw in once
+//    after the parent content reveal. Standalone .squiggle-link elements
+//    (portfolio / resume) stay hidden here — their wave appears on hover.
+//  - On hover every link's wave draws from left to right, and reverses back
+//    when the pointer leaves. Handlers are delegated on the container so they
+//    survive re-renders of the links.
 export const useSquiggleDraw = (
   isReady: boolean,
   containerRef: RefObject<HTMLElement | null>,
@@ -37,7 +38,7 @@ export const useSquiggleDraw = (
     if (!container) {
       return;
     }
-    const links = [...container.querySelectorAll<HTMLElement>(SQUIGGLE_SELECTOR)];
+    const links = [...container.querySelectorAll<HTMLElement>(LOAD_DRAW_SELECTOR)];
     if (links.length === 0) {
       return;
     }

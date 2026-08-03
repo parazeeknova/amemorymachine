@@ -69,18 +69,22 @@ export const ResumeModal = ({ onClose, url }: ResumeModalProps) => {
         aria-label="Resume"
       >
         <div
-          className={`flex items-center justify-between px-3 py-2 border-b ${
+          className={`flex shrink-0 items-center justify-between px-2 py-1 border-b ${
             isDarkMode ? "border-border-dark" : "border-border-light"
           }`}
         >
-          <span className="text-[11px] lowercase opacity-60">resume</span>
+          <span className="text-[10px] lowercase opacity-50">resume</span>
           <button
             aria-label="close resume"
-            className={`p-1 transition-colors ${isDarkMode ? "hover:text-text-dark" : "hover:text-text-light"} text-text-dark/40 text-text-light/40`}
+            className={`flex h-4 w-4 items-center justify-center rounded-sm transition-colors ${
+              isDarkMode
+                ? "text-text-dark/70 hover:text-text-dark hover:bg-white/10"
+                : "text-text-light/70 hover:text-text-light hover:bg-black/10"
+            }`}
             onClick={onClose}
             type="button"
           >
-            <XIcon size={14} />
+            <XIcon size={10} />
           </button>
         </div>
         <iframe className="min-h-0 flex-1 w-full border-0" src={url} title="resume" />
