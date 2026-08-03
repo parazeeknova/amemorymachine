@@ -136,13 +136,22 @@ export const ProjectThumb = ({
     return null;
   }
 
+  // Logos are square icons that get clipped at full bleed: give them a
+  // small inset so they sit cleanly inside the container. Screenshots
+  // (and the product layer on hover) stay full-bleed cover.
+  const logoClass = project.logo ? "p-1.5 sm:p-2" : "";
+
   if (!linkUrl) {
     return (
       <div
         className={`relative shrink-0 block overflow-hidden ${className}`}
         style={{ transform: isEven ? "rotate(-3deg)" : "rotate(3deg)" }}
       >
-        <img alt={project.title} className="w-full h-full object-cover" src={primarySrc} />
+        <img
+          alt={project.title}
+          className={`w-full h-full object-cover ${logoClass}`}
+          src={primarySrc}
+        />
         {hasDual && (
           <img
             alt={project.title}
@@ -169,7 +178,7 @@ export const ProjectThumb = ({
       >
         <img
           alt={project.title}
-          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+          className={`w-full h-full object-cover transition-transform duration-300 group-hover:scale-110 ${logoClass}`}
           src={primarySrc}
         />
         {hasDual && (
