@@ -40,6 +40,8 @@ type cfProblem struct {
 
 // cfSolvedProblem is an accepted problem plus when it was last solved.
 type cfSolvedProblem struct {
+	ContestID         int    `json:"contestId"`
+	Index             string `json:"index"`
 	Name              string `json:"name"`
 	SolvedTimeSeconds int64  `json:"solvedTimeSeconds"`
 }
@@ -154,6 +156,8 @@ func cfSubmissionStats(submissions []cfSubmission) (solvedCount int, lastSolved 
 		solvedCount++
 		if len(lastSolved) < 3 {
 			lastSolved = append(lastSolved, cfSolvedProblem{
+				ContestID:         sub.Problem.ContestID,
+				Index:             sub.Problem.Index,
 				Name:              sub.Problem.Name,
 				SolvedTimeSeconds: sub.CreationTimeSeconds,
 			})

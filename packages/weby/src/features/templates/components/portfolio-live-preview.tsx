@@ -1,10 +1,11 @@
 import { memo, useMemo, useRef } from "react";
 import { useTheme } from "#/shared/hooks/use-theme";
-import type { ExperienceItem, Link, Profile, Project } from "#/shared/types";
+import type { ExperienceItem, Profile, Project } from "#/shared/types";
 import type { ParsedPortfolio, ValidationError } from "../lib/portfolio-markdown";
 import { markdownToHtml } from "#/features/blog/lib/markdown-to-html";
 import { GitHubActivity } from "#/features/github/components/calendar";
 import { GitHubStats } from "#/features/github/components/stats";
+import { SocialLinks } from "#/features/landing/components/sections";
 import { useGitHubSettings } from "../hooks/use-github-settings";
 import { useCFSettings } from "../hooks/use-cf-settings";
 import { CodeforcesCard } from "#/features/codeforces/components/card";
@@ -171,44 +172,6 @@ const PreviewProjectsSection = memo(({ projects }: { projects: Project[] }) => {
   );
 });
 
-const PreviewSocialLinks = memo(
-  ({ links, isDarkMode }: { links?: Record<string, Link>; isDarkMode: boolean }) => {
-    if (!links) {
-      return null;
-    }
-
-    const uniqueLinks = [
-      ...new Map(
-        Object.entries(links)
-          .filter(([k, l]) => k !== "portfolio" && l.url && l.label)
-          .map(([, l]) => [l.url, l]),
-      ).values(),
-    ];
-
-    if (uniqueLinks.length === 0) {
-      return null;
-    }
-
-    return (
-      <div className="shrink-0 flex items-center justify-between pt-2">
-        <div className="flex flex-wrap items-center gap-4">
-          {uniqueLinks.map((lk, idx) => (
-            <a
-              key={`${lk.url}-${idx}`}
-              href={lk.url}
-              target="_blank"
-              rel="noreferrer"
-              className={`text-xs lowercase ${isDarkMode ? "text-text-dark/60 hover:text-text-dark" : "text-text-light/60 hover:text-text-light"}`}
-            >
-              {lk.label}
-            </a>
-          ))}
-        </div>
-      </div>
-    );
-  },
-);
-
 export const PortfolioLivePreview = memo(
   // eslint-disable-next-line complexity
   ({ errors, isValid, parsedData }: PortfolioLivePreviewProps) => {
@@ -302,7 +265,7 @@ export const PortfolioLivePreview = memo(
         </div>
 
         {/* Main Content Area matching / route */}
-        <div className="-mt-4 mx-auto flex max-w-2xl flex-col gap-6 p-4 sm:p-6 text-left">
+        <div className="-mt-4 mx-auto flex max-w-3xl flex-col gap-6 sm:gap-8 p-4 sm:p-6 lg:p-8 text-left">
           {/* Navbar simulated links */}
           <div className="flex items-center justify-end gap-3 w-full">
             <span className="text-[13px] lowercase opacity-60">blogs</span>
@@ -313,27 +276,23 @@ export const PortfolioLivePreview = memo(
           <PreviewExperienceSection experiences={experiences} />
           <PreviewProjectsSection projects={projects} />
           {(ghSettings?.enabled || cfSettings?.enabled) && (
-            <div className="border-t border-border-dark/20 pt-4">
-              <div className="flex items-center gap-2 mb-3">
-                <span className="text-[10px] uppercase tracking-wider opacity-40">activity</span>
-              </div>
-              {ghSettings?.enabled ? (
-                <div className="scale-75 origin-top-left mb-2">
-                  <GitHubActivity username={ghSettings.username || "parazeeknova"}>
-                    {ghSettings?.hasToken && <GitHubStats />}
-                    {cfSettings?.enabled && (
-                      <CodeforcesCard username={cfSettings.username || "parazeeknova"} />
-                    )}
-                  </GitHubActivity>
-                </div>
-              ) : (
-                cfSettings?.enabled && (
-                  <CodeforcesCard username={cfSettings.username || "parazeeknova"} />
-                )
+            <>
+              {ghSettings?.enabled && (
+                <GitHubActivity
+                  isDarkMode={isDarkMode}
+                  username={ghSettings.username || "parazeeknova"}
+                >
+                  {ghSettings?.hasToken && <GitHubStats />}
+                </GitHubActivity>
               )}
-            </div>
+              {cfSettings?.enabled && (
+                <CodeforcesCard username={cfSettings.username || "parazeeknova"} />
+              )}
+            </>
           )}
-          <PreviewSocialLinks links={profile.links} isDarkMode={isDarkMode} />
+          <div className="shrink-0 flex items-center justify-between pt-2">
+            <SocialLinks profile={profile} />
+          </div>
 
           <div className="flex justify-end pt-4 pb-2">
             <span
