@@ -1,5 +1,8 @@
 import { useQuery } from "@tanstack/react-query";
+import { useRef } from "react";
 import { useTheme } from "#/shared/hooks/use-theme";
+import { useRevealOnReady } from "#/shared/hooks/use-reveal-on-ready";
+import { SkeletonBar } from "#/shared/components/skeleton";
 import { logger } from "#/shared/lib/logger";
 
 interface CFUser {
@@ -111,6 +114,7 @@ const formatSolvedDate = (ts: number): string => {
 export const CodeforcesCard = ({ username }: CodeforcesCardProps) => {
   const { isDarkMode } = useTheme();
   const t = (dark: string, light: string) => (isDarkMode ? dark : light);
+  const contentRef = useRef<HTMLDivElement>(null);
 
   // Codeforces sends no CORS headers, so we proxy both user.info and
   // user.rating through backy (/api/cf/data) which fetches server-side.
@@ -125,6 +129,12 @@ export const CodeforcesCard = ({ username }: CodeforcesCardProps) => {
     queryKey: ["codeforces-data", username],
     staleTime: 1000 * 60 * 10,
   });
+
+  const isReady = !isLoading;
+
+  // Reveal the graph with the same blur-fade the text sections use. The
+  // skeleton below is a ghost of this exact layout, so the swap is seamless.
+  useRevealOnReady(isReady, contentRef, { stagger: 0.06, y: 12 });
 
   if (isError) {
     logger.warn({ error: String(error), username }, "codeforces data fetch failed");
@@ -275,19 +285,45 @@ export const CodeforcesCard = ({ username }: CodeforcesCardProps) => {
   return (
     <div className="mt-4">
       {isLoading ? (
-        <div className="animate-pulse">
-          <div className="flex items-center gap-2 mb-2">
-            <div className={`h-2.5 w-16 ${t("bg-text-dark/10", "bg-text-light/10")}`} />
-            <div className={`h-2.5 w-10 ${t("bg-text-dark/10", "bg-text-light/10")}`} />
+        <div className="skeleton-shimmer" aria-hidden>
+          <div className="flex items-baseline gap-2 mb-2">
+            <span className="text-base font-semibold lowercase opacity-40">codeforces</span>
+            <SkeletonBar className="h-3.5 w-24" />
+            <SkeletonBar className="h-3.5 w-8 ml-auto" />
           </div>
           <div className="flex items-end gap-0.5 h-10">
             {Array.from({ length: 12 }).map((_, i) => (
-              <div className={`flex-1 h-8 ${t("bg-text-dark/5", "bg-text-light/5")}`} key={i} />
+              <div className={`flex-1 h-8 ${t("bg-amber-500/10", "bg-amber-600/10")}`} key={i} />
             ))}
+          </div>
+          <div className="flex gap-6 mt-4 sm:mt-6">
+            {[
+              { label: "solved" },
+              { label: "contests" },
+              { label: "active months" },
+              { label: "max rating" },
+            ].map((stat) => (
+              <div className="flex flex-col" key={stat.label}>
+                <SkeletonBar className="h-4 w-8" />
+                <span className="text-[10px] uppercase tracking-wider text-gray-500 opacity-40 mt-1 sm:text-xs">
+                  {stat.label}
+                </span>
+              </div>
+            ))}
+          </div>
+          <div className="mt-4">
+            <span className="text-[10px] uppercase tracking-wider text-gray-500 opacity-40 sm:text-xs">
+              recently solved
+            </span>
+            <div className="space-y-1.5 mt-1.5">
+              <SkeletonBar className="h-3 w-3/5" />
+              <SkeletonBar className="h-3 w-1/2" />
+              <SkeletonBar className="h-3 w-2/3" />
+            </div>
           </div>
         </div>
       ) : (
-        content
+        <div ref={contentRef}>{content}</div>
       )}
     </div>
   );

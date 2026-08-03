@@ -65,7 +65,7 @@ describe("CodeforcesCard", () => {
     });
 
     await waitFor(() => {
-      expect(container.querySelector(".animate-pulse")).toBeTruthy();
+      expect(container.querySelector(".skeleton-shimmer")).toBeTruthy();
     });
 
     // The handle and the unavailable fallback are not shown while loading.

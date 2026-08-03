@@ -984,6 +984,23 @@ button {
   transition: --fade-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
 }
 
+/* Content skeletons: soft bars that mirror the loaded layout so the page
+   reserves the final space while data loads. A slow, quiet shimmer reads as
+   "about to appear" instead of a hard pulsing box. */
+@keyframes skeleton-shimmer {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.skeleton-shimmer {
+  animation: skeleton-shimmer 1.8s ease-in-out infinite;
+}
+
 .drag-handle {
   position: fixed;
   opacity: 1;

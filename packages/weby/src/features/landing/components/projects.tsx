@@ -1,10 +1,10 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useProjects } from "../hooks/use-data";
 import { gsap } from "gsap";
 import { ArrowUpRightIcon } from "@phosphor-icons/react";
 import type { Project } from "#/shared/types";
-import { LoadingDots } from "#/shared/components/loading";
+import { SkeletonBar, SkeletonThumb } from "#/shared/components/skeleton";
 
 interface ProjectCardProps {
   index: number;
@@ -263,7 +263,7 @@ export const ProjectList = ({ onDetail }: ProjectListProps) => {
   const { data: projectData, isPending } = useProjects();
   const listRef = useRef<HTMLDivElement>(null);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isPending || !projectData || projectData.length === 0) {
       return;
     }
@@ -301,7 +301,21 @@ export const ProjectList = ({ onDetail }: ProjectListProps) => {
   return (
     <div className="space-y-3 sm:space-y-4" ref={listRef} style={{ perspective: 1000 }}>
       {isPending ? (
-        <LoadingDots />
+        <div className="skeleton-shimmer" aria-hidden>
+          {[0, 1, 2].map((i) => (
+            <div
+              className={`flex items-center gap-3 sm:gap-4 ${i % 2 === 1 ? "flex-row-reverse" : ""}`}
+              key={i}
+            >
+              <SkeletonThumb className="w-20 h-20 sm:w-28 sm:h-28" />
+              <div className="flex-1 min-w-0 space-y-2">
+                <SkeletonBar className="h-3.5 w-2/3" />
+                <SkeletonBar className="h-3 w-full" />
+                <SkeletonBar className="h-3 w-4/5" />
+              </div>
+            </div>
+          ))}
+        </div>
       ) : (
         projectData?.map((project, index) => (
           <ProjectCard key={project.title} index={index} onDetail={onDetail} project={project} />
@@ -323,7 +337,7 @@ export const MobileProjectList = ({ onDetail }: MobileProjectListProps) => {
   const fadeRef = useRef<HTMLDivElement>(null);
   const isFirstRender = useRef(true);
 
-  useEffect(() => {
+  useLayoutEffect(() => {
     if (isPending || !projectData || projectData.length === 0) {
       return;
     }
@@ -417,7 +431,22 @@ export const MobileProjectList = ({ onDetail }: MobileProjectListProps) => {
   }, [isExpanded]);
 
   if (isPending) {
-    return <LoadingDots />;
+    return (
+      <div className="skeleton-shimmer" aria-hidden>
+        {[0, 1, 2].map((i) => (
+          <div
+            className={`flex items-center gap-3 sm:gap-4 ${i % 2 === 1 ? "flex-row-reverse" : ""}`}
+            key={i}
+          >
+            <SkeletonThumb className="w-20 h-20 sm:w-28 sm:h-28" />
+            <div className="flex-1 min-w-0 space-y-2">
+              <SkeletonBar className="h-3.5 w-2/3" />
+              <SkeletonBar className="h-3 w-full" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
   }
 
   if (!projectData || projectData.length === 0) {

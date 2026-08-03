@@ -35,7 +35,7 @@ export const truncate = (text: string, max: number): string => {
 };
 
 // buildPortfolioTitle derives the page title from profile data.
-export const buildPortfolioTitle = (profile: Profile | undefined): string => {
+export const buildPortfolioTitle = (profile?: Profile): string => {
   if (!profile?.name) {
     return "verso — personal knowledge base and folio";
   }
@@ -45,7 +45,7 @@ export const buildPortfolioTitle = (profile: Profile | undefined): string => {
 };
 
 // buildPortfolioDescription derives the meta description from the profile.
-export const buildPortfolioDescription = (profile: Profile | undefined): string => {
+export const buildPortfolioDescription = (profile?: Profile): string => {
   const stripped = stripMarkdown(profile?.description);
   if (stripped) {
     return truncate(stripped, 160);
