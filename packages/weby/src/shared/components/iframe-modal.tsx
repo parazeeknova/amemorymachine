@@ -4,14 +4,16 @@ import { gsap } from "gsap";
 import { XIcon } from "@phosphor-icons/react";
 import { useTheme } from "#/shared/hooks/use-theme";
 
-interface ResumeModalProps {
+interface IframeModalProps {
   onClose: () => void;
+  title: string;
   url: string;
 }
 
-// ResumeModal shows a resume PDF in a simple centered frame. It closes on the
-// close button, on Escape, or on a click outside the frame.
-export const ResumeModal = ({ onClose, url }: ResumeModalProps) => {
+// IframeModal shows a page or PDF in a simple centered frame. It closes on the
+// close button, on Escape, or on a click outside the frame. Used for the
+// resume PDF and the portfolio site.
+export const IframeModal = ({ onClose, title, url }: IframeModalProps) => {
   const { isDarkMode } = useTheme();
   const overlayRef = useRef<HTMLDivElement>(null);
   const frameRef = useRef<HTMLDivElement>(null);
@@ -26,7 +28,19 @@ export const ResumeModal = ({ onClose, url }: ResumeModalProps) => {
       gsap.fromTo(
         frame,
         { opacity: 0, scale: 0.96, y: 10 },
-        { duration: 0.2, ease: "power2.out", opacity: 1, scale: 1, y: 0 },
+        {
+          duration: 0.2,
+          ease: "power2.out",
+          onComplete: () => {
+            // Drop the transform once the entrance finishes: a transform on
+            // the frame creates a containing block, which breaks internal
+            // scrolling of the PDF viewer inside the iframe.
+            gsap.set(frame, { clearProps: "transform" });
+          },
+          opacity: 1,
+          scale: 1,
+          y: 0,
+        },
       );
     }
     return () => {
@@ -62,20 +76,20 @@ export const ResumeModal = ({ onClose, url }: ResumeModalProps) => {
     >
       <div
         ref={frameRef}
-        className={`relative flex h-[85vh] w-full max-w-3xl flex-col border ${
+        className={`relative flex h-[90vh] w-[90vw] max-w-[90vw] flex-col overflow-hidden border ${
           isDarkMode ? "border-border-dark bg-bg-dark" : "border-border-light bg-bg-light"
         }`}
         role="dialog"
-        aria-label="Resume"
+        aria-label={title}
       >
         <div
           className={`flex shrink-0 items-center justify-between px-2 py-1 border-b ${
             isDarkMode ? "border-border-dark" : "border-border-light"
           }`}
         >
-          <span className="text-[10px] lowercase opacity-50">resume</span>
+          <span className="text-[10px] lowercase opacity-50">{title}</span>
           <button
-            aria-label="close resume"
+            aria-label={`close ${title}`}
             className={`flex h-4 w-4 items-center justify-center rounded-sm transition-colors ${
               isDarkMode
                 ? "text-text-dark/70 hover:text-text-dark hover:bg-white/10"
@@ -87,7 +101,12 @@ export const ResumeModal = ({ onClose, url }: ResumeModalProps) => {
             <XIcon size={10} />
           </button>
         </div>
-        <iframe className="min-h-0 flex-1 w-full border-0" src={url} title="resume" />
+        <iframe
+          className="min-h-0 w-full flex-1 overflow-auto border-0"
+          scrolling="auto"
+          src={url}
+          title={title}
+        />
       </div>
     </div>,
     document.body,

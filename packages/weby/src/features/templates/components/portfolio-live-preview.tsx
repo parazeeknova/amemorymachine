@@ -7,7 +7,7 @@ import { markdownToHtml } from "#/features/blog/lib/markdown-to-html";
 import { GitHubActivity } from "#/features/github/components/calendar";
 import { GitHubStats } from "#/features/github/components/stats";
 import { SocialLinks } from "#/features/landing/components/sections";
-import { ResumeModal } from "#/shared/components/resume-modal";
+import { IframeModal } from "#/shared/components/iframe-modal";
 import { useSquiggleDraw } from "#/shared/hooks/use-squiggle-draw";
 import { useGitHubSettings } from "../hooks/use-github-settings";
 import { useCFSettings } from "../hooks/use-cf-settings";
@@ -26,6 +26,7 @@ const PreviewProfileSection = memo(({ profile }: { profile: Profile }) => {
   );
   const sectionRef = useRef<HTMLDivElement>(null);
   const [isResumeOpen, setIsResumeOpen] = useState(false);
+  const [isPortfolioOpen, setIsPortfolioOpen] = useState(false);
 
   const portfolioLink =
     profile.links?.portfolio ||
@@ -48,15 +49,14 @@ const PreviewProfileSection = memo(({ profile }: { profile: Profile }) => {
         <p className="mb-4 flex items-baseline gap-2.5 text-sm">
           {profile.username && <span className="opacity-60 font-mono">@{profile.username}</span>}
           {taglineText && (
-            <a
-              href={portfolioLink?.url || "#"}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="squiggle-link inline-flex items-baseline gap-1"
+            <button
+              className="squiggle-link inline-flex cursor-pointer items-baseline gap-1 bg-transparent p-0 font-inherit text-inherit"
+              onClick={() => setIsPortfolioOpen(true)}
+              type="button"
             >
               portfolio
               <ArrowUpRightIcon size={13} />
-            </a>
+            </button>
           )}
           {profile.resumeUrl && (
             <button
@@ -72,7 +72,18 @@ const PreviewProfileSection = memo(({ profile }: { profile: Profile }) => {
       )}
 
       {isResumeOpen && profile.resumeUrl && (
-        <ResumeModal onClose={() => setIsResumeOpen(false)} url={profile.resumeUrl} />
+        <IframeModal
+          onClose={() => setIsResumeOpen(false)}
+          title="resume"
+          url={profile.resumeUrl}
+        />
+      )}
+      {isPortfolioOpen && portfolioLink?.url && (
+        <IframeModal
+          onClose={() => setIsPortfolioOpen(false)}
+          title="portfolio"
+          url={portfolioLink.url}
+        />
       )}
 
       {descriptionHtml && (

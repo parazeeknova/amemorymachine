@@ -111,11 +111,10 @@ describe("ProfileSection", () => {
 
   it("renders portfolio link", () => {
     render(<ProfileSection profile={mockProfile} isMobile={false} isPending={false} />);
-    const link = screen.getByText(
-      (c, el) => c.includes("portfolio") && el?.tagName.toLowerCase() === "a",
+    const button = screen.getByText(
+      (c, el) => c.includes("portfolio") && el?.tagName.toLowerCase() === "button",
     );
-    expect(link).toBeDefined();
-    expect(link.closest("a")?.getAttribute("href")).toBe("https://example.com");
+    expect(button).toBeDefined();
     expect(screen.getByText("@testuser")).toBeDefined();
   });
 

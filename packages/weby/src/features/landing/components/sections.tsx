@@ -9,7 +9,7 @@ import {
   EnvelopeSimpleIcon,
 } from "@phosphor-icons/react";
 import { AnimatedLink } from "#/shared/components/animated-link";
-import { ResumeModal } from "#/shared/components/resume-modal";
+import { IframeModal } from "#/shared/components/iframe-modal";
 import { SkeletonBar } from "#/shared/components/skeleton";
 import { useSquiggleDraw } from "#/shared/hooks/use-squiggle-draw";
 import { markdownToHtml } from "#/features/blog/lib/markdown-to-html";
@@ -36,6 +36,7 @@ export const ProfileSection = ({ profile, isPending }: ProfileSectionProps) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const portfolio = getLink(profile?.links, "portfolio");
   const [isResumeOpen, setIsResumeOpen] = useState(false);
+  const [isPortfolioOpen, setIsPortfolioOpen] = useState(false);
   const isProfileReady = !isPending && Boolean(profile);
 
   // Draw the squiggly description underlines in after the text reveal.
@@ -118,15 +119,14 @@ export const ProfileSection = ({ profile, isPending }: ProfileSectionProps) => {
             </span>
           )}
           {portfolio && (
-            <AnimatedLink
-              className="squiggle-link inline-flex items-baseline gap-1"
-              href={portfolio.url}
-              rel="noopener noreferrer"
-              target="_blank"
+            <button
+              className="squiggle-link inline-flex cursor-pointer items-baseline gap-1 bg-transparent p-0 font-inherit text-inherit"
+              onClick={() => setIsPortfolioOpen(true)}
+              type="button"
             >
               portfolio
               <ArrowUpRightIcon size={13} />
-            </AnimatedLink>
+            </button>
           )}
           {profile?.resumeUrl && (
             <button
@@ -142,7 +142,18 @@ export const ProfileSection = ({ profile, isPending }: ProfileSectionProps) => {
       )}
 
       {isResumeOpen && profile?.resumeUrl && (
-        <ResumeModal onClose={() => setIsResumeOpen(false)} url={profile.resumeUrl} />
+        <IframeModal
+          onClose={() => setIsResumeOpen(false)}
+          title="resume"
+          url={profile.resumeUrl}
+        />
+      )}
+      {isPortfolioOpen && portfolio?.url && (
+        <IframeModal
+          onClose={() => setIsPortfolioOpen(false)}
+          title="portfolio"
+          url={portfolio.url}
+        />
       )}
 
       {descriptionHtml && (
