@@ -300,7 +300,7 @@ export const ExperienceSection = ({ experience, isPending }: ExperienceSectionPr
               {item.location} | {item.period}
             </p>
             {item.description && (
-              <p className="mt-1.5 max-w-prose text-xs leading-relaxed text-gray-400 sm:text-[13px]">
+              <p className="mt-1.5 w-full text-xs leading-relaxed text-gray-400 sm:text-[13px]">
                 {item.description}
               </p>
             )}
@@ -320,7 +320,7 @@ export const ExperienceSection = ({ experience, isPending }: ExperienceSectionPr
                   {item.location} | {item.period}
                 </p>
                 {item.description && (
-                  <p className="mt-1.5 max-w-prose text-xs leading-relaxed text-gray-400 sm:text-[13px]">
+                  <p className="mt-1.5 w-full text-xs leading-relaxed text-gray-400 sm:text-[13px]">
                     {item.description}
                   </p>
                 )}

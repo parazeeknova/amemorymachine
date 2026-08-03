@@ -41,35 +41,35 @@ export const generatePortfolioMarkdown = (
     experiences ?? [
       {
         description:
-          "Ran self-hosted infrastructure for 5 companies across Hetzner, Hostinger and OVH Cloud — Dokploy and Coolify-managed VPS fleets with Nginx, Traefik, Cloudflare and Portainer handling routing, SSL and container orchestration, with full server ownership and access management. Built multi-cloud pipelines across AWS (EC2, RDS, S3, Lambda, API Gateway, Route53, VPC) and GCP (GKE, GCS, Cloud Functions), offloading serverless workloads to Vercel, Lambda and Cloudflare Workers and wiring everything through Jenkins and GitHub Actions with Docker for staging and prod. Set up per-client observability — Prometheus, Grafana, Uptime Kuma, Sentry and PostHog for the infra, GA4, Search Console, Bing Webmaster Tools and Umami for product analytics. Shipped application layers on Next.js, tRPC, PostgreSQL, Redis, Turso and Convex, from relational cores to real-time sync and edge databases, plus the backend services powering each product.",
+          "Owned self-hosted infra for 5 companies — Docker VPS fleets on Hetzner/Hostinger/OVH with Nginx/Traefik/Cloudflare and Portainer. AWS+GCP multi-cloud pipelines (EC2, RDS, S3, Lambda, GKE, GCS) with serverless offload to Vercel/Workers, CI/CD via Jenkins+GitHub Actions. Observability with Prometheus/Grafana/Sentry/PostHog; app layers on Next.js, tRPC, Postgres, Redis, Turso, Convex.",
         location: "Remote (India)",
         period: "August 25' –Present",
         title: "Founder & Infrastructure Engineer — Singularity Works",
       },
       {
         description:
-          "Built WebSocket APIs and the backend for a multi-tenant HRMS on the MERN stack — real-time CRUD over Socket.IO for employee records, attendance and approvals, powering admin and super-admin dashboards with role-scoped access. Developed RESTful APIs with FastAPI to manage concurrent video streams in a multi-camera security system, handling stream session lifecycle, frame-rate throttling and multi-client fan-out under load.",
+          "Built the MERN backend + Socket.IO WebSocket APIs for a multi-tenant HRMS — real-time CRUD powering admin/super-admin dashboards with role-scoped access. RESTful FastAPI services for concurrent multi-camera video streams, handling session lifecycle and fan-out under load.",
         location: "Remote (Muscat, Oman)",
         period: "April 25'–November 25'",
         title: "Full Stack Developer Intern — amasQIS.ai",
       },
       {
         description:
-          "Led the people behind the browser club — managed cross-functional club operations, coordinated team leads and kept the community running between semesters. Translated complex technical topics into content people actually wanted to read, producing written and visual material on web standards, open-source tooling and developer culture. Built real-time multiplayer games with live leaderboards, cooperative sabotage hints and pair mechanics for community events.",
+          "Led the browser club — cross-functional ops, team-lead coordination, community continuity between semesters. Produced written/visual content on web standards and open-source tooling. Built real-time multiplayer games with live leaderboards, cooperative sabotage hints and pair mechanics.",
         location: "University (VIT)",
         period: "June 25'–February 26'",
         title: "President — Mozilla Firefox Club (VIT)",
       },
       {
         description:
-          "Kept the machine running — logistics, team coordination and the operational groundwork that let the technical people ship without friction. Developed a treasure-hunt app with an admin dashboard on MongoDB, Express, React and Node.js, implementing REST and WebSocket APIs for real-time participant tracking, game-state updates and scoring. Leveraged EC2 with Docker for containerized, scalable hosting under player traffic, and built the event websites plus the AI Club landing page on the MERN stack.",
+          "Handled ops, logistics and team coordination. Built a treasure-hunt app with admin dashboard (MongoDB, Express, React, Node) — REST + WebSocket for real-time participant tracking, game state and scoring, deployed on EC2 with Docker. Also shipped event sites and the club landing page.",
         location: "University (VIT)",
         period: "June 25'–January 26'",
         title: "Operations Manager — AI Club (VIT)",
       },
       {
         description:
-          "Collaborated with a senior developer to enhance a non-profit website — my first commercial frontend work. The project focused on improving online visibility and making donations frictionless, expanding the organization's reach to a broader audience and showcasing the work it does for children who lack proper education, books and food.",
+          "Frontend work on a non-profit site (first commercial project) — improved visibility and donation flow to widen reach for children lacking education, books and food.",
         location: "Remote (India)",
         period: "April 24'–June 24'",
         title: "Frontend Developer — Operation Smile Foundation (NGO,Non-profit)",

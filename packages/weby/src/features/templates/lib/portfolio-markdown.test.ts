@@ -32,7 +32,7 @@ describe("generatePortfolioMarkdown boilerplate", () => {
     expect(markdown).toContain("Singularity Works");
     expect(markdown).toContain("Full Stack Developer Intern");
     expect(markdown).toContain("amasQIS.ai");
-    expect(markdown).toContain("self-hosted infrastructure for 5 companies");
+    expect(markdown).toContain("Owned self-hosted infra for 5 companies");
     expect(markdown).toContain("multi-tenant HRMS");
   });
 
@@ -67,7 +67,7 @@ describe("validatePortfolioMarkdown", () => {
     expect(parsed.isValid).toBe(true);
 
     const sw = parsed.parsed.experiences.find((e) => e.title.includes("Singularity Works"));
-    expect(sw?.description).toContain("self-hosted infrastructure");
+    expect(sw?.description).toContain("Owned self-hosted infra");
     expect(sw?.description).toContain("multi-cloud");
 
     const amas = parsed.parsed.experiences.find((e) => e.title.includes("amasQIS"));
