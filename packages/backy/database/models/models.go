@@ -24,9 +24,10 @@ type Profile struct {
 
 // ExperienceItem represents a work experience entry
 type ExperienceItem struct {
-	Title    string `json:"title"`
-	Location string `json:"location"`
-	Period   string `json:"period"`
+	Title       string `json:"title"`
+	Location    string `json:"location"`
+	Period      string `json:"period"`
+	Description string `json:"description,omitempty"`
 }
 
 // Project represents a project entry

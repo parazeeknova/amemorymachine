@@ -112,6 +112,11 @@ const PreviewExperienceSection = memo(({ experiences }: { experiences: Experienc
             <p className="text-gray-500 text-xs sm:text-sm">
               {item.location} | {item.period}
             </p>
+            {item.description && (
+              <p className="mt-1.5 max-w-prose text-xs leading-relaxed text-gray-400 sm:text-[13px]">
+                {item.description}
+              </p>
+            )}
           </div>
         ))}
       </div>

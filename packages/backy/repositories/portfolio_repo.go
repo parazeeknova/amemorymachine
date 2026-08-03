@@ -51,7 +51,7 @@ func (r *PortfolioRepo) GetPinnedProfile(ctx context.Context) (models.Profile, e
 
 func (r *PortfolioRepo) GetPinnedExperiences(ctx context.Context) ([]models.ExperienceItem, error) {
 	rows, err := r.pool.Query(ctx, `
-		SELECT e.title, e.location, e.period
+		SELECT e.title, e.location, e.period, e.description
 		FROM portfolio_experiences e
 		JOIN portfolio_profiles p ON e.profile_id = p.id
 		WHERE p.is_pinned = true
@@ -65,7 +65,7 @@ func (r *PortfolioRepo) GetPinnedExperiences(ctx context.Context) ([]models.Expe
 	var experiences []models.ExperienceItem
 	for rows.Next() {
 		var item models.ExperienceItem
-		if err := rows.Scan(&item.Title, &item.Location, &item.Period); err != nil {
+		if err := rows.Scan(&item.Title, &item.Location, &item.Period, &item.Description); err != nil {
 			return nil, err
 		}
 		experiences = append(experiences, item)
@@ -132,9 +132,9 @@ func (r *PortfolioRepo) SaveAndPinPortfolio(ctx context.Context, userID *string,
 
 	for idx, exp := range experiences {
 		_, err = tx.Exec(ctx, `
-			INSERT INTO portfolio_experiences (profile_id, title, location, period, position)
-			VALUES ($1, $2, $3, $4, $5)
-		`, profileID, exp.Title, exp.Location, exp.Period, idx)
+			INSERT INTO portfolio_experiences (profile_id, title, location, period, description, position)
+			VALUES ($1, $2, $3, $4, $5, $6)
+		`, profileID, exp.Title, exp.Location, exp.Period, exp.Description, idx)
 		if err != nil {
 			return fmt.Errorf("insert experience: %w", err)
 		}

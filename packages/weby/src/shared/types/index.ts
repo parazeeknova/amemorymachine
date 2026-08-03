@@ -16,6 +16,7 @@ export interface Profile {
 }
 
 export interface ExperienceItem {
+  description?: string;
   location: string;
   period: string;
   title: string;
