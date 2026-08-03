@@ -1,6 +1,7 @@
 import { memo, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { ExperienceItem, Link, Profile } from "#/shared/types";
 import { gsap } from "gsap";
+import { useTheme } from "#/shared/hooks/use-theme";
 import {
   ArrowUpRightIcon,
   GithubLogoIcon,
@@ -171,6 +172,114 @@ interface ExperienceSectionProps {
   isPending?: boolean;
 }
 
+export type ExperienceTabKey = "professional" | "university clubs";
+
+export interface ExperienceTabGroup {
+  key: ExperienceTabKey;
+}
+
+export const getExperienceGroups = (
+  experience: ExperienceItem[] | undefined,
+): ExperienceTabGroup[] => {
+  const professional = (experience ?? []).filter((e) => e.section !== "university clubs");
+  const clubs = (experience ?? []).filter((e) => e.section === "university clubs");
+  return [
+    ...(professional.length > 0 ? [{ key: "professional" as const }] : []),
+    ...(clubs.length > 0 ? [{ key: "university clubs" as const }] : []),
+  ];
+};
+
+export const ExperienceTabBar = memo(
+  ({
+    groups,
+    active,
+    onSelect,
+  }: {
+    groups: ExperienceTabGroup[];
+    active: ExperienceTabKey;
+    onSelect: (key: ExperienceTabKey) => void;
+  }) => {
+    const { isDarkMode } = useTheme();
+    const indicatorRef = useRef<HTMLDivElement>(null);
+    const tabRefs = useRef<Partial<Record<ExperienceTabKey, HTMLButtonElement | null>>>({});
+    const isFirstRender = useRef(true);
+
+    useLayoutEffect(() => {
+      const btn = tabRefs.current[active];
+      const indicator = indicatorRef.current;
+      if (!btn || !indicator) {
+        return;
+      }
+      if (isFirstRender.current) {
+        isFirstRender.current = false;
+        gsap.set(indicator, { left: btn.offsetLeft, width: btn.offsetWidth });
+        return;
+      }
+      gsap.killTweensOf(indicator);
+      gsap.to(indicator, {
+        duration: 0.45,
+        ease: "power3.inOut",
+        left: btn.offsetLeft,
+        width: btn.offsetWidth,
+      });
+      // wonky: the wave bulges and wobbles as it lands on the new tab
+      gsap.fromTo(
+        indicator,
+        { rotation: -2, scaleX: 1.35, scaleY: 1.7 },
+        {
+          duration: 0.6,
+          ease: "elastic.out(1.1, 0.4)",
+          rotation: 0,
+          scaleX: 1,
+          scaleY: 1,
+          transformOrigin: "50% 100%",
+        },
+      );
+    }, [active]);
+
+    const squiggleSvg = isDarkMode
+      ? "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='7' viewBox='0 0 20 7'%3E%3Cpath d='M0 4 C 2.5 1.5, 5 1.5, 7.5 4 S 12.5 6.5, 15 4 S 20 1.5, 20 4' fill='none' stroke='%23b58cff' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E\")"
+      : "url(\"data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='7' viewBox='0 0 20 7'%3E%3Cpath d='M0 4 C 2.5 1.5, 5 1.5, 7.5 4 S 12.5 6.5, 15 4 S 20 1.5, 20 4' fill='none' stroke='%237c3aed' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E\")";
+
+    return (
+      <div className="relative inline-flex items-baseline gap-6">
+        {groups.map((group) => {
+          const isActive = group.key === active;
+          const textClass = {
+            active: isDarkMode ? "text-text-dark" : "text-text-light",
+            idle: isDarkMode
+              ? "text-text-dark/45 hover:text-text-dark/80"
+              : "text-text-light/45 hover:text-text-light/80",
+          }[isActive ? "active" : "idle"];
+          return (
+            <button
+              key={group.key}
+              ref={(el) => {
+                tabRefs.current[group.key] = el;
+              }}
+              className={`relative z-10 px-0.5 pb-1.5 text-xs lowercase transition-colors duration-200 select-none cursor-pointer ${textClass}`}
+              onClick={() => onSelect(group.key)}
+              type="button"
+            >
+              {group.key}
+            </button>
+          );
+        })}
+        <div
+          ref={indicatorRef}
+          className="absolute left-0 -bottom-1 h-[7px]"
+          style={{
+            backgroundImage: squiggleSvg,
+            backgroundPosition: "left bottom",
+            backgroundRepeat: "repeat-x",
+            willChange: "left, width, transform",
+          }}
+        />
+      </div>
+    );
+  },
+);
+
 const ExperienceRow = memo(
   ({ item, withAnimClass }: { item: ExperienceItem; withAnimClass?: boolean }) => (
     <div key={item.title} className={withAnimClass ? "experience-item" : undefined}>
@@ -188,11 +297,48 @@ const ExperienceRow = memo(
 );
 
 export const ExperienceSection = ({ experience, isPending }: ExperienceSectionProps) => {
+  const [activeTab, setActiveTab] = useState<ExperienceTabKey>("professional");
   const [isExpanded, setIsExpanded] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
   const extraRef = useRef<HTMLDivElement>(null);
   const fadeRef = useRef<HTMLDivElement>(null);
   const isFirstRender = useRef(true);
+  const isTabFirstRender = useRef(true);
+
+  const professional = (experience ?? []).filter((e) => e.section !== "university clubs");
+  const clubs = (experience ?? []).filter((e) => e.section === "university clubs");
+  const groups = getExperienceGroups(experience);
+  const resolvedTab = groups.some((g) => g.key === activeTab)
+    ? activeTab
+    : (groups[0]?.key ?? "professional");
+  const activeItems = resolvedTab === "professional" ? professional : clubs;
+  const hasMore = resolvedTab === "professional" && professional.length > 3;
+  const visibleItems = hasMore ? professional.slice(0, 3) : activeItems;
+  const extraItems = hasMore ? professional.slice(3) : [];
+
+  const handleTabSelect = (next: ExperienceTabKey) => {
+    if (next === activeTab) {
+      return;
+    }
+    const el = listRef.current;
+    if (!el) {
+      setActiveTab(next);
+      return;
+    }
+    gsap.killTweensOf(el.children);
+    gsap.to([...el.children], {
+      duration: 0.16,
+      ease: "power2.in",
+      filter: "blur(6px)",
+      onComplete: () => {
+        setIsExpanded(false);
+        setActiveTab(next);
+      },
+      opacity: 0,
+      stagger: 0.02,
+      y: -8,
+    });
+  };
 
   useLayoutEffect(() => {
     if (isPending || !experience || experience.length === 0) {
@@ -228,6 +374,40 @@ export const ExperienceSection = ({ experience, isPending }: ExperienceSectionPr
       },
     );
   }, [isPending, experience]);
+
+  useLayoutEffect(() => {
+    if (isTabFirstRender.current) {
+      isTabFirstRender.current = false;
+      return;
+    }
+    const el = listRef.current;
+    if (!el) {
+      return;
+    }
+    const items = [...el.querySelectorAll(".experience-item")];
+    if (items.length === 0) {
+      return;
+    }
+    gsap.killTweensOf(items);
+    gsap.fromTo(
+      items,
+      {
+        filter: "blur(12px)",
+        opacity: 0,
+        scale: 0.98,
+        y: 14,
+      },
+      {
+        duration: 0.5,
+        ease: "power2.out",
+        filter: "blur(0px)",
+        opacity: 1,
+        scale: 1,
+        stagger: 0.06,
+        y: 0,
+      },
+    );
+  }, [activeTab, experience]);
 
   useEffect(() => {
     isFirstRender.current = false;
@@ -304,61 +484,43 @@ export const ExperienceSection = ({ experience, isPending }: ExperienceSectionPr
     return null;
   }
 
-  const professional = experience.filter((e) => e.section !== "university clubs");
-  const clubs = experience.filter((e) => e.section === "university clubs");
-  const groups = [
-    ...(professional.length > 0 ? [{ items: professional, label: "professional" }] : []),
-    ...(clubs.length > 0 ? [{ items: clubs, label: "university clubs" }] : []),
-  ];
-  const hasMore = professional.length > 3;
-
   return (
     <div className="shrink-0 space-y-6">
-      {groups.map((group) => (
-        <div className="space-y-3 sm:space-y-4" key={group.label}>
-          <h3 className="font-medium text-base lowercase">{group.label}</h3>
+      <ExperienceTabBar groups={groups} active={activeTab} onSelect={handleTabSelect} />
+      <div ref={listRef} className="relative space-y-3 sm:space-y-4" style={{ perspective: 1000 }}>
+        {visibleItems.map((item) => (
+          <ExperienceRow item={item} key={item.title} withAnimClass />
+        ))}
+
+        {extraItems.length > 0 && (
           <div
-            className="relative space-y-3 sm:space-y-4"
-            ref={group.label === "professional" ? listRef : undefined}
-            style={{ perspective: 1000 }}
+            className="space-y-3 sm:space-y-4 overflow-hidden mt-3 sm:mt-4"
+            ref={extraRef}
+            style={{ height: 0, opacity: 0 }}
           >
-            {group.label === "professional"
-              ? professional
-                  .slice(0, 3)
-                  .map((item) => <ExperienceRow item={item} key={item.title} withAnimClass />)
-              : clubs.map((item) => <ExperienceRow item={item} key={item.title} />)}
-
-            {hasMore && group.label === "professional" && (
-              <div
-                className="space-y-3 sm:space-y-4 overflow-hidden mt-3 sm:mt-4"
-                ref={extraRef}
-                style={{ height: 0, opacity: 0 }}
-              >
-                {professional.slice(3).map((item) => (
-                  <ExperienceRow item={item} key={item.title} />
-                ))}
-              </div>
-            )}
-
-            {hasMore && group.label === "professional" && (
-              <div
-                className="pointer-events-none absolute right-0 bottom-0 left-0 h-16 fade-overlay"
-                ref={fadeRef}
-              />
-            )}
+            {extraItems.map((item) => (
+              <ExperienceRow item={item} key={item.title} />
+            ))}
           </div>
+        )}
 
-          {hasMore && group.label === "professional" && (
-            <button
-              className="link-underline mt-1 text-gray-400 text-xs w-full text-center sm:text-left sm:w-auto select-none cursor-pointer"
-              onClick={() => setIsExpanded((prev) => !prev)}
-              type="button"
-            >
-              {isExpanded ? "view less" : "see more"}
-            </button>
-          )}
-        </div>
-      ))}
+        {extraItems.length > 0 && (
+          <div
+            className="pointer-events-none absolute right-0 bottom-0 left-0 h-16 fade-overlay"
+            ref={fadeRef}
+          />
+        )}
+
+        {hasMore && (
+          <button
+            className="link-underline mt-1 text-gray-400 text-xs w-full text-center sm:text-left sm:w-auto select-none cursor-pointer"
+            onClick={() => setIsExpanded((prev) => !prev)}
+            type="button"
+          >
+            {isExpanded ? "view less" : "see more"}
+          </button>
+        )}
+      </div>
     </div>
   );
 };

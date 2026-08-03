@@ -155,6 +155,30 @@ describe("ExperienceSection", () => {
     expect(container).toBeDefined();
   });
 
+  it("switches between professional and university clubs tabs", () => {
+    const mixedExperience: ExperienceItem[] = [
+      { location: "Remote", period: "2020-Present", title: "Software Engineer" },
+      {
+        location: "Campus",
+        period: "2021-2022",
+        section: "university clubs",
+        title: "Club Lead",
+      },
+    ];
+
+    render(<ExperienceSection experience={mixedExperience} isPending={false} />);
+
+    // Default tab shows professional items
+    expect(screen.getByText("Software Engineer")).toBeDefined();
+    expect(screen.queryByText("Club Lead")).toBeNull();
+
+    // Switch to the university clubs tab
+    fireEvent.click(screen.getByRole("button", { name: /university clubs/i }));
+
+    expect(screen.getByText("Club Lead")).toBeDefined();
+    expect(screen.queryByText("Software Engineer")).toBeNull();
+  });
+
   it("can expand and collapse extra items smoothly", () => {
     const mockFullExperience: ExperienceItem[] = [
       { location: "Remote", period: "2020-Present", title: "Software Engineer" },

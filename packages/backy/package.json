@@ -1,6 +1,6 @@
 {
   "name": "@verso/backy",
-  "version": "0.6.68",
+  "version": "0.6.69",
   "private": true,
   "scripts": {
     "build": "go build -o bin/backy",

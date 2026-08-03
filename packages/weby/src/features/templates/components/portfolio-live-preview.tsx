@@ -1,12 +1,18 @@
-import { memo, useMemo, useRef, useState } from "react";
+import { memo, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { ArrowUpRightIcon } from "@phosphor-icons/react";
+import { gsap } from "gsap";
 import { useTheme } from "#/shared/hooks/use-theme";
 import type { ExperienceItem, Profile, Project } from "#/shared/types";
 import type { ParsedPortfolio, ValidationError } from "../lib/portfolio-markdown";
 import { markdownToHtml } from "#/features/blog/lib/markdown-to-html";
 import { GitHubActivity } from "#/features/github/components/calendar";
 import { GitHubStats } from "#/features/github/components/stats";
-import { SocialLinks } from "#/features/landing/components/sections";
+import {
+  ExperienceTabBar,
+  getExperienceGroups,
+  SocialLinks,
+} from "#/features/landing/components/sections";
+import type { ExperienceTabKey } from "#/features/landing/components/sections";
 import { IframeModal } from "#/shared/components/iframe-modal";
 import { useSquiggleDraw } from "#/shared/hooks/use-squiggle-draw";
 import { useGitHubSettings } from "../hooks/use-github-settings";
@@ -98,39 +104,95 @@ const PreviewProfileSection = memo(({ profile }: { profile: Profile }) => {
 });
 
 const PreviewExperienceSection = memo(({ experiences }: { experiences: ExperienceItem[] }) => {
+  const [activeTab, setActiveTab] = useState<ExperienceTabKey>("professional");
+  const listRef = useRef<HTMLDivElement>(null);
+  const isTabFirstRender = useRef(true);
+
+  const professional = experiences.filter((e) => e.section !== "university clubs");
+  const clubs = experiences.filter((e) => e.section === "university clubs");
+  const groups = getExperienceGroups(experiences);
+  const resolvedTab = groups.some((g) => g.key === activeTab)
+    ? activeTab
+    : (groups[0]?.key ?? "professional");
+  const activeItems = resolvedTab === "professional" ? professional : clubs;
+
+  const handleTabSelect = (next: ExperienceTabKey) => {
+    if (next === activeTab) {
+      return;
+    }
+    const el = listRef.current;
+    if (!el) {
+      setActiveTab(next);
+      return;
+    }
+    gsap.killTweensOf(el.children);
+    gsap.to([...el.children], {
+      duration: 0.16,
+      ease: "power2.in",
+      filter: "blur(6px)",
+      onComplete: () => setActiveTab(next),
+      opacity: 0,
+      stagger: 0.02,
+      y: -8,
+    });
+  };
+
+  useLayoutEffect(() => {
+    if (isTabFirstRender.current) {
+      isTabFirstRender.current = false;
+      return;
+    }
+    const el = listRef.current;
+    if (!el) {
+      return;
+    }
+    const items = [...el.querySelectorAll(".experience-item")];
+    if (items.length === 0) {
+      return;
+    }
+    gsap.killTweensOf(items);
+    gsap.fromTo(
+      items,
+      {
+        filter: "blur(12px)",
+        opacity: 0,
+        scale: 0.98,
+        y: 14,
+      },
+      {
+        duration: 0.5,
+        ease: "power2.out",
+        filter: "blur(0px)",
+        opacity: 1,
+        scale: 1,
+        stagger: 0.06,
+        y: 0,
+      },
+    );
+  }, [activeTab, experiences]);
+
   if (experiences.length === 0) {
     return null;
   }
 
-  const professional = experiences.filter((e) => e.section !== "university clubs");
-  const clubs = experiences.filter((e) => e.section === "university clubs");
-  const groups = [
-    ...(professional.length > 0 ? [{ items: professional, label: "professional" }] : []),
-    ...(clubs.length > 0 ? [{ items: clubs, label: "university clubs" }] : []),
-  ];
-
   return (
-    <div className="shrink-0 space-y-6">
-      {groups.map((group) => (
-        <div className="space-y-3" key={group.label}>
-          <h3 className="font-medium text-base lowercase">{group.label}</h3>
-          <div className="space-y-4">
-            {group.items.map((item, idx) => (
-              <div key={`${item.title}-${idx}`} className="space-y-0.5">
-                <h4 className="font-medium text-xs sm:text-sm">{item.title}</h4>
-                <p className="text-gray-500 text-xs sm:text-sm">
-                  {item.location} | {item.period}
-                </p>
-                {item.description && (
-                  <p className="mt-1.5 w-full text-xs leading-relaxed text-gray-400 sm:text-[13px]">
-                    {item.description}
-                  </p>
-                )}
-              </div>
-            ))}
+    <div className="shrink-0 space-y-4">
+      <ExperienceTabBar groups={groups} active={activeTab} onSelect={handleTabSelect} />
+      <div ref={listRef} className="relative space-y-4">
+        {activeItems.map((item, idx) => (
+          <div key={`${item.title}-${idx}`} className="space-y-0.5 experience-item">
+            <h4 className="font-medium text-xs sm:text-sm">{item.title}</h4>
+            <p className="text-gray-500 text-xs sm:text-sm">
+              {item.location} | {item.period}
+            </p>
+            {item.description && (
+              <p className="mt-1.5 w-full text-xs leading-relaxed text-gray-400 sm:text-[13px]">
+                {item.description}
+              </p>
+            )}
           </div>
-        </div>
-      ))}
+        ))}
+      </div>
     </div>
   );
 });
