@@ -258,7 +258,7 @@ export const ExperienceTabBar = memo(
               ref={(el) => {
                 tabRefs.current[group.key] = el;
               }}
-              className={`relative z-10 px-0.5 pb-1 text-xs lowercase transition-colors duration-200 select-none cursor-pointer ${textClass}`}
+              className={`relative z-10 px-0.5 pb-1 text-[11px] lowercase transition-colors duration-200 select-none cursor-pointer ${textClass}`}
               onClick={() => onSelect(group.key)}
               type="button"
             >
