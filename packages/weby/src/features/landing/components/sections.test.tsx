@@ -96,6 +96,7 @@ describe("ProfileSection", () => {
     },
     name: "Test User",
     tagline: "test tagline",
+    username: "testuser",
   };
 
   it("renders profile name", () => {
@@ -108,13 +109,14 @@ describe("ProfileSection", () => {
     expect(screen.queryByRole("heading", { level: 1 })).toBeNull();
   });
 
-  it("renders portfolio link with tagline", () => {
+  it("renders portfolio link", () => {
     render(<ProfileSection profile={mockProfile} isMobile={false} isPending={false} />);
     const link = screen.getByText(
-      (c, el) => c.includes("test tagline") && el?.tagName.toLowerCase() === "a",
+      (c, el) => c.includes("portfolio") && el?.tagName.toLowerCase() === "a",
     );
     expect(link).toBeDefined();
     expect(link.closest("a")?.getAttribute("href")).toBe("https://example.com");
+    expect(screen.getByText("@testuser")).toBeDefined();
   });
 
   it("renders full description on mobile without show more button", () => {

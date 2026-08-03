@@ -2,6 +2,7 @@ import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { ExperienceItem, Link, Profile } from "#/shared/types";
 import { gsap } from "gsap";
 import {
+  ArrowUpRightIcon,
   GithubLogoIcon,
   LinkedinLogoIcon,
   XLogoIcon,
@@ -104,30 +105,33 @@ export const ProfileSection = ({ profile, isPending }: ProfileSectionProps) => {
   return (
     <div className="shrink-0" ref={sectionRef} style={{ perspective: 1000 }}>
       {profile?.name && (
-        <h1 className="font-display font-normal text-5xl sm:text-7xl pl-2">
-          {profile.name}
-          {profile.username && (
-            <span
-              className="ml-2 text-sm opacity-50"
-              style={{ fontFamily: '"Ubuntu Mono", monospace' }}
+        <h1 className="font-display font-normal text-5xl sm:text-7xl pl-2">{profile.name}</h1>
+      )}
+
+      {(profile?.username || portfolio) && (
+        <p className="mb-6 flex items-center justify-between text-sm sm:mb-8">
+          {portfolio && (
+            <AnimatedLink
+              className="squiggle-link flex items-center gap-1"
+              href={portfolio.url}
+              rel="noopener noreferrer"
+              target="_blank"
             >
+              portfolio
+              <ArrowUpRightIcon size={13} />
+            </AnimatedLink>
+          )}
+          {profile?.username && (
+            <span className="opacity-60" style={{ fontFamily: '"Ubuntu Mono", monospace' }}>
               @{profile.username}
             </span>
           )}
-        </h1>
-      )}
-
-      {portfolio && (
-        <p className="mb-6 text-sm sm:mb-8 sm:text-base">
-          <AnimatedLink href={portfolio.url} rel="noopener noreferrer" target="_blank">
-            {profile?.tagline || portfolio.label}
-          </AnimatedLink>
         </p>
       )}
 
       {descriptionHtml && (
         <div
-          className="prose-desc text-sm leading-relaxed sm:text-base lowercase"
+          className="prose-desc text-sm leading-relaxed sm:text-base"
           dangerouslySetInnerHTML={{ __html: descriptionHtml }}
         />
       )}

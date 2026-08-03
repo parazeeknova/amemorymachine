@@ -9,7 +9,7 @@ interface SquiggleOptions {
   hoverDuration?: number;
 }
 
-const SQUIGGLE_SELECTOR = ".prose-desc a";
+const SQUIGGLE_SELECTOR = ".prose-desc a, .squiggle-link";
 
 // useSquiggleDraw animates the purple squiggly underlines inside a
 // .prose-desc block, drawing each wave in left-to-right via the

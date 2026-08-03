@@ -1,4 +1,5 @@
 import { memo, useMemo, useRef } from "react";
+import { ArrowUpRightIcon } from "@phosphor-icons/react";
 import { useTheme } from "#/shared/hooks/use-theme";
 import type { ExperienceItem, Profile, Project } from "#/shared/types";
 import type { ParsedPortfolio, ValidationError } from "../lib/portfolio-markdown";
@@ -38,35 +39,29 @@ const PreviewProfileSection = memo(({ profile }: { profile: Profile }) => {
   return (
     <div className="shrink-0 space-y-3" ref={sectionRef}>
       {profile.name && (
-        <h1 className="font-display font-normal text-4xl sm:text-6xl pl-1">
-          {profile.name}
-          {profile.username && (
-            <span
-              className="ml-2 text-sm opacity-50 font-mono"
-              style={{ fontFamily: '"Ubuntu Mono", monospace' }}
-            >
-              @{profile.username}
-            </span>
-          )}
-        </h1>
+        <h1 className="font-display font-normal text-4xl sm:text-6xl pl-1">{profile.name}</h1>
       )}
 
-      {taglineText && (
-        <p className="mb-4 text-sm sm:text-base">
-          <a
-            href={portfolioLink?.url || "#"}
-            target="_blank"
-            rel="noopener noreferrer"
-            className="link-underline"
-          >
-            {taglineText}
-          </a>
+      {(profile.username || taglineText) && (
+        <p className="mb-4 flex items-center justify-between text-sm sm:text-base">
+          {taglineText && (
+            <a
+              href={portfolioLink?.url || "#"}
+              target="_blank"
+              rel="noopener noreferrer"
+              className="squiggle-link flex items-center gap-1"
+            >
+              portfolio
+              <ArrowUpRightIcon size={13} />
+            </a>
+          )}
+          {profile.username && <span className="opacity-60 font-mono">@{profile.username}</span>}
         </p>
       )}
 
       {descriptionHtml && (
         <div
-          className="text-sm leading-relaxed sm:text-base lowercase prose-desc"
+          className="text-sm leading-relaxed sm:text-base prose-desc"
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: descriptionHtml }}
         />

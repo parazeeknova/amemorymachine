@@ -844,7 +844,8 @@ button {
   color: var(--color-text);
 }
 
-.prose-desc a {
+.prose-desc a,
+.squiggle-link {
   color: inherit;
   font-style: italic;
   font-weight: 600;
@@ -863,7 +864,8 @@ button {
    The ::after width follows --squiggle-progress (0-100), letting GSAP draw
    the wave in left-to-right. The viewBox is taller than the wave so the
    curve never gets sliced at the bottom. */
-.prose-desc a::after {
+.prose-desc a::after,
+.squiggle-link::after {
   position: absolute;
   /* Sits in the padding below the text, leaving a small gap to the glyphs. */
   bottom: 2px;
@@ -877,7 +879,8 @@ button {
   opacity: 0.85;
 }
 
-[data-theme="light"] .prose-desc a::after {
+[data-theme="light"] .prose-desc a::after,
+[data-theme="light"] .squiggle-link::after {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='7' viewBox='0 0 20 7'%3E%3Cpath d='M0 4 C 2.5 1.5, 5 1.5, 7.5 4 S 12.5 6.5, 15 4 S 20 1.5, 20 4' fill='none' stroke='%237c3aed' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E");
 }
 
