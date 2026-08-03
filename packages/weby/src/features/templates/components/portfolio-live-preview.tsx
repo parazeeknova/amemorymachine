@@ -94,7 +94,7 @@ const PreviewProfileSection = memo(({ profile }: { profile: Profile }) => {
 
       {descriptionHtml && (
         <div
-          className="text-sm leading-relaxed sm:text-base prose-desc"
+          className="text-sm leading-relaxed text-justify sm:text-base prose-desc"
           // eslint-disable-next-line react/no-danger
           dangerouslySetInnerHTML={{ __html: descriptionHtml }}
         />
@@ -230,7 +230,7 @@ const PreviewProjectsSection = memo(({ projects }: { projects: Project[] }) => {
               <div className="flex-1 min-w-0">
                 <h3 className="font-medium text-xs sm:text-sm">{proj.title}</h3>
                 {proj.desc && (
-                  <p className="mt-1 text-gray-500 text-xs sm:text-sm leading-relaxed">
+                  <p className="mt-1 text-justify text-gray-500 text-xs sm:text-sm leading-relaxed">
                     {proj.desc}
                   </p>
                 )}

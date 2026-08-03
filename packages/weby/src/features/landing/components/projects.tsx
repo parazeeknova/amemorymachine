@@ -187,7 +187,7 @@ const ProjectCard = ({ index, onDetail, project }: ProjectCardProps) => {
       {renderThumbnail()}
       <div className="flex-1 min-w-0">
         <h3 className="font-medium text-xs sm:text-sm">{project.title}</h3>
-        <p className="mt-1 text-gray-500 text-xs sm:text-sm">{project.desc}</p>
+        <p className="mt-1 text-justify text-gray-500 text-xs sm:text-sm">{project.desc}</p>
         <p className="mt-1 flex items-center gap-2 text-gray-400 text-xs">
           {stackOpen ? (
             <>

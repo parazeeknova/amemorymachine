@@ -159,7 +159,7 @@ export const ProfileSection = ({ profile, isPending }: ProfileSectionProps) => {
 
       {descriptionHtml && (
         <div
-          className="prose-desc text-sm leading-relaxed sm:text-base"
+          className="prose-desc text-sm leading-relaxed text-justify sm:text-base"
           dangerouslySetInnerHTML={{ __html: descriptionHtml }}
         />
       )}
