@@ -157,13 +157,15 @@ export const FormatGuideModal = ({ isOpen, onClose }: FormatGuideModalProps) => 
           </P>
           <Code>
             {
-              "### Project Name\n- Desc: Project description\n- Image: https://img-url.png\n- Stack: React, TypeScript, Bun\n- Readme: https://raw.github.com/...\n- Repo: https://github.com/...\n- Product: https://app-url.com\n- Section: prod"
+              "### Project Name\n- Desc: Project description\n- Image: https://img-url.png\n- Logo: https://img-url.png\n- Stack: React, TypeScript, Bun\n- Readme: https://raw.github.com/...\n- Repo: https://github.com/...\n- Product: https://app-url.com\n- Section: prod"
             }
           </Code>
           <P>
-            All fields are optional. You can skip any field you do not have data for. The Section
-            field groups projects into the prod or personal tabs (anything other than "personal"
-            becomes prod). Add as many projects as you like.
+            All fields are optional. You can skip any field you do not have data for. Image is the
+            product screenshot, Logo is the project icon: the thumbnail shows the logo and
+            crossfades to the screenshot on hover, and if one is missing the other serves both. The
+            Section field groups projects into the prod or personal tabs (anything other than
+            "personal" becomes prod). Add as many projects as you like.
           </P>
 
           <HR />

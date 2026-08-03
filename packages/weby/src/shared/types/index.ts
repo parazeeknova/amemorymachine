@@ -30,6 +30,7 @@ export type ProjectSection = "prod" | "personal";
 export interface Project {
   desc: string;
   image?: string;
+  logo?: string;
   productUrl?: string;
   readmeUrl?: string;
   repoUrl?: string;

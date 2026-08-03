@@ -92,6 +92,7 @@ export const generatePortfolioMarkdown = (
       {
         desc: "A social platform that brings your entire internet into one place. Unified feed, communities, real-time chat, rich media and tipping all tied together by Aura, a reputation system that grows with you, and Zeph, an AI companion that actually remembers you. Built by one person. Slightly unhinged in ambition.",
         image: "https://img.przknv.cc/t/Gk8Fy0aaMAARWSc.jpg",
+        logo: "https://img.przknv.cc/t/zephyr.png",
         productUrl: "https://asocialmedia.cc",
         readmeUrl:
           "https://raw.githubusercontent.com/asocialmedia/social/refs/heads/main/.github/README.md",
@@ -105,6 +106,7 @@ export const generatePortfolioMarkdown = (
       {
         desc: "Personal knowledge base and folio, blog for public face & private brain, one app that doesn't apologize for being both. the left side is where i exist as a person (public face): my projects, my work, my contribution graph. the right side is where i think out loud (private brain): notes, docs, blog posts, half-baked ideas.",
         image: "",
+        logo: "https://img.przknv.cc/t/verso.png",
         productUrl: "https://amemorymachine.cc",
         readmeUrl:
           "https://raw.githubusercontent.com/parazeeknova/verso/refs/heads/main/.github/README.md",
@@ -118,6 +120,7 @@ export const generatePortfolioMarkdown = (
       {
         desc: "A local-first spatial workspace for free-form kanban, structured tasks, durable offline work, and realtime collaboration with other goodies.",
         image: "https://img.przknv.cc/t/Screenshot_2026-07-08_22.51.03.png",
+        logo: "https://img.przknv.cc/t/lumen.png",
         productUrl: "https://lumen.itssingularity.com",
         readmeUrl:
           "https://raw.githubusercontent.com/singularityworks-xyz/lumen/refs/heads/origin/.github/README.md",
@@ -190,7 +193,7 @@ export const generatePortfolioMarkdown = (
   )
     .map(
       (proj) =>
-        `### ${proj.title}\n- Desc: ${proj.desc}\n- Image: ${proj.image || ""}\n- Stack: ${proj.stack || ""}\n- Readme: ${proj.readmeUrl || ""}\n- Repo: ${proj.repoUrl || ""}\n- Product: ${proj.productUrl || ""}\n- Section: ${proj.section ?? "prod"}`,
+        `### ${proj.title}\n- Desc: ${proj.desc}\n- Image: ${proj.image || ""}\n- Logo: ${proj.logo || ""}\n- Stack: ${proj.stack || ""}\n- Readme: ${proj.readmeUrl || ""}\n- Repo: ${proj.repoUrl || ""}\n- Product: ${proj.productUrl || ""}\n- Section: ${proj.section ?? "prod"}`,
     )
     .join("\n\n");
 
@@ -295,6 +298,7 @@ const parseProjectLine = (
     return {
       desc: "",
       image: "",
+      logo: "",
       productUrl: "",
       readmeUrl: "",
       repoUrl: "",
@@ -313,6 +317,8 @@ const parseProjectLine = (
         currentProjItem.desc = val;
       } else if (fieldKey === "image") {
         currentProjItem.image = val;
+      } else if (fieldKey === "logo") {
+        currentProjItem.logo = val;
       } else if (fieldKey === "stack") {
         currentProjItem.stack = val;
       } else if (fieldKey === "readme" || fieldKey === "readmeurl") {

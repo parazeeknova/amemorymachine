@@ -291,7 +291,7 @@ const PreviewProjectsSection = memo(({ projects }: { projects: Project[] }) => {
               key={`${proj.title}-${idx}`}
               className={`flex items-center gap-3 sm:gap-4 ${isEven ? "" : "flex-row-reverse"}`}
             >
-              {proj.image && (
+              {(proj.image || proj.logo) && (
                 <ProjectThumb
                   className="w-20 h-20 sm:w-28 sm:h-28 border border-white/10"
                   index={idx}

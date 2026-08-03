@@ -32,6 +32,11 @@ export const ProjectThumb = ({
   const isEven = index % 2 === 0;
 
   const linkUrl = project.productUrl || project.repoUrl;
+  // Logo shows by default, the product screenshot crossfades in on hover.
+  // If only one of the two exists it serves both states.
+  const primarySrc = project.logo || project.image;
+  const hoverSrc = project.image || project.logo;
+  const hasDual = Boolean(project.logo && project.image);
 
   useEffect(() => {
     setIsMounted(true);
@@ -127,7 +132,7 @@ export const ProjectThumb = ({
     });
   };
 
-  if (!project.image) {
+  if (!project.image && !project.logo) {
     return null;
   }
 
@@ -137,7 +142,14 @@ export const ProjectThumb = ({
         className={`relative shrink-0 block overflow-hidden ${className}`}
         style={{ transform: isEven ? "rotate(-3deg)" : "rotate(3deg)" }}
       >
-        <img alt={project.title} className="w-full h-full object-cover" src={project.image} />
+        <img alt={project.title} className="w-full h-full object-cover" src={primarySrc} />
+        {hasDual && (
+          <img
+            alt={project.title}
+            className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 hover:opacity-100"
+            src={hoverSrc}
+          />
+        )}
       </div>
     );
   }
@@ -158,8 +170,15 @@ export const ProjectThumb = ({
         <img
           alt={project.title}
           className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-          src={project.image}
+          src={primarySrc}
         />
+        {hasDual && (
+          <img
+            alt={project.title}
+            className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-hover:scale-110"
+            src={hoverSrc}
+          />
+        )}
         <div className="absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-all duration-300 group-hover:bg-black/50 group-hover:opacity-100">
           <ArrowUpRightIcon className="text-white" size={24} />
         </div>
@@ -176,7 +195,7 @@ export const ProjectThumb = ({
                   ref={previewImgRef}
                   alt={project.title}
                   className="block w-72 max-h-96 object-contain"
-                  src={project.image}
+                  src={project.image || project.logo}
                 />
               </div>
             </div>,
