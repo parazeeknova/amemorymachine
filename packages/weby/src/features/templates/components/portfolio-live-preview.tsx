@@ -177,6 +177,7 @@ const PreviewExperienceSection = memo(({ experiences }: { experiences: Experienc
 
   return (
     <div className="shrink-0 space-y-4">
+      <h3 className="font-medium text-base lowercase">work i did</h3>
       {groups.length > 1 && (
         <ExperienceTabBar groups={groups} active={activeTab} onSelect={handleTabSelect} />
       )}

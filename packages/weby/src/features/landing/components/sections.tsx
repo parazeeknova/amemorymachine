@@ -258,7 +258,7 @@ export const ExperienceTabBar = memo(
               ref={(el) => {
                 tabRefs.current[group.key] = el;
               }}
-              className={`relative z-10 px-0.5 pb-1.5 text-xs lowercase transition-colors duration-200 select-none cursor-pointer ${textClass}`}
+              className={`relative z-10 px-0.5 pb-1 text-xs lowercase transition-colors duration-200 select-none cursor-pointer ${textClass}`}
               onClick={() => onSelect(group.key)}
               type="button"
             >
@@ -487,6 +487,7 @@ export const ExperienceSection = ({ experience, isPending }: ExperienceSectionPr
 
   return (
     <div className="shrink-0 space-y-6">
+      <h3 className="font-medium text-base lowercase">work i did</h3>
       {groups.length > 1 && (
         <ExperienceTabBar groups={groups} active={activeTab} onSelect={handleTabSelect} />
       )}
