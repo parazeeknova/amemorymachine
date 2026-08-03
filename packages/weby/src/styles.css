@@ -848,11 +848,16 @@ button {
 .squiggle-link {
   color: inherit;
   font-style: italic;
-  font-weight: 400;
   text-decoration: none;
   position: relative;
   /* Room below the text for the squiggle, with a gap between word and wave. */
   padding-bottom: 7px;
+}
+
+/* Description links are bold italic; standalone .squiggle-link elements
+   (portfolio / resume) stay regular weight. */
+.prose-desc a {
+  font-weight: 600;
 }
 
 /* Description links keep the wave drawn by default (re-animated on hover);
@@ -863,6 +868,7 @@ button {
 }
 
 .squiggle-link {
+  font-weight: 400;
   --squiggle-progress: 0;
 }
 
