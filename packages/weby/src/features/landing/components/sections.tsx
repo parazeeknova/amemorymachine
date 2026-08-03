@@ -1,4 +1,4 @@
-import { useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import type { ExperienceItem, Link, Profile } from "#/shared/types";
 import { gsap } from "gsap";
 import {
@@ -171,6 +171,22 @@ interface ExperienceSectionProps {
   isPending?: boolean;
 }
 
+const ExperienceRow = memo(
+  ({ item, withAnimClass }: { item: ExperienceItem; withAnimClass?: boolean }) => (
+    <div key={item.title} className={withAnimClass ? "experience-item" : undefined}>
+      <h3 className="font-medium text-xs sm:text-sm">{item.title}</h3>
+      <p className="text-gray-500 text-xs sm:text-sm">
+        {item.location} | {item.period}
+      </p>
+      {item.description && (
+        <p className="mt-1.5 w-full text-xs leading-relaxed text-gray-400 sm:text-[13px]">
+          {item.description}
+        </p>
+      )}
+    </div>
+  ),
+);
+
 export const ExperienceSection = ({ experience, isPending }: ExperienceSectionProps) => {
   const [isExpanded, setIsExpanded] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
@@ -288,64 +304,61 @@ export const ExperienceSection = ({ experience, isPending }: ExperienceSectionPr
     return null;
   }
 
-  const hasMore = experience.length > 3;
+  const professional = experience.filter((e) => e.section !== "university clubs");
+  const clubs = experience.filter((e) => e.section === "university clubs");
+  const groups = [
+    ...(professional.length > 0 ? [{ items: professional, label: "professional" }] : []),
+    ...(clubs.length > 0 ? [{ items: clubs, label: "university clubs" }] : []),
+  ];
+  const hasMore = professional.length > 3;
 
   return (
-    <div className="shrink-0 space-y-3 sm:space-y-4">
-      <div className="relative space-y-3 sm:space-y-4" ref={listRef} style={{ perspective: 1000 }}>
-        {experience.slice(0, 3).map((item) => (
-          <div key={item.title} className="experience-item">
-            <h3 className="font-medium text-xs sm:text-sm">{item.title}</h3>
-            <p className="text-gray-500 text-xs sm:text-sm">
-              {item.location} | {item.period}
-            </p>
-            {item.description && (
-              <p className="mt-1.5 w-full text-xs leading-relaxed text-gray-400 sm:text-[13px]">
-                {item.description}
-              </p>
+    <div className="shrink-0 space-y-6">
+      {groups.map((group) => (
+        <div className="space-y-3 sm:space-y-4" key={group.label}>
+          <h3 className="font-medium text-base lowercase">{group.label}</h3>
+          <div
+            className="relative space-y-3 sm:space-y-4"
+            ref={group.label === "professional" ? listRef : undefined}
+            style={{ perspective: 1000 }}
+          >
+            {group.label === "professional"
+              ? professional
+                  .slice(0, 3)
+                  .map((item) => <ExperienceRow item={item} key={item.title} withAnimClass />)
+              : clubs.map((item) => <ExperienceRow item={item} key={item.title} />)}
+
+            {hasMore && group.label === "professional" && (
+              <div
+                className="space-y-3 sm:space-y-4 overflow-hidden mt-3 sm:mt-4"
+                ref={extraRef}
+                style={{ height: 0, opacity: 0 }}
+              >
+                {professional.slice(3).map((item) => (
+                  <ExperienceRow item={item} key={item.title} />
+                ))}
+              </div>
+            )}
+
+            {hasMore && group.label === "professional" && (
+              <div
+                className="pointer-events-none absolute right-0 bottom-0 left-0 h-16 fade-overlay"
+                ref={fadeRef}
+              />
             )}
           </div>
-        ))}
 
-        {hasMore && (
-          <div
-            className="space-y-3 sm:space-y-4 overflow-hidden mt-3 sm:mt-4"
-            ref={extraRef}
-            style={{ height: 0, opacity: 0 }}
-          >
-            {experience.slice(3).map((item) => (
-              <div key={item.title}>
-                <h3 className="font-medium text-xs sm:text-sm">{item.title}</h3>
-                <p className="text-gray-500 text-xs sm:text-sm">
-                  {item.location} | {item.period}
-                </p>
-                {item.description && (
-                  <p className="mt-1.5 w-full text-xs leading-relaxed text-gray-400 sm:text-[13px]">
-                    {item.description}
-                  </p>
-                )}
-              </div>
-            ))}
-          </div>
-        )}
-
-        {hasMore && (
-          <div
-            className="pointer-events-none absolute right-0 bottom-0 left-0 h-16 fade-overlay"
-            ref={fadeRef}
-          />
-        )}
-      </div>
-
-      {hasMore && (
-        <button
-          className="link-underline mt-1 text-gray-400 text-xs w-full text-center sm:text-left sm:w-auto select-none cursor-pointer"
-          onClick={() => setIsExpanded((prev) => !prev)}
-          type="button"
-        >
-          {isExpanded ? "view less" : "see more"}
-        </button>
-      )}
+          {hasMore && group.label === "professional" && (
+            <button
+              className="link-underline mt-1 text-gray-400 text-xs w-full text-center sm:text-left sm:w-auto select-none cursor-pointer"
+              onClick={() => setIsExpanded((prev) => !prev)}
+              type="button"
+            >
+              {isExpanded ? "view less" : "see more"}
+            </button>
+          )}
+        </div>
+      ))}
     </div>
   );
 };

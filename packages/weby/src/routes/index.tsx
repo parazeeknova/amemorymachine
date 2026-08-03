@@ -484,10 +484,7 @@ const Home = function Home() {
 
         <ProfileSection isMobile={isMobile} isPending={isPending} profile={profile} />
 
-        <div className="shrink-0 space-y-2">
-          <h3 className="font-medium text-base">work i did</h3>
-          <ExperienceSection experience={experience} isPending={isPending} />
-        </div>
+        <ExperienceSection experience={experience} isPending={isPending} />
 
         <div className="shrink-0 space-y-2">
           <h3 className="font-medium text-base">voo look what i made</h3>

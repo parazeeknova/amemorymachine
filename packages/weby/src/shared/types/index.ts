@@ -15,10 +15,13 @@ export interface Profile {
   resumeUrl?: string;
 }
 
+export type ExperienceSection = "professional" | "university clubs";
+
 export interface ExperienceItem {
   description?: string;
   location: string;
   period: string;
+  section?: ExperienceSection;
   title: string;
 }
 

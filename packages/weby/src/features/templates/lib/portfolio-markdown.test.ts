@@ -32,7 +32,7 @@ describe("generatePortfolioMarkdown boilerplate", () => {
     expect(markdown).toContain("Singularity Works");
     expect(markdown).toContain("Full Stack Developer Intern");
     expect(markdown).toContain("amasQIS.ai");
-    expect(markdown).toContain("Owned self-hosted infra for 5 companies");
+    expect(markdown).toContain("7-figure INR revenue");
     expect(markdown).toContain("multi-tenant HRMS");
   });
 
@@ -67,12 +67,16 @@ describe("validatePortfolioMarkdown", () => {
     expect(parsed.isValid).toBe(true);
 
     const sw = parsed.parsed.experiences.find((e) => e.title.includes("Singularity Works"));
-    expect(sw?.description).toContain("Owned self-hosted infra");
-    expect(sw?.description).toContain("multi-cloud");
+    expect(sw?.description).toContain("7-figure INR revenue");
+    expect(sw?.description).toContain("Azure");
+    expect(sw?.section).toBe("professional");
 
     const amas = parsed.parsed.experiences.find((e) => e.title.includes("amasQIS"));
     expect(amas?.description).toContain("multi-tenant HRMS");
     expect(amas?.description).toContain("FastAPI");
+
+    const club = parsed.parsed.experiences.find((e) => e.title.includes("Mozilla"));
+    expect(club?.section).toBe("university clubs");
   });
 
   it("rejects invalid email format", () => {

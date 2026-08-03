@@ -41,9 +41,10 @@ export const generatePortfolioMarkdown = (
     experiences ?? [
       {
         description:
-          "Owned self-hosted infra for 5 companies — Docker VPS fleets on Hetzner/Hostinger/OVH with Nginx/Traefik/Cloudflare and Portainer. AWS+GCP multi-cloud pipelines (EC2, RDS, S3, Lambda, GKE, GCS) with serverless offload to Vercel/Workers, CI/CD via Jenkins+GitHub Actions. Observability with Prometheus/Grafana/Sentry/PostHog; app layers on Next.js, tRPC, Postgres, Redis, Turso, Convex.",
+          "Scaled infrastructure for 5 companies to 7-figure INR revenue in under 9 months — Docker VPS fleets on Hetzner/Hostinger/OVH with Nginx/Traefik/Cloudflare and Portainer. Multi-cloud pipelines across AWS (EC2, RDS, S3, Lambda, API Gateway, Route53, VPC), GCP (GKE, GCS, Cloud Functions) and Azure (VMs, Blob Storage, App Service), with serverless offload to Vercel/Lambda/Workers and CI/CD via Jenkins + GitHub Actions. Observability with Prometheus/Grafana/Sentry/PostHog; app layers on Next.js, tRPC, Postgres, Redis, Turso, Convex.",
         location: "Remote (India)",
         period: "August 25' –Present",
+        section: "professional",
         title: "Founder & Infrastructure Engineer — Singularity Works",
       },
       {
@@ -51,6 +52,7 @@ export const generatePortfolioMarkdown = (
           "Built the MERN backend + Socket.IO WebSocket APIs for a multi-tenant HRMS — real-time CRUD powering admin/super-admin dashboards with role-scoped access. RESTful FastAPI services for concurrent multi-camera video streams, handling session lifecycle and fan-out under load.",
         location: "Remote (Muscat, Oman)",
         period: "April 25'–November 25'",
+        section: "professional",
         title: "Full Stack Developer Intern — amasQIS.ai",
       },
       {
@@ -58,6 +60,7 @@ export const generatePortfolioMarkdown = (
           "Led the browser club — cross-functional ops, team-lead coordination, community continuity between semesters. Produced written/visual content on web standards and open-source tooling. Built real-time multiplayer games with live leaderboards, cooperative sabotage hints and pair mechanics.",
         location: "University (VIT)",
         period: "June 25'–February 26'",
+        section: "university clubs",
         title: "President — Mozilla Firefox Club (VIT)",
       },
       {
@@ -65,6 +68,7 @@ export const generatePortfolioMarkdown = (
           "Handled ops, logistics and team coordination. Built a treasure-hunt app with admin dashboard (MongoDB, Express, React, Node) — REST + WebSocket for real-time participant tracking, game state and scoring, deployed on EC2 with Docker. Also shipped event sites and the club landing page.",
         location: "University (VIT)",
         period: "June 25'–January 26'",
+        section: "university clubs",
         title: "Operations Manager — AI Club (VIT)",
       },
       {
@@ -72,13 +76,14 @@ export const generatePortfolioMarkdown = (
           "Frontend work on a non-profit site (first commercial project) — improved visibility and donation flow to widen reach for children lacking education, books and food.",
         location: "Remote (India)",
         period: "April 24'–June 24'",
+        section: "professional",
         title: "Frontend Developer — Operation Smile Foundation (NGO,Non-profit)",
       },
     ]
   )
     .map(
       (exp) =>
-        `### ${exp.title}\n- Location: ${exp.location}\n- Period: ${exp.period}\n- Description: ${exp.description ?? ""}`,
+        `### ${exp.title}\n- Location: ${exp.location}\n- Period: ${exp.period}\n- Description: ${exp.description ?? ""}\n- Section: ${exp.section ?? "professional"}`,
     )
     .join("\n\n");
 
@@ -245,7 +250,13 @@ const parseExperienceLine = (
     if (currentExpItem) {
       experiences.push(currentExpItem);
     }
-    return { description: "", location: "", period: "", title: line.slice(4).trim() };
+    return {
+      description: "",
+      location: "",
+      period: "",
+      section: "professional",
+      title: line.slice(4).trim(),
+    };
   }
   if (currentExpItem && line.startsWith("- ")) {
     const itemLine = line.slice(2).trim();
@@ -255,6 +266,9 @@ const parseExperienceLine = (
       currentExpItem.period = itemLine.slice("period:".length).trim();
     } else if (itemLine.toLowerCase().startsWith("description:")) {
       currentExpItem.description = itemLine.slice("description:".length).trim();
+    } else if (itemLine.toLowerCase().startsWith("section:")) {
+      const raw = itemLine.slice("section:".length).trim().toLowerCase();
+      currentExpItem.section = raw.startsWith("university") ? "university clubs" : "professional";
     }
   }
   return currentExpItem;

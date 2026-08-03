@@ -102,24 +102,35 @@ const PreviewExperienceSection = memo(({ experiences }: { experiences: Experienc
     return null;
   }
 
+  const professional = experiences.filter((e) => e.section !== "university clubs");
+  const clubs = experiences.filter((e) => e.section === "university clubs");
+  const groups = [
+    ...(professional.length > 0 ? [{ items: professional, label: "professional" }] : []),
+    ...(clubs.length > 0 ? [{ items: clubs, label: "university clubs" }] : []),
+  ];
+
   return (
-    <div className="shrink-0 space-y-3">
-      <h3 className="font-medium text-base lowercase">work i did</h3>
-      <div className="space-y-4">
-        {experiences.map((item, idx) => (
-          <div key={`${item.title}-${idx}`} className="space-y-0.5">
-            <h4 className="font-medium text-xs sm:text-sm">{item.title}</h4>
-            <p className="text-gray-500 text-xs sm:text-sm">
-              {item.location} | {item.period}
-            </p>
-            {item.description && (
-              <p className="mt-1.5 w-full text-xs leading-relaxed text-gray-400 sm:text-[13px]">
-                {item.description}
-              </p>
-            )}
+    <div className="shrink-0 space-y-6">
+      {groups.map((group) => (
+        <div className="space-y-3" key={group.label}>
+          <h3 className="font-medium text-base lowercase">{group.label}</h3>
+          <div className="space-y-4">
+            {group.items.map((item, idx) => (
+              <div key={`${item.title}-${idx}`} className="space-y-0.5">
+                <h4 className="font-medium text-xs sm:text-sm">{item.title}</h4>
+                <p className="text-gray-500 text-xs sm:text-sm">
+                  {item.location} | {item.period}
+                </p>
+                {item.description && (
+                  <p className="mt-1.5 w-full text-xs leading-relaxed text-gray-400 sm:text-[13px]">
+                    {item.description}
+                  </p>
+                )}
+              </div>
+            ))}
           </div>
-        ))}
-      </div>
+        </div>
+      ))}
     </div>
   );
 });

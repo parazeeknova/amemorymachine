@@ -28,6 +28,7 @@ type ExperienceItem struct {
 	Location    string `json:"location"`
 	Period      string `json:"period"`
 	Description string `json:"description,omitempty"`
+	Section     string `json:"section,omitempty"`
 }
 
 // Project represents a project entry
