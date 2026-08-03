@@ -9,6 +9,7 @@ import {
 } from "@phosphor-icons/react";
 import { AnimatedLink } from "#/shared/components/animated-link";
 import { SkeletonBar } from "#/shared/components/skeleton";
+import { useSquiggleDraw } from "#/shared/hooks/use-squiggle-draw";
 import { markdownToHtml } from "#/features/blog/lib/markdown-to-html";
 
 const getLink = (links: Record<string, Link> | undefined, key: string): Link | undefined => {
@@ -32,6 +33,10 @@ interface ProfileSectionProps {
 export const ProfileSection = ({ profile, isPending }: ProfileSectionProps) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const portfolio = getLink(profile?.links, "portfolio");
+  const isProfileReady = !isPending && Boolean(profile);
+
+  // Draw the squiggly description underlines in after the text reveal.
+  useSquiggleDraw(isProfileReady, sectionRef, { delay: 0.45 });
 
   // useLayoutEffect so GSAP applies the hidden "from" state before the browser
   // paints the freshly mounted content — the skeleton hands off to the blurred
@@ -112,19 +117,11 @@ export const ProfileSection = ({ profile, isPending }: ProfileSectionProps) => {
         </h1>
       )}
 
-      {(portfolio || profile?.email) && (
+      {portfolio && (
         <p className="mb-6 text-sm sm:mb-8 sm:text-base">
-          {portfolio && (
-            <AnimatedLink href={portfolio.url} rel="noopener noreferrer" target="_blank">
-              {profile?.tagline || portfolio.label}
-            </AnimatedLink>
-          )}
-          {portfolio && profile?.email && " · "}
-          {profile?.email && (
-            <AnimatedLink href={`mailto:${profile.email}`} rel="noopener noreferrer">
-              {profile.email}
-            </AnimatedLink>
-          )}
+          <AnimatedLink href={portfolio.url} rel="noopener noreferrer" target="_blank">
+            {profile?.tagline || portfolio.label}
+          </AnimatedLink>
         </p>
       )}
 

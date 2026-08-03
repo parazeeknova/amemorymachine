@@ -845,28 +845,40 @@ button {
 }
 
 .prose-desc a {
-  color: #b58cff;
+  color: inherit;
+  font-style: italic;
   text-decoration: none;
   position: relative;
+  padding-bottom: 3px;
+  /* Squiggle draw progress (0 hidden -> 100 fully drawn), animated by GSAP. */
+  --squiggle-progress: 100;
 }
 
+/* Curved squiggly underline in the accent purple. Drawn as an inline SVG
+   background so it scales with the text and stays behind the descenders.
+   The ::after width follows --squiggle-progress (0-100), letting GSAP draw
+   the wave in left-to-right. The viewBox is taller than the wave so the
+   curve never gets sliced at the bottom. */
 .prose-desc a::after {
   position: absolute;
-  bottom: -2px;
+  bottom: 1px;
   left: 0;
-  width: 0;
-  height: 1px;
+  width: calc(var(--squiggle-progress) * 1%);
+  height: 6px;
   content: "";
-  background-color: currentColor;
-  transition: width 0.3s ease;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='7' viewBox='0 0 20 7'%3E%3Cpath d='M0 4 C 2.5 1.5, 5 1.5, 7.5 4 S 12.5 6.5, 15 4 S 20 1.5, 20 4' fill='none' stroke='%23b58cff' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  opacity: 0.8;
+  transition: opacity 0.2s ease;
+}
+
+[data-theme="light"] .prose-desc a::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='7' viewBox='0 0 20 7'%3E%3Cpath d='M0 4 C 2.5 1.5, 5 1.5, 7.5 4 S 12.5 6.5, 15 4 S 20 1.5, 20 4' fill='none' stroke='%237c3aed' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E");
 }
 
 .prose-desc a:hover::after {
-  width: 100%;
-}
-
-[data-theme="light"] .prose-desc a {
-  color: #7c3aed;
+  opacity: 1;
 }
 
 [data-theme="light"] .blog-reader-prose a {

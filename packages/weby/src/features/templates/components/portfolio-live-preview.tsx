@@ -6,6 +6,7 @@ import { markdownToHtml } from "#/features/blog/lib/markdown-to-html";
 import { GitHubActivity } from "#/features/github/components/calendar";
 import { GitHubStats } from "#/features/github/components/stats";
 import { SocialLinks } from "#/features/landing/components/sections";
+import { useSquiggleDraw } from "#/shared/hooks/use-squiggle-draw";
 import { useGitHubSettings } from "../hooks/use-github-settings";
 import { useCFSettings } from "../hooks/use-cf-settings";
 import { CodeforcesCard } from "#/features/codeforces/components/card";
@@ -21,6 +22,7 @@ const PreviewProfileSection = memo(({ profile }: { profile: Profile }) => {
     () => (profile.description ? markdownToHtml(profile.description) : ""),
     [profile.description],
   );
+  const sectionRef = useRef<HTMLDivElement>(null);
 
   const portfolioLink =
     profile.links?.portfolio ||
@@ -30,8 +32,11 @@ const PreviewProfileSection = memo(({ profile }: { profile: Profile }) => {
 
   const taglineText = profile.tagline || portfolioLink?.label;
 
+  // Draw the squiggly description underlines in when the preview appears.
+  useSquiggleDraw(Boolean(descriptionHtml), sectionRef, { delay: 0.2 });
+
   return (
-    <div className="shrink-0 space-y-3">
+    <div className="shrink-0 space-y-3" ref={sectionRef}>
       {profile.name && (
         <h1 className="font-display font-normal text-4xl sm:text-6xl pl-1">
           {profile.name}
@@ -46,24 +51,16 @@ const PreviewProfileSection = memo(({ profile }: { profile: Profile }) => {
         </h1>
       )}
 
-      {(taglineText || profile.email) && (
+      {taglineText && (
         <p className="mb-4 text-sm sm:text-base">
-          {taglineText && (
-            <a
-              href={portfolioLink?.url || "#"}
-              target="_blank"
-              rel="noopener noreferrer"
-              className="link-underline"
-            >
-              {taglineText}
-            </a>
-          )}
-          {taglineText && profile.email && " · "}
-          {profile.email && (
-            <a href={`mailto:${profile.email}`} className="link-underline">
-              {profile.email}
-            </a>
-          )}
+          <a
+            href={portfolioLink?.url || "#"}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="link-underline"
+          >
+            {taglineText}
+          </a>
         </p>
       )}
 
