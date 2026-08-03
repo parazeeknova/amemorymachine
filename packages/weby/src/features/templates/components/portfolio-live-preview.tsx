@@ -1,4 +1,4 @@
-import { memo, useMemo, useRef } from "react";
+import { memo, useMemo, useRef, useState } from "react";
 import { ArrowUpRightIcon } from "@phosphor-icons/react";
 import { useTheme } from "#/shared/hooks/use-theme";
 import type { ExperienceItem, Profile, Project } from "#/shared/types";
@@ -7,6 +7,7 @@ import { markdownToHtml } from "#/features/blog/lib/markdown-to-html";
 import { GitHubActivity } from "#/features/github/components/calendar";
 import { GitHubStats } from "#/features/github/components/stats";
 import { SocialLinks } from "#/features/landing/components/sections";
+import { ResumeModal } from "#/shared/components/resume-modal";
 import { useSquiggleDraw } from "#/shared/hooks/use-squiggle-draw";
 import { useGitHubSettings } from "../hooks/use-github-settings";
 import { useCFSettings } from "../hooks/use-cf-settings";
@@ -24,6 +25,7 @@ const PreviewProfileSection = memo(({ profile }: { profile: Profile }) => {
     [profile.description],
   );
   const sectionRef = useRef<HTMLDivElement>(null);
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
 
   const portfolioLink =
     profile.links?.portfolio ||
@@ -42,8 +44,9 @@ const PreviewProfileSection = memo(({ profile }: { profile: Profile }) => {
         <h1 className="font-display font-normal text-4xl sm:text-6xl pl-1">{profile.name}</h1>
       )}
 
-      {(profile.username || taglineText) && (
-        <p className="mb-4 flex items-center justify-between text-sm sm:text-base">
+      {(profile.username || taglineText || profile.resumeUrl) && (
+        <p className="mb-4 flex items-center gap-2.5 text-sm sm:text-base">
+          {profile.username && <span className="opacity-60 font-mono">@{profile.username}</span>}
           {taglineText && (
             <a
               href={portfolioLink?.url || "#"}
@@ -55,8 +58,21 @@ const PreviewProfileSection = memo(({ profile }: { profile: Profile }) => {
               <ArrowUpRightIcon size={13} />
             </a>
           )}
-          {profile.username && <span className="opacity-60 font-mono">@{profile.username}</span>}
+          {profile.resumeUrl && (
+            <button
+              className="squiggle-link flex cursor-pointer items-center gap-1 bg-transparent p-0 font-inherit text-inherit"
+              onClick={() => setIsResumeOpen(true)}
+              type="button"
+            >
+              resume
+              <ArrowUpRightIcon size={13} />
+            </button>
+          )}
         </p>
+      )}
+
+      {isResumeOpen && profile.resumeUrl && (
+        <ResumeModal onClose={() => setIsResumeOpen(false)} url={profile.resumeUrl} />
       )}
 
       {descriptionHtml && (

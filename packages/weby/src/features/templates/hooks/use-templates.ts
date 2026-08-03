@@ -30,6 +30,7 @@ export interface PinTemplateInput {
   links: Record<string, { label: string; url: string }>;
   name: string;
   projects: unknown[];
+  resumeUrl: string;
   tagline: string;
   username: string;
 }

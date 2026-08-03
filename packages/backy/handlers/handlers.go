@@ -1434,6 +1434,7 @@ type PinPortfolioTemplateRequest struct {
 	Description string                  `json:"description"`
 	Email       string                  `json:"email"`
 	Username    string                  `json:"username"`
+	ResumeURL   string                  `json:"resumeUrl"`
 	Links       map[string]models.Link  `json:"links"`
 	Experiences []models.ExperienceItem `json:"experiences"`
 	Projects    []models.Project        `json:"projects"`
@@ -1464,6 +1465,7 @@ func (h *Handlers) PinPortfolioTemplate(c *gin.Context) {
 		Description: req.Description,
 		Email:       req.Email,
 		Username:    req.Username,
+		ResumeURL:   req.ResumeURL,
 		Links:       req.Links,
 	}
 

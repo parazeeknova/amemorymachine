@@ -7,6 +7,7 @@ export interface ParsedPortfolio {
   projects: Project[];
 }
 
+// eslint-disable-next-line complexity
 export const generatePortfolioMarkdown = (
   profile?: Profile,
   experiences?: ExperienceItem[],
@@ -16,6 +17,7 @@ export const generatePortfolioMarkdown = (
   const pTagline = profile?.tagline ?? "designer portfolio";
   const pUsername = profile?.username ?? "parazeeknova";
   const pEmail = profile?.email ?? "harsh@itssingularity.com";
+  const pResumeUrl = profile?.resumeUrl ?? "http://f.przknv.cc/u/XghaIR.pdf";
   const lightVideo = profile?.lightVideo ?? "https://img.przknv.cc/t/footer.mp4";
   const darkVideo = profile?.darkVideo ?? "https://img.przknv.cc/t/header.mp4";
   const pDesc =
@@ -170,6 +172,7 @@ Name: ${pName}
 Tagline: ${pTagline}
 Username: ${pUsername}
 Email: ${pEmail}
+Resume: ${pResumeUrl}
 LightVideo: ${lightVideo}
 DarkVideo: ${darkVideo}
 Description: ${pDesc}
@@ -192,6 +195,8 @@ const parseProfileLine = (line: string, profile: Profile) => {
     profile.tagline = line.slice("Tagline:".length).trim();
   } else if (line.startsWith("Username:")) {
     profile.username = line.slice("Username:".length).trim();
+  } else if (line.startsWith("Resume:")) {
+    profile.resumeUrl = line.slice("Resume:".length).trim();
   } else if (line.startsWith("Email:")) {
     profile.email = line.slice("Email:".length).trim();
   } else if (line.startsWith("LightVideo:")) {

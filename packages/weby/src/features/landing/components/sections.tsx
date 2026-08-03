@@ -9,6 +9,7 @@ import {
   EnvelopeSimpleIcon,
 } from "@phosphor-icons/react";
 import { AnimatedLink } from "#/shared/components/animated-link";
+import { ResumeModal } from "#/shared/components/resume-modal";
 import { SkeletonBar } from "#/shared/components/skeleton";
 import { useSquiggleDraw } from "#/shared/hooks/use-squiggle-draw";
 import { markdownToHtml } from "#/features/blog/lib/markdown-to-html";
@@ -34,6 +35,7 @@ interface ProfileSectionProps {
 export const ProfileSection = ({ profile, isPending }: ProfileSectionProps) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const portfolio = getLink(profile?.links, "portfolio");
+  const [isResumeOpen, setIsResumeOpen] = useState(false);
   const isProfileReady = !isPending && Boolean(profile);
 
   // Draw the squiggly description underlines in after the text reveal.
@@ -108,8 +110,13 @@ export const ProfileSection = ({ profile, isPending }: ProfileSectionProps) => {
         <h1 className="font-display font-normal text-5xl sm:text-7xl pl-2">{profile.name}</h1>
       )}
 
-      {(profile?.username || portfolio) && (
-        <p className="mb-6 flex items-center justify-between text-sm sm:mb-8">
+      {(profile?.username || portfolio || profile?.resumeUrl) && (
+        <p className="mb-6 flex items-center gap-2.5 text-sm sm:mb-8">
+          {profile?.username && (
+            <span className="opacity-60" style={{ fontFamily: '"Ubuntu Mono", monospace' }}>
+              @{profile.username}
+            </span>
+          )}
           {portfolio && (
             <AnimatedLink
               className="squiggle-link flex items-center gap-1"
@@ -121,12 +128,21 @@ export const ProfileSection = ({ profile, isPending }: ProfileSectionProps) => {
               <ArrowUpRightIcon size={13} />
             </AnimatedLink>
           )}
-          {profile?.username && (
-            <span className="opacity-60" style={{ fontFamily: '"Ubuntu Mono", monospace' }}>
-              @{profile.username}
-            </span>
+          {profile?.resumeUrl && (
+            <button
+              className="squiggle-link flex cursor-pointer items-center gap-1 bg-transparent p-0 font-inherit text-inherit"
+              onClick={() => setIsResumeOpen(true)}
+              type="button"
+            >
+              resume
+              <ArrowUpRightIcon size={13} />
+            </button>
           )}
         </p>
+      )}
+
+      {isResumeOpen && profile?.resumeUrl && (
+        <ResumeModal onClose={() => setIsResumeOpen(false)} url={profile.resumeUrl} />
       )}
 
       {descriptionHtml && (

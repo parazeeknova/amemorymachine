@@ -24,14 +24,14 @@ func (r *PortfolioRepo) GetPinnedProfile(ctx context.Context) (models.Profile, e
 	var linksBytes []byte
 
 	row := r.pool.QueryRow(ctx, `
-		SELECT name, tagline, description, email, username, links
+		SELECT name, tagline, description, email, username, resume_url, links
 		FROM portfolio_profiles
 		WHERE is_pinned = true
 		ORDER BY updated_at DESC
 		LIMIT 1
 	`)
 
-	err := row.Scan(&profile.Name, &profile.Tagline, &profile.Description, &profile.Email, &profile.Username, &linksBytes)
+	err := row.Scan(&profile.Name, &profile.Tagline, &profile.Description, &profile.Email, &profile.Username, &profile.ResumeURL, &linksBytes)
 	if err != nil {
 		return profile, err
 	}
@@ -122,10 +122,10 @@ func (r *PortfolioRepo) SaveAndPinPortfolio(ctx context.Context, userID *string,
 
 	var profileID string
 	err = tx.QueryRow(ctx, `
-		INSERT INTO portfolio_profiles (user_id, name, tagline, description, email, username, links, is_pinned)
-		VALUES ($1, $2, $3, $4, $5, $6, $7, true)
+		INSERT INTO portfolio_profiles (user_id, name, tagline, description, email, username, resume_url, links, is_pinned)
+		VALUES ($1, $2, $3, $4, $5, $6, $7, $8, true)
 		RETURNING id
-	`, userID, profile.Name, profile.Tagline, profile.Description, profile.Email, profile.Username, linksBytes).Scan(&profileID)
+	`, userID, profile.Name, profile.Tagline, profile.Description, profile.Email, profile.Username, profile.ResumeURL, linksBytes).Scan(&profileID)
 	if err != nil {
 		return fmt.Errorf("insert profile: %w", err)
 	}

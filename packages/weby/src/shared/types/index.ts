@@ -12,6 +12,7 @@ export interface Profile {
   username?: string;
   lightVideo?: string;
   darkVideo?: string;
+  resumeUrl?: string;
 }
 
 export interface ExperienceItem {
