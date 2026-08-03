@@ -38,10 +38,11 @@ export const useProfile = (initialData?: Profile) =>
       return data;
     },
     queryKey: ["profile"],
-    // When the SSR loader already fetched the data, don't refetch on mount —
-    // refetching would swap the rendered content and cause a visible blink.
-    refetchOnMount: !initialData,
-    staleTime: initialData ? Infinity : 1000 * 30,
+    // Always re-validate on mount: SSR/persisted initialData renders
+    // instantly, then a background refetch pulls the latest so the
+    // persisted (up to 7-day-old) cache never goes stale.
+    refetchOnMount: "always",
+    staleTime: 1000 * 30,
   });
 
 export const useExperience = (initialData?: ExperienceItem[]) =>
@@ -53,8 +54,8 @@ export const useExperience = (initialData?: ExperienceItem[]) =>
       return data;
     },
     queryKey: ["experience"],
-    refetchOnMount: !initialData,
-    staleTime: initialData ? Infinity : 1000 * 30,
+    refetchOnMount: "always",
+    staleTime: 1000 * 30,
   });
 
 export const useProjects = (initialData?: Project[]) =>
@@ -66,8 +67,8 @@ export const useProjects = (initialData?: Project[]) =>
       return data;
     },
     queryKey: ["projects"],
-    refetchOnMount: !initialData,
-    staleTime: initialData ? Infinity : 1000 * 30,
+    refetchOnMount: "always",
+    staleTime: 1000 * 30,
   });
 
 export const useBlogManifest = (initialData?: BlogManifestSection[]) =>
