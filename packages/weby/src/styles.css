@@ -848,7 +848,7 @@ button {
 .squiggle-link {
   color: inherit;
   font-style: italic;
-  font-weight: 600;
+  font-weight: 400;
   text-decoration: none;
   position: relative;
   /* Room below the text for the squiggle, with a gap between word and wave. */
@@ -863,7 +863,9 @@ button {
    background so it scales with the text and stays behind the descenders.
    The ::after width follows --squiggle-progress (0-100), letting GSAP draw
    the wave in left-to-right. The viewBox is taller than the wave so the
-   curve never gets sliced at the bottom. */
+   curve never gets sliced at the bottom. background-color is cleared so a
+   link that also carries .link-underline doesn't paint a solid bar behind
+   the wave. */
 .prose-desc a::after,
 .squiggle-link::after {
   position: absolute;
@@ -873,6 +875,7 @@ button {
   width: calc(var(--squiggle-progress) * 1%);
   height: 6px;
   content: "";
+  background-color: transparent;
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='7' viewBox='0 0 20 7'%3E%3Cpath d='M0 4 C 2.5 1.5, 5 1.5, 7.5 4 S 12.5 6.5, 15 4 S 20 1.5, 20 4' fill='none' stroke='%23b58cff' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E");
   background-repeat: repeat-x;
   background-position: left bottom;

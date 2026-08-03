@@ -45,14 +45,14 @@ const PreviewProfileSection = memo(({ profile }: { profile: Profile }) => {
       )}
 
       {(profile.username || taglineText || profile.resumeUrl) && (
-        <p className="mb-4 flex items-center gap-2.5 text-sm sm:text-base">
+        <p className="mb-4 flex items-baseline gap-2.5 text-sm">
           {profile.username && <span className="opacity-60 font-mono">@{profile.username}</span>}
           {taglineText && (
             <a
               href={portfolioLink?.url || "#"}
               target="_blank"
               rel="noopener noreferrer"
-              className="squiggle-link flex items-center gap-1"
+              className="squiggle-link inline-flex items-baseline gap-1"
             >
               portfolio
               <ArrowUpRightIcon size={13} />
@@ -60,7 +60,7 @@ const PreviewProfileSection = memo(({ profile }: { profile: Profile }) => {
           )}
           {profile.resumeUrl && (
             <button
-              className="squiggle-link flex cursor-pointer items-center gap-1 bg-transparent p-0 font-inherit text-inherit"
+              className="squiggle-link inline-flex cursor-pointer items-baseline gap-1 bg-transparent p-0 font-inherit text-inherit"
               onClick={() => setIsResumeOpen(true)}
               type="button"
             >

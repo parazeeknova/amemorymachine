@@ -111,7 +111,7 @@ export const ProfileSection = ({ profile, isPending }: ProfileSectionProps) => {
       )}
 
       {(profile?.username || portfolio || profile?.resumeUrl) && (
-        <p className="mb-6 flex items-center gap-2.5 text-sm sm:mb-8">
+        <p className="mb-6 flex items-baseline gap-2.5 text-sm sm:mb-8">
           {profile?.username && (
             <span className="opacity-60" style={{ fontFamily: '"Ubuntu Mono", monospace' }}>
               @{profile.username}
@@ -119,7 +119,7 @@ export const ProfileSection = ({ profile, isPending }: ProfileSectionProps) => {
           )}
           {portfolio && (
             <AnimatedLink
-              className="squiggle-link flex items-center gap-1"
+              className="squiggle-link inline-flex items-baseline gap-1"
               href={portfolio.url}
               rel="noopener noreferrer"
               target="_blank"
@@ -130,7 +130,7 @@ export const ProfileSection = ({ profile, isPending }: ProfileSectionProps) => {
           )}
           {profile?.resumeUrl && (
             <button
-              className="squiggle-link flex cursor-pointer items-center gap-1 bg-transparent p-0 font-inherit text-inherit"
+              className="squiggle-link inline-flex cursor-pointer items-baseline gap-1 bg-transparent p-0 font-inherit text-inherit"
               onClick={() => setIsResumeOpen(true)}
               type="button"
             >
