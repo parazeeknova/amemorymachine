@@ -203,7 +203,7 @@ export const ProjectThumb = ({
                 <img
                   ref={previewImgRef}
                   alt={project.title}
-                  className="block w-72 max-h-96 object-contain"
+                  className="block w-72 h-72 object-cover"
                   src={project.image || project.logo}
                 />
               </div>

@@ -145,6 +145,7 @@ export const generatePortfolioMarkdown = (
       {
         desc: "A local-first git visualizer built in Rust with egui. Commit graph, syntax-highlighted diffs, file tree with git status, and drag-to-merge all in a ~5MB binary with no Electron, no webview, no cloud, and no subscription for a picture of your own repo. Talks directly to libgit2. Named at 2am. No regrets.",
         image: "https://img.przknv.cc/t/gitcha.png",
+        logo: "https://img.przknv.cc/t/gitcha%20(1).png",
         productUrl: "https://github.com/parazeeknova/gitcha/releases",
         readmeUrl:
           "https://raw.githubusercontent.com/parazeeknova/gitcha/refs/heads/main/.github/README.md",
