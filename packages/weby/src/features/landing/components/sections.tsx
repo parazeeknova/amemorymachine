@@ -210,25 +210,20 @@ export const ExperienceTabBar = memo(
       if (!btn || !indicator) {
         return;
       }
+      gsap.set(indicator, { left: btn.offsetLeft, width: btn.offsetWidth });
       if (isFirstRender.current) {
         isFirstRender.current = false;
-        gsap.set(indicator, { left: btn.offsetLeft, width: btn.offsetWidth });
         return;
       }
       gsap.killTweensOf(indicator);
-      gsap.to(indicator, {
-        duration: 0.45,
-        ease: "power3.inOut",
-        left: btn.offsetLeft,
-        width: btn.offsetWidth,
-      });
-      // wonky: the wave bulges and wobbles as it lands on the new tab
+      // the squiggle is reborn under the new tab, no traveling between tabs
       gsap.fromTo(
         indicator,
-        { rotation: -2, scaleX: 1.35, scaleY: 1.7 },
+        { opacity: 0, rotation: -3, scaleX: 0.2, scaleY: 2 },
         {
-          duration: 0.6,
+          duration: 0.55,
           ease: "elastic.out(1.1, 0.4)",
+          opacity: 1,
           rotation: 0,
           scaleX: 1,
           scaleY: 1,
@@ -288,7 +283,7 @@ const ExperienceRow = memo(
         {item.location} | {item.period}
       </p>
       {item.description && (
-        <p className="mt-1.5 w-full text-xs leading-relaxed text-gray-400 sm:text-[13px]">
+        <p className="mt-1.5 w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
           {item.description}
         </p>
       )}
@@ -486,7 +481,9 @@ export const ExperienceSection = ({ experience, isPending }: ExperienceSectionPr
 
   return (
     <div className="shrink-0 space-y-6">
-      <ExperienceTabBar groups={groups} active={activeTab} onSelect={handleTabSelect} />
+      {groups.length > 1 && (
+        <ExperienceTabBar groups={groups} active={activeTab} onSelect={handleTabSelect} />
+      )}
       <div ref={listRef} className="relative space-y-3 sm:space-y-4" style={{ perspective: 1000 }}>
         {visibleItems.map((item) => (
           <ExperienceRow item={item} key={item.title} withAnimClass />

@@ -155,6 +155,13 @@ describe("ExperienceSection", () => {
     expect(container).toBeDefined();
   });
 
+  it("hides the tab bar when only one group exists", () => {
+    render(<ExperienceSection experience={mockExperience} isPending={false} />);
+    expect(screen.queryByRole("button", { name: /university clubs/i })).toBeNull();
+    expect(screen.queryByRole("button", { name: /professional/i })).toBeNull();
+    expect(screen.getByText("Software Engineer")).toBeDefined();
+  });
+
   it("switches between professional and university clubs tabs", () => {
     const mixedExperience: ExperienceItem[] = [
       { location: "Remote", period: "2020-Present", title: "Software Engineer" },

@@ -177,7 +177,9 @@ const PreviewExperienceSection = memo(({ experiences }: { experiences: Experienc
 
   return (
     <div className="shrink-0 space-y-4">
-      <ExperienceTabBar groups={groups} active={activeTab} onSelect={handleTabSelect} />
+      {groups.length > 1 && (
+        <ExperienceTabBar groups={groups} active={activeTab} onSelect={handleTabSelect} />
+      )}
       <div ref={listRef} className="relative space-y-4">
         {activeItems.map((item, idx) => (
           <div key={`${item.title}-${idx}`} className="space-y-0.5 experience-item">
@@ -186,7 +188,7 @@ const PreviewExperienceSection = memo(({ experiences }: { experiences: Experienc
               {item.location} | {item.period}
             </p>
             {item.description && (
-              <p className="mt-1.5 w-full text-xs leading-relaxed text-gray-400 sm:text-[13px]">
+              <p className="mt-1.5 w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
                 {item.description}
               </p>
             )}
