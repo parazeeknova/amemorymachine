@@ -7,12 +7,6 @@ import type { Project, ProjectSection } from "#/shared/types";
 import { SkeletonBar, SkeletonThumb } from "#/shared/components/skeleton";
 import { getProjectGroups, TabBar } from "./sections";
 
-interface ProjectCardProps {
-  index: number;
-  onDetail?: (project: Project) => void;
-  project: Project;
-}
-
 const isDesktopHoverAvailable = (): boolean => {
   if (typeof window === "undefined") {
     return false;
@@ -20,8 +14,17 @@ const isDesktopHoverAvailable = (): boolean => {
   return window.innerWidth >= 768 && window.matchMedia("(hover: hover)").matches;
 };
 
-const ProjectCard = ({ index, onDetail, project }: ProjectCardProps) => {
-  const [stackOpen, setStackOpen] = useState(false);
+interface ProjectThumbProps {
+  className?: string;
+  index: number;
+  project: Project;
+}
+
+export const ProjectThumb = ({
+  className = "w-28 h-28 sm:w-36 sm:h-36",
+  index,
+  project,
+}: ProjectThumbProps) => {
   const [isMounted, setIsMounted] = useState(false);
   const thumbRef = useRef<HTMLAnchorElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
@@ -124,64 +127,77 @@ const ProjectCard = ({ index, onDetail, project }: ProjectCardProps) => {
     });
   };
 
-  const renderThumbnail = () => {
-    if (!project.image) {
-      return null;
-    }
-    if (linkUrl) {
-      return (
-        <>
-          <a
-            ref={thumbRef}
-            className="group relative shrink-0 block w-28 h-28 sm:w-36 sm:h-36 overflow-hidden"
-            href={linkUrl}
-            onMouseEnter={handlePreviewEnter}
-            onMouseMove={handlePreviewMove}
-            onMouseLeave={handlePreviewLeave}
-            rel="noopener noreferrer"
-            style={{ transform: isEven ? "rotate(-3deg)" : "rotate(3deg)" }}
-            target="_blank"
-          >
-            <img
-              alt={project.title}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-              src={project.image}
-            />
-            <div className="absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-all duration-300 group-hover:bg-black/50 group-hover:opacity-100">
-              <ArrowUpRightIcon className="text-white" size={24} />
-            </div>
-          </a>
-          {isMounted
-            ? createPortal(
-                <div
-                  ref={previewRef}
-                  className="pointer-events-none fixed left-0 top-0 z-50 hidden origin-left"
-                  style={{ perspective: 800 }}
-                >
-                  <div className="overflow-hidden shadow-2xl border border-white/10 bg-black/80 backdrop-blur-sm">
-                    <img
-                      ref={previewImgRef}
-                      alt={project.title}
-                      className="block w-72 max-h-96 object-contain"
-                      src={project.image}
-                    />
-                  </div>
-                </div>,
-                document.body,
-              )
-            : null}
-        </>
-      );
-    }
+  if (!project.image) {
+    return null;
+  }
+
+  if (!linkUrl) {
     return (
       <div
-        className="relative shrink-0 block w-28 h-28 sm:w-36 sm:h-36 overflow-hidden"
+        className={`relative shrink-0 block overflow-hidden ${className}`}
         style={{ transform: isEven ? "rotate(-3deg)" : "rotate(3deg)" }}
       >
         <img alt={project.title} className="w-full h-full object-cover" src={project.image} />
       </div>
     );
-  };
+  }
+
+  return (
+    <>
+      <a
+        ref={thumbRef}
+        className={`group relative shrink-0 block overflow-hidden ${className}`}
+        href={linkUrl}
+        onMouseEnter={handlePreviewEnter}
+        onMouseMove={handlePreviewMove}
+        onMouseLeave={handlePreviewLeave}
+        rel="noopener noreferrer"
+        style={{ transform: isEven ? "rotate(-3deg)" : "rotate(3deg)" }}
+        target="_blank"
+      >
+        <img
+          alt={project.title}
+          className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
+          src={project.image}
+        />
+        <div className="absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-all duration-300 group-hover:bg-black/50 group-hover:opacity-100">
+          <ArrowUpRightIcon className="text-white" size={24} />
+        </div>
+      </a>
+      {isMounted
+        ? createPortal(
+            <div
+              ref={previewRef}
+              className="pointer-events-none fixed left-0 top-0 z-50 hidden origin-left"
+              style={{ perspective: 800 }}
+            >
+              <div className="overflow-hidden shadow-2xl border border-white/10 bg-black/80 backdrop-blur-sm">
+                <img
+                  ref={previewImgRef}
+                  alt={project.title}
+                  className="block w-72 max-h-96 object-contain"
+                  src={project.image}
+                />
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
+    </>
+  );
+};
+
+interface ProjectCardProps {
+  index: number;
+  onDetail?: (project: Project) => void;
+  project: Project;
+}
+
+const ProjectCard = ({ index, onDetail, project }: ProjectCardProps) => {
+  const [stackOpen, setStackOpen] = useState(false);
+  const isEven = index % 2 === 0;
+
+  const renderThumbnail = () => <ProjectThumb index={index} project={project} />;
 
   return (
     <div className={`flex items-center gap-3 sm:gap-4 ${isEven ? "" : "flex-row-reverse"}`}>

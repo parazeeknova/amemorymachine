@@ -7,6 +7,7 @@ import type { ParsedPortfolio, ValidationError } from "../lib/portfolio-markdown
 import { markdownToHtml } from "#/features/blog/lib/markdown-to-html";
 import { GitHubActivity } from "#/features/github/components/calendar";
 import { GitHubStats } from "#/features/github/components/stats";
+import { ProjectThumb } from "#/features/landing/components/projects";
 import {
   getExperienceGroups,
   getProjectGroups,
@@ -285,22 +286,17 @@ const PreviewProjectsSection = memo(({ projects }: { projects: Project[] }) => {
       <div ref={listRef} className="space-y-6 pt-1">
         {filtered.map((proj, idx) => {
           const isEven = idx % 2 === 0;
-          const linkUrl = proj.productUrl || proj.repoUrl;
           return (
             <div
               key={`${proj.title}-${idx}`}
               className={`flex items-center gap-3 sm:gap-4 ${isEven ? "" : "flex-row-reverse"}`}
             >
               {proj.image && (
-                <a
-                  href={linkUrl || "#"}
-                  target="_blank"
-                  rel="noreferrer"
-                  className="relative shrink-0 block w-20 h-20 sm:w-28 sm:h-28 overflow-hidden border border-white/10"
-                  style={{ transform: isEven ? "rotate(-3deg)" : "rotate(3deg)" }}
-                >
-                  <img alt={proj.title} className="w-full h-full object-cover" src={proj.image} />
-                </a>
+                <ProjectThumb
+                  className="w-20 h-20 sm:w-28 sm:h-28 border border-white/10"
+                  index={idx}
+                  project={proj}
+                />
               )}
               <div className="flex-1 min-w-0">
                 <h3 className="font-medium text-xs sm:text-sm">{proj.title}</h3>
