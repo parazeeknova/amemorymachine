@@ -21,12 +21,17 @@ const isDesktopHoverAvailable = (): boolean => {
 
 const ProjectCard = ({ index, onDetail, project }: ProjectCardProps) => {
   const [stackOpen, setStackOpen] = useState(false);
+  const [isMounted, setIsMounted] = useState(false);
   const thumbRef = useRef<HTMLAnchorElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
   const previewImgRef = useRef<HTMLImageElement>(null);
   const isEven = index % 2 === 0;
 
   const linkUrl = project.productUrl || project.repoUrl;
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handlePreviewEnter = () => {
     if (!isDesktopHoverAvailable()) {
@@ -145,9 +150,8 @@ const ProjectCard = ({ index, onDetail, project }: ProjectCardProps) => {
               <ArrowUpRightIcon className="text-white" size={24} />
             </div>
           </a>
-          {typeof window === "undefined"
-            ? null
-            : createPortal(
+          {isMounted
+            ? createPortal(
                 <div
                   ref={previewRef}
                   className="pointer-events-none fixed left-0 top-0 z-50 hidden origin-left"
@@ -163,7 +167,8 @@ const ProjectCard = ({ index, onDetail, project }: ProjectCardProps) => {
                   </div>
                 </div>,
                 document.body,
-              )}
+              )
+            : null}
         </>
       );
     }

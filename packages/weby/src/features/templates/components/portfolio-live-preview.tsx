@@ -33,10 +33,7 @@ const PreviewProfileSection = memo(({ profile }: { profile: Profile }) => {
   return (
     <div className="shrink-0 space-y-3">
       {profile.name && (
-        <h1
-          className="font-normal text-4xl sm:text-6xl pl-1"
-          style={{ fontFamily: '"Louison Adriana", cursive' }}
-        >
+        <h1 className="font-display font-normal text-4xl sm:text-6xl pl-1">
           {profile.name}
           {profile.username && (
             <span
@@ -295,10 +292,7 @@ export const PortfolioLivePreview = memo(
           </div>
 
           <div className="flex justify-end pt-4 pb-2">
-            <span
-              className="text-3xl sm:text-4xl opacity-40"
-              style={{ fontFamily: '"Louison Adriana", cursive' }}
-            >
+            <span className="font-display text-3xl sm:text-4xl opacity-40">
               — with love, {profile.name?.split(" ")[0]?.toLowerCase() || "harsh"}
             </span>
           </div>

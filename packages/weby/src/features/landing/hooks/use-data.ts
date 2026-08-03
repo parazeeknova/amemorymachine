@@ -18,18 +18,6 @@ export const useIsMounted = (): boolean => {
   return mounted;
 };
 
-const getInitialFromStorage = <T>(key: string): T | undefined => {
-  if (typeof window === "undefined") {
-    return undefined;
-  }
-  try {
-    const raw = localStorage.getItem(`verso_cache_${key}`);
-    return raw ? (JSON.parse(raw) as T) : undefined;
-  } catch {
-    return undefined;
-  }
-};
-
 const saveToStorage = <T>(key: string, data: T): void => {
   if (typeof window === "undefined") {
     return;
@@ -41,9 +29,9 @@ const saveToStorage = <T>(key: string, data: T): void => {
   }
 };
 
-export const useProfile = () =>
+export const useProfile = (initialData?: Profile) =>
   useQuery<Profile>({
-    placeholderData: () => getInitialFromStorage<Profile>("profile"),
+    initialData,
     queryFn: async ({ signal }) => {
       const data = await fetchJson<Profile>("/api/profile", { signal });
       saveToStorage("profile", data);
@@ -54,9 +42,9 @@ export const useProfile = () =>
     staleTime: 1000 * 30,
   });
 
-export const useExperience = () =>
+export const useExperience = (initialData?: ExperienceItem[]) =>
   useQuery<ExperienceItem[]>({
-    placeholderData: () => getInitialFromStorage<ExperienceItem[]>("experience"),
+    initialData,
     queryFn: async ({ signal }) => {
       const data = await fetchJson<ExperienceItem[]>("/api/experience", { signal });
       saveToStorage("experience", data);
@@ -67,9 +55,9 @@ export const useExperience = () =>
     staleTime: 1000 * 30,
   });
 
-export const useProjects = () =>
+export const useProjects = (initialData?: Project[]) =>
   useQuery<Project[]>({
-    placeholderData: () => getInitialFromStorage<Project[]>("projects"),
+    initialData,
     queryFn: async ({ signal }) => {
       const data = await fetchJson<Project[]>("/api/projects", { signal });
       saveToStorage("projects", data);
@@ -80,16 +68,21 @@ export const useProjects = () =>
     staleTime: 1000 * 30,
   });
 
-export const useBlogManifest = () =>
+export const useBlogManifest = (initialData?: BlogManifestSection[]) =>
   useQuery<BlogManifestSection[]>({
+    initialData,
     queryFn: ({ signal }) => fetchJson<BlogManifestSection[]>("/api/blogs", { signal }),
     queryKey: ["blogManifest"],
   });
 
-export const useIsFetchingData = (): boolean => {
-  const profile = useProfile();
-  const experience = useExperience();
-  const projects = useProjects();
+export const useIsFetchingData = (initialData?: {
+  profile?: Profile;
+  experience?: ExperienceItem[];
+  projects?: Project[];
+}): boolean => {
+  const profile = useProfile(initialData?.profile);
+  const experience = useExperience(initialData?.experience);
+  const projects = useProjects(initialData?.projects);
 
   return profile.isPending || experience.isPending || projects.isPending;
 };

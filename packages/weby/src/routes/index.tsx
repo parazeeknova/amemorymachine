@@ -1,6 +1,7 @@
 import { ClientOnly, createFileRoute } from "@tanstack/react-router";
 import { gsap } from "gsap";
 import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import type { BlogManifestSection, ExperienceItem, Profile, Project } from "#/shared/types";
 import { GitHubActivity } from "#/features/github/components/calendar";
 import { GitHubStats } from "#/features/github/components/stats";
 import { CodeforcesCard } from "#/features/codeforces/components/card";
@@ -24,8 +25,23 @@ import {
   useProfile,
   useProjects,
 } from "#/features/landing/hooks/use-data";
+import { getBlogManifest, getExperience, getProfile, getProjects } from "#/server/backy";
+import {
+  buildPersonJsonLd,
+  buildPortfolioDescription,
+  buildPortfolioTitle,
+  buildWebSiteJsonLd,
+  getSiteOrigin,
+} from "#/server/seo";
 import { useTheme } from "#/shared/hooks/use-theme";
 import { crossfadeVideo, getHeaderGradient } from "#/shared/lib/video-helpers";
+
+interface PortfolioLoaderData {
+  profile?: Profile;
+  experience?: ExperienceItem[];
+  projects?: Project[];
+  manifest?: BlogManifestSection[];
+}
 
 const useIsMobile = (): boolean => {
   const getSnapshot = useCallback(() => {
@@ -101,6 +117,8 @@ const useThemeButtonHover = (): ThemeButtonRefs => {
 
 // eslint-disable-next-line complexity
 const Home = function Home() {
+  // eslint-disable-next-line no-use-before-define -- Route is defined below
+  const loaderData = Route.useLoaderData();
   const isDesktop = useIsDesktop();
   const { isDarkMode, toggleTheme: toggleThemeStore } = useTheme();
 
@@ -143,17 +161,24 @@ const Home = function Home() {
   const themeRefs = useThemeButtonHover();
   const themeRefsRight = useThemeButtonHover();
 
-  const { data: profile } = useProfile();
-  const { data: experience } = useExperience();
-  const { data: projects } = useProjects();
+  const { data: profile } = useProfile(loaderData?.profile);
+  const { data: experience } = useExperience(loaderData?.experience);
+  const { data: projects } = useProjects(loaderData?.projects);
 
   useEffect(() => {
     if (profile) {
       logger.info(profile, "landing page profile data");
     }
   }, [profile]);
-  const { data: manifest = [] } = useBlogManifest();
-  const isPending = useIsFetchingData();
+  const { data: manifest = [] } = useBlogManifest(loaderData?.manifest);
+  const queriesPending = useIsFetchingData();
+  // When the loader provided data (SSR or client-side navigation), the page
+  // never shows loading skeletons — content renders immediately and matches
+  // the server HTML exactly.
+  const isPending =
+    !loaderData?.profile && !loaderData?.experience && !loaderData?.projects
+      ? queriesPending
+      : false;
 
   if (isDesktop) {
     return <DesktopFrontPage />;
@@ -431,11 +456,13 @@ const Home = function Home() {
           </GitHubActivity>
         </ClientOnly>
 
-        {/* Codeforces card renders outside ClientOnly so it is present in the
-            server-rendered HTML (curl/SSR); the colored graph hydrates on the
-            client. Rendered while CF settings are still loading OR when enabled. */}
+        {/* Codeforces renders inside ClientOnly: the card fetches live data
+            client-side, and SSR-ing a loading skeleton that hydrates to
+            different content would cause a hydration mismatch. */}
         {(!cfSettings || cfSettings.enabled) && (
-          <CodeforcesCard username={cfSettings?.username || "parazeeknova"} />
+          <ClientOnly>
+            <CodeforcesCard username={cfSettings?.username || "parazeeknova"} />
+          </ClientOnly>
         )}
 
         <div className="shrink-0 flex items-center justify-between pt-2">
@@ -444,60 +471,107 @@ const Home = function Home() {
         </div>
 
         <div className="flex justify-end pt-4 pb-2">
-          <span
-            className="text-4xl sm:text-5xl opacity-40"
-            style={{ fontFamily: '"Louison Adriana", cursive' }}
-          >
-            — with love, harsh
-          </span>
+          <span className="font-display text-4xl sm:text-5xl opacity-40">— with love, harsh</span>
         </div>
       </div>
     </div>
   );
 };
 
+// fetchPublicApi reads a same-origin public API route (client-side loader
+// path). The server-side loader path calls backy directly instead.
+const fetchPublicApi = async <T,>(path: string): Promise<T> => {
+  const res = await fetch(path);
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status}`);
+  }
+  return res.json() as Promise<T>;
+};
+
 export const Route = createFileRoute("/")({
   component: Home,
-  head: () => {
-    const origin =
-      typeof window === "undefined"
-        ? import.meta.env.VITE_APP_ORIGIN || "https://przknv.cc"
-        : window.location.origin;
+  head: ({ loaderData }: { loaderData?: PortfolioLoaderData }) => {
+    const origin = getSiteOrigin();
     const ogImage = `${origin}/verso-og.png`;
+    const profile = loaderData?.profile;
+    const title = buildPortfolioTitle(profile);
+    const description = buildPortfolioDescription(profile);
+    const personJsonLd = buildPersonJsonLd(profile, origin);
+    const websiteJsonLd = buildWebSiteJsonLd(profile, origin);
+    const jsonLd = [websiteJsonLd, ...(personJsonLd ? [personJsonLd] : [])]
+      .map((schema) => JSON.stringify(schema))
+      .join("\n");
     return {
       links: [{ href: origin, rel: "canonical" }],
       meta: [
-        { title: "verso — personal knowledge base and folio" },
-        {
-          content:
-            "verso is a personal knowledge base and folio, blog for public face & private brain, one app.",
-          name: "description",
-        },
+        { title },
+        { content: description, name: "description" },
         {
           content:
             "verso, wiki, knowledge base, self-hosted, open-source, markdown, real-time collaboration",
           name: "keywords",
         },
-        { content: "verso — personal knowledge base and folio", property: "og:title" },
-        {
-          content:
-            "verso is a personal knowledge base and folio, blog for public face & private brain, one app.",
-          property: "og:description",
-        },
+        { content: "index, follow, max-image-preview:large", name: "robots" },
+        { content: profile?.username || "verso", name: "author" },
+        { content: profile?.name || "verso", name: "application-name" },
+        { content: "#111111", name: "theme-color" },
+        { content: title, property: "og:title" },
+        { content: description, property: "og:description" },
         { content: "website", property: "og:type" },
+        { content: `${origin}/`, property: "og:url" },
+        { content: "verso", property: "og:site_name" },
+        { content: "en_US", property: "og:locale" },
         { content: ogImage, property: "og:image" },
         { content: "1200", property: "og:image:width" },
         { content: "630", property: "og:image:height" },
         { content: "image/png", property: "og:image:type" },
         { content: "summary_large_image", property: "twitter:card" },
-        { content: "verso — personal knowledge base and folio", property: "twitter:title" },
-        {
-          content:
-            "verso is a personal knowledge base and folio, blog for public face & private brain, one app.",
-          property: "twitter:description",
-        },
+        { content: title, property: "twitter:title" },
+        { content: description, property: "twitter:description" },
         { content: ogImage, property: "twitter:image" },
       ],
+      scripts: [
+        {
+          children: jsonLd,
+          type: "application/ld+json",
+        },
+      ],
     };
+  },
+  loader: async ({ context }): Promise<PortfolioLoaderData> => {
+    const { queryClient } = context;
+    // On the server, call backy directly (absolute URLs via BACKY_ORIGIN).
+    // On the client, fetch the same-origin public API routes instead.
+    const profileLoader = import.meta.env.SSR
+      ? getProfile
+      : () => fetchPublicApi<Profile>("/api/profile");
+    const experienceLoader = import.meta.env.SSR
+      ? getExperience
+      : () => fetchPublicApi<ExperienceItem[]>("/api/experience");
+    const projectsLoader = import.meta.env.SSR
+      ? getProjects
+      : () => fetchPublicApi<Project[]>("/api/projects");
+    const manifestLoader = import.meta.env.SSR
+      ? getBlogManifest
+      : () => fetchPublicApi<BlogManifestSection[]>("/api/blogs");
+    await Promise.all([
+      queryClient.ensureQueryData({ queryFn: profileLoader, queryKey: ["profile"] }),
+      queryClient.ensureQueryData({ queryFn: experienceLoader, queryKey: ["experience"] }),
+      queryClient.ensureQueryData({ queryFn: projectsLoader, queryKey: ["projects"] }),
+      queryClient.ensureQueryData({ queryFn: manifestLoader, queryKey: ["blogManifest"] }),
+    ]);
+    const result: PortfolioLoaderData = {
+      experience: queryClient.getQueryData<ExperienceItem[]>(["experience"]),
+      manifest: queryClient.getQueryData<BlogManifestSection[]>(["blogManifest"]),
+      profile: queryClient.getQueryData<Profile>(["profile"]),
+      projects: queryClient.getQueryData<Project[]>(["projects"]),
+    };
+    // Always seed the cache with the loader result so stale persisted cache
+    // from localStorage never wins over fresh server data during hydration.
+    queryClient.setQueryData(["profile"], result.profile);
+    queryClient.setQueryData(["experience"], result.experience);
+    queryClient.setQueryData(["projects"], result.projects);
+    queryClient.setQueryData(["blogManifest"], result.manifest);
+    return result;
   },
 });

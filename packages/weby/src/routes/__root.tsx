@@ -1,54 +1,16 @@
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
-import { MutationCache, QueryCache, QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
+import type { QueryClient } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
+import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
 import { useState } from "react";
 import { createTheme, MantineProvider } from "@mantine/core";
 
 import { useTheme } from "#/shared/hooks/use-theme";
-import { setAuthCache } from "#/features/auth/lib/auth-cache";
 import "#/shared/lib/i18n";
 
 import mantineCss from "@mantine/core/styles.css?url";
 import appCss from "../styles.css?url";
-
-const isAuthError = (error: unknown): boolean => {
-  if (error instanceof Error && error.message.includes("HTTP 401")) {
-    return true;
-  }
-  if (error instanceof Error && error.message.includes("HTTP 403")) {
-    return true;
-  }
-  return false;
-};
-
-const createQueryClient = () =>
-  new QueryClient({
-    defaultOptions: {
-      queries: {
-        gcTime: 1000 * 60 * 60 * 24,
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        refetchOnWindowFocus: false,
-        retry: 1,
-        staleTime: 1000 * 60 * 60,
-      },
-    },
-    mutationCache: new MutationCache({
-      onError: (error) => {
-        if (isAuthError(error)) {
-          setAuthCache("unauthenticated");
-        }
-      },
-    }),
-    queryCache: new QueryCache({
-      onError: (error) => {
-        if (isAuthError(error)) {
-          setAuthCache("unauthenticated");
-        }
-      },
-    }),
-  });
 
 const theme = createTheme({
   fontFamily: '"Ubuntu Mono", monospace',
@@ -56,7 +18,8 @@ const theme = createTheme({
 });
 
 const RootComponent = () => {
-  const [queryClient] = useState(createQueryClient);
+  // eslint-disable-next-line no-use-before-define -- Route is defined below
+  const { queryClient } = Route.useRouteContext();
 
   const [persister] = useState(() => {
     if (typeof window === "undefined") {
@@ -81,7 +44,11 @@ const RootComponent = () => {
   return (
     <PersistQueryClientProvider
       client={queryClient}
-      persistOptions={{ maxAge: 1000 * 60 * 60 * 24 * 7, persister }}
+      persistOptions={{
+        buster: `verso-${import.meta.env.VITE_APP_VERSION || "dev"}`,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+        persister,
+      }}
     >
       <MantineProvider theme={theme} forceColorScheme={isDarkMode ? "dark" : "light"}>
         <Outlet />
@@ -133,7 +100,7 @@ const RootShell = ({ children }: { children: React.ReactNode }) => (
   </html>
 );
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   component: RootComponent,
   head: () => ({
     links: [

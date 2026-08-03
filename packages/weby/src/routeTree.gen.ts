@@ -14,8 +14,11 @@ import { Route as SplatRouteImport } from './routes/$'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as DesktopRouteImport } from './routes/desktop'
 import { Route as HomeRouteImport } from './routes/home'
+import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as MfaChallengeRouteImport } from './routes/mfa-challenge'
+import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as SettingsRouteImport } from './routes/settings'
+import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ApiBlogsRouteImport } from './routes/api/blogs'
 import { Route as ApiExperienceRouteImport } from './routes/api/experience'
 import { Route as ApiProfileRouteImport } from './routes/api/profile'
@@ -151,14 +154,29 @@ const HomeRoute = HomeRouteImport.update({
   path: '/home',
   getParentRoute: () => rootRouteImport,
 } as any)
+const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
+  id: '/llms.txt',
+  path: '/llms.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const MfaChallengeRoute = MfaChallengeRouteImport.update({
   id: '/mfa-challenge',
   path: '/mfa-challenge',
   getParentRoute: () => rootRouteImport,
 } as any)
+const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
+  id: '/robots.txt',
+  path: '/robots.txt',
+  getParentRoute: () => rootRouteImport,
+} as any)
 const SettingsRoute = SettingsRouteImport.update({
   id: '/settings',
   path: '/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
+  id: '/sitemap.xml',
+  path: '/sitemap.xml',
   getParentRoute: () => rootRouteImport,
 } as any)
 const ApiBlogsRoute = ApiBlogsRouteImport.update({
@@ -758,8 +776,11 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/desktop': typeof DesktopRoute
   '/home': typeof HomeRouteWithChildren
+  '/llms.txt': typeof LlmsDottxtRoute
   '/mfa-challenge': typeof MfaChallengeRoute
+  '/robots.txt': typeof RobotsDottxtRoute
   '/settings': typeof SettingsRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/blogs': typeof ApiBlogsRouteWithChildren
   '/api/experience': typeof ApiExperienceRoute
   '/api/profile': typeof ApiProfileRoute
@@ -875,8 +896,11 @@ export interface FileRoutesByTo {
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/desktop': typeof DesktopRoute
+  '/llms.txt': typeof LlmsDottxtRoute
   '/mfa-challenge': typeof MfaChallengeRoute
+  '/robots.txt': typeof RobotsDottxtRoute
   '/settings': typeof SettingsRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/blogs': typeof ApiBlogsRouteWithChildren
   '/api/experience': typeof ApiExperienceRoute
   '/api/profile': typeof ApiProfileRoute
@@ -992,8 +1016,11 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/desktop': typeof DesktopRoute
   '/home': typeof HomeRouteWithChildren
+  '/llms.txt': typeof LlmsDottxtRoute
   '/mfa-challenge': typeof MfaChallengeRoute
+  '/robots.txt': typeof RobotsDottxtRoute
   '/settings': typeof SettingsRouteWithChildren
+  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/blogs': typeof ApiBlogsRouteWithChildren
   '/api/experience': typeof ApiExperienceRoute
   '/api/profile': typeof ApiProfileRoute
@@ -1112,8 +1139,11 @@ export interface FileRouteTypes {
     | '/about'
     | '/desktop'
     | '/home'
+    | '/llms.txt'
     | '/mfa-challenge'
+    | '/robots.txt'
     | '/settings'
+    | '/sitemap.xml'
     | '/api/blogs'
     | '/api/experience'
     | '/api/profile'
@@ -1229,8 +1259,11 @@ export interface FileRouteTypes {
     | '/$'
     | '/about'
     | '/desktop'
+    | '/llms.txt'
     | '/mfa-challenge'
+    | '/robots.txt'
     | '/settings'
+    | '/sitemap.xml'
     | '/api/blogs'
     | '/api/experience'
     | '/api/profile'
@@ -1345,8 +1378,11 @@ export interface FileRouteTypes {
     | '/about'
     | '/desktop'
     | '/home'
+    | '/llms.txt'
     | '/mfa-challenge'
+    | '/robots.txt'
     | '/settings'
+    | '/sitemap.xml'
     | '/api/blogs'
     | '/api/experience'
     | '/api/profile'
@@ -1464,8 +1500,11 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   DesktopRoute: typeof DesktopRoute
   HomeRoute: typeof HomeRouteWithChildren
+  LlmsDottxtRoute: typeof LlmsDottxtRoute
   MfaChallengeRoute: typeof MfaChallengeRoute
+  RobotsDottxtRoute: typeof RobotsDottxtRoute
   SettingsRoute: typeof SettingsRouteWithChildren
+  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiBlogsRoute: typeof ApiBlogsRouteWithChildren
   ApiExperienceRoute: typeof ApiExperienceRoute
   ApiProfileRoute: typeof ApiProfileRoute
@@ -1550,6 +1589,13 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/llms.txt': {
+      id: '/llms.txt'
+      path: '/llms.txt'
+      fullPath: '/llms.txt'
+      preLoaderRoute: typeof LlmsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/mfa-challenge': {
       id: '/mfa-challenge'
       path: '/mfa-challenge'
@@ -1557,11 +1603,25 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof MfaChallengeRouteImport
       parentRoute: typeof rootRouteImport
     }
+    '/robots.txt': {
+      id: '/robots.txt'
+      path: '/robots.txt'
+      fullPath: '/robots.txt'
+      preLoaderRoute: typeof RobotsDottxtRouteImport
+      parentRoute: typeof rootRouteImport
+    }
     '/settings': {
       id: '/settings'
       path: '/settings'
       fullPath: '/settings'
       preLoaderRoute: typeof SettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/sitemap.xml': {
+      id: '/sitemap.xml'
+      path: '/sitemap.xml'
+      fullPath: '/sitemap.xml'
+      preLoaderRoute: typeof SitemapDotxmlRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/api/blogs': {
@@ -2751,8 +2811,11 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   DesktopRoute: DesktopRoute,
   HomeRoute: HomeRouteWithChildren,
+  LlmsDottxtRoute: LlmsDottxtRoute,
   MfaChallengeRoute: MfaChallengeRoute,
+  RobotsDottxtRoute: RobotsDottxtRoute,
   SettingsRoute: SettingsRouteWithChildren,
+  SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiBlogsRoute: ApiBlogsRouteWithChildren,
   ApiExperienceRoute: ApiExperienceRoute,
   ApiProfileRoute: ApiProfileRoute,

@@ -28,6 +28,7 @@ interface ProfileSectionProps {
   profile: Profile | undefined;
 }
 
+// eslint-disable-next-line complexity
 export const ProfileSection = ({ profile, isPending }: ProfileSectionProps) => {
   const sectionRef = useRef<HTMLDivElement>(null);
   const portfolio = getLink(profile?.links, "portfolio");
@@ -73,7 +74,7 @@ export const ProfileSection = ({ profile, isPending }: ProfileSectionProps) => {
   );
 
   let description: React.ReactNode = null;
-  if (isPending) {
+  if (isPending && !profile) {
     description = <LoadingDots />;
   } else if (descriptionHtml) {
     description = (
@@ -84,10 +85,7 @@ export const ProfileSection = ({ profile, isPending }: ProfileSectionProps) => {
   return (
     <div className="shrink-0" ref={sectionRef} style={{ perspective: 1000 }}>
       {profile?.name && (
-        <h1
-          className="font-normal text-5xl sm:text-7xl pl-2"
-          style={{ fontFamily: '"Louison Adriana", cursive' }}
-        >
+        <h1 className="font-display font-normal text-5xl sm:text-7xl pl-2">
           {profile.name}
           {profile.username && (
             <span
@@ -117,7 +115,7 @@ export const ProfileSection = ({ profile, isPending }: ProfileSectionProps) => {
       )}
 
       {description && (
-        <p className="text-sm leading-relaxed sm:text-base lowercase">{description}</p>
+        <div className="text-sm leading-relaxed sm:text-base lowercase">{description}</div>
       )}
     </div>
   );

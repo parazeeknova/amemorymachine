@@ -181,6 +181,10 @@
   transition: opacity 0.2s ease;
 }
 
+.font-display {
+  font-family: "Louison Adriana", cursive;
+}
+
 .link-underline::after {
   position: absolute;
   bottom: -2px;
