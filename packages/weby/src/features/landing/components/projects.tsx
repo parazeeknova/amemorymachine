@@ -256,11 +256,12 @@ const ProjectCard = ({ index, onDetail, project }: ProjectCardProps) => {
 };
 
 interface ProjectListProps {
+  initialData?: Project[];
   onDetail?: (project: Project) => void;
 }
 
-export const ProjectList = ({ onDetail }: ProjectListProps) => {
-  const { data: projectData, isPending } = useProjects();
+export const ProjectList = ({ initialData, onDetail }: ProjectListProps) => {
+  const { data: projectData, isPending } = useProjects(initialData);
   const listRef = useRef<HTMLDivElement>(null);
 
   useLayoutEffect(() => {
@@ -326,11 +327,12 @@ export const ProjectList = ({ onDetail }: ProjectListProps) => {
 };
 
 interface MobileProjectListProps {
+  initialData?: Project[];
   onDetail?: (project: Project) => void;
 }
 
-export const MobileProjectList = ({ onDetail }: MobileProjectListProps) => {
-  const { data: projectData, isPending } = useProjects();
+export const MobileProjectList = ({ initialData, onDetail }: MobileProjectListProps) => {
+  const { data: projectData, isPending } = useProjects(initialData);
   const [isExpanded, setIsExpanded] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
   const extraRef = useRef<HTMLDivElement>(null);

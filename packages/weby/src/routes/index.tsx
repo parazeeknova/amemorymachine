@@ -171,7 +171,11 @@ const Home = function Home() {
     }
   }, [profile]);
   const { data: manifest = [] } = useBlogManifest(loaderData?.manifest);
-  const queriesPending = useIsFetchingData();
+  const queriesPending = useIsFetchingData({
+    experience: loaderData?.experience,
+    profile: loaderData?.profile,
+    projects: loaderData?.projects,
+  });
   // When the loader provided data (SSR or client-side navigation), the page
   // never shows loading skeletons — content renders immediately and matches
   // the server HTML exactly.
@@ -447,7 +451,7 @@ const Home = function Home() {
 
         <div className="shrink-0 space-y-2">
           <h3 className="font-medium text-base">voo look what i made</h3>
-          <ProjectList onDetail={handleProjectDetail} />
+          <ProjectList initialData={loaderData?.projects} onDetail={handleProjectDetail} />
         </div>
 
         <ClientOnly>
