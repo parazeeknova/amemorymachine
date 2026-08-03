@@ -317,14 +317,19 @@ export const PortfolioLivePreview = memo(
               <div className="flex items-center gap-2 mb-3">
                 <span className="text-[10px] uppercase tracking-wider opacity-40">activity</span>
               </div>
-              {ghSettings?.enabled && (
+              {ghSettings?.enabled ? (
                 <div className="scale-75 origin-top-left mb-2">
-                  <GitHubActivity username={ghSettings.username || "parazeeknova"} />
-                  {ghSettings?.hasToken && <GitHubStats />}
+                  <GitHubActivity username={ghSettings.username || "parazeeknova"}>
+                    {ghSettings?.hasToken && <GitHubStats />}
+                    {cfSettings?.enabled && (
+                      <CodeforcesCard username={cfSettings.username || "parazeeknova"} />
+                    )}
+                  </GitHubActivity>
                 </div>
-              )}
-              {cfSettings?.enabled && (
-                <CodeforcesCard username={cfSettings.username || "parazeeknova"} />
+              ) : (
+                cfSettings?.enabled && (
+                  <CodeforcesCard username={cfSettings.username || "parazeeknova"} />
+                )
               )}
             </div>
           )}

@@ -301,6 +301,7 @@ func main() {
 		api.GET("/github/enabled", h.GetGitHubEnabledStatus)
 		api.GET("/cf/enabled", h.GetCFEnabledStatus)
 		api.GET("/cf/settings", h.GetCFSettings)
+		api.GET("/cf/data", h.GetCFData)
 		api.GET("/stats", h.GetStats)
 		api.GET("/blogs", h.GetBlogManifest)
 		api.GET("/blogs/:slug", h.GetBlogPost)

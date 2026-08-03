@@ -87,8 +87,7 @@ export const useUpdateCFSettings = () => {
     },
     onSettled: () => {
       queryClient.invalidateQueries({ queryKey: ["cf-settings"] });
-      queryClient.invalidateQueries({ queryKey: ["codeforces-user"] });
-      queryClient.invalidateQueries({ queryKey: ["codeforces-rating"] });
+      queryClient.invalidateQueries({ queryKey: ["codeforces-data"] });
     },
     onSuccess: (data) => {
       logger.info({ enabled: data.enabled, username: data.username }, "cf settings: update saved");

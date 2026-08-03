@@ -99,6 +99,12 @@ export const getProjects = () => fetchBacky<Project[]>("projects");
 
 export const getGitHubStats = () => fetchBacky<unknown>("github/stats");
 
+// getCFData proxies Codeforces user.info + user.rating through backy so the
+// browser never calls codeforces.com directly (Codeforces sends no CORS
+// headers). backy returns a combined { user, ratings } payload.
+export const getCFData = (handle: string) =>
+  fetchBacky<unknown>(`cf/data?handle=${encodeURIComponent(handle)}`);
+
 export const getBlogPost = (slug: string) => fetchBacky<BlogPost>(`blogs/${slug}`);
 
 export const getBlogManifest = () => fetchBacky<BlogManifestSection[]>("blogs");

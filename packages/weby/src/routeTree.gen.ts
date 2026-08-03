@@ -38,6 +38,9 @@ import { Route as ApiAuthLogoutRouteImport } from './routes/api/auth/logout'
 import { Route as ApiAuthMeRouteImport } from './routes/api/auth/me'
 import { Route as ApiAuthRefreshRouteImport } from './routes/api/auth/refresh'
 import { Route as ApiBlogsSlugRouteImport } from './routes/api/blogs/$slug'
+import { Route as ApiCfDataRouteImport } from './routes/api/cf/data'
+import { Route as ApiCfSettingsRouteImport } from './routes/api/cf/settings'
+import { Route as ApiConsoleCfSettingsRouteImport } from './routes/api/console/cf-settings'
 import { Route as ApiConsoleGithubSettingsRouteImport } from './routes/api/console/github-settings'
 import { Route as ApiConsoleNotificationsRouteImport } from './routes/api/console/notifications'
 import { Route as ApiConsolePagesRouteImport } from './routes/api/console/pages'
@@ -267,6 +270,21 @@ const ApiBlogsSlugRoute = ApiBlogsSlugRouteImport.update({
   id: '/$slug',
   path: '/$slug',
   getParentRoute: () => ApiBlogsRoute,
+} as any)
+const ApiCfDataRoute = ApiCfDataRouteImport.update({
+  id: '/api/cf/data',
+  path: '/api/cf/data',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiCfSettingsRoute = ApiCfSettingsRouteImport.update({
+  id: '/api/cf/settings',
+  path: '/api/cf/settings',
+  getParentRoute: () => rootRouteImport,
+} as any)
+const ApiConsoleCfSettingsRoute = ApiConsoleCfSettingsRouteImport.update({
+  id: '/api/console/cf-settings',
+  path: '/api/console/cf-settings',
+  getParentRoute: () => rootRouteImport,
 } as any)
 const ApiConsoleGithubSettingsRoute =
   ApiConsoleGithubSettingsRouteImport.update({
@@ -764,6 +782,9 @@ export interface FileRoutesByFullPath {
   '/api/auth/me': typeof ApiAuthMeRoute
   '/api/auth/refresh': typeof ApiAuthRefreshRoute
   '/api/blogs/$slug': typeof ApiBlogsSlugRoute
+  '/api/cf/data': typeof ApiCfDataRoute
+  '/api/cf/settings': typeof ApiCfSettingsRoute
+  '/api/console/cf-settings': typeof ApiConsoleCfSettingsRoute
   '/api/console/github-settings': typeof ApiConsoleGithubSettingsRoute
   '/api/console/notifications': typeof ApiConsoleNotificationsRouteWithChildren
   '/api/console/pages': typeof ApiConsolePagesRouteWithChildren
@@ -876,6 +897,9 @@ export interface FileRoutesByTo {
   '/api/auth/me': typeof ApiAuthMeRoute
   '/api/auth/refresh': typeof ApiAuthRefreshRoute
   '/api/blogs/$slug': typeof ApiBlogsSlugRoute
+  '/api/cf/data': typeof ApiCfDataRoute
+  '/api/cf/settings': typeof ApiCfSettingsRoute
+  '/api/console/cf-settings': typeof ApiConsoleCfSettingsRoute
   '/api/console/github-settings': typeof ApiConsoleGithubSettingsRoute
   '/api/console/notifications': typeof ApiConsoleNotificationsRouteWithChildren
   '/api/console/pages': typeof ApiConsolePagesRouteWithChildren
@@ -992,6 +1016,9 @@ export interface FileRoutesById {
   '/api/auth/me': typeof ApiAuthMeRoute
   '/api/auth/refresh': typeof ApiAuthRefreshRoute
   '/api/blogs/$slug': typeof ApiBlogsSlugRoute
+  '/api/cf/data': typeof ApiCfDataRoute
+  '/api/cf/settings': typeof ApiCfSettingsRoute
+  '/api/console/cf-settings': typeof ApiConsoleCfSettingsRoute
   '/api/console/github-settings': typeof ApiConsoleGithubSettingsRoute
   '/api/console/notifications': typeof ApiConsoleNotificationsRouteWithChildren
   '/api/console/pages': typeof ApiConsolePagesRouteWithChildren
@@ -1109,6 +1136,9 @@ export interface FileRouteTypes {
     | '/api/auth/me'
     | '/api/auth/refresh'
     | '/api/blogs/$slug'
+    | '/api/cf/data'
+    | '/api/cf/settings'
+    | '/api/console/cf-settings'
     | '/api/console/github-settings'
     | '/api/console/notifications'
     | '/api/console/pages'
@@ -1221,6 +1251,9 @@ export interface FileRouteTypes {
     | '/api/auth/me'
     | '/api/auth/refresh'
     | '/api/blogs/$slug'
+    | '/api/cf/data'
+    | '/api/cf/settings'
+    | '/api/console/cf-settings'
     | '/api/console/github-settings'
     | '/api/console/notifications'
     | '/api/console/pages'
@@ -1336,6 +1369,9 @@ export interface FileRouteTypes {
     | '/api/auth/me'
     | '/api/auth/refresh'
     | '/api/blogs/$slug'
+    | '/api/cf/data'
+    | '/api/cf/settings'
+    | '/api/console/cf-settings'
     | '/api/console/github-settings'
     | '/api/console/notifications'
     | '/api/console/pages'
@@ -1444,6 +1480,9 @@ export interface RootRouteChildren {
   ApiAuthLogoutRoute: typeof ApiAuthLogoutRoute
   ApiAuthMeRoute: typeof ApiAuthMeRoute
   ApiAuthRefreshRoute: typeof ApiAuthRefreshRoute
+  ApiCfDataRoute: typeof ApiCfDataRoute
+  ApiCfSettingsRoute: typeof ApiCfSettingsRoute
+  ApiConsoleCfSettingsRoute: typeof ApiConsoleCfSettingsRoute
   ApiConsoleGithubSettingsRoute: typeof ApiConsoleGithubSettingsRoute
   ApiConsoleNotificationsRoute: typeof ApiConsoleNotificationsRouteWithChildren
   ApiConsolePagesRoute: typeof ApiConsolePagesRouteWithChildren
@@ -1678,6 +1717,27 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/blogs/$slug'
       preLoaderRoute: typeof ApiBlogsSlugRouteImport
       parentRoute: typeof ApiBlogsRoute
+    }
+    '/api/cf/data': {
+      id: '/api/cf/data'
+      path: '/api/cf/data'
+      fullPath: '/api/cf/data'
+      preLoaderRoute: typeof ApiCfDataRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/cf/settings': {
+      id: '/api/cf/settings'
+      path: '/api/cf/settings'
+      fullPath: '/api/cf/settings'
+      preLoaderRoute: typeof ApiCfSettingsRouteImport
+      parentRoute: typeof rootRouteImport
+    }
+    '/api/console/cf-settings': {
+      id: '/api/console/cf-settings'
+      path: '/api/console/cf-settings'
+      fullPath: '/api/console/cf-settings'
+      preLoaderRoute: typeof ApiConsoleCfSettingsRouteImport
+      parentRoute: typeof rootRouteImport
     }
     '/api/console/github-settings': {
       id: '/api/console/github-settings'
@@ -2707,6 +2767,9 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAuthLogoutRoute: ApiAuthLogoutRoute,
   ApiAuthMeRoute: ApiAuthMeRoute,
   ApiAuthRefreshRoute: ApiAuthRefreshRoute,
+  ApiCfDataRoute: ApiCfDataRoute,
+  ApiCfSettingsRoute: ApiCfSettingsRoute,
+  ApiConsoleCfSettingsRoute: ApiConsoleCfSettingsRoute,
   ApiConsoleGithubSettingsRoute: ApiConsoleGithubSettingsRoute,
   ApiConsoleNotificationsRoute: ApiConsoleNotificationsRouteWithChildren,
   ApiConsolePagesRoute: ApiConsolePagesRouteWithChildren,

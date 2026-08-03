@@ -431,10 +431,11 @@ const Home = function Home() {
           </GitHubActivity>
         </ClientOnly>
 
-        {cfSettings?.enabled && (
-          <ClientOnly>
-            <CodeforcesCard username={cfSettings?.username || "parazeeknova"} />
-          </ClientOnly>
+        {/* Codeforces card renders outside ClientOnly so it is present in the
+            server-rendered HTML (curl/SSR); the colored graph hydrates on the
+            client. Rendered while CF settings are still loading OR when enabled. */}
+        {(!cfSettings || cfSettings.enabled) && (
+          <CodeforcesCard username={cfSettings?.username || "parazeeknova"} />
         )}
 
         <div className="shrink-0 flex items-center justify-between pt-2">
