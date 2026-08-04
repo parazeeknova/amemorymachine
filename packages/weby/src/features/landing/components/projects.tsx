@@ -440,7 +440,41 @@ interface ProjectListProps {
 // nothing when there are no entries.
 export const OpenSourceSection = ({ initialData }: { initialData?: Project[] }) => {
   const { data: projectData, isPending } = useProjects(initialData);
+  const listRef = useRef<HTMLDivElement>(null);
   const entries = (projectData ?? []).filter((p) => p.section === "opensource");
+
+  useLayoutEffect(() => {
+    if (isPending || entries.length === 0) {
+      return;
+    }
+    const el = listRef.current;
+    if (!el) {
+      return;
+    }
+    const items = [...el.children];
+    if (items.length === 0) {
+      return;
+    }
+    gsap.killTweensOf(items);
+    gsap.fromTo(
+      items,
+      {
+        filter: "blur(12px)",
+        opacity: 0,
+        scale: 0.98,
+        y: 18,
+      },
+      {
+        duration: 0.65,
+        ease: "power2.out",
+        filter: "blur(0px)",
+        opacity: 1,
+        scale: 1,
+        stagger: 0.09,
+        y: 0,
+      },
+    );
+  }, [entries.length, isPending]);
 
   if (isPending) {
     return (
@@ -463,59 +497,61 @@ export const OpenSourceSection = ({ initialData }: { initialData?: Project[] }) 
   return (
     <div className="shrink-0 space-y-5">
       <h3 className="font-medium text-base lowercase">open sourcerering</h3>
-      {stats.length > 0 && (
-        <div className="space-y-1.5">
-          {stats.map((e) => (
-            <p
-              className="font-mono text-[10px] uppercase tracking-wider text-gray-500"
-              key={e.title}
-            >
-              {e.title} · {e.stack}
-            </p>
-          ))}
-        </div>
-      )}
-      {holopin && (
-        <div className="space-y-3">
-          {holopin.desc && (
-            <p className="w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
-              {holopin.desc}
-            </p>
-          )}
-          <a
-            className="inline-block"
-            draggable={false}
-            href={holopin.productUrl || "#"}
-            onContextMenu={(e) => e.preventDefault()}
-            rel="noopener noreferrer"
-            target="_blank"
-          >
-            <img
-              alt={`${holopin.title} badges for parazeeknova`}
-              className="edge-fade w-full"
-              draggable={false}
-              src={holopin.image}
-            />
-          </a>
-        </div>
-      )}
-      {stints.length > 0 && (
-        <div className="space-y-6">
-          {stints.map((e) => (
-            <div key={e.title}>
-              <h4 className="font-medium text-xs sm:text-sm">{e.title}</h4>
-              <p className="font-mono text-[10px] uppercase tracking-wider text-gray-500">
-                {e.stack}
+      <div className="space-y-5" ref={listRef}>
+        {stats.length > 0 && (
+          <div className="space-y-1.5">
+            {stats.map((e) => (
+              <p
+                className="font-mono text-[10px] uppercase tracking-wider text-gray-500"
+                key={e.title}
+              >
+                {e.title} · {e.stack}
               </p>
-              {e.desc && (
-                <p className="mt-1.5 w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
-                  {e.desc}
+            ))}
+          </div>
+        )}
+        {holopin && (
+          <div className="space-y-3">
+            {holopin.desc && (
+              <p className="w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
+                {holopin.desc}
+              </p>
+            )}
+            <a
+              className="inline-block"
+              draggable={false}
+              href={holopin.productUrl || "#"}
+              onContextMenu={(e) => e.preventDefault()}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <img
+                alt={`${holopin.title} badges for parazeeknova`}
+                className="edge-fade w-full"
+                draggable={false}
+                src={holopin.image}
+              />
+            </a>
+          </div>
+        )}
+        {stints.length > 0 && (
+          <div className="space-y-6">
+            {stints.map((e) => (
+              <div key={e.title}>
+                <h4 className="font-medium text-xs sm:text-sm">{e.title}</h4>
+                <p className="font-mono text-[10px] uppercase tracking-wider text-gray-500">
+                  {e.stack}
                 </p>
-              )}
-            </div>
-          ))}
-        </div>
-      )}
+                {e.desc && (
+                  <p className="mt-1.5 w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
+                    {e.desc}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
     </div>
   );
 };
@@ -524,7 +560,41 @@ export const OpenSourceSection = ({ initialData }: { initialData?: Project[] }) 
 // section; renders nothing when there are no entries.
 export const HackathonSection = ({ initialData }: { initialData?: Project[] }) => {
   const { data: projectData, isPending } = useProjects(initialData);
+  const listRef = useRef<HTMLDivElement>(null);
   const hackathons = (projectData ?? []).filter((p) => p.section === "hackathon");
+
+  useLayoutEffect(() => {
+    if (isPending || hackathons.length === 0) {
+      return;
+    }
+    const el = listRef.current;
+    if (!el) {
+      return;
+    }
+    const items = [...el.children];
+    if (items.length === 0) {
+      return;
+    }
+    gsap.killTweensOf(items);
+    gsap.fromTo(
+      items,
+      {
+        filter: "blur(12px)",
+        opacity: 0,
+        scale: 0.98,
+        y: 18,
+      },
+      {
+        duration: 0.65,
+        ease: "power2.out",
+        filter: "blur(0px)",
+        opacity: 1,
+        scale: 1,
+        stagger: 0.09,
+        y: 0,
+      },
+    );
+  }, [hackathons.length, isPending]);
 
   if (isPending) {
     return (
@@ -546,7 +616,7 @@ export const HackathonSection = ({ initialData }: { initialData?: Project[] }) =
   return (
     <div className="shrink-0 space-y-5">
       <h3 className="font-medium text-base lowercase">hacking goes brrr</h3>
-      <div className="space-y-6">
+      <div className="space-y-6" ref={listRef}>
         {hackathons.map((h) => {
           // Hackathons reuse the readme_url slot as an optional third photo.
           const imgs = [h.image, h.logo, h.readmeUrl].filter(Boolean);
