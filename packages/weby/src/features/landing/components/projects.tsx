@@ -351,7 +351,7 @@ export const WorldlineVisualizer = () => {
           ease: "sine.inOut",
           repeat: -1,
           scaleY: 0.3 + Math.random() * 0.9,
-          transformOrigin: "50% 100%",
+          transformOrigin: "50% 50%",
           yoyo: true,
         });
       }
@@ -362,15 +362,15 @@ export const WorldlineVisualizer = () => {
           duration: 0.25,
           ease: "power2.out",
           scaleY: 0.25 + Math.random() * 0.3,
-          transformOrigin: "50% 100%",
+          transformOrigin: "50% 50%",
         });
       }
     }
   }, [isPlaying]);
 
   return (
-    <div className="relative shrink-0 pt-4 pb-6">
-      <div className="mx-auto flex h-10 w-[79%] items-end gap-[3px] text-gray-500">
+    <div className="relative flex h-20 shrink-0 items-center justify-center">
+      <div className="flex h-10 w-[79%] items-center gap-[3px] text-gray-500">
         {Array.from({ length: 28 }).map((_, i) => (
           <span
             key={i}
@@ -380,13 +380,13 @@ export const WorldlineVisualizer = () => {
               }
             }}
             className="w-[2px] bg-current"
-            style={{ height: "100%", transform: "scaleY(0.25)", transformOrigin: "50% 100%" }}
+            style={{ height: "100%", transform: "scaleY(0.25)", transformOrigin: "50% 50%" }}
           />
         ))}
       </div>
       <button
         aria-label={isPlaying ? "pause" : "play"}
-        className="absolute top-0 right-0 flex h-9 w-9 items-center justify-center text-gray-500 transition-colors duration-200 hover:text-gray-300"
+        className="absolute top-1/2 right-0 flex h-9 w-9 -translate-y-1/2 items-center justify-center text-gray-500 transition-colors duration-200 hover:text-gray-300"
         onClick={() => setIsPlaying((prev) => !prev)}
         type="button"
       >
