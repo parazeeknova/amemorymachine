@@ -900,6 +900,36 @@ button {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='7' viewBox='0 0 20 7'%3E%3Cpath d='M0 4 C 2.5 1.5, 5 1.5, 7.5 4 S 12.5 6.5, 15 4 S 20 1.5, 20 4' fill='none' stroke='%237c3aed' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E");
 }
 
+/* Bold-italic position highlight with the squiggle, used in the
+   hackathon timeline meta. Mirrors .prose-desc a but for plain text
+   spans, with the wave always drawn. */
+.squiggle-highlight {
+  color: inherit;
+  font-style: italic;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 7px;
+  --squiggle-progress: 100;
+}
+
+.squiggle-highlight::after {
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  width: calc(var(--squiggle-progress) * 1%);
+  height: 6px;
+  content: "";
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='7' viewBox='0 0 20 7'%3E%3Cpath d='M0 4 C 2.5 1.5, 5 1.5, 7.5 4 S 12.5 6.5, 15 4 S 20 1.5, 20 4' fill='none' stroke='%23b58cff' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  opacity: 0.85;
+}
+
+[data-theme="light"] .squiggle-highlight::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='7' viewBox='0 0 20 7'%3E%3Cpath d='M0 4 C 2.5 1.5, 5 1.5, 7.5 4 S 12.5 6.5, 15 4 S 20 1.5, 20 4' fill='none' stroke='%237c3aed' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E");
+}
+
 [data-theme="light"] .blog-reader-prose a {
   color: #7c3aed;
 }

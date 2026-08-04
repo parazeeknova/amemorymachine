@@ -276,14 +276,15 @@ export const generatePortfolioMarkdown = (
         title: "Saltwise by Dr. Chandra Mohana",
       },
       {
-        desc: "Won HackByte 4.0 First place at IIIT Jabalpur with MLH. 48 hours, three humans, pure spite and caffeine: me, Aman Aziz and Koustubh Pande. We built Chorus, an infinite spatial canvas for AI-assisted development: coding tasks become cards on a canvas, agents execute them in parallel across multiple projects, and you direct master agents and their subagents from a single prompt interface. 110+ providers, 4000+ models. For the demo we sent a voice note from a phone and ran multiple models writing and executing tests live in front of judges from Microsoft, Adobe, and Amazon.",
+        desc: "Won HackByte 4.0 First place at IIIT Jabalpur with MLH. We built Chorus, an infinite spatial canvas for AI-assisted development: coding tasks become cards on a canvas, agents execute them in parallel across multiple projects, and you direct master agents and their subagents from a single prompt interface. 110+ providers, 4000+ models. For the demo we sent a voice note from a phone and ran multiple models writing and executing tests live in front of judges from Microsoft, Adobe, and Amazon.",
         image: "https://img.przknv.cc/t/1775453585144.jpg",
         logo: "https://img.przknv.cc/t/1775453588171.jpg",
         productUrl: "",
         readmeUrl: "https://img.przknv.cc/t/hball-2.jpeg",
         repoUrl: "",
         section: "hackathon",
-        stack: "Apr 2026 · Winner (1st Position) · IIIT Jabalpur · MLH",
+        stack:
+          'Apr 2026 · <span class="squiggle-highlight">Winner (1st Position)</span> · IIIT Jabalpur · MLH',
         title: "HackByte 4.0",
       },
       {
@@ -294,7 +295,8 @@ export const generatePortfolioMarkdown = (
         readmeUrl: "",
         repoUrl: "",
         section: "hackathon",
-        stack: "Apr 2025 · Runner-up, Wikimedia track · IIIT Jabalpur",
+        stack:
+          'Apr 2025 · <span class="squiggle-highlight">Runner-up, Wikimedia track</span> · IIIT Jabalpur',
         title: "HackByte 3.0",
       },
     ]

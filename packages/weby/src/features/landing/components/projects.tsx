@@ -348,9 +348,11 @@ export const HackathonSection = ({ initialData }: { initialData?: Project[] }) =
           return (
             <div className="relative pl-6" key={h.title}>
               <span className="absolute left-[3px] top-2 bottom-0 w-px bg-border" aria-hidden />
-              <p className="font-mono text-[10px] uppercase tracking-wider text-gray-500">
-                {h.stack}
-              </p>
+              {/* eslint-disable-next-line react/no-danger -- meta carries the squiggle-highlight span */}
+              <p
+                className="font-mono text-[10px] uppercase tracking-wider text-gray-500"
+                dangerouslySetInnerHTML={{ __html: h.stack }}
+              />
               <h4 className="mt-1 font-medium text-xs sm:text-sm">{h.title}</h4>
               {h.desc && (
                 <p className="mt-1.5 w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
