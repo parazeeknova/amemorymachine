@@ -121,8 +121,8 @@ export const generatePortfolioMarkdown = (
         logo: "https://img.przknv.cc/t/verso.png",
         productUrl: "https://amemorymachine.cc",
         readmeUrl:
-          "https://raw.githubusercontent.com/parazeeknova/verso/refs/heads/main/.github/README.md",
-        repoUrl: "https://github.com/parazeeknova/verso",
+          "https://raw.githubusercontent.com/parazeeknova/amemorymachine/refs/heads/main/.github/README.md",
+        repoUrl: "https://github.com/parazeeknova/amemorymachine",
         section: "prod",
         stack:
           "Tanstack Start, Vite, Vitest, Golang, TypeScript, Postgres, TipTap, CRDTs, Tailwind CSS, Cloudflare, Docker and more",

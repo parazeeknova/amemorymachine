@@ -20,6 +20,10 @@ ENV NODE_ENV=production
 ENV HOST=0.0.0.0
 ENV PORT=8080
 COPY --from=build /app/packages/weby/.output ./.output
+# TanStack Start's SSR router imports undici externally regardless of bundler
+# settings, and the production image ships no node_modules. Carry the package
+# (zero deps) so the import resolves at runtime.
+COPY --from=build /app/node_modules/undici ./node_modules/undici
 USER node
 EXPOSE 8080
 HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \

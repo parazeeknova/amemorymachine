@@ -24,7 +24,7 @@ const config = defineConfig(async ({ mode }) => {
 
   const plugins = [devtools(), tailwindcss(), tanstackStart(), viteReact()];
 
-  // Self-hosted node-server build (nitro). Deployed as the verso-web
+  // Self-hosted node-server build (nitro). Deployed as the amemorymachine-web
   // docker image; Cloudflare Workers is no longer a target.
   const { nitro } = await import("nitro/vite");
   plugins.push(nitro({ noExternals: ["undici"], preset: "node-server" }));
@@ -83,10 +83,9 @@ const config = defineConfig(async ({ mode }) => {
       },
     },
     ssr: {
-      // Inline undici into the SSR bundle: the production image ships only
-      // .output with no node_modules, so externalized imports of transitive
-      // deps (e.g. undici pulled in by TanStack Start's router) would crash
-      // at runtime with ERR_MODULE_NOT_FOUND.
+      // Prefer inlining undici into the SSR bundle. Some build environments
+      // (containerized bun) still externalize it via TanStack Start's router
+      // chunk, so the Dockerfile additionally ships the package in the image.
       noExternal: ["undici"],
     },
   };

@@ -175,6 +175,17 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
+      - name: Verify SSR bundle is self-contained (weby)
+        if: matrix.package == 'weby'
+        run: |
+          IMAGE="${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ matrix.image-name }}:${{ needs.check-release-tag.outputs.tag }}"
+          podman pull "$IMAGE" >/dev/null 2>&1 || docker pull "$IMAGE" >/dev/null 2>&1
+          if podman run --rm --platform linux/amd64 --entrypoint sh "$IMAGE" -c "grep -rl 'from \"undici\"' /app/.output/server/_ssr/ 2>/dev/null" | grep -q .; then
+            echo "::error::SSR bundle still externalizes undici; production image has no node_modules and will crash on every request"
+            exit 1
+          fi
+          echo "SSR bundle is self-contained"
+
       - name: Generate attestation
         uses: actions/attest-build-provenance@v4
         with:
