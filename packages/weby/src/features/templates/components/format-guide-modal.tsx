@@ -145,7 +145,9 @@ export const FormatGuideModal = ({ isOpen, onClose }: FormatGuideModalProps) => 
           <P>
             You can add as many experience entries as you want. Just repeat the pattern for each
             role. Add - Section: university clubs to a role to move it into the university clubs
-            tab; everything else lands under professional.
+            tab, or - Section: research to pin a paper under its own research tab (its description
+            can carry markdown links, e.g. to the paper or your ORCID); everything else lands under
+            professional.
           </P>
 
           <HR />

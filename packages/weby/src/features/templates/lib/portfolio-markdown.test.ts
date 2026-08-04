@@ -107,6 +107,10 @@ describe("validatePortfolioMarkdown", () => {
 
     const club = parsed.parsed.experiences.find((e) => e.title.includes("Mozilla"));
     expect(club?.section).toBe("university clubs");
+
+    const paper = parsed.parsed.experiences.find((e) => e.title.includes("Fine-Tuning"));
+    expect(paper?.section).toBe("research");
+    expect(paper?.description).toContain("link.springer.com");
   });
 
   it("rejects invalid email format", () => {

@@ -15,7 +15,7 @@ export interface Profile {
   resumeUrl?: string;
 }
 
-export type ExperienceSection = "professional" | "university clubs";
+export type ExperienceSection = "professional" | "research" | "university clubs";
 
 export interface ExperienceItem {
   description?: string;

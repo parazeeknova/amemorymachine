@@ -172,17 +172,19 @@ interface ExperienceSectionProps {
   isPending?: boolean;
 }
 
-export type ExperienceTabKey = "professional" | "university clubs";
+export type ExperienceTabKey = "professional" | "research" | "university clubs";
 
 export interface TabGroup {
   key: string;
 }
 
 export const getExperienceGroups = (experience: ExperienceItem[] | undefined): TabGroup[] => {
-  const professional = (experience ?? []).filter((e) => e.section !== "university clubs");
+  const professional = (experience ?? []).filter((e) => e.section === "professional" || !e.section);
+  const research = (experience ?? []).filter((e) => e.section === "research");
   const clubs = (experience ?? []).filter((e) => e.section === "university clubs");
   return [
     ...(professional.length > 0 ? [{ key: "professional" as const }] : []),
+    ...(research.length > 0 ? [{ key: "research" as const }] : []),
     ...(clubs.length > 0 ? [{ key: "university clubs" as const }] : []),
   ];
 };
@@ -295,11 +297,19 @@ const ExperienceRow = memo(
       <p className="text-gray-500 text-xs sm:text-sm">
         {item.location} | {item.period}
       </p>
-      {item.description && (
-        <p className="mt-1.5 w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
-          {item.description}
-        </p>
-      )}
+      {item.description &&
+        (item.section === "research" ? (
+          // Research entries carry markdown links (paper, ORCID) in the
+          // description, so render them as HTML instead of plain text.
+          <div
+            className="prose-desc mt-1.5 w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]"
+            dangerouslySetInnerHTML={{ __html: markdownToHtml(item.description) }}
+          />
+        ) : (
+          <p className="mt-1.5 w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
+            {item.description}
+          </p>
+        ))}
     </div>
   ),
 );
@@ -313,20 +323,28 @@ export const ExperienceSection = ({ experience, isPending }: ExperienceSectionPr
   const isFirstRender = useRef(true);
   const isTabFirstRender = useRef(true);
 
-  const professional = (experience ?? []).filter((e) => e.section !== "university clubs");
+  const professional = (experience ?? []).filter((e) => e.section === "professional" || !e.section);
+  const research = (experience ?? []).filter((e) => e.section === "research");
   const clubs = (experience ?? []).filter((e) => e.section === "university clubs");
   const groups = getExperienceGroups(experience);
   const resolvedTab = groups.some((g) => g.key === activeTab)
     ? activeTab
     : (groups[0]?.key ?? "professional");
-  const activeItems = resolvedTab === "professional" ? professional : clubs;
+  const activeItems =
+    {
+      professional,
+      research,
+      "university clubs": clubs,
+    }[resolvedTab] ?? [];
   const hasMore = resolvedTab === "professional" && professional.length > 3;
   const visibleItems = hasMore ? professional.slice(0, 3) : activeItems;
   const extraItems = hasMore ? professional.slice(3) : [];
 
   const handleTabSelect = (next: string) => {
     const target: ExperienceTabKey =
-      next === "professional" || next === "university clubs" ? next : "professional";
+      next === "professional" || next === "research" || next === "university clubs"
+        ? next
+        : "professional";
     if (target === activeTab) {
       return;
     }

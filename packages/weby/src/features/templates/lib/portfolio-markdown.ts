@@ -65,6 +65,15 @@ export const generatePortfolioMarkdown = (
       },
       {
         description:
+          "This work investigates how small language models — particularly those in the 1B–3B parameter range — can be fine-tuned to handle programming tasks more effectively. Motivated by the growing interest in running AI models on limited hardware, we evaluate parameter-efficient fine-tuning approaches including Low-Rank Adaptation (LoRA), Quantised Low-Rank Adaptation (QLoRA), and Unsloth to improve performance without requiring expensive resources. Rather than constructing a new dataset, we leverage existing coding problem datasets from platforms such as LeetCode and Codeforces, whose challenges, test cases, and solutions provide a robust basis for evaluating code generation and reasoning. Fine-tuning surfaced common practical hurdles — memory limits, long training times, and occasional instability, particularly on lower-end GPUs — yet the tuned models showed consistent gains: fine-tuned versions solved programming problems noticeably better and exhibited stronger reasoning than their base counterparts. Our results suggest that even smaller models can deliver meaningful code intelligence when trained carefully, making them viable for everyday scenarios where large-scale hardware is unavailable. [Read the paper](https://link.springer.com/chapter/10.1007/978-3-032-17184-9_28) · [ORCID](https://orcid.org/0009-0008-9861-9181)",
+        location: "Springer · CICBA 2025",
+        period: "2026",
+        section: "research",
+        title:
+          "Fine-Tuning for Code Intelligence: Evaluating LLMs on Custom Programming Benchmarks",
+      },
+      {
+        description:
           "Handled ops, logistics and team coordination. Built a treasure-hunt app with admin dashboard (MongoDB, Express, React, Node) — REST + WebSocket for real-time participant tracking, game state and scoring, deployed on EC2 with Docker. Also shipped event sites and the club landing page.",
         location: "University (VIT)",
         period: "June 25'–January 26'",
@@ -313,7 +322,13 @@ const parseExperienceLine = (
       currentExpItem.description = itemLine.slice("description:".length).trim();
     } else if (itemLine.toLowerCase().startsWith("section:")) {
       const raw = itemLine.slice("section:".length).trim().toLowerCase();
-      currentExpItem.section = raw.startsWith("university") ? "university clubs" : "professional";
+      if (raw.startsWith("university")) {
+        currentExpItem.section = "university clubs";
+      } else if (raw.startsWith("research")) {
+        currentExpItem.section = "research";
+      } else {
+        currentExpItem.section = "professional";
+      }
     }
   }
   return currentExpItem;

@@ -110,17 +110,25 @@ const PreviewExperienceSection = memo(({ experiences }: { experiences: Experienc
   const listRef = useRef<HTMLDivElement>(null);
   const isTabFirstRender = useRef(true);
 
-  const professional = experiences.filter((e) => e.section !== "university clubs");
+  const professional = experiences.filter((e) => e.section === "professional" || !e.section);
+  const research = experiences.filter((e) => e.section === "research");
   const clubs = experiences.filter((e) => e.section === "university clubs");
   const groups = getExperienceGroups(experiences);
   const resolvedTab = groups.some((g) => g.key === activeTab)
     ? activeTab
     : (groups[0]?.key ?? "professional");
-  const activeItems = resolvedTab === "professional" ? professional : clubs;
+  const activeItems =
+    {
+      professional,
+      research,
+      "university clubs": clubs,
+    }[resolvedTab] ?? [];
 
   const handleTabSelect = (next: string) => {
     const target: ExperienceTabKey =
-      next === "professional" || next === "university clubs" ? next : "professional";
+      next === "professional" || next === "research" || next === "university clubs"
+        ? next
+        : "professional";
     if (target === activeTab) {
       return;
     }
@@ -192,11 +200,18 @@ const PreviewExperienceSection = memo(({ experiences }: { experiences: Experienc
             <p className="text-gray-500 text-xs sm:text-sm">
               {item.location} | {item.period}
             </p>
-            {item.description && (
-              <p className="mt-1.5 w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
-                {item.description}
-              </p>
-            )}
+            {item.description &&
+              (item.section === "research" ? (
+                // eslint-disable-next-line react/no-danger
+                <div
+                  className="prose-desc mt-1.5 w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]"
+                  dangerouslySetInnerHTML={{ __html: markdownToHtml(item.description) }}
+                />
+              ) : (
+                <p className="mt-1.5 w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
+                  {item.description}
+                </p>
+              ))}
           </div>
         ))}
       </div>
