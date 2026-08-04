@@ -1,6 +1,6 @@
 {
   "name": "@verso/weby",
-  "version": "0.7.31",
+  "version": "0.7.32",
   "private": true,
   "type": "module",
   "imports": {
@@ -8,7 +8,7 @@
   },
   "scripts": {
     "build": "vite build",
-    "check-types": "tsgo --noEmit",
+    "check-types": "tsc --noEmit",
     "cf-typegen": "wrangler types",
     "deploy": "CLOUDFLARE=1 bun run build && wrangler deploy",
     "dev": "NODE_OPTIONS=\"--localstorage-file=/tmp/verso-localstorage\" vite dev --port 3000",

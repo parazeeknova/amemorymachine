@@ -1,13 +1,13 @@
 {
   "name": "@verso/native",
-  "version": "0.7.31",
+  "version": "0.7.32",
   "private": true,
   "type": "module",
   "scripts": {
     "start": "electrobun dev",
     "dev": "electrobun dev --watch",
     "generate-icons": "bun run scripts/generate-icons.ts",
-    "check-types": "tsgo --noEmit",
+    "check-types": "tsc --noEmit",
     "build:canary": "electrobun build --env=canary",
     "build:stable": "electrobun build --env=stable"
   },
