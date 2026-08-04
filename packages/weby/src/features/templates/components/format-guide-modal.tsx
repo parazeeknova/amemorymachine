@@ -167,8 +167,9 @@ export const FormatGuideModal = ({ isOpen, onClose }: FormatGuideModalProps) => 
             product screenshot, Logo is the project icon: the thumbnail shows the logo and
             crossfades to the screenshot on hover, and if one is missing the other serves both.
             LogoScale (0-1) shrinks a logo that renders too large inside the thumbnail. The Section
-            field groups projects into the prod or personal tabs (anything other than "personal"
-            becomes prod). Add as many projects as you like.
+            field groups projects into the prod, personal, or freelance tabs (anything other than
+            "personal" or "freelance" becomes prod); freelance projects render as a distinct card
+            grid. Add as many projects as you like.
           </P>
 
           <HR />

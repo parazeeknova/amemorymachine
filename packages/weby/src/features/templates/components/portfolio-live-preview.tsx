@@ -7,7 +7,7 @@ import type { ParsedPortfolio, ValidationError } from "../lib/portfolio-markdown
 import { markdownToHtml } from "#/features/blog/lib/markdown-to-html";
 import { GitHubActivity } from "#/features/github/components/calendar";
 import { GitHubStats } from "#/features/github/components/stats";
-import { ProjectThumb } from "#/features/landing/components/projects";
+import { FreelanceGrid, ProjectThumb } from "#/features/landing/components/projects";
 import {
   getExperienceGroups,
   getProjectGroups,
@@ -220,7 +220,7 @@ const PreviewExperienceSection = memo(({ experiences }: { experiences: Experienc
 });
 
 const PreviewProjectsSection = memo(({ projects }: { projects: Project[] }) => {
-  const [activeTab, setActiveTab] = useState<"prod" | "personal">("prod");
+  const [activeTab, setActiveTab] = useState<"prod" | "personal" | "freelance">("prod");
   const listRef = useRef<HTMLDivElement>(null);
   const isTabFirstRender = useRef(true);
 
@@ -228,12 +228,11 @@ const PreviewProjectsSection = memo(({ projects }: { projects: Project[] }) => {
   const resolvedTab = groups.some((g) => g.key === activeTab)
     ? activeTab
     : (groups[0]?.key ?? "prod");
-  const filtered = projects.filter((p) =>
-    resolvedTab === "personal" ? p.section === "personal" : p.section !== "personal",
-  );
+  const filtered = projects.filter((p) => (p.section ?? "prod") === resolvedTab);
 
   const handleTabSelect = (next: string) => {
-    const target: "prod" | "personal" = next === "personal" ? "personal" : "prod";
+    const target: "prod" | "personal" | "freelance" =
+      next === "personal" || next === "freelance" ? next : "prod";
     if (target === activeTab) {
       return;
     }
@@ -299,56 +298,60 @@ const PreviewProjectsSection = memo(({ projects }: { projects: Project[] }) => {
         <TabBar groups={groups} active={resolvedTab} onSelect={handleTabSelect} />
       )}
       <div ref={listRef} className="space-y-6 pt-1">
-        {filtered.map((proj, idx) => {
-          const isEven = idx % 2 === 0;
-          return (
-            <div
-              key={`${proj.title}-${idx}`}
-              className={`flex items-center gap-3 sm:gap-4 ${isEven ? "" : "flex-row-reverse"}`}
-            >
-              {(proj.image || proj.logo) && (
-                <ProjectThumb
-                  className="w-20 h-20 sm:w-28 sm:h-28 border border-white/10"
-                  index={idx}
-                  project={proj}
-                />
-              )}
-              <div className="flex-1 min-w-0">
-                <h3 className="font-medium text-xs sm:text-sm">{proj.title}</h3>
-                {proj.desc && (
-                  <p className="mt-1 text-justify text-gray-500 text-xs sm:text-sm leading-relaxed">
-                    {proj.desc}
-                  </p>
+        {resolvedTab === "freelance" ? (
+          <FreelanceGrid projects={filtered} />
+        ) : (
+          filtered.map((proj, idx) => {
+            const isEven = idx % 2 === 0;
+            return (
+              <div
+                key={`${proj.title}-${idx}`}
+                className={`flex items-center gap-3 sm:gap-4 ${isEven ? "" : "flex-row-reverse"}`}
+              >
+                {(proj.image || proj.logo) && (
+                  <ProjectThumb
+                    className="w-20 h-20 sm:w-28 sm:h-28 border border-white/10"
+                    index={idx}
+                    project={proj}
+                  />
                 )}
-                <div className="mt-1.5 flex flex-wrap items-center gap-2 text-xs">
-                  {proj.stack && (
-                    <span className="text-gray-500 text-[11px] font-mono">{proj.stack}</span>
+                <div className="flex-1 min-w-0">
+                  <h3 className="font-medium text-xs sm:text-sm">{proj.title}</h3>
+                  {proj.desc && (
+                    <p className="mt-1 text-justify text-gray-500 text-xs sm:text-sm leading-relaxed">
+                      {proj.desc}
+                    </p>
                   )}
-                  {proj.repoUrl && (
-                    <a
-                      className="text-[#b58cff] text-[11px] lowercase hover:opacity-70"
-                      href={proj.repoUrl}
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
-                      repo
-                    </a>
-                  )}
-                  {proj.productUrl && (
-                    <a
-                      className="text-[#b58cff] text-[11px] lowercase hover:opacity-70"
-                      href={proj.productUrl}
-                      rel="noopener noreferrer"
-                      target="_blank"
-                    >
-                      product
-                    </a>
-                  )}
+                  <div className="mt-1.5 flex flex-wrap items-center gap-2 text-xs">
+                    {proj.stack && (
+                      <span className="text-gray-500 text-[11px] font-mono">{proj.stack}</span>
+                    )}
+                    {proj.repoUrl && (
+                      <a
+                        className="text-[#b58cff] text-[11px] lowercase hover:opacity-70"
+                        href={proj.repoUrl}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        repo
+                      </a>
+                    )}
+                    {proj.productUrl && (
+                      <a
+                        className="text-[#b58cff] text-[11px] lowercase hover:opacity-70"
+                        href={proj.productUrl}
+                        rel="noopener noreferrer"
+                        target="_blank"
+                      >
+                        product
+                      </a>
+                    )}
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </div>
     </div>
   );

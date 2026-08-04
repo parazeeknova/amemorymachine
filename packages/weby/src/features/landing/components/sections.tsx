@@ -190,11 +190,13 @@ export const getExperienceGroups = (experience: ExperienceItem[] | undefined): T
 };
 
 export const getProjectGroups = (projects: Project[] | undefined): TabGroup[] => {
-  const prod = (projects ?? []).filter((p) => p.section !== "personal");
+  const prod = (projects ?? []).filter((p) => p.section === "prod" || !p.section);
   const personal = (projects ?? []).filter((p) => p.section === "personal");
+  const freelance = (projects ?? []).filter((p) => p.section === "freelance");
   return [
     ...(prod.length > 0 ? [{ key: "prod" as const }] : []),
     ...(personal.length > 0 ? [{ key: "personal" as const }] : []),
+    ...(freelance.length > 0 ? [{ key: "freelance" as const }] : []),
   ];
 };
 

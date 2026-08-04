@@ -231,6 +231,50 @@ export const generatePortfolioMarkdown = (
           "Next.js, Elixir, TypeScript, Bun, Firestore, Yjs, Zustand, Tailwind CSS, CRDTs, Docker and more",
         title: "Papyrus. a spreadsheet that syncs like a doc and scales like a database.",
       },
+      {
+        desc: "Singularity Works, an opinionated product studio building systems, infrastructure, and tools for companies that ship.",
+        image: "https://img.przknv.cc/t/Screenshot_2026-07-08_00.57.49.png",
+        logo: "",
+        productUrl: "https://itssingularity.com",
+        readmeUrl: "",
+        repoUrl: "",
+        section: "freelance",
+        stack: "",
+        title: "itssingularity.com",
+      },
+      {
+        desc: "ALLROUND PMC is India's leading project management consultancy for hospitality, healthcare, and construction. We deliver precision, strategy, and excellence.",
+        image: "https://img.przknv.cc/t/allround.webp",
+        logo: "",
+        productUrl: "https://allroundpmc.com",
+        readmeUrl: "",
+        repoUrl: "",
+        section: "freelance",
+        stack: "",
+        title: "ALLROUND PMC Pvt Ltd",
+      },
+      {
+        desc: "Qatar's trusted partner in premium hotel supplies",
+        image: "https://img.przknv.cc/?asset=oryx.webp",
+        logo: "",
+        productUrl: "https://oryxhotelsupplies.com",
+        readmeUrl: "",
+        repoUrl: "",
+        section: "freelance",
+        stack: "",
+        title: "Oryx Hotel Supplies (UAE)",
+      },
+      {
+        desc: "Saltwise helps you find medication alternatives and understand your choices without the jargon.",
+        image: "https://img.przknv.cc/t/saltwise.webp",
+        logo: "",
+        productUrl: "",
+        readmeUrl: "",
+        repoUrl: "",
+        section: "freelance",
+        stack: "",
+        title: "Saltwise by Dr. Chandra Mohana",
+      },
     ]
   )
     .map(
@@ -353,7 +397,14 @@ const applyProjectField = (project: Project, fieldKey: string, val: string): voi
   } else if (fieldKey === "product" || fieldKey === "producturl") {
     project.productUrl = val;
   } else if (fieldKey === "section") {
-    project.section = val.toLowerCase().startsWith("personal") ? "personal" : "prod";
+    const raw = val.toLowerCase();
+    if (raw.startsWith("personal")) {
+      project.section = "personal";
+    } else if (raw.startsWith("freelance")) {
+      project.section = "freelance";
+    } else {
+      project.section = "prod";
+    }
   }
 };
 

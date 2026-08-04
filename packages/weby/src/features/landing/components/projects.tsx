@@ -230,6 +230,50 @@ interface ProjectCardProps {
   project: Project;
 }
 
+// Freelance client work gets its own layout: a card grid instead of the
+// alternating rows used by prod/personal. Each card is a browser-style
+// frame with the site screenshot, then the name and blurb underneath.
+export const FreelanceGrid = ({ projects }: { projects: Project[] }) => (
+  <div className="grid grid-cols-1 gap-3 sm:grid-cols-2 sm:gap-4">
+    {projects.map((proj, idx) => {
+      const linkUrl = proj.productUrl || proj.repoUrl;
+      return (
+        <div className="group border border-border overflow-hidden flex flex-col" key={proj.title}>
+          <a
+            className="relative block overflow-hidden aspect-[16/10]"
+            href={linkUrl || "#"}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            {proj.image && (
+              <img
+                alt={proj.title}
+                className="w-full h-full object-cover transition-transform duration-500 group-hover:scale-[1.04]"
+                src={proj.image}
+              />
+            )}
+            <div className="absolute inset-0 bg-black/0 transition-colors duration-300 group-hover:bg-black/35" />
+            <span className="absolute top-2 right-2 text-[10px] font-mono lowercase opacity-0 transition-opacity duration-300 group-hover:opacity-100 text-white/90">
+              visit ↗
+            </span>
+          </a>
+          <div className="flex-1 p-3">
+            <div className="flex items-baseline justify-between gap-2">
+              <h3 className="font-medium text-xs sm:text-sm lowercase">{proj.title}</h3>
+              <span className="text-[10px] font-mono text-gray-500 shrink-0">
+                {String(idx + 1).padStart(2, "0")}
+              </span>
+            </div>
+            {proj.desc && (
+              <p className="mt-1 text-justify text-gray-400 text-xs leading-relaxed">{proj.desc}</p>
+            )}
+          </div>
+        </div>
+      );
+    })}
+  </div>
+);
+
 const ProjectCard = ({ index, onDetail, project }: ProjectCardProps) => {
   const [stackOpen, setStackOpen] = useState(false);
   const isEven = index % 2 === 0;
@@ -324,12 +368,10 @@ export const ProjectList = ({ initialData, onDetail }: ProjectListProps) => {
   const resolvedTab = groups.some((g) => g.key === activeTab)
     ? activeTab
     : (groups[0]?.key ?? "prod");
-  const filtered = (projectData ?? []).filter((p) =>
-    resolvedTab === "personal" ? p.section === "personal" : p.section !== "personal",
-  );
+  const filtered = (projectData ?? []).filter((p) => (p.section ?? "prod") === resolvedTab);
 
   const handleTabSelect = (next: string) => {
-    const target: ProjectSection = next === "personal" ? "personal" : "prod";
+    const target: ProjectSection = next === "personal" || next === "freelance" ? next : "prod";
     if (target === activeTab) {
       return;
     }
@@ -419,6 +461,15 @@ export const ProjectList = ({ initialData, onDetail }: ProjectListProps) => {
     );
   }, [isPending, projectData]);
 
+  const renderProjects = () => {
+    if (resolvedTab === "freelance") {
+      return <FreelanceGrid projects={filtered} />;
+    }
+    return filtered.map((project, index) => (
+      <ProjectCard key={project.title} index={index} onDetail={onDetail} project={project} />
+    ));
+  };
+
   return (
     <div className="space-y-3 sm:space-y-4">
       {!isPending && groups.length > 1 && (
@@ -442,9 +493,7 @@ export const ProjectList = ({ initialData, onDetail }: ProjectListProps) => {
             ))}
           </div>
         ) : (
-          filtered.map((project, index) => (
-            <ProjectCard key={project.title} index={index} onDetail={onDetail} project={project} />
-          ))
+          renderProjects()
         )}
       </div>
     </div>
@@ -470,12 +519,10 @@ export const MobileProjectList = ({ initialData, onDetail }: MobileProjectListPr
   const resolvedTab = groups.some((g) => g.key === activeTab)
     ? activeTab
     : (groups[0]?.key ?? "prod");
-  const filtered = (projectData ?? []).filter((p) =>
-    resolvedTab === "personal" ? p.section === "personal" : p.section !== "personal",
-  );
+  const filtered = (projectData ?? []).filter((p) => (p.section ?? "prod") === resolvedTab);
 
   const handleTabSelect = (next: string) => {
-    const target: ProjectSection = next === "personal" ? "personal" : "prod";
+    const target: ProjectSection = next === "personal" || next === "freelance" ? next : "prod";
     if (target === activeTab) {
       return;
     }
@@ -650,6 +697,19 @@ export const MobileProjectList = ({ initialData, onDetail }: MobileProjectListPr
   }
 
   const hasMore = filtered.length > 3;
+
+  if (resolvedTab === "freelance") {
+    return (
+      <div className="space-y-3">
+        {groups.length > 1 && (
+          <TabBar groups={groups} active={resolvedTab} onSelect={handleTabSelect} />
+        )}
+        <div ref={listRef} style={{ perspective: 1000 }}>
+          <FreelanceGrid projects={filtered} />
+        </div>
+      </div>
+    );
+  }
 
   return (
     <div className="space-y-3">
