@@ -1,15 +1,24 @@
 import type { BlogManifestSection, ExperienceItem, Profile, Project } from "#/shared/types";
 
-// getSiteOrigin resolves the canonical public origin for SEO artifacts. In
-// production the deployed origin is fixed via VITE_APP_ORIGIN; in dev we use
-// the request host so sitemaps/robots/llms always point at the right place.
+// getSiteOrigin resolves the canonical public origin for SEO artifacts.
+// The request host wins when present so both przknv.cc and
+// amemorymachine.cc serve domain-correct sitemaps/robots/llms.txt;
+// VITE_APP_ORIGIN (or the default) is the fallback for requests with no
+// real host (e.g. the HTML head and direct-IP access).
 export const getSiteOrigin = (requestUrl?: string): string => {
+  if (requestUrl) {
+    try {
+      const { protocol, host } = new URL(requestUrl);
+      if (host) {
+        return `${protocol}//${host}`;
+      }
+    } catch {
+      // malformed request URL, fall through to the configured origin
+    }
+  }
   const fromEnv = import.meta.env.VITE_APP_ORIGIN as string | undefined;
   if (fromEnv && fromEnv.trim().length > 0) {
     return fromEnv.replace(/\/+$/, "");
-  }
-  if (requestUrl) {
-    return new URL(requestUrl).origin;
   }
   return "https://amemorymachine.cc";
 };

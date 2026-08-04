@@ -670,7 +670,7 @@ export const Route = createFileRoute("/")({
   component: Home,
   head: ({ loaderData }: { loaderData?: PortfolioLoaderData }) => {
     const origin = getSiteOrigin();
-    const ogImage = `${origin}/verso-og.png`;
+    const ogImage = `${origin}/amemorymachine-og.png`;
     const profile = loaderData?.profile;
     const title = buildPortfolioTitle(profile);
     const description = buildPortfolioDescription(profile);
