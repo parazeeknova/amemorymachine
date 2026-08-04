@@ -27,7 +27,7 @@ const config = defineConfig(async ({ mode }) => {
   // Self-hosted node-server build (nitro). Deployed as the verso-web
   // docker image; Cloudflare Workers is no longer a target.
   const { nitro } = await import("nitro/vite");
-  plugins.push(nitro({ externals: { inline: ["undici"] }, preset: "node-server" }));
+  plugins.push(nitro({ noExternals: ["undici"], preset: "node-server" }));
 
   return {
     define: {
