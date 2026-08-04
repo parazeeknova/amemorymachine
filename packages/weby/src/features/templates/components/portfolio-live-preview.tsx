@@ -11,6 +11,7 @@ import {
   HackathonSection,
   OpenSourceSection,
   ProjectThumb,
+  WorldlineVisualizer,
 } from "#/features/landing/components/projects";
 import {
   getExperienceGroups,
@@ -483,6 +484,7 @@ export const PortfolioLivePreview = memo(
           <PreviewProjectsSection projects={projects} />
           <HackathonSection />
           <OpenSourceSection />
+          <WorldlineVisualizer />
           {(ghSettings?.enabled || cfSettings?.enabled) && (
             <>
               {ghSettings?.enabled && (

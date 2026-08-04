@@ -313,6 +313,90 @@ const ProjectCard = ({ index, onDetail, project }: ProjectCardProps) => {
   );
 };
 
+// Steins;Gate worldline visualizer: a row of vertical audio bars that
+// dance on play, plus a single glyph-only play/pause button. No audio
+// attached yet, the motion is pure gsap. Gated behind reduced motion.
+const PlayGlyph = () => (
+  <svg aria-hidden fill="currentColor" viewBox="0 0 10 12" width="10">
+    <path d="M0 0 L10 6 L0 12 Z" />
+  </svg>
+);
+
+const PauseGlyph = () => (
+  <svg aria-hidden fill="currentColor" viewBox="0 0 10 12" width="10">
+    <rect height="12" width="3.5" x="0" />
+    <rect height="12" width="3.5" x="6.5" />
+  </svg>
+);
+
+export const WorldlineVisualizer = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const barEls = useRef<HTMLSpanElement[]>([]);
+
+  useEffect(() => {
+    const bars = barEls.current;
+    if (bars.length === 0) {
+      return;
+    }
+    const reduced =
+      typeof window !== "undefined" &&
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (isPlaying && !reduced) {
+      for (const [i, bar] of bars.entries()) {
+        gsap.killTweensOf(bar);
+        gsap.to(bar, {
+          delay: i * 0.02,
+          duration: 0.35 + Math.random() * 0.45,
+          ease: "sine.inOut",
+          repeat: -1,
+          scaleY: 0.3 + Math.random() * 0.9,
+          transformOrigin: "50% 100%",
+          yoyo: true,
+        });
+      }
+    } else {
+      for (const bar of bars) {
+        gsap.killTweensOf(bar);
+        gsap.to(bar, {
+          duration: 0.25,
+          ease: "power2.out",
+          scaleY: 0.25 + Math.random() * 0.3,
+          transformOrigin: "50% 100%",
+        });
+      }
+    }
+  }, [isPlaying]);
+
+  return (
+    <div className="shrink-0 flex flex-col items-center gap-3 pt-2 pb-4">
+      <div className="flex h-10 items-end gap-[3px] text-gray-500">
+        {Array.from({ length: 28 }).map((_, i) => (
+          <span
+            key={i}
+            ref={(el) => {
+              if (el) {
+                barEls.current[i] = el;
+              }
+            }}
+            className="w-[2px] bg-current"
+            style={{ height: "100%", transform: "scaleY(0.25)", transformOrigin: "50% 100%" }}
+          />
+        ))}
+      </div>
+      <button
+        aria-label={isPlaying ? "pause" : "play"}
+        className="flex h-9 w-9 items-center justify-center text-gray-500 transition-colors duration-200 hover:text-gray-300"
+        onClick={() => setIsPlaying((prev) => !prev)}
+        type="button"
+      >
+        {isPlaying ? <PauseGlyph /> : <PlayGlyph />}
+      </button>
+      <p className="font-display text-xs lowercase opacity-40 tracking-wide">el psy kongroo</p>
+    </div>
+  );
+};
+
 interface ProjectListProps {
   initialData?: Project[];
   onDetail?: (project: Project) => void;

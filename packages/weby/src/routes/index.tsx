@@ -24,6 +24,7 @@ import {
   HackathonSection,
   OpenSourceSection,
   ProjectList,
+  WorldlineVisualizer,
 } from "#/features/landing/components/projects";
 import { BlogReaderPanel } from "#/features/blog/components/blog-reader-panel";
 import { LoginPopup } from "#/features/auth/components/login-popup";
@@ -498,6 +499,8 @@ const Home = function Home() {
         <HackathonSection initialData={loaderData?.projects} />
 
         <OpenSourceSection />
+
+        <WorldlineVisualizer />
 
         <ClientOnly>
           <GitHubActivity isDarkMode={isDarkMode} username={githubUsername}>
