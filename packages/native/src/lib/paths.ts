@@ -45,9 +45,9 @@ const generateUuid = (): string => {
   // eslint-disable-next-line no-bitwise
   const bytes = randomBytes(16);
   // eslint-disable-next-line no-bitwise
-  bytes[6] = (bytes[6] & 0x0F) | 0x40;
+  bytes[6] = (bytes[6] & 15) | 64;
   // eslint-disable-next-line no-bitwise
-  bytes[8] = (bytes[8] & 0x3F) | 0x80;
+  bytes[8] = (bytes[8] & 63) | 128;
   return `${bytes.slice(0, 4).toString("hex")}-${bytes.slice(4, 6).toString("hex")}-${bytes
     .slice(6, 8)
     .toString("hex")}-${bytes.slice(8, 10).toString("hex")}-${bytes.slice(10, 16).toString("hex")}`;
