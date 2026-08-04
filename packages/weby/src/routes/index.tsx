@@ -462,13 +462,13 @@ const Home = function Home() {
       </div>
 
       <div className="-mt-1 mx-auto flex max-w-3xl flex-col gap-6 sm:gap-8 p-4 sm:p-6 lg:p-8">
-        {/* floating mini nav: appears once you scroll past the top */}
-        <div
-          className={`fixed top-3 right-3 z-50 flex items-center gap-3 rounded-full border px-3 py-1.5 transition-all duration-300 backdrop-blur-sm sm:top-4 sm:right-4 ${
-            isScrolled
-              ? "translate-y-0 opacity-100"
-              : "pointer-events-none -translate-y-2 opacity-0"
-          } ${isDarkMode ? "border-border-dark bg-bg-dark/80" : "border-border-light bg-bg-light/80"}`}
+        {/* floating mini nav: sticks to the top-right of the content
+            column once you scroll past the top */}
+        <nav
+          aria-label="quick nav"
+          className={`fixed top-3 z-50 flex items-center gap-4 transition-opacity duration-300 right-[max(1rem,calc((100vw-48rem)/2+1rem))] sm:right-[max(1.5rem,calc((100vw-48rem)/2+1.5rem))] lg:right-[max(2rem,calc((100vw-48rem)/2+2rem))] ${
+            isScrolled ? "opacity-100" : "pointer-events-none opacity-0"
+          }`}
         >
           {profile?.resumeUrl && (
             <a
@@ -497,7 +497,7 @@ const Home = function Home() {
           </button>
           <button
             aria-label="Toggle theme"
-            className="rounded-full p-1.5 focus:outline-none focus-visible:ring-1 focus-visible:ring-current/40"
+            className="p-1.5 focus:outline-none focus-visible:ring-1 focus-visible:ring-current/40"
             onClick={animatedToggleTheme}
             ref={themeRefsNav.buttonRef}
             type="button"
@@ -509,7 +509,7 @@ const Home = function Home() {
               style={{ backgroundColor: "transparent" }}
             />
           </button>
-        </div>
+        </nav>
         <div className="flex items-center justify-end gap-3 w-full">
           <button
             className={`text-[13px] lowercase focus:outline-none hover:opacity-70 ${
