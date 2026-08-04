@@ -173,8 +173,9 @@ export const generatePortfolioMarkdown = (
         title: "Papyrus. a spreadsheet that syncs like a doc and scales like a database.",
       },
       {
-        desc: "Fast TUI with hierarchical notebooks, fuzzy search, syntax highlighting for 25+ languages, and versioned storage.",
-        image: "",
+        desc: "Snix. the snippet manager i wanted in my terminal and couldn't find, so i built it.\n\nFast TUI for snippets, notebooks, and boilerplates, inspired by Nap, built because copy-pasting from old projects got old. Hierarchical notebooks keep things organized instead of one giant dump, fuzzy search finds what I need without remembering exact names, syntax highlighting across 25+ languages so it actually reads right. Versioned storage means nothing gets overwritten by accident. Still shipping (soon!), still the tool I reach for daily.",
+        image: "https://img.przknv.cc/t/snix.png",
+        logo: "https://img.przknv.cc/t/snixl.png",
         productUrl: "",
         readmeUrl:
           "https://raw.githubusercontent.com/parazeeknova/snix/refs/heads/main/.github/README.md",
@@ -184,15 +185,42 @@ export const generatePortfolioMarkdown = (
         title: "Snix is a Terminal snippet manager",
       },
       {
-        desc: "Windows code editor with built-in terminal. Supports 35+ languages, code folding, Lua customization, and QScintilla-based editing.",
-        image: "",
+        desc: "Successor to Nyxtext, rebuilt from scratch on PyQt6 and QScintilla. Windows editor with a built-in terminal, 35+ languages, code folding, Lua for when I want it to work exactly my way. Started as one project trying to kill the need for five different text tools, Zenith just does it better, faster, and without getting in the way of my hands leaving the keyboard.",
+        image: "https://img.przknv.cc/t/nyxtext.png",
+        logo: "https://img.przknv.cc/t/Zenith-logo.png",
         productUrl: "",
         readmeUrl:
           "https://raw.githubusercontent.com/parazeeknova/nyxtext-zenith/refs/heads/main/.github/README.md",
         repoUrl: "https://github.com/parazeeknova/nyxtext-zenith",
         section: "personal",
         stack: "Python, PyQt, QScintilla",
-        title: "Nyxtext Zenith is a Keyboard-first code editor",
+        title:
+          "Nyxtext Zenith. a keyboard-first code editor, built to be the last text editor I install.",
+      },
+      {
+        desc: "Fully local face recognition for controlled environments, no cloud APIs, no scraped data, no open-world guessing. Every identity gets explicitly enrolled in advance, so matching is deterministic against a private set instead of trying to recognize the entire world. Live operator view overlays names, roles, and confidence directly on the camera feed, with transport, inference, and enrollment kept as separate, explicit boundaries instead of one black box. Built for knowing who's actually in the room, not guessing who might be.",
+        image: "",
+        logo: "https://img.przknv.cc/t/maya.png",
+        productUrl: "",
+        readmeUrl: "",
+        repoUrl: "",
+        section: "personal",
+        stack: "",
+        title:
+          "Maya. closed-set face recognition, built for rooms where every face is already known.",
+      },
+      {
+        desc: "Turns matugen into a live theming engine for Zen Browser. Same wallpaper-switcher event that re-tints your terminal, status bar, and launcher now re-tints every open tab too, no separate theme step, no manual sync. Per-site overrides for places like GitHub that already run their own design system, so it re-tints without fighting them. One palette, every surface, including the browser everyone forgets to theme.",
+        image: "https://img.przknv.cc/t/zen-wabi.png",
+        logo: "",
+        productUrl: "",
+        readmeUrl:
+          "https://raw.githubusercontent.com/parazeeknova/zen-wabi/refs/heads/main/.github/README.md",
+        repoUrl: "https://github.com/parazeeknova/zen-wabi",
+        section: "personal",
+        stack: "",
+        title:
+          "zen-wabi. your wallpaper already re-themes your terminal, now it re-themes your browser too.",
       },
     ]
   )
