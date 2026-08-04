@@ -27,7 +27,7 @@ const config = defineConfig(async ({ mode }) => {
   // Self-hosted node-server build (nitro). Deployed as the verso-web
   // docker image; Cloudflare Workers is no longer a target.
   const { nitro } = await import("nitro/vite");
-  plugins.push(nitro({ preset: "node-server" }));
+  plugins.push(nitro({ externals: { inline: ["undici"] }, preset: "node-server" }));
 
   return {
     define: {
@@ -81,6 +81,13 @@ const config = defineConfig(async ({ mode }) => {
           target: `http://localhost:${port}`,
         },
       },
+    },
+    ssr: {
+      // Inline undici into the SSR bundle: the production image ships only
+      // .output with no node_modules, so externalized imports of transitive
+      // deps (e.g. undici pulled in by TanStack Start's router) would crash
+      // at runtime with ERR_MODULE_NOT_FOUND.
+      noExternal: ["undici"],
     },
   };
 });
