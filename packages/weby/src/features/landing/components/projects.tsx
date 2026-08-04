@@ -153,6 +153,7 @@ export const ProjectThumb = ({
       <img
         alt={project.title}
         className={`w-full h-full object-cover ${hoverScale} ${logoClass}`}
+        draggable={false}
         src={primarySrc}
       />
     </div>
@@ -169,6 +170,7 @@ export const ProjectThumb = ({
           <img
             alt={project.title}
             className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 hover:opacity-100"
+            draggable={false}
             src={hoverSrc}
           />
         )}
@@ -194,6 +196,7 @@ export const ProjectThumb = ({
           <img
             alt={project.title}
             className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-hover:scale-110"
+            draggable={false}
             src={hoverSrc}
           />
         )}
@@ -213,6 +216,7 @@ export const ProjectThumb = ({
                   ref={previewImgRef}
                   alt={project.title}
                   className="block w-72 h-72 object-cover"
+                  draggable={false}
                   src={project.image || project.logo}
                 />
               </div>
@@ -341,6 +345,7 @@ export const OpenSourceSection = () => (
       >
         <img
           alt="Holopin badges for parazeeknova"
+          draggable={false}
           className="edge-fade w-full"
           src="https://holopin.me/parazeeknova"
         />
@@ -423,6 +428,7 @@ export const HackathonSection = ({ initialData }: { initialData?: Project[] }) =
                     <img
                       alt={`${h.title} ${imgIdx + 1}`}
                       className="edge-fade flex-1 min-w-0 h-24 object-cover sm:h-28"
+                      draggable={false}
                       key={src}
                       src={src}
                       style={{ transform: imgIdx % 2 === 0 ? "rotate(-3deg)" : "rotate(3deg)" }}

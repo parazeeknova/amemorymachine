@@ -539,6 +539,7 @@ export const ExperienceSection = ({ experience, isPending }: ExperienceSectionPr
                   <img
                     alt=""
                     className="edge-fade flex-1 min-w-0 h-24 object-cover sm:h-28"
+                    draggable={false}
                     key={src}
                     src={src}
                     style={{ transform: imgIdx % 2 === 0 ? "rotate(-3deg)" : "rotate(3deg)" }}

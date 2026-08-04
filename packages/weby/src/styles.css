@@ -900,6 +900,15 @@ button {
   background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='7' viewBox='0 0 20 7'%3E%3Cpath d='M0 4 C 2.5 1.5, 5 1.5, 7.5 4 S 12.5 6.5, 15 4 S 20 1.5, 20 4' fill='none' stroke='%237c3aed' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E");
 }
 
+/* Portfolio images and media are protected from drag and selection:
+   no dragging, no text-selection cursor, no copy affordance. */
+img,
+video {
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
 /* Soft feathered edges for photo strips: the image diffuses into the
    surface on all four sides instead of a hard border. Theme-agnostic
    (the fade reveals whatever background sits behind). The fade zone is
