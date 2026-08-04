@@ -229,7 +229,7 @@ const PreviewExperienceSection = memo(({ experiences }: { experiences: Experienc
                 {clubImgs.map((src, imgIdx) => (
                   <img
                     alt=""
-                    className="flex-1 min-w-0 h-24 object-cover border border-white/10 sm:h-28"
+                    className="edge-fade flex-1 min-w-0 h-24 object-cover sm:h-28"
                     key={src}
                     src={src}
                     style={{ transform: imgIdx % 2 === 0 ? "rotate(-3deg)" : "rotate(3deg)" }}
