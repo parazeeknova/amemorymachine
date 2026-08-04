@@ -140,6 +140,23 @@ export const ProjectThumb = ({
   // small inset so they sit cleanly inside the container. Screenshots
   // (and the product layer on hover) stay full-bleed cover.
   const logoClass = project.logo ? "p-1.5 sm:p-2" : "";
+  // Optional per-project shrink for logos that render too large
+  // (e.g. the asocialmedia squircle). Scaled around the center via a
+  // wrapper so the hover scale on the img itself keeps working.
+  const logoScale =
+    project.logoScale && project.logoScale > 0 && project.logoScale < 1 ? project.logoScale : 1;
+  const primaryImg = (hoverScale: string) => (
+    <div
+      className="flex h-full w-full items-center justify-center"
+      style={{ transform: `scale(${logoScale})` }}
+    >
+      <img
+        alt={project.title}
+        className={`w-full h-full object-cover ${hoverScale} ${logoClass}`}
+        src={primarySrc}
+      />
+    </div>
+  );
 
   if (!linkUrl) {
     return (
@@ -147,11 +164,7 @@ export const ProjectThumb = ({
         className={`relative shrink-0 block overflow-hidden ${className}`}
         style={{ transform: isEven ? "rotate(-3deg)" : "rotate(3deg)" }}
       >
-        <img
-          alt={project.title}
-          className={`w-full h-full object-cover ${logoClass}`}
-          src={primarySrc}
-        />
+        {primaryImg("")}
         {hasDual && (
           <img
             alt={project.title}
@@ -176,11 +189,7 @@ export const ProjectThumb = ({
         style={{ transform: isEven ? "rotate(-3deg)" : "rotate(3deg)" }}
         target="_blank"
       >
-        <img
-          alt={project.title}
-          className={`w-full h-full object-cover transition-transform duration-300 group-hover:scale-110 ${logoClass}`}
-          src={primarySrc}
-        />
+        {primaryImg("transition-transform duration-300 group-hover:scale-110")}
         {hasDual && (
           <img
             alt={project.title}

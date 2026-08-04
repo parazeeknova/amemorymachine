@@ -31,6 +31,7 @@ export interface Project {
   desc: string;
   image?: string;
   logo?: string;
+  logoScale?: number;
   productUrl?: string;
   readmeUrl?: string;
   repoUrl?: string;

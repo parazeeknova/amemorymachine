@@ -78,7 +78,7 @@ func (r *PortfolioRepo) GetPinnedExperiences(ctx context.Context) ([]models.Expe
 
 func (r *PortfolioRepo) GetPinnedProjects(ctx context.Context) ([]models.Project, error) {
 	rows, err := r.pool.Query(ctx, `
-		SELECT pr.title, pr.description, pr.image, pr.logo, pr.readme_url, pr.repo_url, pr.product_url, pr.stack, pr.section
+		SELECT pr.title, pr.description, pr.image, pr.logo, pr.logo_scale, pr.readme_url, pr.repo_url, pr.product_url, pr.stack, pr.section
 		FROM portfolio_projects pr
 		JOIN portfolio_profiles p ON pr.profile_id = p.id
 		WHERE p.is_pinned = true
@@ -92,7 +92,7 @@ func (r *PortfolioRepo) GetPinnedProjects(ctx context.Context) ([]models.Project
 	var projects []models.Project
 	for rows.Next() {
 		var item models.Project
-		if err := rows.Scan(&item.Title, &item.Desc, &item.Image, &item.Logo, &item.ReadmeURL, &item.RepoURL, &item.ProductURL, &item.Stack, &item.Section); err != nil {
+		if err := rows.Scan(&item.Title, &item.Desc, &item.Image, &item.Logo, &item.LogoScale, &item.ReadmeURL, &item.RepoURL, &item.ProductURL, &item.Stack, &item.Section); err != nil {
 			return nil, err
 		}
 		projects = append(projects, item)
@@ -142,9 +142,9 @@ func (r *PortfolioRepo) SaveAndPinPortfolio(ctx context.Context, userID *string,
 
 	for idx, proj := range projects {
 		_, err = tx.Exec(ctx, `
-			INSERT INTO portfolio_projects (profile_id, title, description, image, logo, readme_url, repo_url, product_url, stack, section, position)
-			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11)
-		`, profileID, proj.Title, proj.Desc, proj.Image, proj.Logo, proj.ReadmeURL, proj.RepoURL, proj.ProductURL, proj.Stack, proj.Section, idx)
+			INSERT INTO portfolio_projects (profile_id, title, description, image, logo, logo_scale, readme_url, repo_url, product_url, stack, section, position)
+			VALUES ($1, $2, $3, $4, $5, $6, $7, $8, $9, $10, $11, $12)
+		`, profileID, proj.Title, proj.Desc, proj.Image, proj.Logo, proj.LogoScale, proj.ReadmeURL, proj.RepoURL, proj.ProductURL, proj.Stack, proj.Section, idx)
 		if err != nil {
 			return fmt.Errorf("insert project: %w", err)
 		}

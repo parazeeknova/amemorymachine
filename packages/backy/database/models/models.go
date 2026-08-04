@@ -33,15 +33,16 @@ type ExperienceItem struct {
 
 // Project represents a project entry
 type Project struct {
-	Title      string `json:"title"`
-	Desc       string `json:"desc"`
-	Image      string `json:"image,omitempty"`
-	Logo       string `json:"logo,omitempty"`
-	ReadmeURL  string `json:"readmeUrl,omitempty"`
-	RepoURL    string `json:"repoUrl,omitempty"`
-	ProductURL string `json:"productUrl,omitempty"`
-	Stack      string `json:"stack"`
-	Section    string `json:"section"`
+	Title      string  `json:"title"`
+	Desc       string  `json:"desc"`
+	Image      string  `json:"image,omitempty"`
+	Logo       string  `json:"logo,omitempty"`
+	LogoScale  float64 `json:"logoScale,omitempty"`
+	ReadmeURL  string  `json:"readmeUrl,omitempty"`
+	RepoURL    string  `json:"repoUrl,omitempty"`
+	ProductURL string  `json:"productUrl,omitempty"`
+	Stack      string  `json:"stack"`
+	Section    string  `json:"section"`
 }
 
 // GitHubOrg represents a GitHub organization

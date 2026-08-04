@@ -93,6 +93,7 @@ export const generatePortfolioMarkdown = (
         desc: "A social platform that brings your entire internet into one place. Unified feed, communities, real-time chat, rich media and tipping all tied together by Aura, a reputation system that grows with you, and Zeph, an AI companion that actually remembers you. Built by one person. Slightly unhinged in ambition.",
         image: "https://img.przknv.cc/t/Gk8Fy0aaMAARWSc.jpg",
         logo: "https://img.przknv.cc/t/zephyr.png",
+        logoScale: 0.8,
         productUrl: "https://asocialmedia.cc",
         readmeUrl:
           "https://raw.githubusercontent.com/asocialmedia/social/refs/heads/main/.github/README.md",
@@ -195,7 +196,7 @@ export const generatePortfolioMarkdown = (
   )
     .map(
       (proj) =>
-        `### ${proj.title}\n- Desc: ${proj.desc}\n- Image: ${proj.image || ""}\n- Logo: ${proj.logo || ""}\n- Stack: ${proj.stack || ""}\n- Readme: ${proj.readmeUrl || ""}\n- Repo: ${proj.repoUrl || ""}\n- Product: ${proj.productUrl || ""}\n- Section: ${proj.section ?? "prod"}`,
+        `### ${proj.title}\n- Desc: ${proj.desc}\n- Image: ${proj.image || ""}\n- Logo: ${proj.logo || ""}\n- LogoScale: ${proj.logoScale ?? 1}\n- Stack: ${proj.stack || ""}\n- Readme: ${proj.readmeUrl || ""}\n- Repo: ${proj.repoUrl || ""}\n- Product: ${proj.productUrl || ""}\n- Section: ${proj.section ?? "prod"}`,
     )
     .join("\n\n");
 
@@ -288,6 +289,29 @@ const parseExperienceLine = (
   return currentExpItem;
 };
 
+const applyProjectField = (project: Project, fieldKey: string, val: string): void => {
+  if (fieldKey === "desc" || fieldKey === "description") {
+    project.desc = val;
+  } else if (fieldKey === "image") {
+    project.image = val;
+  } else if (fieldKey === "logo") {
+    project.logo = val;
+  } else if (fieldKey === "logoscale") {
+    const parsed = Number(val);
+    project.logoScale = Number.isFinite(parsed) && parsed > 0 ? parsed : 1;
+  } else if (fieldKey === "stack") {
+    project.stack = val;
+  } else if (fieldKey === "readme" || fieldKey === "readmeurl") {
+    project.readmeUrl = val;
+  } else if (fieldKey === "repo" || fieldKey === "repourl") {
+    project.repoUrl = val;
+  } else if (fieldKey === "product" || fieldKey === "producturl") {
+    project.productUrl = val;
+  } else if (fieldKey === "section") {
+    project.section = val.toLowerCase().startsWith("personal") ? "personal" : "prod";
+  }
+};
+
 const parseProjectLine = (
   line: string,
   projects: Project[],
@@ -301,6 +325,7 @@ const parseProjectLine = (
       desc: "",
       image: "",
       logo: "",
+      logoScale: 1,
       productUrl: "",
       readmeUrl: "",
       repoUrl: "",
@@ -315,23 +340,7 @@ const parseProjectLine = (
     if (colonIdx > 0) {
       const fieldKey = itemLine.slice(0, colonIdx).trim().toLowerCase();
       const val = itemLine.slice(colonIdx + 1).trim();
-      if (fieldKey === "desc" || fieldKey === "description") {
-        currentProjItem.desc = val;
-      } else if (fieldKey === "image") {
-        currentProjItem.image = val;
-      } else if (fieldKey === "logo") {
-        currentProjItem.logo = val;
-      } else if (fieldKey === "stack") {
-        currentProjItem.stack = val;
-      } else if (fieldKey === "readme" || fieldKey === "readmeurl") {
-        currentProjItem.readmeUrl = val;
-      } else if (fieldKey === "repo" || fieldKey === "repourl") {
-        currentProjItem.repoUrl = val;
-      } else if (fieldKey === "product" || fieldKey === "producturl") {
-        currentProjItem.productUrl = val;
-      } else if (fieldKey === "section") {
-        currentProjItem.section = val.toLowerCase().startsWith("personal") ? "personal" : "prod";
-      }
+      applyProjectField(currentProjItem, fieldKey, val);
     }
   }
   return currentProjItem;
