@@ -502,9 +502,7 @@ export const PortfolioLivePreview = memo(
           </div>
 
           <div className="flex justify-end pt-4 pb-2">
-            <span className="font-display text-3xl sm:text-4xl opacity-40">
-              — with love, {profile.name?.split(" ")[0]?.toLowerCase() || "harsh"}
-            </span>
+            <span className="font-display text-3xl sm:text-4xl opacity-40">— El Psy Kongroo</span>
           </div>
         </div>
       </div>

@@ -520,7 +520,7 @@ const Home = function Home() {
         </div>
 
         <div className="flex justify-end pt-4 pb-2">
-          <span className="font-display text-4xl sm:text-5xl opacity-40">— with love, harsh</span>
+          <span className="font-display text-4xl sm:text-5xl opacity-40">— El Psy Kongroo</span>
         </div>
       </div>
     </div>
