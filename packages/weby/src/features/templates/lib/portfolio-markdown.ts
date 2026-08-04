@@ -303,13 +303,13 @@ export const generatePortfolioMarkdown = (
       },
       {
         desc: "In six weeks, built a text editor in Qt (Nyxtext Zenith) supporting over 35 languages with all the standard features of a text editor, including calltips, autocompletions, filetree, and syntax highlighting.",
-        image: "",
-        logo: "",
+        image: "https://img.przknv.cc/t/bs1.avif",
+        logo: "https://img.przknv.cc/t/bs2.avif",
         productUrl: "",
-        readmeUrl: "",
+        readmeUrl: "https://img.przknv.cc/t/bs3.avif",
         repoUrl: "",
         section: "hackathon",
-        stack: "buildspace · Nights & Weekends S5 · Jun 2024 - Aug 2024 · India · Remote",
+        stack: "buildspace · Nights & Weekends S5 · Jun 2024 - Aug 2024",
         title: "Nyxtext Zenith",
       },
     ]
