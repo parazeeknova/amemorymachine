@@ -16,7 +16,7 @@ interface IframeModalProps {
 export const IframeModal = ({ onClose, title, url }: IframeModalProps) => {
   const { isDarkMode } = useTheme();
   const overlayRef = useRef<HTMLDivElement>(null);
-  const frameRef = useRef<HTMLDivElement>(null);
+  const frameRef = useRef<HTMLDialogElement>(null);
 
   useEffect(() => {
     const overlay = overlayRef.current;
@@ -74,13 +74,13 @@ export const IframeModal = ({ onClose, title, url }: IframeModalProps) => {
       }}
       role="presentation"
     >
-      <div
+      <dialog
         ref={frameRef}
-        className={`relative flex h-[90vh] w-[90vw] max-w-[90vw] flex-col overflow-hidden border ${
+        aria-label={title}
+        className={`relative m-0 flex h-[90vh] w-[90vw] max-w-[90vw] flex-col overflow-hidden border bg-transparent p-0 ${
           isDarkMode ? "border-border-dark bg-bg-dark" : "border-border-light bg-bg-light"
         }`}
-        role="dialog"
-        aria-label={title}
+        open
       >
         <div
           className={`flex shrink-0 items-center justify-between px-2 py-1 border-b ${
@@ -102,12 +102,12 @@ export const IframeModal = ({ onClose, title, url }: IframeModalProps) => {
           </button>
         </div>
         <iframe
-          className="min-h-0 w-full flex-1 overflow-auto border-0"
+          className="min-w-0 w-full flex-1 overflow-auto border-0"
           scrolling="auto"
           src={url}
           title={title}
         />
-      </div>
+      </dialog>
     </div>,
     document.body,
   );

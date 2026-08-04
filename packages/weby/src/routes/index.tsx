@@ -614,11 +614,10 @@ const Home = function Home() {
 
       {/* raw portfolio markdown modal */}
       {isRawOpen && (
-        <div
+        <dialog
           aria-label="Raw portfolio markdown"
-          aria-modal="true"
-          className="fixed inset-0 z-50 flex items-center justify-center p-4"
-          role="dialog"
+          className="fixed inset-0 z-50 m-0 flex items-center justify-center bg-transparent p-4"
+          open
         >
           <div
             aria-hidden
@@ -647,11 +646,11 @@ const Home = function Home() {
                 close
               </button>
             </div>
-            <pre className="overflow-auto p-4 font-mono text-[11px] leading-relaxed whitespace-pre-wrap wrap-break-word text-gray-400">
+            <pre className="overflow-auto p-4 font-mono text-[11px] leading-relaxed whitespace-pre-wrap break-words text-gray-400">
               {rawMarkdown}
             </pre>
           </div>
-        </div>
+        </dialog>
       )}
     </div>
   );

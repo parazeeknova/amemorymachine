@@ -570,11 +570,10 @@ export const PortfolioLivePreview = memo(
 
         {/* raw portfolio markdown modal */}
         {isRawOpen && (
-          <div
+          <dialog
             aria-label="Raw portfolio markdown"
-            aria-modal="true"
-            className="fixed inset-0 z-[60] flex items-center justify-center p-4"
-            role="dialog"
+            className="fixed inset-0 z-[60] m-0 flex items-center justify-center bg-transparent p-4"
+            open
           >
             <div
               aria-hidden
@@ -607,7 +606,7 @@ export const PortfolioLivePreview = memo(
                 {rawMarkdown}
               </pre>
             </div>
-          </div>
+          </dialog>
         )}
       </div>
     );
