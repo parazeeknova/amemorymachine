@@ -902,14 +902,15 @@ button {
 
 /* Soft feathered edges for photo strips: the image diffuses into the
    surface on all four sides instead of a hard border. Theme-agnostic
-   (the fade reveals whatever background sits behind). */
+   (the fade reveals whatever background sits behind). The fade zone is
+   small so the edges read as a subtle kiss, not a rounded frame. */
 .edge-fade {
   -webkit-mask-image:
-    linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%),
-    linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+    linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
   mask-image:
-    linear-gradient(to right, transparent 0%, black 15%, black 85%, transparent 100%),
-    linear-gradient(to bottom, transparent 0%, black 15%, black 85%, transparent 100%);
+    linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
   -webkit-mask-composite: source-in;
   mask-composite: intersect;
 }
