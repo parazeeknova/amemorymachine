@@ -105,7 +105,7 @@ export const generatePortfolioMarkdown = (
       },
       {
         desc: "Personal knowledge base and folio, blog for public face & private brain, one app that doesn't apologize for being both. the left side is where i exist as a person (public face): my projects, my work, my contribution graph. the right side is where i think out loud (private brain): notes, docs, blog posts, half-baked ideas.",
-        image: "",
+        image: "https://img.przknv.cc/t/versopp.png",
         logo: "https://img.przknv.cc/t/verso.png",
         productUrl: "https://amemorymachine.cc",
         readmeUrl:
@@ -158,7 +158,8 @@ export const generatePortfolioMarkdown = (
       },
       {
         desc: "Realtime collaborative spreadsheet with a local-first document model, CRDT-based syncing, worker-driven evaluation, and a virtualized grid built to stay responsive on 10K+ row datasets.",
-        image: "",
+        image: "https://img.przknv.cc/t/papss.png",
+        logo: "https://img.przknv.cc/t/papyrus.png",
         productUrl: "https://sheets.przknv.cc",
         readmeUrl:
           "https://raw.githubusercontent.com/parazeeknova/papyrus/refs/heads/main/.github/README.md",
