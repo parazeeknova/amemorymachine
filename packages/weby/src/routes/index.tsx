@@ -488,8 +488,10 @@ const Home = function Home() {
             column once you scroll past the top */}
         <nav
           aria-label="quick nav"
-          className={`fixed top-3 z-50 flex items-center gap-4 px-3 py-1.5 transition-opacity duration-300 bg-linear-to-l ${
-            isDarkMode ? "from-white/10 to-transparent" : "from-black/8 to-transparent"
+          className={`fixed top-0 z-50 flex items-center gap-4 px-3 py-2 transition-opacity duration-300 bg-linear-to-b ${
+            isDarkMode
+              ? "from-[#b58cff]/25 via-[#b58cff]/8 to-transparent"
+              : "from-[#7c3aed]/18 via-[#7c3aed]/6 to-transparent"
           } right-[max(1rem,calc((100vw-48rem)/2+1rem))] sm:right-[max(1.5rem,calc((100vw-48rem)/2+1.5rem))] lg:right-[max(2rem,calc((100vw-48rem)/2+2rem))] ${
             isScrolled ? "opacity-100" : "pointer-events-none opacity-0"
           }`}

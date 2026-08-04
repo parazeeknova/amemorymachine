@@ -1,10 +1,11 @@
-import { memo, useLayoutEffect, useMemo, useRef, useState } from "react";
+import { memo, useEffect, useLayoutEffect, useMemo, useRef, useState } from "react";
 import { ArrowUpRightIcon } from "@phosphor-icons/react";
 import { gsap } from "gsap";
 import { useTheme } from "#/shared/hooks/use-theme";
 import type { ExperienceItem, Profile, Project } from "#/shared/types";
 import type { ParsedPortfolio, ValidationError } from "../lib/portfolio-markdown";
 import { markdownToHtml } from "#/features/blog/lib/markdown-to-html";
+import { generatePortfolioMarkdown } from "../lib/portfolio-markdown";
 import { GitHubActivity } from "#/features/github/components/calendar";
 import { GitHubStats } from "#/features/github/components/stats";
 import {
@@ -384,9 +385,40 @@ export const PortfolioLivePreview = memo(
   ({ errors, isValid, parsedData }: PortfolioLivePreviewProps) => {
     const { isDarkMode } = useTheme();
     const containerRef = useRef<HTMLDivElement>(null);
+    const [isRawOpen, setIsRawOpen] = useState(false);
+    const [isScrolled, setIsScrolled] = useState(false);
     const { experiences, profile, projects } = parsedData;
     const { data: ghSettings } = useGitHubSettings();
     const { data: cfSettings } = useCFSettings();
+
+    const rawMarkdown = useMemo(
+      () => generatePortfolioMarkdown(profile, experiences, projects),
+      [experiences, profile, projects],
+    );
+
+    useEffect(() => {
+      const el = containerRef.current;
+      if (!el) {
+        return;
+      }
+      const onScroll = () => setIsScrolled(el.scrollTop > 80);
+      el.addEventListener("scroll", onScroll, { passive: true });
+      onScroll();
+      return () => el.removeEventListener("scroll", onScroll);
+    }, []);
+
+    useEffect(() => {
+      if (!isRawOpen) {
+        return;
+      }
+      const onKey = (e: KeyboardEvent) => {
+        if (e.key === "Escape") {
+          setIsRawOpen(false);
+        }
+      };
+      document.addEventListener("keydown", onKey);
+      return () => document.removeEventListener("keydown", onKey);
+    }, [isRawOpen]);
 
     const lightVideoUrl = profile.lightVideo || "https://img.przknv.cc/t/footer.mp4";
     const darkVideoUrl = profile.darkVideo || "https://img.przknv.cc/t/header.mp4";
@@ -473,8 +505,35 @@ export const PortfolioLivePreview = memo(
 
         {/* Main Content Area matching / route */}
         <div className="-mt-4 mx-auto flex max-w-3xl flex-col gap-6 sm:gap-8 p-4 sm:p-6 lg:p-8 text-left">
+          {/* floating mini nav, matching the / route */}
+          <nav
+            aria-label="quick nav"
+            className={`sticky top-0 z-50 flex items-center gap-4 self-end px-3 py-2 transition-opacity duration-300 bg-linear-to-b ${
+              isDarkMode
+                ? "from-[#b58cff]/25 via-[#b58cff]/8 to-transparent"
+                : "from-[#7c3aed]/18 via-[#7c3aed]/6 to-transparent"
+            } ${isScrolled ? "opacity-100" : "pointer-events-none opacity-0"}`}
+          >
+            <button
+              className="text-[13px] lowercase opacity-60 transition-opacity hover:opacity-100"
+              onClick={() => setIsRawOpen(true)}
+              type="button"
+            >
+              raw
+            </button>
+            <span className="text-[13px] lowercase opacity-60">blogs</span>
+            <span className="inline-block h-3 w-3 rounded-full border border-current opacity-60" />
+          </nav>
+
           {/* Navbar simulated links */}
           <div className="flex items-center justify-end gap-3 w-full">
+            <button
+              className="text-[13px] lowercase opacity-60 transition-opacity hover:opacity-100"
+              onClick={() => setIsRawOpen(true)}
+              type="button"
+            >
+              raw
+            </button>
             <span className="text-[13px] lowercase opacity-60">blogs</span>
             <span className="h-3 w-3 rounded-full border border-current opacity-60 inline-block" />
           </div>
@@ -508,6 +567,48 @@ export const PortfolioLivePreview = memo(
             <span className="font-display text-3xl sm:text-4xl opacity-40">— El Psy Kongroo</span>
           </div>
         </div>
+
+        {/* raw portfolio markdown modal */}
+        {isRawOpen && (
+          <div
+            aria-label="Raw portfolio markdown"
+            aria-modal="true"
+            className="fixed inset-0 z-[60] flex items-center justify-center p-4"
+            role="dialog"
+          >
+            <div
+              aria-hidden
+              className="absolute inset-0 bg-black/50"
+              onClick={() => setIsRawOpen(false)}
+            />
+            <div
+              className={`relative flex max-h-[85vh] w-full max-w-2xl flex-col border ${
+                isDarkMode ? "border-border-dark bg-bg-dark" : "border-border-light bg-bg-light"
+              }`}
+            >
+              <div
+                className={`flex items-center justify-between border-b px-3 py-2 ${
+                  isDarkMode ? "border-border-dark/40" : "border-border-light/40"
+                }`}
+              >
+                <span className="font-mono text-[11px] lowercase text-gray-500">portfolio.md</span>
+                <button
+                  aria-label="Close"
+                  className={`text-[11px] lowercase hover:opacity-70 ${
+                    isDarkMode ? "text-text-dark/60" : "text-text-light/60"
+                  }`}
+                  onClick={() => setIsRawOpen(false)}
+                  type="button"
+                >
+                  close
+                </button>
+              </div>
+              <pre className="overflow-auto p-4 font-mono text-[11px] leading-relaxed whitespace-pre-wrap break-words text-gray-400">
+                {rawMarkdown}
+              </pre>
+            </div>
+          </div>
+        )}
       </div>
     );
   },
