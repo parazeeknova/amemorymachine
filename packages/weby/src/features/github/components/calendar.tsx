@@ -160,7 +160,7 @@ export const GitHubActivity = ({ username, isDarkMode = true, children }: GitHub
         <div className="flex items-baseline gap-2 mb-2">
           <span className="text-base font-semibold lowercase">github</span>
           <a
-            className="text-sm font-mono font-medium lowercase underline decoration-gray-500/40 underline-offset-4 hover:decoration-gray-500"
+            className="squiggle-highlight text-sm font-mono font-medium lowercase"
             href={`https://github.com/${encodeURIComponent(username)}`}
             rel="noopener noreferrer"
             target="_blank"
