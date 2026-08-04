@@ -224,7 +224,7 @@ const PreviewExperienceSection = memo(({ experiences }: { experiences: Experienc
               <div className="flex gap-2">
                 {clubImgs.map((src, imgIdx) => (
                   <img
-                    alt="club photo"
+                    alt=""
                     className="flex-1 min-w-0 h-24 object-cover border border-white/10 sm:h-28"
                     key={src}
                     src={src}

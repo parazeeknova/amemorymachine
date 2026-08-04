@@ -537,7 +537,7 @@ export const ExperienceSection = ({ experience, isPending }: ExperienceSectionPr
               <div className="flex gap-2">
                 {clubImgs.map((src, imgIdx) => (
                   <img
-                    alt="club photo"
+                    alt=""
                     className="flex-1 min-w-0 h-24 object-cover border border-border sm:h-28"
                     key={src}
                     src={src}
