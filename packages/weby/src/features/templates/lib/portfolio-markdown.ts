@@ -161,6 +161,7 @@ export const generatePortfolioMarkdown = (
         desc: "Realtime collaborative spreadsheet with a local-first document model, CRDT-based syncing, worker-driven evaluation, and a virtualized grid built to stay responsive on 10K+ row datasets.",
         image: "https://img.przknv.cc/t/papss.png",
         logo: "https://img.przknv.cc/t/papyrus.png",
+        logoScale: 0.8,
         productUrl: "https://sheets.przknv.cc",
         readmeUrl:
           "https://raw.githubusercontent.com/parazeeknova/papyrus/refs/heads/main/.github/README.md",
