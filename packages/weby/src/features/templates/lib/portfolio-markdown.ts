@@ -310,7 +310,62 @@ export const generatePortfolioMarkdown = (
         repoUrl: "",
         section: "hackathon",
         stack: "buildspace · Nights & Weekends S5 · Jun 2024 - Aug 2024",
-        title: "Nyxtext Zenith",
+        title: "Nights & Weekends S5",
+      },
+      {
+        desc: "",
+        image: "",
+        logo: "",
+        productUrl: "",
+        readmeUrl: "",
+        repoUrl: "",
+        section: "opensource",
+        stack: "mentor + participant · 16 PRs merged",
+        title: "hacktoberfest 24",
+      },
+      {
+        desc: "",
+        image: "",
+        logo: "",
+        productUrl: "",
+        readmeUrl: "",
+        repoUrl: "",
+        section: "opensource",
+        stack: "mentor + participant · 48 PRs merged",
+        title: "hacktoberfest 25",
+      },
+      {
+        desc: "Participated in Hacktoberfest 2024 and 2025 as both mentor and participant, merging 16 pull requests in 24 and 48 in 25 across open source projects.",
+        image: "https://holopin.me/parazeeknova",
+        logo: "",
+        productUrl: "https://holopin.io/@parazeeknova",
+        readmeUrl: "",
+        repoUrl: "",
+        section: "opensource",
+        stack: "",
+        title: "holopin",
+      },
+      {
+        desc: "Served as project admin and contributor: guided participants through their first open-source contributions, triaged issues, and kept the project healthy and mergeable for the whole program. Ranked 9th overall among all contributors by impact and activity.",
+        image: "",
+        logo: "",
+        productUrl: "",
+        readmeUrl: "",
+        repoUrl: "",
+        section: "opensource",
+        stack: "Jan 2025 - Mar 2025 · India · Remote",
+        title: "Social Winter of Code (SWOC)",
+      },
+      {
+        desc: "Selected for the Summer of Bitcoin 2025 bootcamp, Developer Track, an open-source program for Bitcoin development. Solved blockchain-focused challenges in Rust, working on Bitcoin node interactions, multisig transactions, mining, and descriptor wallets.",
+        image: "",
+        logo: "",
+        productUrl: "",
+        readmeUrl: "",
+        repoUrl: "",
+        section: "opensource",
+        stack: "Feb 2025 - Mar 2025 · India · Remote",
+        title: "Summer of Bitcoin",
       },
     ]
   )
@@ -443,6 +498,8 @@ const applyProjectField = (project: Project, fieldKey: string, val: string): voi
       project.section = "freelance";
     } else if (raw.startsWith("hackathon")) {
       project.section = "hackathon";
+    } else if (raw.startsWith("opensource")) {
+      project.section = "opensource";
     } else {
       project.section = "prod";
     }

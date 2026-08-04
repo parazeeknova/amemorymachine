@@ -432,67 +432,93 @@ interface ProjectListProps {
   onDetail?: (project: Project) => void;
 }
 
-// Open source section: Hacktoberfest participation, open-source program
-// stints, and the Holopin badge board. Rendered after the hackathon
-// timeline.
-export const OpenSourceSection = () => (
-  <div className="shrink-0 space-y-5">
-    <h3 className="font-medium text-base lowercase">open sourcerering</h3>
-    <div className="space-y-3">
-      <div className="space-y-1.5">
-        <p className="font-mono text-[10px] uppercase tracking-wider text-gray-500">
-          hacktoberfest 24 · mentor + participant · 16 PRs merged
-        </p>
-        <p className="font-mono text-[10px] uppercase tracking-wider text-gray-500">
-          hacktoberfest 25 · mentor + participant · 48 PRs merged
-        </p>
+// Open source section: hacktoberfest stats, program stints, and the
+// Holopin badge board. Data-driven via the optional 'opensource' project
+// section: entries titled 'hacktoberfest *' render as mono stat lines, a
+// 'holopin' entry renders its image as the full-width board wrapped in its
+// productUrl, everything else renders as title/meta/desc blocks. Renders
+// nothing when there are no entries.
+export const OpenSourceSection = ({ initialData }: { initialData?: Project[] }) => {
+  const { data: projectData, isPending } = useProjects(initialData);
+  const entries = (projectData ?? []).filter((p) => p.section === "opensource");
+
+  if (isPending) {
+    return (
+      <div className="shrink-0 space-y-3 skeleton-shimmer" aria-hidden>
+        {[0, 1].map((i) => (
+          <SkeletonBar className="h-3 w-2/3" key={i} />
+        ))}
       </div>
-      <p className="w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
-        Participated in Hacktoberfest 2024 and 2025 as both mentor and participant, merging 16 pull
-        requests in 24 and 48 in 25 across open source projects.
-      </p>
-      <a
-        className="inline-block"
-        draggable={false}
-        href="https://holopin.io/@parazeeknova"
-        onContextMenu={(e) => e.preventDefault()}
-        rel="noopener noreferrer"
-        target="_blank"
-      >
-        <img
-          alt="Holopin badges for parazeeknova"
-          className="edge-fade w-full"
-          draggable={false}
-          src="https://holopin.me/parazeeknova"
-        />
-      </a>
+    );
+  }
+
+  if (entries.length === 0) {
+    return null;
+  }
+
+  const holopin = entries.find((e) => e.title.toLowerCase().startsWith("holopin"));
+  const stats = entries.filter((e) => /^hacktoberfest/i.test(e.title));
+  const stints = entries.filter((e) => e !== holopin && !/^hacktoberfest/i.test(e.title));
+
+  return (
+    <div className="shrink-0 space-y-5">
+      <h3 className="font-medium text-base lowercase">open sourcerering</h3>
+      {stats.length > 0 && (
+        <div className="space-y-1.5">
+          {stats.map((e) => (
+            <p
+              className="font-mono text-[10px] uppercase tracking-wider text-gray-500"
+              key={e.title}
+            >
+              {e.title} · {e.stack}
+            </p>
+          ))}
+        </div>
+      )}
+      {holopin && (
+        <div className="space-y-3">
+          {holopin.desc && (
+            <p className="w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
+              {holopin.desc}
+            </p>
+          )}
+          <a
+            className="inline-block"
+            draggable={false}
+            href={holopin.productUrl || "#"}
+            onContextMenu={(e) => e.preventDefault()}
+            rel="noopener noreferrer"
+            target="_blank"
+          >
+            <img
+              alt={`${holopin.title} badges for parazeeknova`}
+              className="edge-fade w-full"
+              draggable={false}
+              src={holopin.image}
+            />
+          </a>
+        </div>
+      )}
+      {stints.length > 0 && (
+        <div className="space-y-6">
+          {stints.map((e) => (
+            <div key={e.title}>
+              <h4 className="font-medium text-xs sm:text-sm">{e.title}</h4>
+              <p className="font-mono text-[10px] uppercase tracking-wider text-gray-500">
+                {e.stack}
+              </p>
+              {e.desc && (
+                <p className="mt-1.5 w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
+                  {e.desc}
+                </p>
+              )}
+            </div>
+          ))}
+        </div>
+      )}
     </div>
-    <div className="space-y-6">
-      <div>
-        <h4 className="font-medium text-xs sm:text-sm">Social Winter of Code (SWOC)</h4>
-        <p className="font-mono text-[10px] uppercase tracking-wider text-gray-500">
-          Jan 2025 - Mar 2025 · India · Remote
-        </p>
-        <p className="mt-1.5 w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
-          Served as project admin and contributor: guided participants through their first
-          open-source contributions, triaged issues, and kept the project healthy and mergeable for
-          the whole program. Ranked 9th overall among all contributors by impact and activity.
-        </p>
-      </div>
-      <div>
-        <h4 className="font-medium text-xs sm:text-sm">Summer of Bitcoin</h4>
-        <p className="font-mono text-[10px] uppercase tracking-wider text-gray-500">
-          Feb 2025 - Mar 2025 · India · Remote
-        </p>
-        <p className="mt-1.5 w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
-          Selected for the Summer of Bitcoin 2025 bootcamp, Developer Track, an open-source program
-          for Bitcoin development. Solved blockchain-focused challenges in Rust, working on Bitcoin
-          node interactions, multisig transactions, mining, and descriptor wallets.
-        </p>
-      </div>
-    </div>
-  </div>
-);
+  );
+};
 // Hackathon timeline: a rail of dated entries below the projects. Reads
 // the same /api/projects data, filtered to the optional 'hackathon'
 // section; renders nothing when there are no entries.
@@ -525,8 +551,11 @@ export const HackathonSection = ({ initialData }: { initialData?: Project[] }) =
           // Hackathons reuse the readme_url slot as an optional third photo.
           const imgs = [h.image, h.logo, h.readmeUrl].filter(Boolean);
           return (
-            <div className="relative pl-6" key={h.title}>
-              <span className="absolute left-[3px] top-2 bottom-0 w-px bg-border" aria-hidden />
+            <div className="relative sm:pl-6" key={h.title}>
+              <span
+                aria-hidden
+                className="absolute left-[3px] top-2 bottom-0 hidden w-px bg-border sm:block"
+              />
               {/* eslint-disable-next-line react/no-danger -- meta carries the squiggle-highlight span */}
               <p
                 className="font-mono text-[10px] uppercase tracking-wider text-gray-500"

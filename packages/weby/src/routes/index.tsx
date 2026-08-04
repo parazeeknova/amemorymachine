@@ -583,7 +583,7 @@ const Home = function Home() {
 
         <HackathonSection initialData={loaderData?.projects} />
 
-        <OpenSourceSection />
+        <OpenSourceSection initialData={loaderData?.projects} />
 
         <WorldlineVisualizer />
 
@@ -647,7 +647,7 @@ const Home = function Home() {
                 close
               </button>
             </div>
-            <pre className="overflow-auto p-4 font-mono text-[11px] leading-relaxed whitespace-pre-wrap break-words text-gray-400">
+            <pre className="overflow-auto p-4 font-mono text-[11px] leading-relaxed whitespace-pre-wrap wrap-break-word text-gray-400">
               {rawMarkdown}
             </pre>
           </div>
