@@ -371,7 +371,7 @@ export const WorldlineVisualizer = () => {
   return (
     <div className="relative flex h-20 shrink-0 items-center justify-center">
       <div className="flex h-10 w-[79%] items-center justify-between text-gray-500">
-        {Array.from({ length: 28 }).map((_, i) => (
+        {Array.from({ length: 64 }).map((_, i) => (
           <span
             key={i}
             ref={(el) => {
