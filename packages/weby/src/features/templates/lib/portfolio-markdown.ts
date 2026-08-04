@@ -232,7 +232,7 @@ export const generatePortfolioMarkdown = (
         title: "Papyrus. a spreadsheet that syncs like a doc and scales like a database.",
       },
       {
-        desc: "Singularity Works. We craft digital experiences that speak to the subconscious, creating profound connections through purposeful simplicity.",
+        desc: "Singularity Works is our product studio. The landing page tells the brand story: we craft digital experiences that speak to the subconscious, creating profound connections through purposeful simplicity. Designed and built in-house, covering the studio positioning, the product portfolio, and everything we ship.",
         image: "https://img.przknv.cc/t/Screenshot_2026-07-08_00.57.49.png",
         logo: "",
         productUrl: "https://itssingularity.com",
@@ -240,10 +240,10 @@ export const generatePortfolioMarkdown = (
         repoUrl: "",
         section: "freelance",
         stack: "",
-        title: "itssingularity.com",
+        title: "Singularity Works",
       },
       {
-        desc: "ALLROUND PMC is a project management consultancy for luxury 5-star hospitality chains. We built their landing page, CMS, and job portal for the careers section, plus fully self-hosted infrastructure with uptime monitoring, OpenTelemetry, analytics, and CDN.",
+        desc: "ALLROUND PMC is a project management consultancy that builds luxury 5-star hotel chains. We delivered their complete digital presence: a polished landing page, a CMS for site content, a job portal for the careers section, and fully self-hosted infrastructure with uptime monitoring, OpenTelemetry tracing, analytics, and CDN edge delivery.",
         image: "https://img.przknv.cc/t/allround.webp",
         logo: "",
         productUrl: "https://allroundpmc.com",
@@ -254,8 +254,8 @@ export const generatePortfolioMarkdown = (
         title: "ALLROUND PMC Pvt Ltd",
       },
       {
-        desc: "Oryx is a premium 5-star hotel supplies brand in the UAE, known for premium cutlery. We built their e-commerce, invoice management, CRM, and inventory systems.",
-        image: "https://img.przknv.cc/?asset=oryx.webp",
+        desc: "Oryx Hotel Supplies is a premium 5-star hotel supplies brand in the UAE, known for its premium cutlery. We built their full commerce stack: e-commerce storefront, invoice management, CRM, and inventory systems.",
+        image: "https://img.przknv.cc/t/oryx.webp",
         logo: "",
         productUrl: "https://oryxhotelsupplies.com",
         readmeUrl: "",
@@ -265,7 +265,7 @@ export const generatePortfolioMarkdown = (
         title: "Oryx Hotel Supplies (UAE)",
       },
       {
-        desc: "Saltwise is an AI agent for doctors: given a chemical formula it searches medication alternatives over the web, talks back through TTS/STT, and breaks down each option in detail, including what could go wrong.",
+        desc: "Saltwise is an AI agent built for doctors. Given a chemical formula, it searches for alternative medications across the web, talks back through TTS/STT, and presents each option in detail: mechanism, dosing, availability, and what could go wrong, including interactions and contraindications.",
         image: "https://img.przknv.cc/t/saltwise.webp",
         logo: "",
         productUrl: "",
