@@ -314,10 +314,11 @@ interface ProjectListProps {
   onDetail?: (project: Project) => void;
 }
 
-// Open source section: Hacktoberfest participation + the Holopin badge
-// board. Rendered after the hackathon timeline.
+// Open source section: Hacktoberfest participation, open-source program
+// stints, and the Holopin badge board. Rendered after the hackathon
+// timeline.
 export const OpenSourceSection = () => (
-  <div className="shrink-0 space-y-4">
+  <div className="shrink-0 space-y-5">
     <h3 className="font-medium text-base lowercase">open sourcerering</h3>
     <div className="space-y-1.5">
       <p className="font-mono text-[10px] uppercase tracking-wider text-gray-500">
@@ -327,10 +328,30 @@ export const OpenSourceSection = () => (
         hacktoberfest 25 · mentor + participant · 48 PRs merged
       </p>
     </div>
-    <p className="w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
-      Participated in Hacktoberfest 2024 and 2025 as both mentor and participant, merging 16 pull
-      requests in 24 and 48 in 25 across open source projects.
-    </p>
+    <div className="space-y-6">
+      <div>
+        <h4 className="font-medium text-xs sm:text-sm">Social Winter of Code (SWOC)</h4>
+        <p className="font-mono text-[10px] uppercase tracking-wider text-gray-500">
+          Jan 2025 - Mar 2025 · India · Remote
+        </p>
+        <p className="mt-1.5 w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
+          Served as project admin and contributor: guided participants through their first
+          open-source contributions, triaged issues, and kept the project healthy and mergeable for
+          the whole program. Ranked 9th overall among all contributors by impact and activity.
+        </p>
+      </div>
+      <div>
+        <h4 className="font-medium text-xs sm:text-sm">Summer of Bitcoin</h4>
+        <p className="font-mono text-[10px] uppercase tracking-wider text-gray-500">
+          Feb 2025 - Mar 2025 · India · Remote
+        </p>
+        <p className="mt-1.5 w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
+          Selected for the Summer of Bitcoin 2025 bootcamp, Developer Track, an open-source program
+          for Bitcoin development. Solved blockchain-focused challenges in Rust, working on Bitcoin
+          node interactions, multisig transactions, mining, and descriptor wallets.
+        </p>
+      </div>
+    </div>
     <a
       className="inline-block"
       href="https://holopin.io/@parazeeknova"
