@@ -301,6 +301,28 @@ export const generatePortfolioMarkdown = (
           'Apr 2025 · <span class="squiggle-highlight">Runner-up, Wikimedia track</span> · IIIT Jabalpur',
         title: "HackByte 3.0",
       },
+      {
+        desc: "Participated in the bootcamp round of Summer of Bitcoin 2025, Developer Track, solving blockchain-focused challenges in Rust. Worked on Bitcoin node interactions, multisig transactions, mining, and descriptor wallets.",
+        image: "",
+        logo: "",
+        productUrl: "",
+        readmeUrl: "",
+        repoUrl: "",
+        section: "hackathon",
+        stack: "Summer of Bitcoin · Internship · Feb 2025 - Mar 2025 · India · Remote",
+        title: "Bitcoin Development Trainee",
+      },
+      {
+        desc: "In six weeks, built a text editor in Qt (Nyxtext Zenith) supporting over 35 languages with all the standard features of a text editor, including calltips, autocompletions, filetree, and syntax highlighting.",
+        image: "",
+        logo: "",
+        productUrl: "",
+        readmeUrl: "",
+        repoUrl: "",
+        section: "hackathon",
+        stack: "buildspace · Nights & Weekends S5 · Jun 2024 - Aug 2024 · India · Remote",
+        title: "Nyxtext Zenith",
+      },
     ]
   )
     .map(
