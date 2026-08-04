@@ -1,8 +1,9 @@
 import type { AuthUser } from "#/shared/types";
 import { useQuery, useQueryClient } from "@tanstack/react-query";
 import { fetchProtected } from "./fetch-protected";
-import { setAuthCache } from "#/features/auth/lib/auth-cache";
+import { isSessionCacheStale, setAuthCache } from "#/features/auth/lib/auth-cache";
 import { useConsoleStore } from "#/features/console/stores/console-store";
+import { getCachedAuth } from "#/shared/lib/native-storage";
 
 export interface LoginResult {
   mfa_required?: boolean;
@@ -11,17 +12,23 @@ export interface LoginResult {
 
 export const useAuth = () => {
   const queryClient = useQueryClient();
+  const cachedAuth = getCachedAuth();
+  const hasValidCache =
+    cachedAuth !== null &&
+    cachedAuth.user !== null &&
+    typeof cachedAuth.expiresAt === "number" &&
+    cachedAuth.expiresAt > Date.now();
 
   return useQuery<AuthUser | null>({
     queryFn: async ({ signal }) => {
       try {
-        return await fetchProtected<AuthUser>("/api/auth/me", { signal });
+        const user = await fetchProtected<AuthUser>("/api/auth/me", { signal });
+        setAuthCache("authenticated");
+        return user;
       } catch (error) {
         if (error instanceof DOMException && error.name === "AbortError") {
           throw error;
         }
-        // Only clear the cached auth state on explicit unauthenticated responses.
-        // Network errors, 5xx, etc. should not flush the cache.
         if (
           error instanceof Error &&
           (error.message.startsWith("HTTP 401") || error.message.startsWith("HTTP 403"))
@@ -35,8 +42,10 @@ export const useAuth = () => {
       }
     },
     queryKey: ["auth"],
+    refetchOnMount: hasValidCache || isSessionCacheStale(),
     retry: false,
-    staleTime: 30 * 60 * 1000,
+    staleTime: 5 * 60 * 1000,
+    ...(hasValidCache && cachedAuth?.user ? { initialData: cachedAuth.user as AuthUser } : {}),
   });
 };
 
@@ -76,11 +85,11 @@ export const useAuthActions = () => {
     }
     const data = (await res.json()) as LoginResult;
 
-    // If MFA is required, return without invalidating auth cache
     if (data.mfa_required) {
       return data;
     }
 
+    setAuthCache("authenticated");
     await queryClient.invalidateQueries({ queryKey: ["auth"] });
     await queryClient.invalidateQueries({ queryKey: ["bootstrapState"] });
     return data;

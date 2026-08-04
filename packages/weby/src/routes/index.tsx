@@ -1,18 +1,35 @@
 import { ClientOnly, createFileRoute } from "@tanstack/react-router";
 import { gsap } from "gsap";
-import { useCallback, useEffect, useMemo, useRef, useState, useSyncExternalStore } from "react";
+import {
+  useCallback,
+  useEffect,
+  useLayoutEffect,
+  useMemo,
+  useRef,
+  useState,
+  useSyncExternalStore,
+} from "react";
+import type { BlogManifestSection, ExperienceItem, Profile, Project } from "#/shared/types";
 import { GitHubActivity } from "#/features/github/components/calendar";
 import { GitHubStats } from "#/features/github/components/stats";
+import { CodeforcesCard } from "#/features/codeforces/components/card";
+import { useCFSettings } from "#/features/templates/hooks/use-cf-settings";
 import {
   ExperienceSection,
   ProfileSection,
   SocialLinks,
 } from "#/features/landing/components/sections";
 import { ReadmeViewer } from "#/features/landing/components/readme-viewer";
-import { ProjectList } from "#/features/landing/components/projects";
+import {
+  HackathonSection,
+  OpenSourceSection,
+  ProjectList,
+  WorldlineVisualizer,
+} from "#/features/landing/components/projects";
 import { BlogReaderPanel } from "#/features/blog/components/blog-reader-panel";
 import { LoginPopup } from "#/features/auth/components/login-popup";
 import { useIsDesktop } from "#/shared/lib/desktop";
+import { logger } from "#/shared/lib/logger";
 import { DesktopFrontPage } from "#/features/auth/components/desktop-front-page";
 import {
   useBlogManifest,
@@ -21,7 +38,24 @@ import {
   useProfile,
   useProjects,
 } from "#/features/landing/hooks/use-data";
+import { getBlogManifest, getExperience, getProfile, getProjects } from "#/server/backy";
+import {
+  buildPersonJsonLd,
+  buildPortfolioDescription,
+  buildPortfolioTitle,
+  buildWebSiteJsonLd,
+  getSiteOrigin,
+} from "#/server/seo";
+import { useTheme } from "#/shared/hooks/use-theme";
 import { crossfadeVideo, getHeaderGradient } from "#/shared/lib/video-helpers";
+import { generatePortfolioMarkdown } from "#/features/templates/lib/portfolio-markdown";
+
+interface PortfolioLoaderData {
+  profile?: Profile;
+  experience?: ExperienceItem[];
+  projects?: Project[];
+  manifest?: BlogManifestSection[];
+}
 
 const useIsMobile = (): boolean => {
   const getSnapshot = useCallback(() => {
@@ -95,10 +129,13 @@ const useThemeButtonHover = (): ThemeButtonRefs => {
   return { buttonRef, indicatorRef };
 };
 
+// eslint-disable-next-line complexity
 const Home = function Home() {
+  // eslint-disable-next-line no-use-before-define -- Route is defined below
+  const loaderData = Route.useLoaderData();
   const isDesktop = useIsDesktop();
+  const { isDarkMode, toggleTheme: toggleThemeStore } = useTheme();
 
-  const [isDarkMode, setIsDarkMode] = useState(true);
   const [viewMode, setViewMode] = useState<"portfolio" | "blogs">("portfolio");
   const [selectedBlogSlug, setSelectedBlogSlug] = useState<string | null>(null);
   const [selectedProject, setSelectedProject] = useState<{
@@ -108,6 +145,8 @@ const Home = function Home() {
     title: string;
   } | null>(null);
   const [isAtBottom, setIsAtBottom] = useState(false);
+  const [isScrolled, setIsScrolled] = useState(false);
+  const [isRawOpen, setIsRawOpen] = useState(false);
   const isMobile = useIsMobile();
 
   useEffect(() => {
@@ -123,6 +162,7 @@ const Home = function Home() {
       const atBottom = isScrollable && scrollTop + clientHeight >= scrollHeight - 40;
 
       setIsAtBottom(atBottom);
+      setIsScrolled(scrollTop > 80);
     };
 
     document.addEventListener("scroll", handleScroll, { capture: true, passive: true });
@@ -137,12 +177,50 @@ const Home = function Home() {
 
   const themeRefs = useThemeButtonHover();
   const themeRefsRight = useThemeButtonHover();
+  const themeRefsNav = useThemeButtonHover();
 
-  const { data: profile } = useProfile();
-  const { data: experience } = useExperience();
-  const { data: projects } = useProjects();
-  const { data: manifest = [] } = useBlogManifest();
-  const isPending = useIsFetchingData();
+  const { data: profile } = useProfile(loaderData?.profile);
+  const { data: experience } = useExperience(loaderData?.experience);
+  const { data: projects } = useProjects(loaderData?.projects);
+
+  const rawMarkdown = useMemo(() => {
+    if (!profile || !experience || !projects) {
+      return "";
+    }
+    return generatePortfolioMarkdown(profile, experience, projects);
+  }, [experience, profile, projects]);
+
+  useEffect(() => {
+    if (!isRawOpen) {
+      return;
+    }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsRawOpen(false);
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [isRawOpen]);
+
+  useEffect(() => {
+    if (profile) {
+      logger.info(profile, "landing page profile data");
+    }
+  }, [profile]);
+  const { data: manifest = [] } = useBlogManifest(loaderData?.manifest);
+  const queriesPending = useIsFetchingData({
+    experience: loaderData?.experience,
+    profile: loaderData?.profile,
+    projects: loaderData?.projects,
+  });
+  // When the loader provided data (SSR or client-side navigation), the page
+  // never shows loading skeletons — content renders immediately and matches
+  // the server HTML exactly.
+  const isPending =
+    !loaderData?.profile && !loaderData?.experience && !loaderData?.projects
+      ? queriesPending
+      : false;
 
   if (isDesktop) {
     return <DesktopFrontPage />;
@@ -176,58 +254,84 @@ const Home = function Home() {
     }
   }, [firstPostSlug, firstProject, selectedBlogSlug, selectedProject]);
 
-  // Read initial theme from localStorage on mount
-  useEffect(() => {
-    if (typeof window !== "undefined") {
-      const savedTheme = localStorage.getItem("theme");
-      if (savedTheme === "light") {
-        setIsDarkMode(false);
-      } else {
-        setIsDarkMode(true);
-      }
-    }
-  }, []);
-
   const videoRef = useRef<HTMLVideoElement>(null);
   const nextVideoRef = useRef<HTMLVideoElement>(null);
   const gradientRef = useRef<HTMLDivElement>(null);
+  const videoHeaderRef = useRef<HTMLDivElement>(null);
   const videoActiveNext = useRef(false);
 
+  // Reveal the header video with the same blur-fade the content below uses,
+  // so the whole first screen animates in as one. The container itself is
+  // faded (not the <video> children, which keep their own opacity logic for
+  // theme crossfades).
+  useLayoutEffect(() => {
+    if (isPending) {
+      return;
+    }
+    const el = videoHeaderRef.current;
+    if (!el) {
+      return;
+    }
+    gsap.killTweensOf(el);
+    gsap.fromTo(
+      el,
+      { filter: "blur(12px)", opacity: 0, scale: 1.02, y: -8 },
+      {
+        duration: 0.8,
+        ease: "power2.out",
+        filter: "blur(0px)",
+        opacity: 1,
+        scale: 1,
+        y: 0,
+      },
+    );
+  }, [isPending]);
+
   useEffect(() => {
-    const src = isDarkMode
-      ? "https://img.przknv.cc/t/header.mp4"
-      : "https://img.przknv.cc/t/footer.mp4";
+    const darkSrc = profile?.darkVideo || "/header.webm";
+    const lightSrc = profile?.lightVideo || "/footer.webm";
+    const src = isDarkMode ? darkSrc : lightSrc;
+    const safePlay = async (video: HTMLVideoElement) => {
+      try {
+        await video.play();
+      } catch {
+        // Ignore autoplay errors
+      }
+    };
     if (videoActiveNext.current) {
       if (nextVideoRef.current) {
-        nextVideoRef.current.src = src;
+        if (nextVideoRef.current.getAttribute("src") !== src) {
+          nextVideoRef.current.src = src;
+        }
         nextVideoRef.current.style.opacity = "1";
+        void safePlay(nextVideoRef.current);
       }
       if (videoRef.current) {
         videoRef.current.style.opacity = "0";
       }
     } else {
       if (videoRef.current) {
-        videoRef.current.src = src;
+        if (videoRef.current.getAttribute("src") !== src) {
+          videoRef.current.src = src;
+        }
         videoRef.current.style.opacity = "1";
+        void safePlay(videoRef.current);
       }
       if (nextVideoRef.current) {
         nextVideoRef.current.style.opacity = "0";
       }
     }
-  }, [isDarkMode]);
+  }, [isDarkMode, profile?.darkVideo, profile?.lightVideo]);
 
   const toggleTheme = useCallback(() => {
-    const newTheme = isDarkMode ? "light" : "dark";
-    setIsDarkMode(!isDarkMode);
-    localStorage.setItem("theme", newTheme);
-    document.documentElement.dataset.theme = newTheme;
-  }, [isDarkMode]);
+    toggleThemeStore();
+  }, [toggleThemeStore]);
 
   const animatedToggleTheme = useCallback(() => {
     const nextDark = !isDarkMode;
-    const nextSrc = nextDark
-      ? "https://img.przknv.cc/t/header.mp4"
-      : "https://img.przknv.cc/t/footer.mp4";
+    const darkSrc = profile?.darkVideo || "/header.webm";
+    const lightSrc = profile?.lightVideo || "/footer.webm";
+    const nextSrc = nextDark ? darkSrc : lightSrc;
     const fromRef = videoActiveNext.current ? nextVideoRef : videoRef;
     const toRef = videoActiveNext.current ? videoRef : nextVideoRef;
 
@@ -235,7 +339,7 @@ const Home = function Home() {
       videoActiveNext.current = !videoActiveNext.current;
       toggleTheme();
     });
-  }, [isDarkMode, toggleTheme]);
+  }, [isDarkMode, profile?.darkVideo, profile?.lightVideo, toggleTheme]);
 
   const handleProjectDetail = useCallback(
     (project: { productUrl?: string; readmeUrl?: string; repoUrl?: string; title: string }) => {
@@ -271,6 +375,17 @@ const Home = function Home() {
     }
     return "parazeeknova";
   })();
+
+  const { data: cfSettings } = useCFSettings();
+
+  useEffect(() => {
+    if (cfSettings) {
+      logger.info(
+        { enabled: cfSettings.enabled, username: cfSettings.username },
+        "landing: cf settings loaded",
+      );
+    }
+  }, [cfSettings]);
 
   if (viewMode === "blogs") {
     const activeSlug = selectedBlogSlug ?? firstPostSlug ?? "";
@@ -337,7 +452,11 @@ const Home = function Home() {
       }`}
     >
       {/* Header Video */}
-      <div className="relative mx-auto w-full max-w-3xl h-48 sm:h-64 overflow-hidden">
+      <div
+        ref={videoHeaderRef}
+        className="relative mx-auto w-full max-w-3xl h-48 sm:h-64 overflow-hidden"
+        style={{ opacity: 0 }}
+      >
         <video
           ref={nextVideoRef}
           autoPlay
@@ -346,7 +465,7 @@ const Home = function Home() {
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
           style={{ opacity: 0 }}
-          src="https://img.przknv.cc/t/footer.mp4"
+          src={profile?.lightVideo || "/footer.webm"}
         />
         <video
           ref={videoRef}
@@ -355,7 +474,7 @@ const Home = function Home() {
           muted
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
-          src="https://img.przknv.cc/t/header.mp4"
+          src={profile?.darkVideo || "/header.webm"}
         />
         <div
           ref={gradientRef}
@@ -365,7 +484,67 @@ const Home = function Home() {
       </div>
 
       <div className="-mt-1 mx-auto flex max-w-3xl flex-col gap-6 sm:gap-8 p-4 sm:p-6 lg:p-8">
+        {/* floating mini nav: sticks to the top-right of the content
+            column once you scroll past the top */}
+        <nav
+          aria-label="quick nav"
+          className={`fixed top-0 z-50 flex items-center gap-4 px-3 py-2 transition-opacity duration-300 bg-linear-to-b ${
+            isDarkMode
+              ? "from-[#b58cff]/25 via-[#b58cff]/8 to-transparent"
+              : "from-[#7c3aed]/18 via-[#7c3aed]/6 to-transparent"
+          } right-[max(1rem,calc((100vw-48rem)/2+1rem))] sm:right-[max(1.5rem,calc((100vw-48rem)/2+1.5rem))] lg:right-[max(2rem,calc((100vw-48rem)/2+2rem))] ${
+            isScrolled ? "opacity-100" : "pointer-events-none opacity-0"
+          }`}
+        >
+          <button
+            className={`text-[13px] lowercase focus:outline-none hover:opacity-70 ${
+              isDarkMode
+                ? "text-text-dark/60 hover:text-text-dark"
+                : "text-text-light/60 hover:text-text-light"
+            }`}
+            onClick={() => setIsRawOpen(true)}
+            type="button"
+          >
+            raw
+          </button>
+          <button
+            className={`text-[13px] lowercase focus:outline-none hover:opacity-70 ${
+              isDarkMode
+                ? "text-text-dark/60 hover:text-text-dark"
+                : "text-text-light/60 hover:text-text-light"
+            }`}
+            onClick={() => setViewMode("blogs")}
+            type="button"
+          >
+            blogs
+          </button>
+          <button
+            aria-label="Toggle theme"
+            className="p-1.5 focus:outline-none focus-visible:ring-1 focus-visible:ring-current/40"
+            onClick={animatedToggleTheme}
+            ref={themeRefsNav.buttonRef}
+            type="button"
+          >
+            <span className="sr-only">Toggle theme</span>
+            <span
+              className="block h-3 w-3 rounded-full border border-current"
+              ref={themeRefsNav.indicatorRef}
+              style={{ backgroundColor: "transparent" }}
+            />
+          </button>
+        </nav>
         <div className="flex items-center justify-end gap-3 w-full">
+          <button
+            className={`text-[13px] lowercase focus:outline-none hover:opacity-70 ${
+              isDarkMode
+                ? "text-text-dark/60 hover:text-text-dark"
+                : "text-text-light/60 hover:text-text-light"
+            }`}
+            onClick={() => setIsRawOpen(true)}
+            type="button"
+          >
+            raw
+          </button>
           <button
             className={`text-[13px] lowercase focus:outline-none hover:opacity-70 ${
               isDarkMode
@@ -395,15 +574,18 @@ const Home = function Home() {
 
         <ProfileSection isMobile={isMobile} isPending={isPending} profile={profile} />
 
-        <div className="shrink-0 space-y-2">
-          <h3 className="font-medium text-base">work i did</h3>
-          <ExperienceSection experience={experience} isPending={isPending} />
-        </div>
+        <ExperienceSection experience={experience} isPending={isPending} />
 
         <div className="shrink-0 space-y-2">
           <h3 className="font-medium text-base">voo look what i made</h3>
-          <ProjectList onDetail={handleProjectDetail} />
+          <ProjectList initialData={loaderData?.projects} onDetail={handleProjectDetail} />
         </div>
+
+        <HackathonSection initialData={loaderData?.projects} />
+
+        <OpenSourceSection initialData={loaderData?.projects} />
+
+        <WorldlineVisualizer />
 
         <ClientOnly>
           <GitHubActivity isDarkMode={isDarkMode} username={githubUsername}>
@@ -411,66 +593,163 @@ const Home = function Home() {
           </GitHubActivity>
         </ClientOnly>
 
+        {/* Codeforces renders inside ClientOnly: the card fetches live data
+            client-side, and SSR-ing a loading skeleton that hydrates to
+            different content would cause a hydration mismatch. */}
+        {(!cfSettings || cfSettings.enabled) && (
+          <ClientOnly>
+            <CodeforcesCard username={cfSettings?.username || "parazeeknova"} />
+          </ClientOnly>
+        )}
+
         <div className="shrink-0 flex items-center justify-between pt-2">
           <SocialLinks profile={profile} />
           <LoginPopup isAtBottom={isAtBottom} isDarkMode={isDarkMode} />
         </div>
 
         <div className="flex justify-end pt-4 pb-2">
-          <span
-            className="text-4xl sm:text-5xl opacity-40"
-            style={{ fontFamily: '"Louison Adriana", cursive' }}
-          >
-            — with love, harsh
-          </span>
+          <span className="font-display text-4xl sm:text-5xl opacity-40">— El Psy Kongroo</span>
         </div>
       </div>
+
+      {/* raw portfolio markdown modal */}
+      {isRawOpen && (
+        <dialog
+          aria-label="Raw portfolio markdown"
+          className="fixed inset-0 z-50 m-0 flex items-center justify-center bg-transparent p-4"
+          open
+        >
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setIsRawOpen(false)}
+          />
+          <div
+            className={`relative flex max-h-[85vh] w-full max-w-2xl flex-col border ${
+              isDarkMode ? "border-border-dark bg-bg-dark" : "border-border-light bg-bg-light"
+            }`}
+          >
+            <div
+              className={`flex items-center justify-between border-b px-3 py-2 ${
+                isDarkMode ? "border-border-dark/40" : "border-border-light/40"
+              }`}
+            >
+              <span className="font-mono text-[11px] lowercase text-gray-500">portfolio.md</span>
+              <button
+                aria-label="Close"
+                className={`text-[11px] lowercase hover:opacity-70 ${
+                  isDarkMode ? "text-text-dark/60" : "text-text-light/60"
+                }`}
+                onClick={() => setIsRawOpen(false)}
+                type="button"
+              >
+                close
+              </button>
+            </div>
+            <pre className="overflow-auto p-4 font-mono text-[11px] leading-relaxed whitespace-pre-wrap break-words text-gray-400">
+              {rawMarkdown}
+            </pre>
+          </div>
+        </dialog>
+      )}
     </div>
   );
 };
 
+// fetchPublicApi reads a same-origin public API route (client-side loader
+// path). The server-side loader path calls backy directly instead.
+const fetchPublicApi = async <T,>(path: string): Promise<T> => {
+  const res = await fetch(path);
+  if (!res.ok) {
+    throw new Error(`HTTP ${res.status}`);
+  }
+  return res.json() as Promise<T>;
+};
+
 export const Route = createFileRoute("/")({
   component: Home,
-  head: () => {
-    const origin =
-      typeof window === "undefined"
-        ? import.meta.env.VITE_APP_ORIGIN || "https://przknv.cc"
-        : window.location.origin;
-    const ogImage = `${origin}/verso-og.png`;
+  head: ({ loaderData }: { loaderData?: PortfolioLoaderData }) => {
+    const origin = getSiteOrigin();
+    const ogImage = `${origin}/amemorymachine-og.png`;
+    const profile = loaderData?.profile;
+    const title = buildPortfolioTitle(profile);
+    const description = buildPortfolioDescription(profile);
+    const personJsonLd = buildPersonJsonLd(profile, origin);
+    const websiteJsonLd = buildWebSiteJsonLd(profile, origin);
+    const jsonLd = [websiteJsonLd, ...(personJsonLd ? [personJsonLd] : [])]
+      .map((schema) => JSON.stringify(schema))
+      .join("\n");
     return {
       links: [{ href: origin, rel: "canonical" }],
       meta: [
-        { title: "verso — personal knowledge base and folio" },
-        {
-          content:
-            "verso is a personal knowledge base and folio, blog for public face & private brain, one app.",
-          name: "description",
-        },
+        { title },
+        { content: description, name: "description" },
         {
           content:
             "verso, wiki, knowledge base, self-hosted, open-source, markdown, real-time collaboration",
           name: "keywords",
         },
-        { content: "verso — personal knowledge base and folio", property: "og:title" },
-        {
-          content:
-            "verso is a personal knowledge base and folio, blog for public face & private brain, one app.",
-          property: "og:description",
-        },
+        { content: "index, follow, max-image-preview:large", name: "robots" },
+        { content: profile?.username || "verso", name: "author" },
+        { content: profile?.name || "verso", name: "application-name" },
+        { content: "#111111", name: "theme-color" },
+        { content: title, property: "og:title" },
+        { content: description, property: "og:description" },
         { content: "website", property: "og:type" },
+        { content: `${origin}/`, property: "og:url" },
+        { content: "verso", property: "og:site_name" },
+        { content: "en_US", property: "og:locale" },
         { content: ogImage, property: "og:image" },
         { content: "1200", property: "og:image:width" },
         { content: "630", property: "og:image:height" },
         { content: "image/png", property: "og:image:type" },
         { content: "summary_large_image", property: "twitter:card" },
-        { content: "verso — personal knowledge base and folio", property: "twitter:title" },
-        {
-          content:
-            "verso is a personal knowledge base and folio, blog for public face & private brain, one app.",
-          property: "twitter:description",
-        },
+        { content: title, property: "twitter:title" },
+        { content: description, property: "twitter:description" },
         { content: ogImage, property: "twitter:image" },
       ],
+      scripts: [
+        {
+          children: jsonLd,
+          type: "application/ld+json",
+        },
+      ],
     };
+  },
+  loader: async ({ context }): Promise<PortfolioLoaderData> => {
+    const { queryClient } = context;
+    // On the server, call backy directly (absolute URLs via BACKY_ORIGIN).
+    // On the client, fetch the same-origin public API routes instead.
+    const profileLoader = import.meta.env.SSR
+      ? getProfile
+      : () => fetchPublicApi<Profile>("/api/profile");
+    const experienceLoader = import.meta.env.SSR
+      ? getExperience
+      : () => fetchPublicApi<ExperienceItem[]>("/api/experience");
+    const projectsLoader = import.meta.env.SSR
+      ? getProjects
+      : () => fetchPublicApi<Project[]>("/api/projects");
+    const manifestLoader = import.meta.env.SSR
+      ? getBlogManifest
+      : () => fetchPublicApi<BlogManifestSection[]>("/api/blogs");
+    await Promise.all([
+      queryClient.ensureQueryData({ queryFn: profileLoader, queryKey: ["profile"] }),
+      queryClient.ensureQueryData({ queryFn: experienceLoader, queryKey: ["experience"] }),
+      queryClient.ensureQueryData({ queryFn: projectsLoader, queryKey: ["projects"] }),
+      queryClient.ensureQueryData({ queryFn: manifestLoader, queryKey: ["blogManifest"] }),
+    ]);
+    const result: PortfolioLoaderData = {
+      experience: queryClient.getQueryData<ExperienceItem[]>(["experience"]),
+      manifest: queryClient.getQueryData<BlogManifestSection[]>(["blogManifest"]),
+      profile: queryClient.getQueryData<Profile>(["profile"]),
+      projects: queryClient.getQueryData<Project[]>(["projects"]),
+    };
+    // Always seed the cache with the loader result so stale persisted cache
+    // from localStorage never wins over fresh server data during hydration.
+    queryClient.setQueryData(["profile"], result.profile);
+    queryClient.setQueryData(["experience"], result.experience);
+    queryClient.setQueryData(["projects"], result.projects);
+    queryClient.setQueryData(["blogManifest"], result.manifest);
+    return result;
   },
 });

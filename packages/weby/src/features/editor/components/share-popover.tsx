@@ -39,6 +39,7 @@ const SquareSwitch = ({ checked, disabled, onChange, isDarkMode }: SquareSwitchP
   return (
     <button
       type="button"
+      aria-label="Toggle public access"
       onClick={onChange}
       disabled={disabled}
       className={`relative inline-flex h-4 w-7 shrink-0 cursor-pointer items-center transition-colors duration-150 focus:outline-none ${

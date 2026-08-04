@@ -3,7 +3,7 @@
 //
 // When the desktop app's embedded Nitro server proxies to the remote
 // production backend, backy returns cookies scoped to its own domain
-// (e.g. Domain=przknv.cc, Secure). The WebView loads from localhost,
+// (e.g. Domain=amemorymachine.cc, Secure). The WebView loads from localhost,
 // so those cookies get rejected. Stripping Domain and Secure makes
 // them "host-only" cookies that bind to the current origin.
 export const sanitizeSetCookies = (backendResponse: Response): string[] =>

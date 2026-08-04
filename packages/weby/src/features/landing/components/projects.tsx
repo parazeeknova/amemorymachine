@@ -1,16 +1,11 @@
-import { useEffect, useRef, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { createPortal } from "react-dom";
 import { useProjects } from "../hooks/use-data";
 import { gsap } from "gsap";
 import { ArrowUpRightIcon } from "@phosphor-icons/react";
-import type { Project } from "#/shared/types";
-import { LoadingDots } from "#/shared/components/loading";
-
-interface ProjectCardProps {
-  index: number;
-  onDetail?: (project: Project) => void;
-  project: Project;
-}
+import type { Project, ProjectSection } from "#/shared/types";
+import { SkeletonBar, SkeletonThumb } from "#/shared/components/skeleton";
+import { getProjectGroups, TabBar } from "./sections";
 
 const isDesktopHoverAvailable = (): boolean => {
   if (typeof window === "undefined") {
@@ -19,14 +14,33 @@ const isDesktopHoverAvailable = (): boolean => {
   return window.innerWidth >= 768 && window.matchMedia("(hover: hover)").matches;
 };
 
-const ProjectCard = ({ index, onDetail, project }: ProjectCardProps) => {
-  const [stackOpen, setStackOpen] = useState(false);
+interface ProjectThumbProps {
+  className?: string;
+  index: number;
+  project: Project;
+}
+
+export const ProjectThumb = ({
+  className = "w-28 h-28 sm:w-36 sm:h-36",
+  index,
+  project,
+}: ProjectThumbProps) => {
+  const [isMounted, setIsMounted] = useState(false);
   const thumbRef = useRef<HTMLAnchorElement>(null);
   const previewRef = useRef<HTMLDivElement>(null);
   const previewImgRef = useRef<HTMLImageElement>(null);
   const isEven = index % 2 === 0;
 
   const linkUrl = project.productUrl || project.repoUrl;
+  // Logo shows by default, the product screenshot crossfades in on hover.
+  // If only one of the two exists it serves both states.
+  const primarySrc = project.logo || project.image;
+  const hoverSrc = project.image || project.logo;
+  const hasDual = Boolean(project.logo && project.image);
+
+  useEffect(() => {
+    setIsMounted(true);
+  }, []);
 
   const handlePreviewEnter = () => {
     if (!isDesktopHoverAvailable()) {
@@ -118,71 +132,120 @@ const ProjectCard = ({ index, onDetail, project }: ProjectCardProps) => {
     });
   };
 
-  const renderThumbnail = () => {
-    if (!project.image) {
-      return null;
-    }
-    if (linkUrl) {
-      return (
-        <>
-          <a
-            ref={thumbRef}
-            className="group relative shrink-0 block w-28 h-28 sm:w-36 sm:h-36 overflow-hidden"
-            href={linkUrl}
-            onMouseEnter={handlePreviewEnter}
-            onMouseMove={handlePreviewMove}
-            onMouseLeave={handlePreviewLeave}
-            rel="noopener noreferrer"
-            style={{ transform: isEven ? "rotate(-3deg)" : "rotate(3deg)" }}
-            target="_blank"
-          >
-            <img
-              alt={project.title}
-              className="w-full h-full object-cover transition-transform duration-300 group-hover:scale-110"
-              src={project.image}
-            />
-            <div className="absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-all duration-300 group-hover:bg-black/50 group-hover:opacity-100">
-              <ArrowUpRightIcon className="text-white" size={24} />
-            </div>
-          </a>
-          {typeof window === "undefined"
-            ? null
-            : createPortal(
-                <div
-                  ref={previewRef}
-                  className="pointer-events-none fixed left-0 top-0 z-50 hidden origin-left"
-                  style={{ perspective: 800 }}
-                >
-                  <div className="overflow-hidden shadow-2xl border border-white/10 bg-black/80 backdrop-blur-sm">
-                    <img
-                      ref={previewImgRef}
-                      alt={project.title}
-                      className="block w-72 max-h-96 object-contain"
-                      src={project.image}
-                    />
-                  </div>
-                </div>,
-                document.body,
-              )}
-        </>
-      );
-    }
+  if (!project.image && !project.logo) {
+    return null;
+  }
+
+  // Logos are square icons that get clipped at full bleed: give them a
+  // small inset so they sit cleanly inside the container. Screenshots
+  // (and the product layer on hover) stay full-bleed cover.
+  const logoClass = project.logo ? "p-1.5 sm:p-2" : "";
+  // Optional per-project shrink for logos that render too large
+  // (e.g. the asocialmedia squircle). Scaled around the center via a
+  // wrapper so the hover scale on the img itself keeps working.
+  const logoScale =
+    project.logoScale && project.logoScale > 0 && project.logoScale < 1 ? project.logoScale : 1;
+  const primaryImg = (hoverScale: string) => (
+    <div
+      className="flex h-full w-full items-center justify-center"
+      style={{ transform: `scale(${logoScale})` }}
+    >
+      <img
+        alt={project.title}
+        className={`w-full h-full object-cover ${hoverScale} ${logoClass}`}
+        draggable={false}
+        src={primarySrc}
+      />
+    </div>
+  );
+
+  if (!linkUrl) {
     return (
       <div
-        className="relative shrink-0 block w-28 h-28 sm:w-36 sm:h-36 overflow-hidden"
+        className={`relative shrink-0 block overflow-hidden ${className}`}
         style={{ transform: isEven ? "rotate(-3deg)" : "rotate(3deg)" }}
       >
-        <img alt={project.title} className="w-full h-full object-cover" src={project.image} />
+        {primaryImg("")}
+        {hasDual && (
+          <img
+            alt={project.title}
+            className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 hover:opacity-100"
+            draggable={false}
+            src={hoverSrc}
+          />
+        )}
       </div>
     );
-  };
+  }
+
+  return (
+    <>
+      <a
+        ref={thumbRef}
+        className={`group relative shrink-0 block overflow-hidden ${className}`}
+        href={linkUrl}
+        onMouseEnter={handlePreviewEnter}
+        onMouseMove={handlePreviewMove}
+        onMouseLeave={handlePreviewLeave}
+        rel="noopener noreferrer"
+        style={{ transform: isEven ? "rotate(-3deg)" : "rotate(3deg)" }}
+        target="_blank"
+      >
+        {primaryImg("transition-transform duration-300 group-hover:scale-110")}
+        {hasDual && (
+          <img
+            alt={project.title}
+            className="absolute inset-0 w-full h-full object-cover opacity-0 transition-opacity duration-300 group-hover:opacity-100 group-hover:scale-110"
+            draggable={false}
+            src={hoverSrc}
+          />
+        )}
+        <div className="absolute inset-0 flex items-center justify-center bg-black/0 opacity-0 transition-all duration-300 group-hover:bg-black/50 group-hover:opacity-100">
+          <ArrowUpRightIcon className="text-white" size={24} />
+        </div>
+      </a>
+      {isMounted
+        ? createPortal(
+            <div
+              ref={previewRef}
+              className="pointer-events-none fixed left-0 top-0 z-50 hidden origin-left"
+              style={{ perspective: 800 }}
+            >
+              <div className="overflow-hidden shadow-2xl border border-white/10 bg-black/80 backdrop-blur-sm">
+                <img
+                  ref={previewImgRef}
+                  alt={project.title}
+                  className="block w-72 h-72 object-cover"
+                  draggable={false}
+                  src={project.image || project.logo}
+                />
+              </div>
+            </div>,
+            document.body,
+          )
+        : null}
+    </>
+  );
+};
+
+interface ProjectCardProps {
+  index: number;
+  onDetail?: (project: Project) => void;
+  project: Project;
+}
+
+const ProjectCard = ({ index, onDetail, project }: ProjectCardProps) => {
+  const [stackOpen, setStackOpen] = useState(false);
+  const isEven = index % 2 === 0;
+
+  const renderThumbnail = () => <ProjectThumb index={index} project={project} />;
 
   return (
     <div className={`flex items-center gap-3 sm:gap-4 ${isEven ? "" : "flex-row-reverse"}`}>
       {renderThumbnail()}
       <div className="flex-1 min-w-0">
         <h3 className="font-medium text-xs sm:text-sm">{project.title}</h3>
-        <p className="mt-1 text-gray-500 text-xs sm:text-sm">{project.desc}</p>
+        <p className="mt-1 text-justify text-gray-500 text-xs sm:text-sm">{project.desc}</p>
         <p className="mt-1 flex items-center gap-2 text-gray-400 text-xs">
           {stackOpen ? (
             <>
@@ -250,15 +313,417 @@ const ProjectCard = ({ index, onDetail, project }: ProjectCardProps) => {
   );
 };
 
+// Steins;Gate worldline visualizer: a row of vertical audio bars that
+// dance on play, plus a single glyph-only play/pause button. No audio
+// attached yet, the motion is pure gsap. Gated behind reduced motion.
+const PlayGlyph = () => (
+  <svg aria-hidden fill="currentColor" viewBox="0 0 10 12" width="10">
+    <path d="M0 0 L10 6 L0 12 Z" />
+  </svg>
+);
+
+const PauseGlyph = () => (
+  <svg aria-hidden fill="currentColor" viewBox="0 0 10 12" width="10">
+    <rect height="12" width="3.5" x="0" />
+    <rect height="12" width="3.5" x="6.5" />
+  </svg>
+);
+
+export const WorldlineVisualizer = () => {
+  const [isPlaying, setIsPlaying] = useState(false);
+  const barEls = useRef<HTMLSpanElement[]>([]);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const togglePlay = async () => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    if (!audioRef.current) {
+      audioRef.current = new Audio("https://cdn.przknv.cc/madsci.mp3");
+      audioRef.current.loop = true;
+      audioRef.current.addEventListener("ended", () => setIsPlaying(false));
+    }
+    const audio = audioRef.current;
+    if (isPlaying) {
+      audio.pause();
+      setIsPlaying(false);
+    } else {
+      try {
+        await audio.play();
+        setIsPlaying(true);
+      } catch {
+        // autoplay or codec failure: keep the visualizer silent
+      }
+    }
+  };
+
+  useEffect(
+    () => () => {
+      audioRef.current?.pause();
+    },
+    [],
+  );
+
+  useEffect(() => {
+    const bars = barEls.current;
+    if (bars.length === 0) {
+      return;
+    }
+    const reduced =
+      typeof window !== "undefined" &&
+      typeof window.matchMedia === "function" &&
+      window.matchMedia("(prefers-reduced-motion: reduce)").matches;
+    if (isPlaying && !reduced) {
+      for (const [i, bar] of bars.entries()) {
+        gsap.killTweensOf(bar);
+        gsap.to(bar, {
+          delay: i * 0.02,
+          duration: 0.35 + Math.random() * 0.45,
+          ease: "sine.inOut",
+          repeat: -1,
+          scaleY: 0.3 + Math.random() * 0.9,
+          transformOrigin: "50% 50%",
+          yoyo: true,
+        });
+      }
+    } else {
+      for (const bar of bars) {
+        gsap.killTweensOf(bar);
+        gsap.to(bar, {
+          duration: 0.25,
+          ease: "power2.out",
+          scaleY: 0.25 + Math.random() * 0.3,
+          transformOrigin: "50% 50%",
+        });
+      }
+    }
+  }, [isPlaying]);
+
+  return (
+    <div className="relative flex h-20 shrink-0 items-center justify-center">
+      <div className="flex h-10 w-[79%] items-center justify-between text-gray-500">
+        {Array.from({ length: 64 }).map((_, i) => (
+          <span
+            key={i}
+            ref={(el) => {
+              if (el) {
+                barEls.current[i] = el;
+              }
+            }}
+            className="w-[2px] bg-current"
+            style={{ height: "100%", transform: "scaleY(0.25)", transformOrigin: "50% 50%" }}
+          />
+        ))}
+      </div>
+      <button
+        aria-label={isPlaying ? "pause" : "play"}
+        className="absolute top-1/2 right-0 flex h-9 w-9 -translate-y-1/2 items-center justify-center text-gray-500 transition-colors duration-200 hover:text-gray-300"
+        onClick={togglePlay}
+        type="button"
+      >
+        {isPlaying ? <PauseGlyph /> : <PlayGlyph />}
+      </button>
+    </div>
+  );
+};
+
 interface ProjectListProps {
+  initialData?: Project[];
   onDetail?: (project: Project) => void;
 }
 
-export const ProjectList = ({ onDetail }: ProjectListProps) => {
-  const { data: projectData, isPending } = useProjects();
+// Open source section: hacktoberfest stats, program stints, and the
+// Holopin badge board. Data-driven via the optional 'opensource' project
+// section: entries titled 'hacktoberfest *' render as mono stat lines, a
+// 'holopin' entry renders its image as the full-width board wrapped in its
+// productUrl, everything else renders as title/meta/desc blocks. Renders
+// nothing when there are no entries.
+export const OpenSourceSection = ({ initialData }: { initialData?: Project[] }) => {
+  const { data: projectData, isPending } = useProjects(initialData);
   const listRef = useRef<HTMLDivElement>(null);
+  const entries = (projectData ?? []).filter((p) => p.section === "opensource");
 
-  useEffect(() => {
+  useLayoutEffect(() => {
+    if (isPending || entries.length === 0) {
+      return;
+    }
+    const el = listRef.current;
+    if (!el) {
+      return;
+    }
+    const items = [...el.children];
+    if (items.length === 0) {
+      return;
+    }
+    gsap.killTweensOf(items);
+    gsap.fromTo(
+      items,
+      {
+        filter: "blur(12px)",
+        opacity: 0,
+        scale: 0.98,
+        y: 18,
+      },
+      {
+        duration: 0.65,
+        ease: "power2.out",
+        filter: "blur(0px)",
+        opacity: 1,
+        scale: 1,
+        stagger: 0.09,
+        y: 0,
+      },
+    );
+  }, [entries.length, isPending]);
+
+  if (isPending) {
+    return (
+      <div className="shrink-0 space-y-3 skeleton-shimmer" aria-hidden>
+        {[0, 1].map((i) => (
+          <SkeletonBar className="h-3 w-2/3" key={i} />
+        ))}
+      </div>
+    );
+  }
+
+  if (entries.length === 0) {
+    return null;
+  }
+
+  const holopin = entries.find((e) => e.title.toLowerCase().startsWith("holopin"));
+  const stats = entries.filter((e) => /^hacktoberfest/i.test(e.title));
+  const stints = entries.filter((e) => e !== holopin && !/^hacktoberfest/i.test(e.title));
+
+  return (
+    <div className="shrink-0 space-y-5">
+      <h3 className="font-medium text-base lowercase">open sourcerering</h3>
+      <div className="space-y-5" ref={listRef}>
+        {stats.length > 0 && (
+          <div className="space-y-1.5">
+            {stats.map((e) => (
+              <p
+                className="font-mono text-[10px] uppercase tracking-wider text-gray-500"
+                key={e.title}
+              >
+                {e.title} · {e.stack}
+              </p>
+            ))}
+          </div>
+        )}
+        {holopin && (
+          <div className="space-y-3">
+            {holopin.desc && (
+              <p className="w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
+                {holopin.desc}
+              </p>
+            )}
+            <a
+              className="inline-block"
+              draggable={false}
+              href={holopin.productUrl || "#"}
+              onContextMenu={(e) => e.preventDefault()}
+              rel="noopener noreferrer"
+              target="_blank"
+            >
+              <img
+                alt={`${holopin.title} badges for parazeeknova`}
+                className="edge-fade w-full"
+                draggable={false}
+                src={holopin.image}
+              />
+            </a>
+          </div>
+        )}
+        {stints.length > 0 && (
+          <div className="space-y-6">
+            {stints.map((e) => (
+              <div key={e.title}>
+                <h4 className="font-medium text-xs sm:text-sm">{e.title}</h4>
+                <p className="font-mono text-[10px] uppercase tracking-wider text-gray-500">
+                  {e.stack}
+                </p>
+                {e.desc && (
+                  <p className="mt-1.5 w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
+                    {e.desc}
+                  </p>
+                )}
+              </div>
+            ))}
+          </div>
+        )}
+      </div>
+    </div>
+  );
+};
+// Hackathon timeline: a rail of dated entries below the projects. Reads
+// the same /api/projects data, filtered to the optional 'hackathon'
+// section; renders nothing when there are no entries.
+export const HackathonSection = ({ initialData }: { initialData?: Project[] }) => {
+  const { data: projectData, isPending } = useProjects(initialData);
+  const listRef = useRef<HTMLDivElement>(null);
+  const hackathons = (projectData ?? []).filter((p) => p.section === "hackathon");
+
+  useLayoutEffect(() => {
+    if (isPending || hackathons.length === 0) {
+      return;
+    }
+    const el = listRef.current;
+    if (!el) {
+      return;
+    }
+    const items = [...el.children];
+    if (items.length === 0) {
+      return;
+    }
+    gsap.killTweensOf(items);
+    gsap.fromTo(
+      items,
+      {
+        filter: "blur(12px)",
+        opacity: 0,
+        scale: 0.98,
+        y: 18,
+      },
+      {
+        duration: 0.65,
+        ease: "power2.out",
+        filter: "blur(0px)",
+        opacity: 1,
+        scale: 1,
+        stagger: 0.09,
+        y: 0,
+      },
+    );
+  }, [hackathons.length, isPending]);
+
+  if (isPending) {
+    return (
+      <div className="shrink-0 space-y-3 skeleton-shimmer" aria-hidden>
+        {[0, 1].map((i) => (
+          <div className="flex gap-3" key={i}>
+            <SkeletonBar className="h-4 w-1/3" />
+            <SkeletonBar className="h-3 w-2/3" />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (hackathons.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="shrink-0 space-y-5">
+      <h3 className="font-medium text-base lowercase">hacking goes brrr</h3>
+      <div className="space-y-6" ref={listRef}>
+        {hackathons.map((h) => {
+          // Hackathons reuse the readme_url slot as an optional third photo.
+          const imgs = [h.image, h.logo, h.readmeUrl].filter(Boolean);
+          return (
+            <div key={h.title}>
+              {/* eslint-disable-next-line react/no-danger -- meta carries the squiggle-highlight span */}
+              <p
+                className="font-mono text-[10px] uppercase tracking-wider text-gray-500"
+                dangerouslySetInnerHTML={{ __html: h.stack }}
+              />
+              <h4 className="mt-1 font-medium text-xs sm:text-sm">{h.title}</h4>
+              {h.desc && (
+                <p className="mt-1.5 w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
+                  {h.desc}
+                </p>
+              )}
+              {imgs.length > 0 && (
+                <div className="mt-3 flex gap-2">
+                  {imgs.map((src, imgIdx) => (
+                    <img
+                      alt={`${h.title} ${imgIdx + 1}`}
+                      className="edge-fade flex-1 min-w-0 h-24 object-cover sm:h-28"
+                      draggable={false}
+                      key={src}
+                      src={src}
+                      style={{ transform: imgIdx % 2 === 0 ? "rotate(-3deg)" : "rotate(3deg)" }}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
+export const ProjectList = ({ initialData, onDetail }: ProjectListProps) => {
+  const { data: projectData, isPending } = useProjects(initialData);
+  const [activeTab, setActiveTab] = useState<ProjectSection>("prod");
+  const listRef = useRef<HTMLDivElement>(null);
+  const isTabFirstRender = useRef(true);
+
+  const groups = getProjectGroups(projectData);
+  const resolvedTab = groups.some((g) => g.key === activeTab)
+    ? activeTab
+    : (groups[0]?.key ?? "prod");
+  const filtered = (projectData ?? []).filter((p) => (p.section ?? "prod") === resolvedTab);
+
+  const handleTabSelect = (next: string) => {
+    const target: ProjectSection = next === "personal" || next === "freelance" ? next : "prod";
+    if (target === activeTab) {
+      return;
+    }
+    const el = listRef.current;
+    if (!el) {
+      setActiveTab(target);
+      return;
+    }
+    gsap.killTweensOf(el.children);
+    gsap.to([...el.children], {
+      duration: 0.16,
+      ease: "power2.in",
+      filter: "blur(6px)",
+      onComplete: () => setActiveTab(target),
+      opacity: 0,
+      stagger: 0.02,
+      y: -8,
+    });
+  };
+
+  useLayoutEffect(() => {
+    if (isTabFirstRender.current) {
+      isTabFirstRender.current = false;
+      return;
+    }
+    const el = listRef.current;
+    if (!el) {
+      return;
+    }
+    const items = [...el.children];
+    if (items.length === 0) {
+      return;
+    }
+    gsap.killTweensOf(items);
+    gsap.fromTo(
+      items,
+      {
+        filter: "blur(12px)",
+        opacity: 0,
+        scale: 0.98,
+        y: 14,
+      },
+      {
+        duration: 0.5,
+        ease: "power2.out",
+        filter: "blur(0px)",
+        opacity: 1,
+        scale: 1,
+        stagger: 0.06,
+        y: 0,
+      },
+    );
+  }, [activeTab]);
+
+  useLayoutEffect(() => {
     if (isPending || !projectData || projectData.length === 0) {
       return;
     }
@@ -293,32 +758,122 @@ export const ProjectList = ({ onDetail }: ProjectListProps) => {
     );
   }, [isPending, projectData]);
 
+  const renderProjects = () =>
+    filtered.map((project, index) => (
+      <ProjectCard key={project.title} index={index} onDetail={onDetail} project={project} />
+    ));
+
   return (
-    <div className="space-y-3 sm:space-y-4" ref={listRef} style={{ perspective: 1000 }}>
-      {isPending ? (
-        <LoadingDots />
-      ) : (
-        projectData?.map((project, index) => (
-          <ProjectCard key={project.title} index={index} onDetail={onDetail} project={project} />
-        ))
+    <div className="space-y-3 sm:space-y-4">
+      {!isPending && groups.length > 1 && (
+        <TabBar groups={groups} active={resolvedTab} onSelect={handleTabSelect} />
       )}
+      <div className="space-y-3 sm:space-y-4" ref={listRef} style={{ perspective: 1000 }}>
+        {isPending ? (
+          <div className="skeleton-shimmer" aria-hidden>
+            {[0, 1, 2].map((i) => (
+              <div
+                className={`flex items-center gap-3 sm:gap-4 ${i % 2 === 1 ? "flex-row-reverse" : ""}`}
+                key={i}
+              >
+                <SkeletonThumb className="w-20 h-20 sm:w-28 sm:h-28" />
+                <div className="flex-1 min-w-0 space-y-2">
+                  <SkeletonBar className="h-3.5 w-2/3" />
+                  <SkeletonBar className="h-3 w-full" />
+                  <SkeletonBar className="h-3 w-4/5" />
+                </div>
+              </div>
+            ))}
+          </div>
+        ) : (
+          renderProjects()
+        )}
+      </div>
     </div>
   );
 };
 
 interface MobileProjectListProps {
+  initialData?: Project[];
   onDetail?: (project: Project) => void;
 }
 
-export const MobileProjectList = ({ onDetail }: MobileProjectListProps) => {
-  const { data: projectData, isPending } = useProjects();
+export const MobileProjectList = ({ initialData, onDetail }: MobileProjectListProps) => {
+  const { data: projectData, isPending } = useProjects(initialData);
+  const [activeTab, setActiveTab] = useState<ProjectSection>("prod");
   const [isExpanded, setIsExpanded] = useState(false);
   const listRef = useRef<HTMLDivElement>(null);
   const extraRef = useRef<HTMLDivElement>(null);
   const fadeRef = useRef<HTMLDivElement>(null);
   const isFirstRender = useRef(true);
+  const isTabFirstRender = useRef(true);
 
-  useEffect(() => {
+  const groups = getProjectGroups(projectData);
+  const resolvedTab = groups.some((g) => g.key === activeTab)
+    ? activeTab
+    : (groups[0]?.key ?? "prod");
+  const filtered = (projectData ?? []).filter((p) => (p.section ?? "prod") === resolvedTab);
+
+  const handleTabSelect = (next: string) => {
+    const target: ProjectSection = next === "personal" || next === "freelance" ? next : "prod";
+    if (target === activeTab) {
+      return;
+    }
+    const el = listRef.current;
+    if (!el) {
+      setActiveTab(target);
+      return;
+    }
+    gsap.killTweensOf(el.children);
+    gsap.to([...el.children], {
+      duration: 0.16,
+      ease: "power2.in",
+      filter: "blur(6px)",
+      onComplete: () => {
+        setIsExpanded(false);
+        setActiveTab(target);
+      },
+      opacity: 0,
+      stagger: 0.02,
+      y: -8,
+    });
+  };
+
+  useLayoutEffect(() => {
+    if (isTabFirstRender.current) {
+      isTabFirstRender.current = false;
+      return;
+    }
+    const el = listRef.current;
+    if (!el) {
+      return;
+    }
+    const items = [...el.querySelectorAll(".project-card-visible")];
+    if (items.length === 0) {
+      return;
+    }
+    gsap.killTweensOf(items);
+    gsap.fromTo(
+      items,
+      {
+        filter: "blur(12px)",
+        opacity: 0,
+        scale: 0.98,
+        y: 14,
+      },
+      {
+        duration: 0.5,
+        ease: "power2.out",
+        filter: "blur(0px)",
+        opacity: 1,
+        scale: 1,
+        stagger: 0.06,
+        y: 0,
+      },
+    );
+  }, [activeTab]);
+
+  useLayoutEffect(() => {
     if (isPending || !projectData || projectData.length === 0) {
       return;
     }
@@ -412,19 +967,37 @@ export const MobileProjectList = ({ onDetail }: MobileProjectListProps) => {
   }, [isExpanded]);
 
   if (isPending) {
-    return <LoadingDots />;
+    return (
+      <div className="skeleton-shimmer" aria-hidden>
+        {[0, 1, 2].map((i) => (
+          <div
+            className={`flex items-center gap-3 sm:gap-4 ${i % 2 === 1 ? "flex-row-reverse" : ""}`}
+            key={i}
+          >
+            <SkeletonThumb className="w-20 h-20 sm:w-28 sm:h-28" />
+            <div className="flex-1 min-w-0 space-y-2">
+              <SkeletonBar className="h-3.5 w-2/3" />
+              <SkeletonBar className="h-3 w-full" />
+            </div>
+          </div>
+        ))}
+      </div>
+    );
   }
 
   if (!projectData || projectData.length === 0) {
     return null;
   }
 
-  const hasMore = projectData.length > 3;
+  const hasMore = filtered.length > 3;
 
   return (
-    <div>
+    <div className="space-y-3">
+      {groups.length > 1 && (
+        <TabBar groups={groups} active={resolvedTab} onSelect={handleTabSelect} />
+      )}
       <div className="relative space-y-3 sm:space-y-4" ref={listRef} style={{ perspective: 1000 }}>
-        {projectData.slice(0, 3).map((project, index) => (
+        {filtered.slice(0, 3).map((project, index) => (
           <div key={project.title} className="project-card-visible">
             <ProjectCard index={index} onDetail={onDetail} project={project} />
           </div>
@@ -436,7 +1009,7 @@ export const MobileProjectList = ({ onDetail }: MobileProjectListProps) => {
             ref={extraRef}
             style={{ height: 0, opacity: 0 }}
           >
-            {projectData.slice(3).map((project, index) => (
+            {filtered.slice(3).map((project, index) => (
               <ProjectCard
                 key={project.title}
                 index={index + 3}

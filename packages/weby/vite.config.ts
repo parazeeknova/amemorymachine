@@ -20,21 +20,20 @@ const readPackageVersion = (): string => {
 const config = defineConfig(async ({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const port = env.PORT || env.BACKEND_PORT || "7000";
-  const isCloudflare = env.CLOUDFLARE === "1";
   const appVersion = readPackageVersion();
 
   const plugins = [devtools(), tailwindcss(), tanstackStart(), viteReact()];
 
-  if (isCloudflare) {
-    const { cloudflare } = await import("@cloudflare/vite-plugin");
-    plugins.unshift(cloudflare({ viteEnvironment: { name: "ssr" } }));
-  } else {
-    const { nitro } = await import("nitro/vite");
-    plugins.push(nitro({ preset: "node-server" }));
-  }
+  // Self-hosted node-server build (nitro). Deployed as the verso-web
+  // docker image; Cloudflare Workers is no longer a target.
+  const { nitro } = await import("nitro/vite");
+  plugins.push(nitro({ preset: "node-server" }));
 
   return {
     define: {
+      "import.meta.env.VITE_APP_ORIGIN": JSON.stringify(
+        env.VITE_APP_ORIGIN?.trim() || "https://amemorymachine.cc",
+      ),
       "import.meta.env.VITE_APP_VERSION": JSON.stringify(appVersion),
     },
     optimizeDeps: {
@@ -53,14 +52,29 @@ const config = defineConfig(async ({ mode }) => {
             on: (event: string, handler: (...args: unknown[]) => void) => void;
           }) => {
             proxy.on("error", (_err: unknown, _req: unknown, res: unknown) => {
-              const response = res as {
+              // When backend is unreachable, res may be a net.Socket, not ServerResponse.
+              // Try ServerResponse path first, then fall back to raw socket write.
+              const sr = res as {
                 writeHead?: (code: number, headers: Record<string, string>) => void;
                 end?: (body: string) => void;
                 writableEnded?: boolean;
               };
-              if (response?.writeHead && !response.writableEnded) {
-                response.writeHead(502, { "Content-Type": "application/json" });
-                response.end?.(JSON.stringify({ error: "Backend unavailable" }));
+              const body = JSON.stringify({ error: "Backend unavailable" });
+              if (sr.writeHead && !sr.writableEnded && sr.end) {
+                sr.writeHead(502, { "Content-Type": "application/json" });
+                sr.end(body);
+              } else {
+                const sock = res as {
+                  writable?: boolean;
+                  write?: (d: string) => void;
+                  end?: () => void;
+                };
+                if (sock.writable && sock.write) {
+                  sock.write(
+                    `HTTP/1.1 502 Bad Gateway\r\nContent-Type: application/json\r\nContent-Length: ${body.length}\r\nConnection: close\r\n\r\n${body}`,
+                  );
+                  sock.end?.();
+                }
               }
             });
           },

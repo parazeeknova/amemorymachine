@@ -99,6 +99,12 @@ export const getProjects = () => fetchBacky<Project[]>("projects");
 
 export const getGitHubStats = () => fetchBacky<unknown>("github/stats");
 
+// getCFData proxies Codeforces user.info + user.rating through backy so the
+// browser never calls codeforces.com directly (Codeforces sends no CORS
+// headers). backy returns a combined { user, ratings } payload.
+export const getCFData = (handle: string) =>
+  fetchBacky<unknown>(`cf/data?handle=${encodeURIComponent(handle)}`);
+
 export const getBlogPost = (slug: string) => fetchBacky<BlogPost>(`blogs/${slug}`);
 
 export const getBlogManifest = () => fetchBacky<BlogManifestSection[]>("blogs");
@@ -919,4 +925,33 @@ export const resolveComment = (
       "Content-Type": "application/json",
     },
     method: "POST",
+  });
+
+export interface TemplateSummary {
+  description: string;
+  icon: string;
+  id: string;
+  isDefault: boolean;
+  title: string;
+}
+
+export const getTemplates = (cookieHeader?: string | null) =>
+  fetchBacky<TemplateSummary[]>("console/templates", {
+    headers: cookieHeader ? { Cookie: cookieHeader } : undefined,
+  });
+
+export const pinTemplate = (body: unknown, cookieHeader?: string | null) =>
+  fetchBacky<{ message: string; status: string }>("console/templates/pin", {
+    body: JSON.stringify(body),
+    headers: {
+      ...(cookieHeader ? { Cookie: cookieHeader } : {}),
+      "Content-Type": "application/json",
+    },
+    method: "POST",
+  });
+
+export const unpinTemplate = (cookieHeader?: string | null) =>
+  fetchBacky<{ message: string; status: string }>("console/templates", {
+    headers: cookieHeader ? { Cookie: cookieHeader } : {},
+    method: "DELETE",
   });

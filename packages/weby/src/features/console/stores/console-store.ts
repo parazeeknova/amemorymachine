@@ -1,29 +1,44 @@
 import { create } from "zustand";
 import { createJSONStorage, persist } from "zustand/middleware";
+import { isDesktopApp } from "#/shared/lib/desktop";
 
-const safeStorage = {
-  getItem: (name: string) => {
-    try {
-      return localStorage.getItem(name);
-    } catch {
-      return null;
-    }
-  },
+// In-memory fallback for environments where sync localStorage is too slow (Electrobun/WebKit)
+const memoryStore = new Map<string, string>();
+const inMemoryStorage = {
+  getItem: (name: string) => memoryStore.get(name) ?? null,
   removeItem: (name: string) => {
-    try {
-      localStorage.removeItem(name);
-    } catch {
-      /* unavailable */
-    }
+    memoryStore.delete(name);
   },
   setItem: (name: string, value: string) => {
-    try {
-      localStorage.setItem(name, value);
-    } catch {
-      /* unavailable */
-    }
+    memoryStore.set(name, value);
   },
 };
+
+const safeStorage = isDesktopApp()
+  ? inMemoryStorage
+  : {
+      getItem: (name: string) => {
+        try {
+          return localStorage.getItem(name);
+        } catch {
+          return null;
+        }
+      },
+      removeItem: (name: string) => {
+        try {
+          localStorage.removeItem(name);
+        } catch {
+          /* unavailable */
+        }
+      },
+      setItem: (name: string, value: string) => {
+        try {
+          localStorage.setItem(name, value);
+        } catch {
+          /* unavailable */
+        }
+      },
+    };
 
 interface ConsoleState {
   sidebarOpen: boolean;
@@ -57,6 +72,10 @@ const getInitialSidebarOpen = (): boolean => {
   }
   if (window.innerWidth < 768) {
     return false;
+  }
+  // WebKit (Electrobun) has very slow sync localStorage — skip read
+  if (isDesktopApp()) {
+    return true;
   }
   try {
     const stored = localStorage.getItem("verso-console-store");

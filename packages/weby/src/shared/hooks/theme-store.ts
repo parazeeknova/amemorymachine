@@ -1,5 +1,19 @@
 import { create } from "zustand";
 import { persist, createJSONStorage } from "zustand/middleware";
+import { getCachedTheme } from "#/shared/lib/native-storage";
+import { isDesktopApp } from "#/shared/lib/desktop";
+
+// In-memory fallback for Electrobun/WebKit where sync localStorage is too slow
+const memoryStore = new Map<string, string>();
+const inMemoryStorage = {
+  getItem: (name: string) => memoryStore.get(name) ?? null,
+  removeItem: (name: string) => {
+    memoryStore.delete(name);
+  },
+  setItem: (name: string, value: string) => {
+    memoryStore.set(name, value);
+  },
+};
 
 export type ThemePreference = "light" | "dark" | "system";
 
@@ -33,6 +47,10 @@ const applyDOM = (resolved: "light" | "dark") => {
 };
 
 const readStoredPreference = (): ThemePreference | null => {
+  // WebKit (Electrobun) has very slow sync localStorage — native shell handles theme
+  if (isDesktopApp()) {
+    return null;
+  }
   if (typeof localStorage === "undefined") {
     return null;
   }
@@ -59,11 +77,30 @@ const readStoredPreference = (): ThemePreference | null => {
   return null;
 };
 
+const getNativeInitialTheme = (): ThemePreference | null => {
+  const cached = getCachedTheme();
+  if (!cached || !cached.preference) {
+    return null;
+  }
+  const p = cached.preference;
+  if (p === "light" || p === "dark" || p === "system") {
+    return p;
+  }
+  return null;
+};
+
 export const useThemeStore = create<ThemeState & ThemeActions>()(
   persist(
     (set, get) => ({
       hydrate: () => {
         if (get().hydrated) {
+          return;
+        }
+        const nativeTheme = getNativeInitialTheme();
+        if (nativeTheme) {
+          const resolved = resolvePreference(nativeTheme);
+          applyDOM(resolved);
+          set({ hydrated: true, preference: nativeTheme, resolved });
           return;
         }
         const stored = readStoredPreference();
@@ -99,7 +136,7 @@ export const useThemeStore = create<ThemeState & ThemeActions>()(
     {
       name: "verso-theme",
       partialize: (state) => ({ preference: state.preference }),
-      storage: createJSONStorage(() => localStorage),
+      storage: createJSONStorage(() => (isDesktopApp() ? inMemoryStorage : localStorage)),
     },
   ),
 );

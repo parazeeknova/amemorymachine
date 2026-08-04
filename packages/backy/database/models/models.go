@@ -18,25 +18,32 @@ type Profile struct {
 	Description string          `json:"description"`
 	Email       string          `json:"email,omitempty"`
 	Username    string          `json:"username,omitempty"`
+	ResumeURL   string          `json:"resumeUrl,omitempty"`
 	Links       map[string]Link `json:"links"`
 }
 
 // ExperienceItem represents a work experience entry
 type ExperienceItem struct {
-	Title    string `json:"title"`
-	Location string `json:"location"`
-	Period   string `json:"period"`
+	Title       string `json:"title"`
+	Location    string `json:"location"`
+	Period      string `json:"period"`
+	Description string `json:"description,omitempty"`
+	Section     string `json:"section,omitempty"`
+	Image       string `json:"image,omitempty"`
 }
 
 // Project represents a project entry
 type Project struct {
-	Title      string `json:"title"`
-	Desc       string `json:"desc"`
-	Image      string `json:"image,omitempty"`
-	ReadmeURL  string `json:"readmeUrl,omitempty"`
-	RepoURL    string `json:"repoUrl,omitempty"`
-	ProductURL string `json:"productUrl,omitempty"`
-	Stack      string `json:"stack"`
+	Title      string  `json:"title"`
+	Desc       string  `json:"desc"`
+	Image      string  `json:"image,omitempty"`
+	Logo       string  `json:"logo,omitempty"`
+	LogoScale  float64 `json:"logoScale,omitempty"`
+	ReadmeURL  string  `json:"readmeUrl,omitempty"`
+	RepoURL    string  `json:"repoUrl,omitempty"`
+	ProductURL string  `json:"productUrl,omitempty"`
+	Stack      string  `json:"stack"`
+	Section    string  `json:"section"`
 }
 
 // GitHubOrg represents a GitHub organization

@@ -175,6 +175,7 @@ func main() {
 		h = handlers.NewWithDB(cfg, pageService, spaceService, workspaceService, groupService)
 		h.SetNotifier(notificationService)
 		h.SetPageFavoriteRepo(pageFavRepo)
+		h.SetPortfolioRepo(repositories.NewPortfolioRepo())
 	} else {
 		h = handlers.New(cfg)
 	}
@@ -297,6 +298,10 @@ func main() {
 		api.GET("/experience", h.GetExperience)
 		api.GET("/projects", h.GetProjects)
 		api.GET("/github/stats", h.GetGitHubStats)
+		api.GET("/github/enabled", h.GetGitHubEnabledStatus)
+		api.GET("/cf/enabled", h.GetCFEnabledStatus)
+		api.GET("/cf/settings", h.GetCFSettings)
+		api.GET("/cf/data", h.GetCFData)
 		api.GET("/stats", h.GetStats)
 		api.GET("/blogs", h.GetBlogManifest)
 		api.GET("/blogs/:slug", h.GetBlogPost)
@@ -340,6 +345,17 @@ func main() {
 			}
 			// Collab token endpoint
 			console.POST("/auth/collab-token", authHandlers.CollabToken)
+
+			// Templates
+			console.GET("/templates", h.GetTemplates)
+			console.POST("/templates/pin", h.PinPortfolioTemplate)
+			console.DELETE("/templates", h.UnpinPortfolioTemplate)
+			console.GET("/github-settings", h.GetGitHubSettings)
+			console.POST("/github-settings", h.UpdateGitHubSettings)
+			console.GET("/cf-settings", h.GetCFSettings)
+			console.POST("/cf-settings", h.UpdateCFSettings)
+			console.GET("/video-thumbnail", h.GetVideoThumbnail)
+			console.DELETE("/video-thumbnails", h.DeleteVideoThumbnails)
 
 			// Profile
 			profileHandlers.RegisterRoutes(console)

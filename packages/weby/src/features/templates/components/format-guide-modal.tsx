@@ -1,0 +1,190 @@
+import { XIcon } from "@phosphor-icons/react";
+import { useEffect, useRef, useState } from "react";
+import { gsap } from "gsap";
+import { useTheme } from "#/shared/hooks/use-theme";
+
+interface FormatGuideModalProps {
+  isOpen: boolean;
+  onClose: () => void;
+}
+
+const H2 = ({ children }: { children: string }) => (
+  <span className="block text-[11px] font-semibold lowercase text-text-dark/70 mt-3 mb-1">
+    {children}
+  </span>
+);
+
+const P = ({ children }: { children: string }) => (
+  <span className="block text-[10px] leading-relaxed lowercase text-text-dark/40">{children}</span>
+);
+
+const Code = ({ children }: { children: string }) => (
+  <pre className="my-1 px-3 py-2 border border-border-dark/40 bg-white/3 text-[10px] leading-relaxed overflow-x-auto font-mono text-text-dark/60">
+    {children}
+  </pre>
+);
+
+const HR = () => <div className="my-2 border-t border-border-dark/15" />;
+
+export const FormatGuideModal = ({ isOpen, onClose }: FormatGuideModalProps) => {
+  const { isDarkMode } = useTheme();
+  const t = (dark: string, light: string) => (isDarkMode ? dark : light);
+  const [visible, setVisible] = useState(false);
+  const overlayRef = useRef<HTMLDivElement>(null);
+  const cardRef = useRef<HTMLDivElement>(null);
+
+  useEffect(() => {
+    if (!isOpen) {
+      setVisible(false);
+      return;
+    }
+    setVisible(true);
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!visible) {
+      return;
+    }
+    const ctx = gsap.context(() => {
+      if (overlayRef.current) {
+        gsap.fromTo(overlayRef.current, { opacity: 0 }, { duration: 0.15, opacity: 1 });
+      }
+      if (cardRef.current) {
+        gsap.fromTo(
+          cardRef.current,
+          { opacity: 0, scale: 0.97, y: -8 },
+          { duration: 0.2, ease: "power2.out", opacity: 1, scale: 1, y: 0 },
+        );
+      }
+    });
+    return () => ctx.revert();
+  }, [visible]);
+
+  useEffect(() => {
+    if (!isOpen) {
+      return;
+    }
+    const handler = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        onClose();
+      }
+    };
+    window.addEventListener("keydown", handler);
+    return () => window.removeEventListener("keydown", handler);
+  }, [isOpen, onClose]);
+
+  if (!visible) {
+    return null;
+  }
+
+  return (
+    <div
+      ref={overlayRef}
+      className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs"
+    >
+      <div
+        ref={cardRef}
+        className={`w-full max-w-xl max-h-[85vh] flex flex-col border ${t("bg-bg-dark border-border-dark text-text-dark", "bg-bg-light border-border-light text-text-light")}`}
+      >
+        <div
+          className={`flex items-center justify-between px-3 py-1.5 border-b shrink-0 ${t("border-border-dark", "border-border-light")}`}
+        >
+          <span className="text-[12px] font-medium lowercase">format guide</span>
+          <button
+            className={`p-1 transition-colors ${t("text-text-dark/40 hover:text-text-dark", "text-text-light/40 hover:text-text-light")}`}
+            onClick={onClose}
+            type="button"
+          >
+            <XIcon size={15} />
+          </button>
+        </div>
+
+        <div className="flex-1 overflow-y-auto px-4 py-3 text-left">
+          <H2>section headers</H2>
+          <P>
+            Your template must have three sections. Each section starts with a heading on its own
+            line. The parser looks for these exact headings:
+          </P>
+          <Code>{"## PROFILE\n## EXPERIENCE\n## PROJECTS"}</Code>
+          <P>The order matters. Always put PROFILE first, then EXPERIENCE, then PROJECTS.</P>
+
+          <HR />
+
+          <H2>profile section</H2>
+          <P>
+            This is where you describe yourself. Put this right after the PROFILE heading. Every
+            field is optional except the section heading itself. Here are the fields you can use:
+          </P>
+          <Code>
+            {
+              "Name: Your Full Name\nTagline: your title or tagline\nUsername: yourusername\nEmail: your@email.com\nDescription: short bio paragraph."
+            }
+          </Code>
+          <P>
+            You can also add links. Start with "Links:" on its own line, then list each link with a
+            dash:
+          </P>
+          <Code>{"Links:\n- label: https://url.com\n- github: https://github.com/username"}</Code>
+          <P>
+            Each link needs a label and a url separated by a colon. The label is what shows up on
+            the page, the url is where it links to.
+          </P>
+
+          <HR />
+
+          <H2>experience section</H2>
+          <P>
+            This is your work history. Each job or role is a separate entry. Start each entry with
+            three hashes followed by the job title and company name separated by an em dash:
+          </P>
+          <Code>
+            {
+              "### Job Title — Company Name\n- Location: Remote (City, Country)\n- Period: Month YY' – Present\n- Image: https://img-url.png\n- Section: professional"
+            }
+          </Code>
+          <P>
+            You can add as many experience entries as you want. Just repeat the pattern for each
+            role. Add - Section: university clubs to a role to move it into the university clubs
+            tab, or - Section: research to pin a paper under its own research tab (its description
+            can carry markdown links, e.g. to the paper or your ORCID); everything else lands under
+            professional. The optional Image field shows a photo under the university clubs tab:
+            entries with images render them as a single-row strip below the clubs.
+          </P>
+
+          <HR />
+
+          <H2>projects section</H2>
+          <P>
+            This is where you show off your work. Each project is an entry starting with three
+            hashes:
+          </P>
+          <Code>
+            {
+              "### Project Name\n- Desc: Project description\n- Image: https://img-url.png\n- Logo: https://img-url.png\n- LogoScale: 0.8\n- Stack: React, TypeScript, Bun\n- Readme: https://raw.github.com/...\n- Repo: https://github.com/...\n- Product: https://app-url.com\n- Section: prod"
+            }
+          </Code>
+          <P>
+            All fields are optional. You can skip any field you do not have data for. Image is the
+            product screenshot, Logo is the project icon: the thumbnail shows the logo and
+            crossfades to the screenshot on hover, and if one is missing the other serves both.
+            LogoScale (0-1) shrinks a logo that renders too large inside the thumbnail. The Section
+            field groups projects into the prod, personal, or freelance tabs (anything other than
+            "personal" or "freelance" becomes prod); freelance projects render as a distinct card
+            grid. Add as many projects as you like.
+          </P>
+
+          <HR />
+
+          <H2>tips</H2>
+          <P>
+            The preview on the right updates as you type so you can see exactly how things will
+            look.
+          </P>
+          <P>Use the save button in the sidebar to save your template and make it live.</P>
+          <P>Every save creates a history snapshot you can restore from later.</P>
+          <P>Click reset to boilerplate to start fresh with the default template.</P>
+        </div>
+      </div>
+    </div>
+  );
+};

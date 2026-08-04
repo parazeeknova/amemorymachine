@@ -96,6 +96,7 @@ describe("ProfileSection", () => {
     },
     name: "Test User",
     tagline: "test tagline",
+    username: "testuser",
   };
 
   it("renders profile name", () => {
@@ -110,11 +111,11 @@ describe("ProfileSection", () => {
 
   it("renders portfolio link", () => {
     render(<ProfileSection profile={mockProfile} isMobile={false} isPending={false} />);
-    const link = screen.getByText(
-      (c, el) => c.includes("Portfolio") && el?.tagName.toLowerCase() === "a",
+    const button = screen.getByText(
+      (c, el) => c.includes("portfolio") && el?.tagName.toLowerCase() === "button",
     );
-    expect(link).toBeDefined();
-    expect(link.closest("a")?.getAttribute("href")).toBe("https://example.com");
+    expect(button).toBeDefined();
+    expect(screen.getByText("@testuser")).toBeDefined();
   });
 
   it("renders full description on mobile without show more button", () => {
@@ -152,6 +153,37 @@ describe("ExperienceSection", () => {
     render(<ExperienceSection experience={undefined} isPending={true} />);
     const container = document.querySelector(".shrink-0");
     expect(container).toBeDefined();
+  });
+
+  it("hides the tab bar when only one group exists", () => {
+    render(<ExperienceSection experience={mockExperience} isPending={false} />);
+    expect(screen.queryByRole("button", { name: /university clubs/i })).toBeNull();
+    expect(screen.queryByRole("button", { name: /professional/i })).toBeNull();
+    expect(screen.getByText("Software Engineer")).toBeDefined();
+  });
+
+  it("switches between professional and university clubs tabs", () => {
+    const mixedExperience: ExperienceItem[] = [
+      { location: "Remote", period: "2020-Present", title: "Software Engineer" },
+      {
+        location: "Campus",
+        period: "2021-2022",
+        section: "university clubs",
+        title: "Club Lead",
+      },
+    ];
+
+    render(<ExperienceSection experience={mixedExperience} isPending={false} />);
+
+    // Default tab shows professional items
+    expect(screen.getByText("Software Engineer")).toBeDefined();
+    expect(screen.queryByText("Club Lead")).toBeNull();
+
+    // Switch to the university clubs tab
+    fireEvent.click(screen.getByRole("button", { name: /university clubs/i }));
+
+    expect(screen.getByText("Club Lead")).toBeDefined();
+    expect(screen.queryByText("Software Engineer")).toBeNull();
   });
 
   it("can expand and collapse extra items smoothly", () => {

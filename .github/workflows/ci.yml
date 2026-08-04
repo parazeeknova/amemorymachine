@@ -11,8 +11,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME_WEB: verso-web
-  IMAGE_NAME_API: verso-serve
+  IMAGE_NAME_WEB: amemorymachine-web
+  IMAGE_NAME_API: amemorymachine-serve
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -125,11 +125,11 @@ jobs:
       matrix:
         include:
           - package: weby
-            image-name: verso-web
+            image-name: amemorymachine-web
             dockerfile: ./packages/weby/Dockerfile
             context: .
           - package: backy
-            image-name: verso-serve
+            image-name: amemorymachine-serve
             dockerfile: ./packages/backy/Dockerfile
             context: ./packages/backy
     steps:
@@ -289,7 +289,7 @@ jobs:
           {
             echo "changes<<CHANGES_EOF"
             echo "<p align=\"center\">"
-            echo "  <img src=\"https://github.com/parazeeknova/verso/blob/main/packages/weby/public/verso.png?raw=true\" alt=\"Verso Logo\" width=\"128\" height=\"128\" />"
+            echo "  <img src=\"https://github.com/parazeeknova/verso/blob/main/packages/weby/public/amemorymachine.png?raw=true\" alt=\"Amemorymachine Logo\" width=\"128\" height=\"128\" />"
             echo "</p>"
             echo ""
             echo "## Changes"
@@ -383,7 +383,17 @@ jobs:
             -d '{ "applicationId": "${{ secrets.DOKPLOY_APP_ID }}" }' \
             --fail --silent --show-error
 
-      - name: Wait for deploy to complete (migrations run on startup)
+      - name: Trigger web deploy
+        run: |
+          curl -X 'POST' \
+            '${{ secrets.DOKPLOY_API_URL }}/api/application.deploy' \
+            -H 'accept: application/json' \
+            -H 'Content-Type: application/json' \
+            -H 'x-api-key: ${{ secrets.DOKPLOY_API_TOKEN }}' \
+            -d '{ "applicationId": "${{ secrets.DOKPLOY_WEB_APP_ID }}" }' \
+            --fail --silent --show-error
+
+      - name: Wait for backy deploy to complete (migrations run on startup)
         run: |
           API_URL="${{ secrets.DOKPLOY_API_URL }}"
           TOKEN="${{ secrets.DOKPLOY_API_TOKEN }}"
@@ -395,6 +405,29 @@ jobs:
             echo "attempt $i/24: status=$STATUS"
             if [ "$STATUS" = "done" ] || [ "$STATUS" = "running" ]; then
               echo "Deployment complete (migrations applied)"
+              exit 0
+            fi
+            if [ "$STATUS" = "error" ] || [ "$STATUS" = "failed" ]; then
+              echo "Deployment failed"
+              exit 1
+            fi
+            sleep 5
+          done
+          echo "Timed out waiting for deployment"
+          exit 1
+
+      - name: Wait for web deploy to complete
+        run: |
+          API_URL="${{ secrets.DOKPLOY_API_URL }}"
+          TOKEN="${{ secrets.DOKPLOY_API_TOKEN }}"
+          APP_ID="${{ secrets.DOKPLOY_WEB_APP_ID }}"
+          echo "Polling Dokploy deployment status..."
+          for i in $(seq 1 24); do
+            RESPONSE=$(curl -s "$API_URL/api/deployment.all?applicationId=$APP_ID" -H "x-api-key: $TOKEN")
+            STATUS=$(echo "$RESPONSE" | jq -r 'if type == "array" then .[0].status // .[0].applicationStatus // "polling" else .status // .applicationStatus // "polling" end')
+            echo "attempt $i/24: status=$STATUS"
+            if [ "$STATUS" = "done" ] || [ "$STATUS" = "running" ]; then
+              echo "Deployment complete"
               exit 0
             fi
             if [ "$STATUS" = "error" ] || [ "$STATUS" = "failed" ]; then

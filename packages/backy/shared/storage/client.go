@@ -1,9 +1,11 @@
 package storage
 
 import (
+	"bytes"
 	"context"
 	"errors"
 	"fmt"
+	"io"
 	"os"
 	"strings"
 
@@ -21,6 +23,7 @@ var defaultBuckets = []string{
 	"avatars-workspaces",
 	"avatars-spaces",
 	"avatars-profiles",
+	"video-thumbnails",
 }
 
 // Client wraps an S3 client configured for RustFS.
@@ -33,7 +36,7 @@ type Client struct {
 func NewClient() (*Client, error) {
 	endpoint := os.Getenv("RUSTFS_ENDPOINT")
 	if endpoint == "" {
-		endpoint = "http://localhost:90000"
+		endpoint = "http://localhost:6000"
 	}
 
 	accessKey := os.Getenv("RUSTFS_ACCESS_KEY")
@@ -106,6 +109,147 @@ func (c *Client) ensureBucket(ctx context.Context, bucket string) error {
 // S3 returns the underlying S3 client.
 func (c *Client) S3() *s3.Client {
 	return c.s3
+}
+
+// ObjectExists checks whether a key exists in the given bucket.
+func (c *Client) ObjectExists(ctx context.Context, bucket, key string) (bool, error) {
+	_, err := c.s3.HeadObject(ctx, &s3.HeadObjectInput{
+		Bucket: aws.String(bucket),
+		Key:    aws.String(key),
+	})
+	if err != nil {
+		var apiErr smithy.APIError
+		if errors.As(err, &apiErr) && apiErr.ErrorCode() == "NotFound" {
+			return false, nil
+		}
+		return false, err
+	}
+	return true, nil
+}
+
+// PutObject uploads data to the given bucket and key.
+func (c *Client) PutObject(ctx context.Context, bucket, key string, data []byte, contentType string) error {
+	_, err := c.s3.PutObject(ctx, &s3.PutObjectInput{
+		Bucket:      aws.String(bucket),
+		Key:         aws.String(key),
+		Body:        bytes.NewReader(data),
+		ContentType: aws.String(contentType),
+	})
+	return err
+}
+
+// GetObject downloads the object data from the given bucket and key.
+func (c *Client) GetObject(ctx context.Context, bucket, key string) ([]byte, error) {
+	out, err := c.s3.GetObject(ctx, &s3.GetObjectInput{
+		Bucket: aws.String(bucket),
+		Key:    aws.String(key),
+	})
+	if err != nil {
+		return nil, err
+	}
+	defer func() { _ = out.Body.Close() }()
+	return io.ReadAll(out.Body)
+}
+
+// ClearObjects deletes all objects in a bucket without deleting the bucket itself.
+func (c *Client) ClearObjects(ctx context.Context, bucket string) error {
+	in := &s3.ListObjectsV2Input{Bucket: aws.String(bucket)}
+	for {
+		out, err := c.s3.ListObjectsV2(ctx, in)
+		if err != nil {
+			var apiErr smithy.APIError
+			if errors.As(err, &apiErr) {
+				code := apiErr.ErrorCode()
+				if code == "NoSuchBucket" || code == "NoSuchKey" || code == "NotFound" {
+					return nil
+				}
+			}
+			return fmt.Errorf("list objects: %w", err)
+		}
+		if len(out.Contents) == 0 {
+			return nil
+		}
+
+		var objects []types.ObjectIdentifier
+		for _, obj := range out.Contents {
+			objects = append(objects, types.ObjectIdentifier{Key: obj.Key})
+		}
+
+		_, err = c.s3.DeleteObjects(ctx, &s3.DeleteObjectsInput{
+			Bucket: aws.String(bucket),
+			Delete: &types.Delete{Objects: objects},
+		})
+		if err != nil {
+			return fmt.Errorf("delete objects: %w", err)
+		}
+
+		if out.IsTruncated != nil && *out.IsTruncated {
+			in.ContinuationToken = out.NextContinuationToken
+		} else {
+			return nil
+		}
+	}
+}
+
+// DeleteObjects deletes only the given keys from the bucket, leaving the
+// rest of the bucket intact.
+func (c *Client) DeleteObjects(ctx context.Context, bucket string, keys []string) error {
+	if len(keys) == 0 {
+		return nil
+	}
+	objects := make([]types.ObjectIdentifier, 0, len(keys))
+	for _, key := range keys {
+		objects = append(objects, types.ObjectIdentifier{Key: aws.String(key)})
+	}
+	_, err := c.s3.DeleteObjects(ctx, &s3.DeleteObjectsInput{
+		Bucket: aws.String(bucket),
+		Delete: &types.Delete{Objects: objects},
+	})
+	return err
+}
+
+// DeleteObjectsIf lists the bucket and deletes every object whose key
+// matches the predicate. Returns the number of objects deleted.
+func (c *Client) DeleteObjectsIf(ctx context.Context, bucket string, keep func(key string) bool) error {
+	in := &s3.ListObjectsV2Input{Bucket: aws.String(bucket)}
+	for {
+		out, err := c.s3.ListObjectsV2(ctx, in)
+		if err != nil {
+			var apiErr smithy.APIError
+			if errors.As(err, &apiErr) {
+				code := apiErr.ErrorCode()
+				if code == "NoSuchBucket" || code == "NoSuchKey" || code == "NotFound" {
+					return nil
+				}
+			}
+			return fmt.Errorf("list objects: %w", err)
+		}
+		if len(out.Contents) == 0 {
+			return nil
+		}
+
+		var objects []types.ObjectIdentifier
+		for _, obj := range out.Contents {
+			if obj.Key != nil && keep(*obj.Key) {
+				objects = append(objects, types.ObjectIdentifier{Key: obj.Key})
+			}
+		}
+		if len(objects) > 0 {
+			_, err = c.s3.DeleteObjects(ctx, &s3.DeleteObjectsInput{
+				Bucket: aws.String(bucket),
+				Delete: &types.Delete{Objects: objects},
+			})
+			if err != nil {
+				return fmt.Errorf("delete objects: %w", err)
+			}
+		}
+
+		if out.IsTruncated != nil && *out.IsTruncated {
+			in.ContinuationToken = out.NextContinuationToken
+		} else {
+			return nil
+		}
+	}
 }
 
 // DeleteBucketAndObjects deletes all objects in the bucket, then deletes the bucket itself.

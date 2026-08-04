@@ -1,6 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
-import { useState } from "react";
-import { LoadingDots } from "#/shared/components/loading";
+import { useRef, useState } from "react";
+import { useRevealOnReady } from "#/shared/hooks/use-reveal-on-ready";
+import { SkeletonBar, SkeletonCircle } from "#/shared/components/skeleton";
 
 export interface GitHubOrg {
   login: string;
@@ -66,11 +67,35 @@ const useGitHubStats = () =>
 
 export const GitHubStats = () => {
   const { data, isPending, isError, error } = useGitHubStats();
+  const contentRef = useRef<HTMLDivElement>(null);
+
+  const isReady = !isPending;
+  useRevealOnReady(isReady, contentRef, { stagger: 0.07, y: 12 });
 
   if (isPending) {
     return (
-      <div className="mt-4 sm:mt-6">
-        <LoadingDots />
+      <div className="mt-4 sm:mt-6 skeleton-shimmer" aria-hidden>
+        <div className="flex space-x-6">
+          {[
+            { label: "commits this month" },
+            { label: "commits last year" },
+            { label: "pull requests this month" },
+          ].map((stat) => (
+            <div className="flex flex-col" key={stat.label}>
+              <SkeletonBar className="h-4 w-12" />
+              <span className="text-[10px] uppercase tracking-wider text-gray-500 opacity-40 mt-1 sm:text-xs">
+                {stat.label}
+              </span>
+            </div>
+          ))}
+        </div>
+        <div className="mt-4 flex items-center gap-3">
+          <span className="text-[10px] uppercase tracking-wider text-gray-500 opacity-40 sm:text-xs">
+            orgs
+          </span>
+          <SkeletonCircle className="h-4 w-4" />
+          <SkeletonCircle className="h-4 w-4" />
+        </div>
       </div>
     );
   }
@@ -108,7 +133,7 @@ export const GitHubStats = () => {
   ];
 
   return (
-    <div className="mt-4 sm:mt-6">
+    <div className="mt-4 sm:mt-6" ref={contentRef}>
       <div className="flex space-x-6">
         {stats.map((stat) => (
           <div className="flex flex-col" key={stat.desktopLabel}>

@@ -249,14 +249,17 @@ export const EmojiList = ({
                   {t("No results")}
                 </Text>
               ) : (
+                // eslint-disable-next-line jsx-a11y/prefer-tag-over-role
                 items.map((item, i) => (
                   <UnstyledButton
+                    tabIndex={0}
                     key={item.id}
                     data-i={i}
                     w="100%"
                     className={clsx(classes.row, { [classes.active]: i === idx })}
                     onClick={() => pickSearchItem(i)}
                     onMouseEnter={() => setIdx(i)}
+                    // eslint-disable-next-line jsx-a11y/prefer-tag-over-role
                     role="option"
                     aria-selected={i === idx}
                   >
@@ -308,11 +311,13 @@ export const EmojiList = ({
         </div>
         <ScrollArea.Autosize mah={220} scrollbarSize={6} viewportRef={gridViewport}>
           <div className={classes.grid} style={{ gridTemplateColumns: `repeat(${COLS}, 1fr)` }}>
+            {/* eslint-disable-next-line jsx-a11y/prefer-tag-over-role */}
             {gridItems.map((entry, i) => (
               <button
                 key={entry.id}
                 data-i={i}
                 title={`:${entry.id}:`}
+                // eslint-disable-next-line jsx-a11y/prefer-tag-over-role
                 role="option"
                 aria-selected={i === idx}
                 aria-label={entry.id}
@@ -337,10 +342,12 @@ export const EmojiList = ({
       withBorder
       radius="none"
       style={{ width: 240 }}
+      // eslint-disable-next-line jsx-a11y/prefer-tag-over-role
       role="listbox"
       aria-label={t("Emoji picker")}
     >
       <div
+        // eslint-disable-next-line jsx-a11y/prefer-tag-over-role
         role="status"
         aria-live="polite"
         aria-atomic="true"

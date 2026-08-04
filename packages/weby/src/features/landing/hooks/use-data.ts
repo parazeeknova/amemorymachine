@@ -18,18 +18,6 @@ export const useIsMounted = (): boolean => {
   return mounted;
 };
 
-const getInitialFromStorage = <T>(key: string): T | undefined => {
-  if (typeof window === "undefined") {
-    return undefined;
-  }
-  try {
-    const raw = localStorage.getItem(`verso_cache_${key}`);
-    return raw ? (JSON.parse(raw) as T) : undefined;
-  } catch {
-    return undefined;
-  }
-};
-
 const saveToStorage = <T>(key: string, data: T): void => {
   if (typeof window === "undefined") {
     return;
@@ -41,56 +29,63 @@ const saveToStorage = <T>(key: string, data: T): void => {
   }
 };
 
-export const useProfile = () => {
-  const isMounted = useIsMounted();
-  return useQuery<Profile>({
-    placeholderData: () => (isMounted ? getInitialFromStorage<Profile>("profile") : undefined),
+export const useProfile = (initialData?: Profile) =>
+  useQuery<Profile>({
+    initialData,
     queryFn: async ({ signal }) => {
       const data = await fetchJson<Profile>("/api/profile", { signal });
       saveToStorage("profile", data);
       return data;
     },
     queryKey: ["profile"],
+    // Always re-validate on mount: SSR/persisted initialData renders
+    // instantly, then a background refetch pulls the latest so the
+    // persisted (up to 7-day-old) cache never goes stale.
+    refetchOnMount: "always",
+    staleTime: 1000 * 30,
   });
-};
 
-export const useExperience = () => {
-  const isMounted = useIsMounted();
-  return useQuery<ExperienceItem[]>({
-    placeholderData: () =>
-      isMounted ? getInitialFromStorage<ExperienceItem[]>("experience") : undefined,
+export const useExperience = (initialData?: ExperienceItem[]) =>
+  useQuery<ExperienceItem[]>({
+    initialData,
     queryFn: async ({ signal }) => {
       const data = await fetchJson<ExperienceItem[]>("/api/experience", { signal });
       saveToStorage("experience", data);
       return data;
     },
     queryKey: ["experience"],
+    refetchOnMount: "always",
+    staleTime: 1000 * 30,
   });
-};
 
-export const useProjects = () => {
-  const isMounted = useIsMounted();
-  return useQuery<Project[]>({
-    placeholderData: () => (isMounted ? getInitialFromStorage<Project[]>("projects") : undefined),
+export const useProjects = (initialData?: Project[]) =>
+  useQuery<Project[]>({
+    initialData,
     queryFn: async ({ signal }) => {
       const data = await fetchJson<Project[]>("/api/projects", { signal });
       saveToStorage("projects", data);
       return data;
     },
     queryKey: ["projects"],
+    refetchOnMount: "always",
+    staleTime: 1000 * 30,
   });
-};
 
-export const useBlogManifest = () =>
+export const useBlogManifest = (initialData?: BlogManifestSection[]) =>
   useQuery<BlogManifestSection[]>({
+    initialData,
     queryFn: ({ signal }) => fetchJson<BlogManifestSection[]>("/api/blogs", { signal }),
     queryKey: ["blogManifest"],
   });
 
-export const useIsFetchingData = (): boolean => {
-  const profile = useProfile();
-  const experience = useExperience();
-  const projects = useProjects();
+export const useIsFetchingData = (initialData?: {
+  profile?: Profile;
+  experience?: ExperienceItem[];
+  projects?: Project[];
+}): boolean => {
+  const profile = useProfile(initialData?.profile);
+  const experience = useExperience(initialData?.experience);
+  const projects = useProjects(initialData?.projects);
 
   return profile.isPending || experience.isPending || projects.isPending;
 };

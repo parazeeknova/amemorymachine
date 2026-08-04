@@ -618,6 +618,7 @@ export const PageHistoryModal = ({
                       <div className="flex items-center gap-1.5">
                         <button
                           type="button"
+                          aria-label="Toggle highlight changes"
                           onClick={() => setHighlightChanges((v) => !v)}
                           className={`relative inline-flex h-3.5 w-6 shrink-0 cursor-pointer items-center transition-colors duration-150 ${
                             highlightChanges ? "bg-accent" : t("bg-neutral-700", "bg-neutral-300")

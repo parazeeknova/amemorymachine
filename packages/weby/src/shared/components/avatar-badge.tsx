@@ -47,9 +47,11 @@ export const AvatarBadge = ({ className = "", icon, initialsClass, name }: Avata
   }
 
   return (
+    // eslint-disable-next-line jsx-a11y/prefer-tag-over-role
     <span
       aria-label={altText}
       className={`${baseClassName} inline-grid place-items-center ${initialsFontClass} font-medium leading-none tracking-tight`.trim()}
+      // eslint-disable-next-line jsx-a11y/prefer-tag-over-role
       role="img"
     >
       {getInitials(name)}

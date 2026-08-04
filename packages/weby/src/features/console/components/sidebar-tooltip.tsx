@@ -12,6 +12,10 @@ export const SidebarTooltip = ({ children, label }: TooltipProps) => {
   const { isDarkMode } = useTheme();
   const t = (dark: string, light: string) => (isDarkMode ? dark : light);
 
+  if (!label) {
+    return <div className="relative flex w-full">{children}</div>;
+  }
+
   return (
     <div
       className="relative flex w-full"

@@ -2,6 +2,7 @@ package handlers
 
 import (
 	"bytes"
+	"context"
 	"encoding/json"
 	"errors"
 	"net/http"
@@ -11,6 +12,7 @@ import (
 	"github.com/google/uuid"
 	"golang.org/x/sync/singleflight"
 
+	"verso/backy/database"
 	"verso/backy/database/models"
 	ghfeat "verso/backy/features/github"
 	groupfeat "verso/backy/features/group"
@@ -23,8 +25,16 @@ import (
 	"verso/backy/shared/cache"
 	"verso/backy/shared/logger"
 	"verso/backy/shared/storage"
-	"verso/backy/store"
 )
+
+// PortfolioRepoer is the interface consumed by the portfolio-related handlers.
+type PortfolioRepoer interface {
+	GetPinnedProfile(ctx context.Context) (models.Profile, error)
+	GetPinnedExperiences(ctx context.Context) ([]models.ExperienceItem, error)
+	GetPinnedProjects(ctx context.Context) ([]models.Project, error)
+	SaveAndPinPortfolio(ctx context.Context, userID *string, profile models.Profile, experiences []models.ExperienceItem, projects []models.Project) error
+	UnpinPortfolio(ctx context.Context) error
+}
 
 // Handlers holds all HTTP handlers
 type Handlers struct {
@@ -39,6 +49,7 @@ type Handlers struct {
 	workspaceService *wsfeat.WorkspaceService
 	groupService     *groupfeat.GroupService
 	pageFavoriteRepo *repositories.PageFavoriteRepo
+	portfolioRepo    PortfolioRepoer
 	notifier         notifeat.Notifier
 	storageClient    *storage.Client
 }
@@ -70,6 +81,11 @@ func (h *Handlers) SetStorageClient(c *storage.Client) {
 	h.storageClient = c
 }
 
+// SetPortfolioRepo sets the portfolio repository on the handlers.
+func (h *Handlers) SetPortfolioRepo(r PortfolioRepoer) {
+	h.portfolioRepo = r
+}
+
 // NewWithDB creates a new handlers instance with database-backed services.
 func NewWithDB(cfg Config, pageService *pagefeat.PageService, spaceService *spacefeat.SpaceService, workspaceService *wsfeat.WorkspaceService, groupService *groupfeat.GroupService) *Handlers {
 	h := New(cfg)
@@ -93,17 +109,38 @@ func (h *Handlers) MigrationStatus(c *gin.Context) {
 
 // GetProfile returns profile data
 func (h *Handlers) GetProfile(c *gin.Context) {
-	c.JSON(http.StatusOK, store.Profile)
+	if h.portfolioRepo != nil {
+		prof, err := h.portfolioRepo.GetPinnedProfile(c.Request.Context())
+		if err == nil {
+			c.JSON(http.StatusOK, prof)
+			return
+		}
+	}
+	c.JSON(http.StatusOK, models.Profile{})
 }
 
 // GetExperience returns experience data
 func (h *Handlers) GetExperience(c *gin.Context) {
-	c.JSON(http.StatusOK, store.Experiences)
+	if h.portfolioRepo != nil {
+		experiences, err := h.portfolioRepo.GetPinnedExperiences(c.Request.Context())
+		if err == nil {
+			c.JSON(http.StatusOK, experiences)
+			return
+		}
+	}
+	c.JSON(http.StatusOK, []models.ExperienceItem{})
 }
 
 // GetProjects returns projects data
 func (h *Handlers) GetProjects(c *gin.Context) {
-	c.JSON(http.StatusOK, store.Projects)
+	if h.portfolioRepo != nil {
+		projects, err := h.portfolioRepo.GetPinnedProjects(c.Request.Context())
+		if err == nil {
+			c.JSON(http.StatusOK, projects)
+			return
+		}
+	}
+	c.JSON(http.StatusOK, []models.Project{})
 }
 
 // GetBlogPost returns a blog post by slug from the database.
@@ -152,12 +189,36 @@ func (h *Handlers) GetBlogManifest(c *gin.Context) {
 
 // GetGitHubStats returns GitHub statistics with caching
 func (h *Handlers) GetGitHubStats(c *gin.Context) {
-	if h.config.GitHubToken == "" {
-		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "GITHUB_TOKEN not configured"})
-		return
+	// Check DB settings first, fall back to env config
+	token := h.config.GitHubToken
+	username := h.config.GitHubUsername
+
+	if pool := database.PoolAvailable(); pool != nil {
+		var dbEnabled bool
+		var dbUsername string
+		var dbTokenEncrypted []byte
+		err := pool.QueryRow(c.Request.Context(),
+			`SELECT enabled, username, token_encrypted FROM github_settings ORDER BY created_at LIMIT 1`,
+		).Scan(&dbEnabled, &dbUsername, &dbTokenEncrypted)
+		if err == nil {
+			if !dbEnabled {
+				c.JSON(http.StatusServiceUnavailable, gin.H{"error": "GitHub integration is disabled"})
+				return
+			}
+			username = dbUsername
+			if len(dbTokenEncrypted) > 0 {
+				decrypted, decErr := decryptToken(dbTokenEncrypted)
+				if decErr == nil {
+					token = decrypted
+				}
+			}
+		}
 	}
 
-	username := h.config.GitHubUsername
+	if token == "" {
+		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "GitHub token not configured"})
+		return
+	}
 
 	if cached, ok := h.statsCache.Get(username); ok {
 		c.JSON(http.StatusOK, cached)
@@ -165,7 +226,7 @@ func (h *Handlers) GetGitHubStats(c *gin.Context) {
 	}
 
 	result, err, _ := h.statsGroup.Do(username, func() (interface{}, error) {
-		stats, computeErr := h.githubService.ComputeStats(c.Request.Context(), h.config.GitHubToken, username)
+		stats, computeErr := h.githubService.ComputeStats(c.Request.Context(), token, username)
 		if computeErr != nil {
 			return nil, computeErr
 		}
@@ -1059,9 +1120,13 @@ func (h *Handlers) GetStats(c *gin.Context) {
 		}
 	}
 
-	for _, p := range store.Projects {
-		if p.ReadmeURL != "" {
-			readmes++
+	if h.portfolioRepo != nil {
+		if projects, err := h.portfolioRepo.GetPinnedProjects(c.Request.Context()); err == nil {
+			for _, p := range projects {
+				if p.ReadmeURL != "" {
+					readmes++
+				}
+			}
 		}
 	}
 
@@ -1337,6 +1402,96 @@ func (h *Handlers) GetPublicShare(c *gin.Context) {
 			"accessLevel":    share.AccessLevel,
 		},
 	})
+}
+
+// TemplateSummary represents a template entry for the console templates page.
+type TemplateSummary struct {
+	ID          string `json:"id"`
+	Title       string `json:"title"`
+	Description string `json:"description"`
+	Icon        string `json:"icon"`
+	IsDefault   bool   `json:"isDefault"`
+}
+
+// GetTemplates returns available templates.
+func (h *Handlers) GetTemplates(c *gin.Context) {
+	templates := []TemplateSummary{
+		{
+			ID:          "portfolio",
+			Title:       "Developer Portfolio",
+			Description: "Personal developer portfolio template with profile details, experience timeline, and project showcase.",
+			Icon:        "User",
+			IsDefault:   true,
+		},
+	}
+	c.JSON(http.StatusOK, templates)
+}
+
+// PinPortfolioTemplateRequest represents payload to save and pin portfolio data.
+type PinPortfolioTemplateRequest struct {
+	Name        string                  `json:"name"`
+	Tagline     string                  `json:"tagline"`
+	Description string                  `json:"description"`
+	Email       string                  `json:"email"`
+	Username    string                  `json:"username"`
+	ResumeURL   string                  `json:"resumeUrl"`
+	Links       map[string]models.Link  `json:"links"`
+	Experiences []models.ExperienceItem `json:"experiences"`
+	Projects    []models.Project        `json:"projects"`
+}
+
+// PinPortfolioTemplate saves portfolio details to PostgreSQL and pins it as the / route content.
+func (h *Handlers) PinPortfolioTemplate(c *gin.Context) {
+	if h.portfolioRepo == nil {
+		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "portfolio repository unavailable"})
+		return
+	}
+
+	var req PinPortfolioTemplateRequest
+	if err := c.ShouldBindJSON(&req); err != nil {
+		c.JSON(http.StatusBadRequest, gin.H{"error": err.Error()})
+		return
+	}
+
+	userIDStr := middleware.GetCurrentUserID(c)
+	var userID *string
+	if userIDStr != "" {
+		userID = &userIDStr
+	}
+
+	profile := models.Profile{
+		Name:        req.Name,
+		Tagline:     req.Tagline,
+		Description: req.Description,
+		Email:       req.Email,
+		Username:    req.Username,
+		ResumeURL:   req.ResumeURL,
+		Links:       req.Links,
+	}
+
+	if err := h.portfolioRepo.SaveAndPinPortfolio(c.Request.Context(), userID, profile, req.Experiences, req.Projects); err != nil {
+		logger.Log.Error().Err(err).Msg("pin portfolio failed")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to pin portfolio template"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": "ok", "message": "Portfolio pinned to / route successfully"})
+}
+
+// UnpinPortfolioTemplate unpins all portfolio profiles so the / route shows default content.
+func (h *Handlers) UnpinPortfolioTemplate(c *gin.Context) {
+	if h.portfolioRepo == nil {
+		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "portfolio repository unavailable"})
+		return
+	}
+
+	if err := h.portfolioRepo.UnpinPortfolio(c.Request.Context()); err != nil {
+		logger.Log.Error().Err(err).Msg("unpin portfolio failed")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to unpin portfolio"})
+		return
+	}
+
+	c.JSON(http.StatusOK, gin.H{"status": "ok", "message": "Portfolio template cleared"})
 }
 
 // GetPublicShort handles GET /api/short/:shortCode.

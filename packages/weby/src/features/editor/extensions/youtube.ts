@@ -18,8 +18,9 @@ export const CustomYoutube = Youtube.extend({
   },
   addCommands() {
     return {
+      ...this.parent?.(),
       setYoutubeVideo:
-        (options: { src: string; width?: number; height?: number }) =>
+        (options: { src: string; width?: string | number; height?: string | number }) =>
         ({ chain, state }) => {
           const pos = state.selection.from;
           return chain()

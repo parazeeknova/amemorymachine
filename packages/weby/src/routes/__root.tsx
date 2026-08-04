@@ -1,7 +1,8 @@
 import { createSyncStoragePersister } from "@tanstack/query-sync-storage-persister";
-import { QueryClient, QueryClientProvider } from "@tanstack/react-query";
+import { QueryClientProvider } from "@tanstack/react-query";
+import type { QueryClient } from "@tanstack/react-query";
 import { PersistQueryClientProvider } from "@tanstack/react-query-persist-client";
-import { createRootRoute, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
+import { createRootRouteWithContext, HeadContent, Outlet, Scripts } from "@tanstack/react-router";
 import { useState } from "react";
 import { createTheme, MantineProvider } from "@mantine/core";
 
@@ -11,34 +12,23 @@ import "#/shared/lib/i18n";
 import mantineCss from "@mantine/core/styles.css?url";
 import appCss from "../styles.css?url";
 
-const createQueryClient = () =>
-  new QueryClient({
-    defaultOptions: {
-      queries: {
-        gcTime: 1000 * 60 * 60 * 24,
-        refetchOnMount: false,
-        refetchOnReconnect: false,
-        refetchOnWindowFocus: false,
-        retry: 1,
-        staleTime: 1000 * 60 * 60,
-      },
-    },
-  });
-
 const theme = createTheme({
   fontFamily: '"Ubuntu Mono", monospace',
   fontFamilyMonospace: '"Ubuntu Mono", monospace',
 });
 
 const RootComponent = () => {
-  const [queryClient] = useState(createQueryClient);
-  const [persister] = useState(() =>
-    typeof window === "undefined"
-      ? undefined
-      : createSyncStoragePersister({
-          storage: window.localStorage,
-        }),
-  );
+  // eslint-disable-next-line no-use-before-define -- Route is defined below
+  const { queryClient } = Route.useRouteContext();
+
+  const [persister] = useState(() => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    return createSyncStoragePersister({
+      storage: window.localStorage,
+    });
+  });
   const { isDarkMode } = useTheme();
 
   if (!persister) {
@@ -54,7 +44,11 @@ const RootComponent = () => {
   return (
     <PersistQueryClientProvider
       client={queryClient}
-      persistOptions={{ maxAge: 1000 * 60 * 60 * 24 * 7, persister }}
+      persistOptions={{
+        buster: `verso-${import.meta.env.VITE_APP_VERSION || "dev"}`,
+        maxAge: 1000 * 60 * 60 * 24 * 7,
+        persister,
+      }}
     >
       <MantineProvider theme={theme} forceColorScheme={isDarkMode ? "dark" : "light"}>
         <Outlet />
@@ -67,6 +61,12 @@ const THEME_SCRIPT = [
   "(function(){",
   "var resolvedTheme=window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light';",
   "try{var storedVersoTheme=null;",
+  "var nativeTheme=null;",
+  "if(window.__versoInitialTheme&&window.__versoInitialTheme.preference){nativeTheme=window.__versoInitialTheme.preference}",
+  "if(nativeTheme==='light'||nativeTheme==='dark'){resolvedTheme=nativeTheme}",
+  // In the native app (Electrobun), the shell handles theme — skip slow sync localStorage reads.
+  // __versoEnv may not be injected yet; pathname is always available as fallback.
+  "else if(!window.__versoEnv&&window.location.pathname.indexOf('/desktop')!==0){",
   "var storedVersoThemeRaw=localStorage.getItem('verso-theme');",
   "if(storedVersoThemeRaw){var parsedVersoTheme=JSON.parse(storedVersoThemeRaw);var versoPreference=parsedVersoTheme.state&&parsedVersoTheme.state.preference;",
   "if(versoPreference==='light'||versoPreference==='dark'||versoPreference==='system')storedVersoTheme=versoPreference}",
@@ -76,7 +76,7 @@ const THEME_SCRIPT = [
   "if(legacyTheme==='light'||legacyTheme==='dark')storedVersoTheme=legacyTheme}",
   "if(storedVersoTheme){resolvedTheme=storedVersoTheme==='system'",
   "?(window.matchMedia('(prefers-color-scheme: dark)').matches?'dark':'light')",
-  ":storedVersoTheme}}catch(e){}",
+  ":storedVersoTheme}}}catch(e){}",
   "document.documentElement.dataset.theme=resolvedTheme;",
   "document.documentElement.dataset.mantineColorScheme=resolvedTheme",
   "})()",
@@ -100,7 +100,7 @@ const RootShell = ({ children }: { children: React.ReactNode }) => (
   </html>
 );
 
-export const Route = createRootRoute({
+export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()({
   component: RootComponent,
   head: () => ({
     links: [
@@ -113,14 +113,14 @@ export const Route = createRootRoute({
         rel: "stylesheet",
       },
       {
-        href: "/verso.svg",
+        href: "/amemorymachine.svg",
         rel: "icon",
         sizes: "any",
         type: "image/svg+xml",
       },
       {
         color: "#000000",
-        href: "/verso.svg",
+        href: "/amemorymachine.svg",
         rel: "mask-icon",
       },
     ],
@@ -170,7 +170,7 @@ export const Route = createRootRoute({
         property: "og:image",
       },
       {
-        content: "https://folio.przknv.cc",
+        content: "https://amemorymachine.cc",
         property: "og:url",
       },
       {

@@ -1,22 +1,24 @@
 {
-  "name": "@verso/native",
-  "version": "0.5.35",
+  "name": "@amemorymachine/native",
+  "version": "0.7.37",
   "private": true,
   "type": "module",
   "scripts": {
     "start": "electrobun dev",
     "dev": "electrobun dev --watch",
     "generate-icons": "bun run scripts/generate-icons.ts",
-    "check-types": "tsgo --noEmit",
+    "check-types": "tsc --noEmit",
     "build:canary": "electrobun build --env=canary",
     "build:stable": "electrobun build --env=stable"
   },
   "dependencies": {
-    "electrobun": "^1.18.1"
+    "electrobun": "^1.18.4-beta.6"
   },
   "devDependencies": {
     "@types/bun": "^1.3.14",
+    "@types/node": "^26.1.1",
     "@types/three": "^0.185.1",
-    "@typescript/native-preview": "^7.0.0-dev.20260425.1"
+    "bun-types": "^1.3.14",
+    "typescript": "^7.0.2"
   }
 }

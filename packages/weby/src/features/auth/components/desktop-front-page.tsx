@@ -91,9 +91,7 @@ export const DesktopFrontPage = () => {
 
   const animatedToggleTheme = useCallback(() => {
     const nextDark = !isDarkMode;
-    const nextSrc = nextDark
-      ? "https://img.przknv.cc/t/header.mp4"
-      : "https://img.przknv.cc/t/footer.mp4";
+    const nextSrc = nextDark ? "/header.webm" : "/footer.webm";
     const fromRef = videoActiveNext.current ? nextVideoRef : videoRef;
     const toRef = videoActiveNext.current ? videoRef : nextVideoRef;
     crossfadeVideo(fromRef, toRef, nextSrc, () => {
@@ -103,21 +101,32 @@ export const DesktopFrontPage = () => {
   }, [isDarkMode, toggleTheme]);
 
   useEffect(() => {
-    const src = isDarkMode
-      ? "https://img.przknv.cc/t/header.mp4"
-      : "https://img.przknv.cc/t/footer.mp4";
+    const src = isDarkMode ? "/header.webm" : "/footer.webm";
+    const safePlay = async (video: HTMLVideoElement) => {
+      try {
+        await video.play();
+      } catch {
+        // Ignore autoplay errors
+      }
+    };
     if (videoActiveNext.current) {
       if (nextVideoRef.current) {
-        nextVideoRef.current.src = src;
+        if (nextVideoRef.current.getAttribute("src") !== src) {
+          nextVideoRef.current.src = src;
+        }
         nextVideoRef.current.style.opacity = "1";
+        void safePlay(nextVideoRef.current);
       }
       if (videoRef.current) {
         videoRef.current.style.opacity = "0";
       }
     } else {
       if (videoRef.current) {
-        videoRef.current.src = src;
+        if (videoRef.current.getAttribute("src") !== src) {
+          videoRef.current.src = src;
+        }
         videoRef.current.style.opacity = "1";
+        void safePlay(videoRef.current);
       }
       if (nextVideoRef.current) {
         nextVideoRef.current.style.opacity = "0";
@@ -125,12 +134,13 @@ export const DesktopFrontPage = () => {
     }
   }, [isDarkMode]);
 
-  // If user is already logged in, automatically navigate to console
+  // If user is already logged in, automatically navigate to console.
+  const isLoggedIn = user !== null;
   useEffect(() => {
-    if (user) {
+    if (isLoggedIn) {
       void navigate({ replace: true, to: "/home" });
     }
-  }, [user, navigate]);
+  }, [isLoggedIn, navigate]);
 
   // Dismiss login dialog on Escape key
   useEffect(() => {
@@ -168,6 +178,7 @@ export const DesktopFrontPage = () => {
         return;
       }
       void navigate({ replace: true, to: "/home" });
+      // eslint-disable-next-line no-shadow -- catch parameter shadows state for clean error extraction
     } catch (error) {
       setError(error instanceof Error ? error.message : "Login failed");
       setLoading(false);
@@ -185,6 +196,7 @@ export const DesktopFrontPage = () => {
     try {
       await login(username, password, email, name);
       void navigate({ replace: true, to: "/home" });
+      // eslint-disable-next-line no-shadow
     } catch (error) {
       setError(error instanceof Error ? error.message : "Setup failed");
       setLoading(false);
@@ -394,7 +406,7 @@ export const DesktopFrontPage = () => {
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
           style={{ opacity: 0 }}
-          src="https://img.przknv.cc/t/footer.mp4"
+          src="/footer.webm"
         />
         <video
           ref={videoRef}
@@ -403,7 +415,7 @@ export const DesktopFrontPage = () => {
           muted
           playsInline
           className="absolute inset-0 w-full h-full object-cover"
-          src="https://img.przknv.cc/t/header.mp4"
+          src="/header.webm"
         />
         <div
           ref={gradientRef}
@@ -417,9 +429,9 @@ export const DesktopFrontPage = () => {
         <div className="flex flex-col items-center">
           <div className="flex items-end gap-3 sm:gap-5 justify-center">
             <img
-              alt="verso"
+              alt="amemorymachine"
               className="h-16 sm:h-24 lg:h-28 mb-2 opacity-85 select-none"
-              src="/verso.svg"
+              src="/amemorymachine.svg"
             />
             <GradientText
               as="h1"

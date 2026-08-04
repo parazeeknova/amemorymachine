@@ -113,7 +113,6 @@
     overflow-x: hidden;
     scroll-behavior: smooth;
     scrollbar-width: none;
-    text-transform: lowercase;
   }
 
   body {
@@ -182,6 +181,10 @@
   transition: opacity 0.2s ease;
 }
 
+.font-display {
+  font-family: "Louison Adriana", cursive;
+}
+
 .link-underline::after {
   position: absolute;
   bottom: -2px;
@@ -223,8 +226,7 @@ button {
   color: inherit;
   font-family: inherit;
   font-size: inherit;
-  line-height: inherit;
-  text-transform: lowercase;
+  text-transform: none !important;
   outline: none !important;
   border: none !important;
 }
@@ -255,6 +257,8 @@ button {
   border: none !important;
   box-shadow: none !important;
   min-height: 100%;
+  font-size: 0.8125rem;
+  line-height: 1.4;
 }
 
 .blog-reader-prose .tiptap .ProseMirror:focus,
@@ -840,29 +844,114 @@ button {
   color: var(--color-text);
 }
 
-.prose-desc a {
-  color: #b58cff;
+.prose-desc a,
+.squiggle-link {
+  color: inherit;
+  font-style: italic;
   text-decoration: none;
   position: relative;
+  /* Room below the text for the squiggle, with a gap between word and wave. */
+  padding-bottom: 7px;
 }
 
-.prose-desc a::after {
+/* Description links are bold italic; standalone .squiggle-link elements
+   (portfolio / resume) stay regular weight. */
+.prose-desc a {
+  font-weight: 600;
+}
+
+/* Description links keep the wave drawn by default (re-animated on hover);
+   standalone .squiggle-link elements (portfolio / resume) stay hidden until
+   hovered. Both animate via --squiggle-progress (0 hidden -> 100 drawn). */
+.prose-desc a {
+  --squiggle-progress: 100;
+}
+
+.squiggle-link {
+  font-weight: 400;
+  --squiggle-progress: 0;
+}
+
+/* Curved squiggly underline in the accent purple. Drawn as an inline SVG
+   background so it scales with the text and stays behind the descenders.
+   The ::after width follows --squiggle-progress (0-100), letting GSAP draw
+   the wave in left-to-right. The viewBox is taller than the wave so the
+   curve never gets sliced at the bottom. background-color is cleared so a
+   link that also carries .link-underline doesn't paint a solid bar behind
+   the wave. */
+.prose-desc a::after,
+.squiggle-link::after {
   position: absolute;
-  bottom: -2px;
+  /* Sits in the padding below the text, leaving a small gap to the glyphs. */
+  bottom: 2px;
   left: 0;
-  width: 0;
-  height: 1px;
+  width: calc(var(--squiggle-progress) * 1%);
+  height: 6px;
   content: "";
-  background-color: currentColor;
-  transition: width 0.3s ease;
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='7' viewBox='0 0 20 7'%3E%3Cpath d='M0 4 C 2.5 1.5, 5 1.5, 7.5 4 S 12.5 6.5, 15 4 S 20 1.5, 20 4' fill='none' stroke='%23b58cff' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  opacity: 0.85;
 }
 
-.prose-desc a:hover::after {
-  width: 100%;
+[data-theme="light"] .prose-desc a::after,
+[data-theme="light"] .squiggle-link::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='7' viewBox='0 0 20 7'%3E%3Cpath d='M0 4 C 2.5 1.5, 5 1.5, 7.5 4 S 12.5 6.5, 15 4 S 20 1.5, 20 4' fill='none' stroke='%237c3aed' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E");
 }
 
-[data-theme="light"] .prose-desc a {
-  color: #7c3aed;
+/* Portfolio images and media are protected from drag and selection:
+   no dragging, no text-selection cursor, no copy affordance. */
+img,
+video {
+  -webkit-user-drag: none;
+  -webkit-user-select: none;
+  user-select: none;
+}
+
+/* Soft feathered edges for photo strips: the image diffuses into the
+   surface on all four sides instead of a hard border. Theme-agnostic
+   (the fade reveals whatever background sits behind). The fade zone is
+   small so the edges read as a subtle kiss, not a rounded frame. */
+.edge-fade {
+  -webkit-mask-image:
+    linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
+  mask-image:
+    linear-gradient(to right, transparent 0%, black 5%, black 95%, transparent 100%),
+    linear-gradient(to bottom, transparent 0%, black 5%, black 95%, transparent 100%);
+  -webkit-mask-composite: source-in;
+  mask-composite: intersect;
+}
+
+/* Bold-italic position highlight with the squiggle, used in the
+   hackathon timeline meta. Mirrors .prose-desc a but for plain text
+   spans, with the wave always drawn. */
+.squiggle-highlight {
+  color: inherit;
+  font-style: italic;
+  font-weight: 600;
+  position: relative;
+  padding-bottom: 7px;
+  --squiggle-progress: 100;
+}
+
+.squiggle-highlight::after {
+  position: absolute;
+  bottom: 2px;
+  left: 0;
+  width: calc(var(--squiggle-progress) * 1%);
+  height: 6px;
+  content: "";
+  background-color: transparent;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='7' viewBox='0 0 20 7'%3E%3Cpath d='M0 4 C 2.5 1.5, 5 1.5, 7.5 4 S 12.5 6.5, 15 4 S 20 1.5, 20 4' fill='none' stroke='%23b58cff' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: repeat-x;
+  background-position: left bottom;
+  opacity: 0.85;
+}
+
+[data-theme="light"] .squiggle-highlight::after {
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='20' height='7' viewBox='0 0 20 7'%3E%3Cpath d='M0 4 C 2.5 1.5, 5 1.5, 7.5 4 S 12.5 6.5, 15 4 S 20 1.5, 20 4' fill='none' stroke='%237c3aed' stroke-width='2.2' stroke-linecap='round'/%3E%3C/svg%3E");
 }
 
 [data-theme="light"] .blog-reader-prose a {
@@ -978,6 +1067,23 @@ button {
 .fade-overlay-top {
   background: linear-gradient(to bottom, var(--fade-color) 0%, transparent 100%);
   transition: --fade-color 0.5s cubic-bezier(0.4, 0, 0.2, 1);
+}
+
+/* Content skeletons: soft bars that mirror the loaded layout so the page
+   reserves the final space while data loads. A slow, quiet shimmer reads as
+   "about to appear" instead of a hard pulsing box. */
+@keyframes skeleton-shimmer {
+  0%,
+  100% {
+    opacity: 1;
+  }
+  50% {
+    opacity: 0.45;
+  }
+}
+
+.skeleton-shimmer {
+  animation: skeleton-shimmer 1.8s ease-in-out infinite;
 }
 
 .drag-handle {
@@ -1270,31 +1376,6 @@ div[data-type="columns"][data-layout="three_with_sidebars"] > div[data-type="col
   color: rgba(200, 50, 50, 0.6);
 }
 
-@keyframes typing-phase-in {
-  0% {
-    opacity: 0.4;
-    color: var(--color-accent);
-    text-shadow: 0 0 8px var(--color-accent);
-    transform: translateY(1px);
-  }
-  60% {
-    opacity: 0.9;
-    text-shadow: 0 0 2px var(--color-accent);
-    transform: translateY(0);
-  }
-  100% {
-    opacity: 1;
-    color: inherit;
-    text-shadow: none;
-    transform: translateY(0);
-  }
-}
-
-.ProseMirror .typing-char-animate {
-  display: inline;
-  animation: typing-phase-in 0.28s cubic-bezier(0.22, 1, 0.36, 1) forwards;
-}
-
 .ProseMirror.is-typing {
   caret-color: var(--color-accent);
   transition: caret-color 0.15s ease;
@@ -1302,4 +1383,19 @@ div[data-type="columns"][data-layout="three_with_sidebars"] > div[data-type="col
 
 .ProseMirror:not(.is-typing) {
   transition: caret-color 0.4s ease;
+}
+
+@keyframes fade-in {
+  from {
+    opacity: 0;
+    transform: translateY(4px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.animate-fade-in {
+  animation: fade-in 0.3s ease-out both;
 }

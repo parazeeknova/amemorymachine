@@ -239,6 +239,7 @@ export const ConsoleHome = () => {
         </div>
       </div>
       {showCreateSpace && (
+        // eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions
         <div
           className="fixed inset-0 z-50"
           onClick={() => setShowCreateSpace(false)}
@@ -247,8 +248,10 @@ export const ConsoleHome = () => {
               setShowCreateSpace(false);
             }
           }}
+          // eslint-disable-next-line jsx-a11y/prefer-tag-over-role
           role="dialog"
         >
+          {/* eslint-disable-next-line jsx-a11y/no-noninteractive-element-interactions */}
           <div
             className={`absolute border p-3 w-52 shadow-lg ${t("border-border-dark bg-text-light", "border-border-light bg-[#e0e0e0]")}`}
             onClick={(e) => e.stopPropagation()}

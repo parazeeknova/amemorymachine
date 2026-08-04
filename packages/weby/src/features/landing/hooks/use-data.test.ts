@@ -56,24 +56,50 @@ describe("useProfile", () => {
     expect(localStorage.getItem("verso_cache_profile")).toContain("Test User");
   });
 
-  it("restores cached profile data from localStorage instantly on warm start", () => {
+  it("uses initialData immediately when provided (SSR loader path)", () => {
     const cachedProfile = {
       description: "cached description",
       links: {},
       name: "Cached User",
       tagline: "cached tagline",
     };
-    localStorage.setItem("verso_cache_profile", JSON.stringify(cachedProfile));
 
-    const mockFetch = vi.fn().mockResolvedValueOnce(createMockResponse(cachedProfile));
-    vi.stubGlobal("fetch", mockFetch);
-
-    const { result } = renderHook(() => useProfile(), {
+    const { result } = renderHook(() => useProfile(cachedProfile), {
       wrapper: createWrapper(),
     });
 
-    // Warm start has data instantly from placeholderData
+    // Warm start has data instantly from the loader's initialData
     expect(result.current.data).toEqual(cachedProfile);
+    expect(result.current.isPending).toBe(false);
+  });
+
+  it("still revalidates initialData in the background on mount", async () => {
+    const cachedProfile = {
+      description: "cached description",
+      links: {},
+      name: "Cached User",
+      tagline: "cached tagline",
+    };
+    const freshProfile = {
+      description: "fresh description",
+      links: {},
+      name: "Fresh User",
+      tagline: "fresh tagline",
+    };
+
+    const mockFetch = vi.fn().mockResolvedValueOnce(createMockResponse(freshProfile));
+    vi.stubGlobal("fetch", mockFetch);
+
+    const { result } = renderHook(() => useProfile(cachedProfile), {
+      wrapper: createWrapper(),
+    });
+
+    // initialData renders immediately, then the background refetch lands
+    expect(result.current.data).toEqual(cachedProfile);
+    await waitFor(() => {
+      expect(result.current.data).toEqual(freshProfile);
+    });
+    expect(mockFetch).toHaveBeenCalledWith("/api/profile", expect.any(Object));
   });
 
   it("handles fetch error", async () => {
