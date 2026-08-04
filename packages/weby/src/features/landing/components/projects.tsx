@@ -369,8 +369,8 @@ export const WorldlineVisualizer = () => {
   }, [isPlaying]);
 
   return (
-    <div className="shrink-0 flex flex-col items-center gap-3 pt-2 pb-4">
-      <div className="flex h-10 items-end gap-[3px] text-gray-500">
+    <div className="relative shrink-0 pt-4 pb-6">
+      <div className="mx-auto flex h-10 w-[79%] items-end gap-[3px] text-gray-500">
         {Array.from({ length: 28 }).map((_, i) => (
           <span
             key={i}
@@ -386,13 +386,12 @@ export const WorldlineVisualizer = () => {
       </div>
       <button
         aria-label={isPlaying ? "pause" : "play"}
-        className="flex h-9 w-9 items-center justify-center text-gray-500 transition-colors duration-200 hover:text-gray-300"
+        className="absolute top-0 right-0 flex h-9 w-9 items-center justify-center text-gray-500 transition-colors duration-200 hover:text-gray-300"
         onClick={() => setIsPlaying((prev) => !prev)}
         type="button"
       >
         {isPlaying ? <PauseGlyph /> : <PlayGlyph />}
       </button>
-      <p className="font-display text-xs lowercase opacity-40 tracking-wide">el psy kongroo</p>
     </div>
   );
 };
