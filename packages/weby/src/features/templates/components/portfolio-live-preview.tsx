@@ -7,7 +7,7 @@ import type { ParsedPortfolio, ValidationError } from "../lib/portfolio-markdown
 import { markdownToHtml } from "#/features/blog/lib/markdown-to-html";
 import { GitHubActivity } from "#/features/github/components/calendar";
 import { GitHubStats } from "#/features/github/components/stats";
-import { ProjectThumb } from "#/features/landing/components/projects";
+import { HackathonSection, ProjectThumb } from "#/features/landing/components/projects";
 import {
   getExperienceGroups,
   getProjectGroups,
@@ -456,6 +456,7 @@ export const PortfolioLivePreview = memo(
           <PreviewProfileSection profile={profile} />
           <PreviewExperienceSection experiences={experiences} />
           <PreviewProjectsSection projects={projects} />
+          <HackathonSection />
           {(ghSettings?.enabled || cfSettings?.enabled) && (
             <>
               {ghSettings?.enabled && (

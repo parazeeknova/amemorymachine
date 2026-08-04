@@ -314,6 +314,75 @@ interface ProjectListProps {
   onDetail?: (project: Project) => void;
 }
 
+// Hackathon timeline: a rail of dated entries below the projects. Reads
+// the same /api/projects data, filtered to the optional 'hackathon'
+// section; renders nothing when there are no entries.
+export const HackathonSection = ({ initialData }: { initialData?: Project[] }) => {
+  const { data: projectData, isPending } = useProjects(initialData);
+  const hackathons = (projectData ?? []).filter((p) => p.section === "hackathon");
+
+  if (isPending) {
+    return (
+      <div className="shrink-0 space-y-3 skeleton-shimmer" aria-hidden>
+        {[0, 1].map((i) => (
+          <div className="flex gap-3" key={i}>
+            <SkeletonBar className="h-4 w-1/3" />
+            <SkeletonBar className="h-3 w-2/3" />
+          </div>
+        ))}
+      </div>
+    );
+  }
+
+  if (hackathons.length === 0) {
+    return null;
+  }
+
+  return (
+    <div className="shrink-0 space-y-5">
+      <h3 className="font-medium text-base lowercase">hacking goes brrr</h3>
+      <div className="space-y-6">
+        {hackathons.map((h) => {
+          const imgs = [h.image, h.logo].filter(Boolean);
+          return (
+            <div className="relative pl-6" key={h.title}>
+              {/* rail + dot */}
+              <span className="absolute left-[3px] top-2 bottom-0 w-px bg-border" aria-hidden />
+              <span
+                aria-hidden
+                className="absolute left-0 top-1 h-[7px] w-[7px] rounded-full"
+                style={{ backgroundColor: "var(--color-accent)" }}
+              />
+              <p className="font-mono text-[10px] uppercase tracking-wider text-gray-500">
+                {h.stack}
+              </p>
+              <h4 className="mt-1 font-medium text-xs sm:text-sm">{h.title}</h4>
+              {h.desc && (
+                <p className="mt-1.5 w-full max-w-prose text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
+                  {h.desc}
+                </p>
+              )}
+              {imgs.length > 0 && (
+                <div className="mt-3 flex flex-wrap gap-2">
+                  {imgs.map((src, imgIdx) => (
+                    <img
+                      alt={`${h.title} ${imgIdx + 1}`}
+                      className="h-24 w-40 object-cover border border-border sm:h-28 sm:w-48"
+                      key={src}
+                      src={src}
+                      style={{ transform: imgIdx % 2 === 0 ? "rotate(-1deg)" : "rotate(1deg)" }}
+                    />
+                  ))}
+                </div>
+              )}
+            </div>
+          );
+        })}
+      </div>
+    </div>
+  );
+};
+
 export const ProjectList = ({ initialData, onDetail }: ProjectListProps) => {
   const { data: projectData, isPending } = useProjects(initialData);
   const [activeTab, setActiveTab] = useState<ProjectSection>("prod");

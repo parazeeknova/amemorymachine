@@ -20,7 +20,7 @@ import {
   SocialLinks,
 } from "#/features/landing/components/sections";
 import { ReadmeViewer } from "#/features/landing/components/readme-viewer";
-import { ProjectList } from "#/features/landing/components/projects";
+import { HackathonSection, ProjectList } from "#/features/landing/components/projects";
 import { BlogReaderPanel } from "#/features/blog/components/blog-reader-panel";
 import { LoginPopup } from "#/features/auth/components/login-popup";
 import { useIsDesktop } from "#/shared/lib/desktop";
@@ -490,6 +490,8 @@ const Home = function Home() {
           <h3 className="font-medium text-base">voo look what i made</h3>
           <ProjectList initialData={loaderData?.projects} onDetail={handleProjectDetail} />
         </div>
+
+        <HackathonSection initialData={loaderData?.projects} />
 
         <ClientOnly>
           <GitHubActivity isDarkMode={isDarkMode} username={githubUsername}>

@@ -111,6 +111,10 @@ describe("validatePortfolioMarkdown", () => {
     const paper = parsed.parsed.experiences.find((e) => e.title.includes("Fine-Tuning"));
     expect(paper?.section).toBe("research");
     expect(paper?.description).toContain("link.springer.com");
+
+    const hack = parsed.parsed.projects.find((p) => p.title.includes("HackByte 4.0"));
+    expect(hack?.section).toBe("hackathon");
+    expect(hack?.stack).toContain("Apr 2026");
   });
 
   it("rejects invalid email format", () => {

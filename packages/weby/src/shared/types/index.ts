@@ -25,7 +25,7 @@ export interface ExperienceItem {
   title: string;
 }
 
-export type ProjectSection = "prod" | "personal" | "freelance";
+export type ProjectSection = "prod" | "personal" | "freelance" | "hackathon";
 
 export interface Project {
   desc: string;
