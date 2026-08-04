@@ -232,7 +232,7 @@ export const generatePortfolioMarkdown = (
         title: "Papyrus. a spreadsheet that syncs like a doc and scales like a database.",
       },
       {
-        desc: "Singularity Works, an opinionated product studio building systems, infrastructure, and tools for companies that ship.",
+        desc: "Singularity Works. We craft digital experiences that speak to the subconscious, creating profound connections through purposeful simplicity.",
         image: "https://img.przknv.cc/t/Screenshot_2026-07-08_00.57.49.png",
         logo: "",
         productUrl: "https://itssingularity.com",
@@ -243,7 +243,7 @@ export const generatePortfolioMarkdown = (
         title: "itssingularity.com",
       },
       {
-        desc: "ALLROUND PMC is India's leading project management consultancy for hospitality, healthcare, and construction. We deliver precision, strategy, and excellence.",
+        desc: "ALLROUND PMC is a project management consultancy for luxury 5-star hospitality chains. We built their landing page, CMS, and job portal for the careers section, plus fully self-hosted infrastructure with uptime monitoring, OpenTelemetry, analytics, and CDN.",
         image: "https://img.przknv.cc/t/allround.webp",
         logo: "",
         productUrl: "https://allroundpmc.com",
@@ -254,7 +254,7 @@ export const generatePortfolioMarkdown = (
         title: "ALLROUND PMC Pvt Ltd",
       },
       {
-        desc: "Qatar's trusted partner in premium hotel supplies",
+        desc: "Oryx is a premium 5-star hotel supplies brand in the UAE, known for premium cutlery. We built their e-commerce, invoice management, CRM, and inventory systems.",
         image: "https://img.przknv.cc/?asset=oryx.webp",
         logo: "",
         productUrl: "https://oryxhotelsupplies.com",
@@ -265,7 +265,7 @@ export const generatePortfolioMarkdown = (
         title: "Oryx Hotel Supplies (UAE)",
       },
       {
-        desc: "Saltwise helps you find medication alternatives and understand your choices without the jargon.",
+        desc: "Saltwise is an AI agent for doctors: given a chemical formula it searches medication alternatives over the web, talks back through TTS/STT, and breaks down each option in detail, including what could go wrong.",
         image: "https://img.przknv.cc/t/saltwise.webp",
         logo: "",
         productUrl: "",
