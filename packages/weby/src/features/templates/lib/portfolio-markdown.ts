@@ -290,7 +290,7 @@ export const generatePortfolioMarkdown = (
         title: "HackByte 4.0",
       },
       {
-        desc: "Secured 2nd place in the Wikimedia track at HackByte 3.0. Judged by mentors from the Wikimedia Foundation.",
+        desc: "Secured 2nd place in the Wikimedia track at HackByte 3.0, judged by mentors from the Wikimedia Foundation. We built a gamified bootcamp that walks new Wikipedia authors through the four pillars of editing: the steepest part of the learning curve becomes quests, checkpoints, and instant AI feedback on drafts instead of walls of policy text.",
         image: "https://img.przknv.cc/t/hb3.jpeg",
         logo: "https://img.przknv.cc/t/Screenshot_2026-08-04_16.08.19.png",
         productUrl: "",
