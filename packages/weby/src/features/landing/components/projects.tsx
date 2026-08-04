@@ -339,14 +339,16 @@ export const OpenSourceSection = () => (
       </p>
       <a
         className="inline-block"
+        draggable={false}
         href="https://holopin.io/@parazeeknova"
+        onContextMenu={(e) => e.preventDefault()}
         rel="noopener noreferrer"
         target="_blank"
       >
         <img
           alt="Holopin badges for parazeeknova"
-          draggable={false}
           className="edge-fade w-full"
+          draggable={false}
           src="https://holopin.me/parazeeknova"
         />
       </a>
