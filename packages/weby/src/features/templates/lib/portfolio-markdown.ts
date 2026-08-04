@@ -289,7 +289,7 @@ export const generatePortfolioMarkdown = (
       },
       {
         desc: "Secured 2nd place in the Wikimedia track at HackByte 3.0. Judged by mentors from the Wikimedia Foundation.",
-        image: "https://img.przknv.cc/t/hackbyte-3.png",
+        image: "https://img.przknv.cc/t/hb3.jpeg",
         logo: "https://img.przknv.cc/t/Screenshot_2026-08-04_16.08.19.png",
         productUrl: "",
         readmeUrl: "",
