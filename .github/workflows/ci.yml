@@ -289,7 +289,7 @@ jobs:
           {
             echo "changes<<CHANGES_EOF"
             echo "<p align=\"center\">"
-            echo "  <img src=\"https://github.com/parazeeknova/verso/blob/main/packages/weby/public/verso.png?raw=true\" alt=\"Verso Logo\" width=\"128\" height=\"128\" />"
+            echo "  <img src=\"https://github.com/parazeeknova/verso/blob/main/packages/weby/public/amemorymachine.png?raw=true\" alt=\"Amemorymachine Logo\" width=\"128\" height=\"128\" />"
             echo "</p>"
             echo ""
             echo "## Changes"
@@ -416,7 +416,7 @@ jobs:
           echo "Timed out waiting for deployment"
           exit 1
 
-      - name: Wait for verso-web deploy to complete
+      - name: Wait for web deploy to complete
         run: |
           API_URL="${{ secrets.DOKPLOY_API_URL }}"
           TOKEN="${{ secrets.DOKPLOY_API_TOKEN }}"
