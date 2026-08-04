@@ -551,11 +551,7 @@ export const HackathonSection = ({ initialData }: { initialData?: Project[] }) =
           // Hackathons reuse the readme_url slot as an optional third photo.
           const imgs = [h.image, h.logo, h.readmeUrl].filter(Boolean);
           return (
-            <div className="relative sm:pl-6" key={h.title}>
-              <span
-                aria-hidden
-                className="absolute left-[3px] top-2 bottom-0 hidden w-px bg-border sm:block"
-              />
+            <div key={h.title}>
               {/* eslint-disable-next-line react/no-danger -- meta carries the squiggle-highlight span */}
               <p
                 className="font-mono text-[10px] uppercase tracking-wider text-gray-500"
