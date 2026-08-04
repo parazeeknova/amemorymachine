@@ -341,7 +341,7 @@ export const OpenSourceSection = () => (
       >
         <img
           alt="Holopin badges for parazeeknova"
-          className="w-full border border-border"
+          className="edge-fade w-full"
           src="https://holopin.me/parazeeknova"
         />
       </a>
