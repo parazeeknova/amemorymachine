@@ -314,6 +314,38 @@ interface ProjectListProps {
   onDetail?: (project: Project) => void;
 }
 
+// Open source section: Hacktoberfest participation + the Holopin badge
+// board. Rendered after the hackathon timeline.
+export const OpenSourceSection = () => (
+  <div className="shrink-0 space-y-4">
+    <h3 className="font-medium text-base lowercase">open sourcerering</h3>
+    <div className="space-y-1.5">
+      <p className="font-mono text-[10px] uppercase tracking-wider text-gray-500">
+        hacktoberfest 24 · mentor + participant · 16 PRs merged
+      </p>
+      <p className="font-mono text-[10px] uppercase tracking-wider text-gray-500">
+        hacktoberfest 25 · mentor + participant · 48 PRs merged
+      </p>
+    </div>
+    <p className="w-full text-justify text-xs leading-relaxed text-gray-400 sm:text-[13px]">
+      Participated in Hacktoberfest 2024 and 2025 as both mentor and participant, merging 16 pull
+      requests in 24 and 48 in 25 across open source projects.
+    </p>
+    <a
+      className="inline-block"
+      href="https://holopin.io/@parazeeknova"
+      rel="noopener noreferrer"
+      target="_blank"
+    >
+      <img
+        alt="Holopin badges for parazeeknova"
+        className="w-full border border-border"
+        src="https://holopin.me/parazeeknova"
+      />
+    </a>
+  </div>
+);
+
 // Hackathon timeline: a rail of dated entries below the projects. Reads
 // the same /api/projects data, filtered to the optional 'hackathon'
 // section; renders nothing when there are no entries.

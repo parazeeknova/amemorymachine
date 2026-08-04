@@ -20,7 +20,11 @@ import {
   SocialLinks,
 } from "#/features/landing/components/sections";
 import { ReadmeViewer } from "#/features/landing/components/readme-viewer";
-import { HackathonSection, ProjectList } from "#/features/landing/components/projects";
+import {
+  HackathonSection,
+  OpenSourceSection,
+  ProjectList,
+} from "#/features/landing/components/projects";
 import { BlogReaderPanel } from "#/features/blog/components/blog-reader-panel";
 import { LoginPopup } from "#/features/auth/components/login-popup";
 import { useIsDesktop } from "#/shared/lib/desktop";
@@ -492,6 +496,8 @@ const Home = function Home() {
         </div>
 
         <HackathonSection initialData={loaderData?.projects} />
+
+        <OpenSourceSection />
 
         <ClientOnly>
           <GitHubActivity isDarkMode={isDarkMode} username={githubUsername}>
