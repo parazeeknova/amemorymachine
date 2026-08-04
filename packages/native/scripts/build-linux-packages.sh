@@ -49,8 +49,8 @@ mkdir -p "$APPDIR/usr/share/icons/hicolor/256x256/apps"
 
 # Copy files
 cp -r "$BUILD_DIR/"* "$APPDIR/usr/bin/"
-cp "$REPO_ROOT/packages/weby/public/verso.png" "$APPDIR/verso.png"
-cp "$REPO_ROOT/packages/weby/public/verso.png" "$APPDIR/usr/share/icons/hicolor/256x256/apps/verso.png"
+cp "$REPO_ROOT/packages/weby/public/amemorymachine.png" "$APPDIR/verso.png"
+cp "$REPO_ROOT/packages/weby/public/amemorymachine.png" "$APPDIR/usr/share/icons/hicolor/256x256/apps/verso.png"
 
 # AppRun script (sets flags and starts the app)
 cat << 'EOF' > "$APPDIR/AppRun"

@@ -16,7 +16,7 @@ const SIZES = [
 ];
 
 const main = async () => {
-  const svgPath = join(import.meta.dirname, "../../weby/public/verso.svg");
+  const svgPath = join(import.meta.dirname, "../../weby/public/amemorymachine.svg");
   const outputDir = join(import.meta.dirname, "../icon.iconset");
 
   console.log(`Creating directory: ${outputDir}`);
