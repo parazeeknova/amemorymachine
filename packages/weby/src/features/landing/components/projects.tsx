@@ -332,6 +332,37 @@ const PauseGlyph = () => (
 export const WorldlineVisualizer = () => {
   const [isPlaying, setIsPlaying] = useState(false);
   const barEls = useRef<HTMLSpanElement[]>([]);
+  const audioRef = useRef<HTMLAudioElement | null>(null);
+
+  const togglePlay = async () => {
+    if (typeof window === "undefined") {
+      return;
+    }
+    if (!audioRef.current) {
+      audioRef.current = new Audio("https://cdn.przknv.cc/madsci.mp3");
+      audioRef.current.loop = true;
+      audioRef.current.addEventListener("ended", () => setIsPlaying(false));
+    }
+    const audio = audioRef.current;
+    if (isPlaying) {
+      audio.pause();
+      setIsPlaying(false);
+    } else {
+      try {
+        await audio.play();
+        setIsPlaying(true);
+      } catch {
+        // autoplay or codec failure: keep the visualizer silent
+      }
+    }
+  };
+
+  useEffect(
+    () => () => {
+      audioRef.current?.pause();
+    },
+    [],
+  );
 
   useEffect(() => {
     const bars = barEls.current;
@@ -387,7 +418,7 @@ export const WorldlineVisualizer = () => {
       <button
         aria-label={isPlaying ? "pause" : "play"}
         className="absolute top-1/2 right-0 flex h-9 w-9 -translate-y-1/2 items-center justify-center text-gray-500 transition-colors duration-200 hover:text-gray-300"
-        onClick={() => setIsPlaying((prev) => !prev)}
+        onClick={togglePlay}
         type="button"
       >
         {isPlaying ? <PauseGlyph /> : <PlayGlyph />}
