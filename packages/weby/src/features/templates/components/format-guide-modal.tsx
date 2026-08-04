@@ -139,7 +139,7 @@ export const FormatGuideModal = ({ isOpen, onClose }: FormatGuideModalProps) => 
           </P>
           <Code>
             {
-              "### Job Title — Company Name\n- Location: Remote (City, Country)\n- Period: Month YY' – Present"
+              "### Job Title — Company Name\n- Location: Remote (City, Country)\n- Period: Month YY' – Present\n- Image: https://img-url.png\n- Section: professional"
             }
           </Code>
           <P>
@@ -147,7 +147,8 @@ export const FormatGuideModal = ({ isOpen, onClose }: FormatGuideModalProps) => 
             role. Add - Section: university clubs to a role to move it into the university clubs
             tab, or - Section: research to pin a paper under its own research tab (its description
             can carry markdown links, e.g. to the paper or your ORCID); everything else lands under
-            professional.
+            professional. The optional Image field shows a photo under the university clubs tab:
+            entries with images render them as a single-row strip below the clubs.
           </P>
 
           <HR />

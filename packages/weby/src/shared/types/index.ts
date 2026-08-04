@@ -19,6 +19,7 @@ export type ExperienceSection = "professional" | "research" | "university clubs"
 
 export interface ExperienceItem {
   description?: string;
+  image?: string;
   location: string;
   period: string;
   section?: ExperienceSection;

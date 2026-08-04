@@ -58,6 +58,7 @@ export const generatePortfolioMarkdown = (
       {
         description:
           "Led the browser club — cross-functional ops, team-lead coordination, community continuity between semesters. Produced written/visual content on web standards and open-source tooling. Built real-time multiplayer games with live leaderboards, cooperative sabotage hints and pair mechanics.",
+        image: "https://img.przknv.cc/t/moz2.jpeg",
         location: "University (VIT)",
         period: "June 25'–February 26'",
         section: "university clubs",
@@ -75,6 +76,7 @@ export const generatePortfolioMarkdown = (
       {
         description:
           "Handled ops, logistics and team coordination. Built a treasure-hunt app with admin dashboard (MongoDB, Express, React, Node) — REST + WebSocket for real-time participant tracking, game state and scoring, deployed on EC2 with Docker. Also shipped event sites and the club landing page.",
+        image: "https://img.przknv.cc/t/aic.jpeg",
         location: "University (VIT)",
         period: "June 25'–January 26'",
         section: "university clubs",
@@ -92,7 +94,7 @@ export const generatePortfolioMarkdown = (
   )
     .map(
       (exp) =>
-        `### ${exp.title}\n- Location: ${exp.location}\n- Period: ${exp.period}\n- Description: ${exp.description ?? ""}\n- Section: ${exp.section ?? "professional"}`,
+        `### ${exp.title}\n- Location: ${exp.location}\n- Period: ${exp.period}\n- Description: ${exp.description ?? ""}\n- Image: ${exp.image ?? ""}\n- Section: ${exp.section ?? "professional"}`,
     )
     .join("\n\n");
 
@@ -388,6 +390,8 @@ const parseExperienceLine = (
       currentExpItem.period = itemLine.slice("period:".length).trim();
     } else if (itemLine.toLowerCase().startsWith("description:")) {
       currentExpItem.description = itemLine.slice("description:".length).trim();
+    } else if (itemLine.toLowerCase().startsWith("image:")) {
+      currentExpItem.image = itemLine.slice("image:".length).trim();
     } else if (itemLine.toLowerCase().startsWith("section:")) {
       const raw = itemLine.slice("section:".length).trim().toLowerCase();
       if (raw.startsWith("university")) {

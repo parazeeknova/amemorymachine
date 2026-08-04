@@ -525,6 +525,29 @@ export const ExperienceSection = ({ experience, isPending }: ExperienceSectionPr
           <ExperienceRow item={item} key={item.title} withAnimClass />
         ))}
 
+        {/* Club photos: optional per-entry images collected into a
+            single-row strip under the university clubs tab. */}
+        {resolvedTab === "university clubs" &&
+          (() => {
+            const clubImgs = clubs.map((c) => c.image).filter((img): img is string => Boolean(img));
+            if (clubImgs.length === 0) {
+              return null;
+            }
+            return (
+              <div className="flex gap-2">
+                {clubImgs.map((src, imgIdx) => (
+                  <img
+                    alt="club photo"
+                    className="flex-1 min-w-0 h-24 object-cover border border-border sm:h-28"
+                    key={src}
+                    src={src}
+                    style={{ transform: imgIdx % 2 === 0 ? "rotate(-3deg)" : "rotate(3deg)" }}
+                  />
+                ))}
+              </div>
+            );
+          })()}
+
         {extraItems.length > 0 && (
           <div
             className="space-y-3 sm:space-y-4 overflow-hidden mt-3 sm:mt-4"

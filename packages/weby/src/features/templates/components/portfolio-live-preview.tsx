@@ -214,6 +214,26 @@ const PreviewExperienceSection = memo(({ experiences }: { experiences: Experienc
               ))}
           </div>
         ))}
+        {resolvedTab === "university clubs" &&
+          (() => {
+            const clubImgs = clubs.map((c) => c.image).filter((img): img is string => Boolean(img));
+            if (clubImgs.length === 0) {
+              return null;
+            }
+            return (
+              <div className="flex gap-2">
+                {clubImgs.map((src, imgIdx) => (
+                  <img
+                    alt="club photo"
+                    className="flex-1 min-w-0 h-24 object-cover border border-white/10 sm:h-28"
+                    key={src}
+                    src={src}
+                    style={{ transform: imgIdx % 2 === 0 ? "rotate(-3deg)" : "rotate(3deg)" }}
+                  />
+                ))}
+              </div>
+            );
+          })()}
       </div>
     </div>
   );
