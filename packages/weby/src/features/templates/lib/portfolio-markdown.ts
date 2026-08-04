@@ -90,7 +90,7 @@ export const generatePortfolioMarkdown = (
   const projsArr = (
     projects ?? [
       {
-        desc: "A social platform that brings your entire internet into one place. Unified feed, communities, real-time chat, rich media and tipping all tied together by Aura, a reputation system that grows with you, and Zeph, an AI companion that actually remembers you. Built by one person. Slightly unhinged in ambition.",
+        desc: "asocialmedia (formerly zephyr), the last social platform you'll ever need. now with a cast that talks back.Your internet, unified: feed, communities, real-time chat, rich media, tipping. Powered by Aura, a reputation system that levels with you, and a Cast, characters with their own personas, takes, and beef, who actually read your posts and show up in the comments to agree, argue, or roast you. Zeph's just the one you know best. Built by one person. Ambition: unhinged.",
         image: "https://img.przknv.cc/t/Gk8Fy0aaMAARWSc.jpg",
         logo: "https://img.przknv.cc/t/zephyr.png",
         logoScale: 0.8,
@@ -105,7 +105,7 @@ export const generatePortfolioMarkdown = (
           "asocialmedia formerly zephyr is the last social platform you'll ever need. Open source, cozy, and slightly unhinged.",
       },
       {
-        desc: "Personal knowledge base and folio, blog for public face & private brain, one app that doesn't apologize for being both. the left side is where i exist as a person (public face): my projects, my work, my contribution graph. the right side is where i think out loud (private brain): notes, docs, blog posts, half-baked ideas.",
+        desc: "amemorymachine. built because your brain forgets and your notes app doesn't retrieve. Everything I read, write, hear, or scribble gets ingested, indexed, and made retrievable. OCR pulls text out of images and scans, STT turns voice into notes, TTS reads them back. Runs on local or self-hosted LLMs, no data leaving unless I say so. Notes live as a RAG graph, not a folder tree, so context surfaces on its own instead of getting buried. Realtime markdown docs, Notion-style editing, but the memory underneath actually connects things.",
         image: "https://img.przknv.cc/t/versopp.png",
         logo: "https://img.przknv.cc/t/verso.png",
         productUrl: "https://amemorymachine.cc",
@@ -119,7 +119,7 @@ export const generatePortfolioMarkdown = (
           "amemorymachine is a personal knowledge base and folio, blog for public face & private brain, one app",
       },
       {
-        desc: "A local-first spatial workspace for free-form kanban, structured tasks, durable offline work, and realtime collaboration with other goodies.",
+        desc: "Lumen. a spatial system for organizing work, infinite canvas, not another kanban board.Local-first spatial workspace where tasks live on an infinite canvas instead of a fixed board. Free-form kanban when you want to think in space, structured tasks when you need actual deadlines, offline-first so it survives dropped connections and closed laptops. Realtime collab with no lag, built on CRDTs so two people editing the same board never fight each other. RAG-backed AI reads the whole canvas, not just one card, so you can ask it what's actually going on instead of digging through columns yourself.",
         image: "https://img.przknv.cc/t/Screenshot_2026-07-08_22.51.03.png",
         logo: "https://img.przknv.cc/t/lumen.png",
         productUrl: "https://lumen.itssingularity.com",
@@ -158,7 +158,7 @@ export const generatePortfolioMarkdown = (
           "Gitcha is a native git GUI written in rust to be blazing fast and light that goes brr",
       },
       {
-        desc: "Realtime collaborative spreadsheet with a local-first document model, CRDT-based syncing, worker-driven evaluation, and a virtualized grid built to stay responsive on 10K+ row datasets.",
+        desc: "Realtime collaborative spreadsheet, local-first, so it works before the network catches up. CRDT-based syncing means every edit merges cleanly, no last-write-wins, no overwritten formulas. Evaluation runs off the main thread in a worker, so the grid never freezes while it's computing. Virtualized rendering keeps it responsive past 10K+ rows, scrolling and editing stay instant even when the sheet gets heavy. Built for the moment spreadsheets usually fall apart.",
         image: "https://img.przknv.cc/t/papss.png",
         logo: "https://img.przknv.cc/t/papyrus.png",
         logoScale: 0.8,
@@ -169,7 +169,7 @@ export const generatePortfolioMarkdown = (
         section: "prod",
         stack:
           "Next.js, Elixir, TypeScript, Bun, Firestore, Yjs, Zustand, Tailwind CSS, CRDTs, Docker and more",
-        title: "Papyrus is a realtime collaborative spreadsheet",
+        title: "Papyrus. a spreadsheet that syncs like a doc and scales like a database.",
       },
       {
         desc: "Fast TUI with hierarchical notebooks, fuzzy search, syntax highlighting for 25+ languages, and versioned storage.",
