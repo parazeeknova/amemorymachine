@@ -516,7 +516,11 @@ export const LoginPopup = ({ isDarkMode, isAtBottom = false }: LoginPopupProps) 
         }}
         type="button"
       >
-        <img src="/verso.svg" alt="verso" className="h-3.5 w-3.5 shrink-0 rounded-sm" />
+        <img
+          src="/amemorymachine.svg"
+          alt="amemorymachine"
+          className="h-3.5 w-3.5 shrink-0 rounded-sm"
+        />
         {isAuthenticated ? (
           <span>
             by{" "}

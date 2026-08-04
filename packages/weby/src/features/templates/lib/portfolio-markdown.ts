@@ -29,7 +29,7 @@ export const generatePortfolioMarkdown = (
       asocialmedia: { label: "asocialmedia", url: "https://www.asocialmedia.cc" },
       github: { label: "GitHub", url: "https://www.github.com/parazeeknova" },
       linkedin: { label: "LinkedIn", url: "https://www.linkedin.com/in/hashk" },
-      portfolio: { label: "designer portfolio", url: "https://folio.przknv.cc" },
+      portfolio: { label: "designer portfolio", url: "https://amemorymachine.cc" },
       singularity: { label: "Singularity Works", url: "https://www.itsingularity.com" },
       twitter: { label: "X", url: "https://www.x.com/parazeeknova" },
     },

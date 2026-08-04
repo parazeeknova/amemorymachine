@@ -32,7 +32,7 @@ const config = defineConfig(async ({ mode }) => {
   return {
     define: {
       "import.meta.env.VITE_APP_ORIGIN": JSON.stringify(
-        env.VITE_APP_ORIGIN?.trim() || "https://przknv.cc",
+        env.VITE_APP_ORIGIN?.trim() || "https://amemorymachine.cc",
       ),
       "import.meta.env.VITE_APP_VERSION": JSON.stringify(appVersion),
     },

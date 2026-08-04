@@ -1,6 +1,6 @@
 {
-  "name": "@verso/native",
-  "version": "0.7.34",
+  "name": "@amemorymachine/native",
+  "version": "0.7.35",
   "private": true,
   "type": "module",
   "scripts": {

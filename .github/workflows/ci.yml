@@ -11,8 +11,8 @@ on:
 
 env:
   REGISTRY: ghcr.io
-  IMAGE_NAME_WEB: verso-web
-  IMAGE_NAME_API: verso-serve
+  IMAGE_NAME_WEB: amemorymachine-web
+  IMAGE_NAME_API: amemorymachine-serve
 
 concurrency:
   group: ${{ github.workflow }}-${{ github.ref }}
@@ -125,11 +125,11 @@ jobs:
       matrix:
         include:
           - package: weby
-            image-name: verso-web
+            image-name: amemorymachine-web
             dockerfile: ./packages/weby/Dockerfile
             context: .
           - package: backy
-            image-name: verso-serve
+            image-name: amemorymachine-serve
             dockerfile: ./packages/backy/Dockerfile
             context: ./packages/backy
     steps:
@@ -383,7 +383,7 @@ jobs:
             -d '{ "applicationId": "${{ secrets.DOKPLOY_APP_ID }}" }' \
             --fail --silent --show-error
 
-      - name: Trigger verso-web deploy
+      - name: Trigger web deploy
         run: |
           curl -X 'POST' \
             '${{ secrets.DOKPLOY_API_URL }}/api/application.deploy' \

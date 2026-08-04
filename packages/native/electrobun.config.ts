@@ -6,7 +6,7 @@ const packageJson = JSON.parse(readFileSync(join(import.meta.dirname, "package.j
 
 export default {
   app: {
-    identifier: "cc.przknv.verso",
+    identifier: "cc.amemorymachine.app",
     name: "Verso",
     version: packageJson.version,
   },

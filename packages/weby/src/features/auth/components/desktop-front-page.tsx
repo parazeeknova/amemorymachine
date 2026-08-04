@@ -429,9 +429,9 @@ export const DesktopFrontPage = () => {
         <div className="flex flex-col items-center">
           <div className="flex items-end gap-3 sm:gap-5 justify-center">
             <img
-              alt="verso"
+              alt="amemorymachine"
               className="h-16 sm:h-24 lg:h-28 mb-2 opacity-85 select-none"
-              src="/verso.svg"
+              src="/amemorymachine.svg"
             />
             <GradientText
               as="h1"

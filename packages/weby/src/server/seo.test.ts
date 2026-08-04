@@ -55,7 +55,7 @@ describe("buildPortfolioTitle", () => {
   });
 
   it("falls back without a profile", () => {
-    expect(buildPortfolioTitle()).toContain("verso");
+    expect(buildPortfolioTitle()).toContain("amemorymachine");
   });
 });
 
@@ -70,7 +70,7 @@ describe("buildPortfolioDescription", () => {
 
 describe("buildPersonJsonLd", () => {
   it("builds a Person schema with social links", () => {
-    const json = buildPersonJsonLd(profile, "https://przknv.cc");
+    const json = buildPersonJsonLd(profile, "https://amemorymachine.cc");
     expect(json).not.toBeNull();
     expect(json?.name).toBe("Harsh Sahu");
     expect(json?.sameAs).toContain("https://github.com/parazeeknova");
@@ -84,9 +84,9 @@ describe("buildPersonJsonLd", () => {
 
 describe("buildWebSiteJsonLd", () => {
   it("builds a WebSite schema", () => {
-    const json = buildWebSiteJsonLd(profile, "https://przknv.cc");
+    const json = buildWebSiteJsonLd(profile, "https://amemorymachine.cc");
     expect(json["@type"]).toBe("WebSite");
-    expect(json.url).toBe("https://przknv.cc");
+    expect(json.url).toBe("https://amemorymachine.cc");
   });
 });
 
@@ -102,7 +102,7 @@ describe("getSiteOrigin", () => {
   });
 
   it("defaults to the known production origin", () => {
-    expect(getSiteOrigin()).toBe("https://przknv.cc");
+    expect(getSiteOrigin()).toBe("https://amemorymachine.cc");
   });
 });
 
@@ -119,15 +119,18 @@ describe("buildSitemapXml", () => {
 
 describe("collectSitemapUrls", () => {
   it("emits the homepage and about", () => {
-    const urls = collectSitemapUrls(profile, [], "https://przknv.cc");
-    expect(urls.map((u) => u.loc)).toEqual(["https://przknv.cc/", "https://przknv.cc/about"]);
+    const urls = collectSitemapUrls(profile, [], "https://amemorymachine.cc");
+    expect(urls.map((u) => u.loc)).toEqual([
+      "https://amemorymachine.cc/",
+      "https://amemorymachine.cc/about",
+    ]);
   });
 });
 
 describe("buildRobotsTxt", () => {
   it("references the sitemap", () => {
-    const robots = buildRobotsTxt("https://przknv.cc");
-    expect(robots).toContain("Sitemap: https://przknv.cc/sitemap.xml");
+    const robots = buildRobotsTxt("https://amemorymachine.cc");
+    expect(robots).toContain("Sitemap: https://amemorymachine.cc/sitemap.xml");
     expect(robots).toContain("User-agent: *");
   });
 });
@@ -147,7 +150,7 @@ describe("buildLlmstxt", () => {
   ];
 
   it("includes profile, projects, experience and blog posts", () => {
-    const txt = buildLlmstxt(profile, projects, experience, manifest, "https://przknv.cc");
+    const txt = buildLlmstxt(profile, projects, experience, manifest, "https://amemorymachine.cc");
     expect(txt).toContain("# Harsh Sahu — designer portfolio");
     expect(txt).toContain("[GitHub](https://github.com/parazeeknova)");
     expect(txt).toContain("[Snix](https://tool.example.com): A fast tool — Rust");

@@ -113,14 +113,14 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         rel: "stylesheet",
       },
       {
-        href: "/verso.svg",
+        href: "/amemorymachine.svg",
         rel: "icon",
         sizes: "any",
         type: "image/svg+xml",
       },
       {
         color: "#000000",
-        href: "/verso.svg",
+        href: "/amemorymachine.svg",
         rel: "mask-icon",
       },
     ],
@@ -170,7 +170,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         property: "og:image",
       },
       {
-        content: "https://folio.przknv.cc",
+        content: "https://amemorymachine.cc",
         property: "og:url",
       },
       {

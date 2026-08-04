@@ -274,7 +274,7 @@ const SpaceBreadcrumb = ({
         className={`lowercase ${t("text-text-dark/50 hover:text-text-dark", "text-text-light/50 hover:text-text-light")}`}
         to="/home"
       >
-        <img alt="verso" className="h-3.5 w-3.5" src="/verso.svg" />
+        <img alt="amemorymachine" className="h-3.5 w-3.5" src="/amemorymachine.svg" />
       </Link>
 
       <span className={t("text-text-dark/15", "text-text-light/15")}>/</span>
@@ -418,7 +418,7 @@ const TemplatesBreadcrumb = ({ isDarkMode, navigate, currentPath }: TemplatesBre
         className={`lowercase ${t("text-text-dark/50 hover:text-text-dark", "text-text-light/50 hover:text-text-light")}`}
         to="/home"
       >
-        <img alt="verso" className="h-3.5 w-3.5" src="/verso.svg" />
+        <img alt="amemorymachine" className="h-3.5 w-3.5" src="/amemorymachine.svg" />
       </Link>
 
       <span className={t("text-text-dark/15", "text-text-light/15")}>/</span>
@@ -545,7 +545,7 @@ export const ConsoleNavbar = ({ onToggleSidebar, sidebarOpen }: ConsoleNavbarPro
         className={`flex items-center gap-1.5 lowercase mr-1 md:mr-3 ${t("text-text-dark/70 hover:text-text-dark", "text-text-light/70 hover:text-text-light")}`}
         to="/home"
       >
-        <img alt="verso" className="h-3.5 w-3.5" src="/verso.svg" />
+        <img alt="amemorymachine" className="h-3.5 w-3.5" src="/amemorymachine.svg" />
         verso
       </Link>
     );

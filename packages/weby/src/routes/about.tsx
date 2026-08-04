@@ -8,7 +8,7 @@ export const Route = createFileRoute("/about")({
   head: () => ({
     links: [
       {
-        href: "https://przknv.cc/about",
+        href: "https://amemorymachine.cc/about",
         rel: "canonical",
       },
     ],
@@ -35,10 +35,10 @@ export const Route = createFileRoute("/about")({
         property: "og:description",
       },
       { content: "website", property: "og:type" },
-      { content: "https://przknv.cc/about", property: "og:url" },
+      { content: "https://amemorymachine.cc/about", property: "og:url" },
       { content: "verso", property: "og:site_name" },
       { content: "en_US", property: "og:locale" },
-      { content: "https://przknv.cc/verso-og.png", property: "og:image" },
+      { content: "https://amemorymachine.cc/amemorymachine-og.png", property: "og:image" },
       { content: "1200", property: "og:image:width" },
       { content: "630", property: "og:image:height" },
       { content: "image/png", property: "og:image:type" },
@@ -49,7 +49,7 @@ export const Route = createFileRoute("/about")({
           "verso is a self-hosted personal knowledge base, blog, and portfolio: a public face for visitors and a private, retrieval-augmented mind for its owner.",
         property: "twitter:description",
       },
-      { content: "https://przknv.cc/verso-og.png", property: "twitter:image" },
+      { content: "https://amemorymachine.cc/amemorymachine-og.png", property: "twitter:image" },
     ],
   }),
 });

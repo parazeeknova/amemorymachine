@@ -11,7 +11,7 @@ export const getSiteOrigin = (requestUrl?: string): string => {
   if (requestUrl) {
     return new URL(requestUrl).origin;
   }
-  return "https://przknv.cc";
+  return "https://amemorymachine.cc";
 };
 
 // stripMarkdown flattens the markdown source used for the profile description
@@ -37,7 +37,7 @@ export const truncate = (text: string, max: number): string => {
 // buildPortfolioTitle derives the page title from profile data.
 export const buildPortfolioTitle = (profile?: Profile): string => {
   if (!profile?.name) {
-    return "verso — personal knowledge base and folio";
+    return "amemorymachine — personal knowledge base and folio";
   }
   const { name } = profile;
   const tagline = profile.tagline?.trim();
@@ -54,7 +54,7 @@ export const buildPortfolioDescription = (profile?: Profile): string => {
   if (tagline) {
     return truncate(tagline, 160);
   }
-  return "verso is a personal knowledge base and folio, blog for public face & private brain, one app.";
+  return "amemorymachine is a personal knowledge base and folio, blog for public face & private brain, one app.";
 };
 
 interface PersonJsonLd {
@@ -87,7 +87,7 @@ export const buildPersonJsonLd = (
     alternateName: profile.username || undefined,
     description: truncate(stripMarkdown(profile.description), 300) || undefined,
     email,
-    image: `${origin}/verso-og.png`,
+    image: `${origin}/amemorymachine-og.png`,
     name: profile.name,
     sameAs,
     url: origin,
@@ -213,7 +213,7 @@ export const buildLlmstxt = (
 ): string => {
   const lines: string[] = [];
 
-  const title = profile?.name?.trim() || "verso";
+  const title = profile?.name?.trim() || "amemorymachine";
   const tagline = profile?.tagline?.trim();
   const heading = tagline ? `${title} — ${tagline}` : title;
   lines.push(`# ${heading}`, "");
@@ -223,7 +223,7 @@ export const buildLlmstxt = (
 
   lines.push("## Portfolio");
   lines.push(`- [Homepage](${origin}/): ${tagline || "portfolio and blog"}`);
-  lines.push(`- [About](${origin}/about): about verso and its owner`);
+  lines.push(`- [About](${origin}/about): about amemorymachine and its owner`);
 
   const socialLinks = Object.entries(profile?.links ?? {})
     .filter(([, link]) => link?.url && link?.label)
@@ -261,7 +261,7 @@ export const buildLlmstxt = (
     }
   }
 
-  lines.push("", `## Details`, `Made with verso — a self-hosted personal knowledge base.`);
+  lines.push("", `## Details`, `Made with amemorymachine — a self-hosted personal knowledge base.`);
   lines.push("", "");
   return lines.join("\n");
 };

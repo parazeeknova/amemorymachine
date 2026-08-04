@@ -985,7 +985,7 @@ export const AboutPage = () => {
     operatingSystem: "macOS, Windows, Linux",
     sameAs: [GH],
     softwareVersion: stripV(latest.tag_name),
-    url: "https://przknv.cc/about",
+    url: "https://amemorymachine.cc/about",
   };
   const desktopKeys = new Set<DownloadKey>(["appimage", "deb", "linux", "mac", "rpm", "win"]);
   const managerKeys = new Set<DownloadKey>(["arch", "nix"]);
@@ -1057,7 +1057,7 @@ export const AboutPage = () => {
           }}
         >
           <a className="flex items-center gap-2 lowercase" href="/">
-            <img alt="verso" className="h-4 w-4" src="/verso.svg" />
+            <img alt="amemorymachine" className="h-4 w-4" src="/amemorymachine.svg" />
             verso
           </a>
           <div className="flex items-center gap-3">
@@ -1083,7 +1083,7 @@ export const AboutPage = () => {
           className={`flex items-center justify-between border-b pb-3 mb-10 text-[13px] ${t("border-border-dark", "border-border-light")}`}
         >
           <a className="flex items-center gap-2 lowercase" href="/">
-            <img alt="verso" className="h-4 w-4" src="/verso.svg" />
+            <img alt="amemorymachine" className="h-4 w-4" src="/amemorymachine.svg" />
             verso
           </a>
           <div className="flex items-center gap-4 lowercase">
@@ -1110,7 +1110,11 @@ export const AboutPage = () => {
             <br />
             two minds.
           </GradientText>
-          <img alt="verso" className="h-20 w-20 shrink-0 sm:h-32 sm:w-32" src="/verso.svg" />
+          <img
+            alt="amemorymachine"
+            className="h-20 w-20 shrink-0 sm:h-32 sm:w-32"
+            src="/amemorymachine.svg"
+          />
         </div>
 
         <p
@@ -1128,7 +1132,7 @@ export const AboutPage = () => {
         <div className="mt-8 flex flex-wrap gap-3">
           <a
             className={`flex items-center gap-2 border px-5 py-2.5 text-[13px] lowercase transition-colors ${t("border-border-dark bg-text-dark text-bg-dark hover:bg-text-dark/90", "border-border-light bg-text-light text-bg-light hover:bg-text-light/90")}`}
-            href="https://przknv.cc"
+            href="https://amemorymachine.cc"
             rel="noopener noreferrer"
             style={{
               backgroundImage: isDarkMode
@@ -1684,7 +1688,11 @@ export const AboutPage = () => {
           <div className={`border-t ${t("border-border-dark", "border-border-light")}`} />
           <div className="flex flex-col items-center pt-12 pb-4">
             <div className="flex items-end gap-4 sm:gap-6">
-              <img alt="verso" className="h-16 sm:h-24 lg:h-28 mb-2 opacity-80" src="/verso.svg" />
+              <img
+                alt="amemorymachine"
+                className="h-16 sm:h-24 lg:h-28 mb-2 opacity-80"
+                src="/amemorymachine.svg"
+              />
               <GradientText
                 as="h2"
                 className="text-8xl lg:text-[10em] font-bold tracking-tight lowercase"
@@ -1715,7 +1723,7 @@ export const AboutPage = () => {
               </a>
               <a
                 className={t("hover:text-text-dark/70", "hover:text-text-light/70")}
-                href="https://przknv.cc"
+                href="https://amemorymachine.cc"
                 rel="noopener noreferrer"
                 target="_blank"
               >
