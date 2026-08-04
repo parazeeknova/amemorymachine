@@ -279,7 +279,7 @@ export const TabBar = memo(
         })}
         <div
           ref={indicatorRef}
-          className="absolute left-0 -bottom-1 h-[7px]"
+          className="absolute left-0 -bottom-1 h-1.75"
           style={{
             backgroundImage: squiggleSvg,
             backgroundPosition: "left bottom",

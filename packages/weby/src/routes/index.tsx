@@ -48,6 +48,7 @@ import {
 } from "#/server/seo";
 import { useTheme } from "#/shared/hooks/use-theme";
 import { crossfadeVideo, getHeaderGradient } from "#/shared/lib/video-helpers";
+import { generatePortfolioMarkdown } from "#/features/templates/lib/portfolio-markdown";
 
 interface PortfolioLoaderData {
   profile?: Profile;
@@ -145,6 +146,7 @@ const Home = function Home() {
   } | null>(null);
   const [isAtBottom, setIsAtBottom] = useState(false);
   const [isScrolled, setIsScrolled] = useState(false);
+  const [isRawOpen, setIsRawOpen] = useState(false);
   const isMobile = useIsMobile();
 
   useEffect(() => {
@@ -180,6 +182,26 @@ const Home = function Home() {
   const { data: profile } = useProfile(loaderData?.profile);
   const { data: experience } = useExperience(loaderData?.experience);
   const { data: projects } = useProjects(loaderData?.projects);
+
+  const rawMarkdown = useMemo(() => {
+    if (!profile || !experience || !projects) {
+      return "";
+    }
+    return generatePortfolioMarkdown(profile, experience, projects);
+  }, [experience, profile, projects]);
+
+  useEffect(() => {
+    if (!isRawOpen) {
+      return;
+    }
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") {
+        setIsRawOpen(false);
+      }
+    };
+    document.addEventListener("keydown", onKey);
+    return () => document.removeEventListener("keydown", onKey);
+  }, [isRawOpen]);
 
   useEffect(() => {
     if (profile) {
@@ -466,24 +488,23 @@ const Home = function Home() {
             column once you scroll past the top */}
         <nav
           aria-label="quick nav"
-          className={`fixed top-3 z-50 flex items-center gap-4 transition-opacity duration-300 right-[max(1rem,calc((100vw-48rem)/2+1rem))] sm:right-[max(1.5rem,calc((100vw-48rem)/2+1.5rem))] lg:right-[max(2rem,calc((100vw-48rem)/2+2rem))] ${
+          className={`fixed top-3 z-50 flex items-center gap-4 px-3 py-1.5 transition-opacity duration-300 bg-linear-to-l ${
+            isDarkMode ? "from-white/10 to-transparent" : "from-black/8 to-transparent"
+          } right-[max(1rem,calc((100vw-48rem)/2+1rem))] sm:right-[max(1.5rem,calc((100vw-48rem)/2+1.5rem))] lg:right-[max(2rem,calc((100vw-48rem)/2+2rem))] ${
             isScrolled ? "opacity-100" : "pointer-events-none opacity-0"
           }`}
         >
-          {profile?.resumeUrl && (
-            <a
-              className={`text-[13px] lowercase focus:outline-none hover:opacity-70 ${
-                isDarkMode
-                  ? "text-text-dark/60 hover:text-text-dark"
-                  : "text-text-light/60 hover:text-text-light"
-              }`}
-              href={profile.resumeUrl}
-              rel="noopener noreferrer"
-              target="_blank"
-            >
-              raw
-            </a>
-          )}
+          <button
+            className={`text-[13px] lowercase focus:outline-none hover:opacity-70 ${
+              isDarkMode
+                ? "text-text-dark/60 hover:text-text-dark"
+                : "text-text-light/60 hover:text-text-light"
+            }`}
+            onClick={() => setIsRawOpen(true)}
+            type="button"
+          >
+            raw
+          </button>
           <button
             className={`text-[13px] lowercase focus:outline-none hover:opacity-70 ${
               isDarkMode
@@ -511,6 +532,17 @@ const Home = function Home() {
           </button>
         </nav>
         <div className="flex items-center justify-end gap-3 w-full">
+          <button
+            className={`text-[13px] lowercase focus:outline-none hover:opacity-70 ${
+              isDarkMode
+                ? "text-text-dark/60 hover:text-text-dark"
+                : "text-text-light/60 hover:text-text-light"
+            }`}
+            onClick={() => setIsRawOpen(true)}
+            type="button"
+          >
+            raw
+          </button>
           <button
             className={`text-[13px] lowercase focus:outline-none hover:opacity-70 ${
               isDarkMode
@@ -577,6 +609,48 @@ const Home = function Home() {
           <span className="font-display text-4xl sm:text-5xl opacity-40">— El Psy Kongroo</span>
         </div>
       </div>
+
+      {/* raw portfolio markdown modal */}
+      {isRawOpen && (
+        <div
+          aria-label="Raw portfolio markdown"
+          aria-modal="true"
+          className="fixed inset-0 z-50 flex items-center justify-center p-4"
+          role="dialog"
+        >
+          <div
+            aria-hidden
+            className="absolute inset-0 bg-black/50"
+            onClick={() => setIsRawOpen(false)}
+          />
+          <div
+            className={`relative flex max-h-[85vh] w-full max-w-2xl flex-col border ${
+              isDarkMode ? "border-border-dark bg-bg-dark" : "border-border-light bg-bg-light"
+            }`}
+          >
+            <div
+              className={`flex items-center justify-between border-b px-3 py-2 ${
+                isDarkMode ? "border-border-dark/40" : "border-border-light/40"
+              }`}
+            >
+              <span className="font-mono text-[11px] lowercase text-gray-500">portfolio.md</span>
+              <button
+                aria-label="Close"
+                className={`text-[11px] lowercase hover:opacity-70 ${
+                  isDarkMode ? "text-text-dark/60" : "text-text-light/60"
+                }`}
+                onClick={() => setIsRawOpen(false)}
+                type="button"
+              >
+                close
+              </button>
+            </div>
+            <pre className="overflow-auto p-4 font-mono text-[11px] leading-relaxed whitespace-pre-wrap break-words text-gray-400">
+              {rawMarkdown}
+            </pre>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
