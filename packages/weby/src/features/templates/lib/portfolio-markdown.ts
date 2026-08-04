@@ -276,11 +276,11 @@ export const generatePortfolioMarkdown = (
         title: "Saltwise by Dr. Chandra Mohana",
       },
       {
-        desc: "We won HackByte 4.0 First place. 48 hours, 20+ cups of coffee, three humans running on pure spite and caffeine: me, Aman Aziz and Koustubh Pande. We built Chorus, an infinite spatial canvas for AI-assisted development: coding tasks become cards on a canvas and agents execute them autonomously in parallel, across multiple projects at once, while you stay in control through a single prompt interface directing master agents and their subagents. 110+ providers, 4000+ models. Check progress from your phone mid-run, get notified, prompt on the go. Deploy to your own VPS or run it locally, you own the whole stack. For the demo, we sent a voice note from a phone: three model providers spun up, running multiple models simultaneously, writing and running unit, integration, and e2e tests across separate projects on the laptop in front of judges from Microsoft, Adobe, and Amazon. Thank you BitByte TPC and IIITDM Jabalpur and Major League Hacking for the chaos, the caffeine, and a memory we will not forget anytime soon.",
+        desc: "Won HackByte 4.0 First place at IIIT Jabalpur with MLH. 48 hours, three humans, pure spite and caffeine: me, Aman Aziz and Koustubh Pande. We built Chorus, an infinite spatial canvas for AI-assisted development: coding tasks become cards on a canvas, agents execute them in parallel across multiple projects, and you direct master agents and their subagents from a single prompt interface. 110+ providers, 4000+ models. For the demo we sent a voice note from a phone and ran multiple models writing and executing tests live in front of judges from Microsoft, Adobe, and Amazon.",
         image: "https://img.przknv.cc/t/1775453585144.jpg",
         logo: "https://img.przknv.cc/t/1775453588171.jpg",
         productUrl: "",
-        readmeUrl: "",
+        readmeUrl: "https://img.przknv.cc/t/hball-2.jpeg",
         repoUrl: "",
         section: "hackathon",
         stack: "Apr 2026 · Winner (1st Position) · IIIT Jabalpur · MLH",
@@ -289,7 +289,7 @@ export const generatePortfolioMarkdown = (
       {
         desc: "Secured 2nd place in the Wikimedia track at HackByte 3.0. Judged by mentors from the Wikimedia Foundation.",
         image: "https://img.przknv.cc/t/hackbyte-3.png",
-        logo: "",
+        logo: "https://img.przknv.cc/t/Screenshot_2026-08-04_16.08.19.png",
         productUrl: "",
         readmeUrl: "",
         repoUrl: "",
