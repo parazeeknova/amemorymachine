@@ -6,6 +6,7 @@ import (
 	"fmt"
 	"io"
 	"net/http"
+	"net/url"
 	"os"
 	"os/exec"
 
@@ -21,6 +22,14 @@ func (h *Handlers) GetVideoThumbnail(c *gin.Context) {
 	videoURL := c.Query("url")
 	if videoURL == "" {
 		c.JSON(http.StatusBadRequest, gin.H{"error": "url query parameter is required"})
+		return
+	}
+
+	// Only allow http/https so the endpoint cannot be pointed at local
+	// files or other schemes (SSRF hardening).
+	parsed, err := url.Parse(videoURL)
+	if err != nil || (parsed.Scheme != "http" && parsed.Scheme != "https") || parsed.Host == "" {
+		c.JSON(http.StatusBadRequest, gin.H{"error": "url must be an http(s) URL"})
 		return
 	}
 
@@ -50,7 +59,15 @@ func (h *Handlers) GetVideoThumbnail(c *gin.Context) {
 	tmpPath := tmpFile.Name()
 	defer func() { _ = os.Remove(tmpPath) }()
 
-	resp, err := http.Get(videoURL)
+	// Fetch with the request context so a client disconnect cancels the
+	// download, and cap the body to avoid unbounded memory/disk usage.
+	req, err := http.NewRequestWithContext(c.Request.Context(), http.MethodGet, videoURL, nil)
+	if err != nil {
+		_ = tmpFile.Close()
+		c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("failed to build request: %v", err)})
+		return
+	}
+	resp, err := http.DefaultClient.Do(req)
 	if err != nil {
 		_ = tmpFile.Close()
 		c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("failed to fetch video: %v", err)})
@@ -64,9 +81,20 @@ func (h *Handlers) GetVideoThumbnail(c *gin.Context) {
 		return
 	}
 
-	if _, err := io.Copy(tmpFile, resp.Body); err != nil {
+	const maxVideoBytes = 500 << 20 // 500 MiB cap
+	if resp.ContentLength > maxVideoBytes {
+		_ = tmpFile.Close()
+		c.JSON(http.StatusBadRequest, gin.H{"error": "video too large"})
+		return
+	}
+	if _, err := io.Copy(tmpFile, io.LimitReader(resp.Body, maxVideoBytes+1)); err != nil {
 		_ = tmpFile.Close()
 		c.JSON(http.StatusInternalServerError, gin.H{"error": fmt.Sprintf("failed to download video: %v", err)})
+		return
+	}
+	if info, statErr := tmpFile.Stat(); statErr == nil && info.Size() > maxVideoBytes {
+		_ = tmpFile.Close()
+		c.JSON(http.StatusBadRequest, gin.H{"error": "video too large"})
 		return
 	}
 	_ = tmpFile.Close()
@@ -99,15 +127,34 @@ func (h *Handlers) GetVideoThumbnail(c *gin.Context) {
 	c.Data(http.StatusOK, "image/jpeg", thumbData)
 }
 
-// DeleteVideoThumbnails removes all cached video thumbnails from RustFS.
-// Called after a template save to clean up stale thumbnails from old video URLs.
+// DeleteVideoThumbnails removes cached video thumbnails whose keys are not
+// derived from the video URLs the caller is still using. Callers send the
+// current video URLs in the request body, so unrelated thumbnails (other
+// profiles, other content) are left intact.
 func (h *Handlers) DeleteVideoThumbnails(c *gin.Context) {
-	if h.storageClient != nil {
-		if err := h.storageClient.ClearObjects(c.Request.Context(), thumbnailBucket); err != nil {
-			log.Error().Err(err).Msg("failed to clear video thumbnails")
-			c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to clear thumbnails"})
-			return
-		}
+	if h.storageClient == nil {
+		c.JSON(http.StatusOK, gin.H{"status": "ok", "message": "video thumbnails cleared"})
+		return
+	}
+
+	var req struct {
+		URLs []string `json:"urls"`
+	}
+	_ = c.ShouldBindJSON(&req)
+
+	currentKeys := make(map[string]struct{}, len(req.URLs))
+	for _, u := range req.URLs {
+		hash := sha256.Sum256([]byte(u))
+		currentKeys[hex.EncodeToString(hash[:])+".jpg"] = struct{}{}
+	}
+
+	if err := h.storageClient.DeleteObjectsIf(c.Request.Context(), thumbnailBucket, func(key string) bool {
+		_, keep := currentKeys[key]
+		return !keep
+	}); err != nil {
+		log.Error().Err(err).Msg("failed to clear stale video thumbnails")
+		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to clear thumbnails"})
+		return
 	}
 	c.JSON(http.StatusOK, gin.H{"status": "ok", "message": "video thumbnails cleared"})
 }

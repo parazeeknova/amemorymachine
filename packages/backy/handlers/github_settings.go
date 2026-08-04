@@ -34,6 +34,10 @@ func encryptToken(plaintext string) ([]byte, error) {
 }
 
 func decryptToken(encrypted []byte) (string, error) {
+	// A sealed box is nonce (24) + ciphertext + secretbox overhead (16).
+	if len(encrypted) < 24+secretbox.Overhead {
+		return "", os.ErrInvalid
+	}
 	key := deriveKey()
 	var nonce [24]byte
 	copy(nonce[:], encrypted[:24])
@@ -53,6 +57,10 @@ type GitHubSettings struct {
 
 func (h *Handlers) GetGitHubSettings(c *gin.Context) {
 	pool := database.PoolAvailable()
+	if pool == nil {
+		c.JSON(http.StatusServiceUnavailable, gin.H{"error": "database unavailable"})
+		return
+	}
 	var enabled bool
 	var username string
 	var tokenEncrypted []byte

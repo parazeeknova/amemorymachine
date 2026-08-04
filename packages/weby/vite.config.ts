@@ -20,18 +20,14 @@ const readPackageVersion = (): string => {
 const config = defineConfig(async ({ mode }) => {
   const env = loadEnv(mode, process.cwd(), "");
   const port = env.PORT || env.BACKEND_PORT || "7000";
-  const isCloudflare = env.CLOUDFLARE === "1";
   const appVersion = readPackageVersion();
 
   const plugins = [devtools(), tailwindcss(), tanstackStart(), viteReact()];
 
-  if (isCloudflare) {
-    const { cloudflare } = await import("@cloudflare/vite-plugin");
-    plugins.unshift(cloudflare({ viteEnvironment: { name: "ssr" } }));
-  } else {
-    const { nitro } = await import("nitro/vite");
-    plugins.push(nitro({ preset: "node-server" }));
-  }
+  // Self-hosted node-server build (nitro). Deployed as the verso-web
+  // docker image; Cloudflare Workers is no longer a target.
+  const { nitro } = await import("nitro/vite");
+  plugins.push(nitro({ preset: "node-server" }));
 
   return {
     define: {

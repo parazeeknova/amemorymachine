@@ -1,6 +1,6 @@
 {
   "name": "@verso/weby",
-  "version": "0.7.32",
+  "version": "0.7.33",
   "private": true,
   "type": "module",
   "imports": {
@@ -9,8 +9,6 @@
   "scripts": {
     "build": "vite build",
     "check-types": "tsc --noEmit",
-    "cf-typegen": "wrangler types",
-    "deploy": "CLOUDFLARE=1 bun run build && wrangler deploy",
     "dev": "NODE_OPTIONS=\"--localstorage-file=/tmp/verso-localstorage\" vite dev --port 3000",
     "preview": "vite preview",
     "test": "vitest run"
@@ -86,7 +84,6 @@
     "zustand": "^5.0.14"
   },
   "devDependencies": {
-    "@cloudflare/vite-plugin": "^1.47.0",
     "@tailwindcss/typography": "^0.5.20",
     "@tanstack/devtools-vite": "^0.6.1",
     "@testing-library/dom": "^10.4.1",
@@ -100,8 +97,7 @@
     "jsdom": "^29.1.1",
     "typescript": "^7.0.2",
     "vite": "^8.1.5",
-    "vitest": "^4.1.10",
-    "wrangler": "^4.114.0"
+    "vitest": "^4.1.10"
   },
   "pnpm": {
     "onlyBuiltDependencies": [

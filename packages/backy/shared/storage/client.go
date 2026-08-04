@@ -191,6 +191,67 @@ func (c *Client) ClearObjects(ctx context.Context, bucket string) error {
 	}
 }
 
+// DeleteObjects deletes only the given keys from the bucket, leaving the
+// rest of the bucket intact.
+func (c *Client) DeleteObjects(ctx context.Context, bucket string, keys []string) error {
+	if len(keys) == 0 {
+		return nil
+	}
+	objects := make([]types.ObjectIdentifier, 0, len(keys))
+	for _, key := range keys {
+		objects = append(objects, types.ObjectIdentifier{Key: aws.String(key)})
+	}
+	_, err := c.s3.DeleteObjects(ctx, &s3.DeleteObjectsInput{
+		Bucket: aws.String(bucket),
+		Delete: &types.Delete{Objects: objects},
+	})
+	return err
+}
+
+// DeleteObjectsIf lists the bucket and deletes every object whose key
+// matches the predicate. Returns the number of objects deleted.
+func (c *Client) DeleteObjectsIf(ctx context.Context, bucket string, keep func(key string) bool) error {
+	in := &s3.ListObjectsV2Input{Bucket: aws.String(bucket)}
+	for {
+		out, err := c.s3.ListObjectsV2(ctx, in)
+		if err != nil {
+			var apiErr smithy.APIError
+			if errors.As(err, &apiErr) {
+				code := apiErr.ErrorCode()
+				if code == "NoSuchBucket" || code == "NoSuchKey" || code == "NotFound" {
+					return nil
+				}
+			}
+			return fmt.Errorf("list objects: %w", err)
+		}
+		if len(out.Contents) == 0 {
+			return nil
+		}
+
+		var objects []types.ObjectIdentifier
+		for _, obj := range out.Contents {
+			if obj.Key != nil && keep(*obj.Key) {
+				objects = append(objects, types.ObjectIdentifier{Key: obj.Key})
+			}
+		}
+		if len(objects) > 0 {
+			_, err = c.s3.DeleteObjects(ctx, &s3.DeleteObjectsInput{
+				Bucket: aws.String(bucket),
+				Delete: &types.Delete{Objects: objects},
+			})
+			if err != nil {
+				return fmt.Errorf("delete objects: %w", err)
+			}
+		}
+
+		if out.IsTruncated != nil && *out.IsTruncated {
+			in.ContinuationToken = out.NextContinuationToken
+		} else {
+			return nil
+		}
+	}
+}
+
 // DeleteBucketAndObjects deletes all objects in the bucket, then deletes the bucket itself.
 func (c *Client) DeleteBucketAndObjects(ctx context.Context, bucket string) error {
 	in := &s3.ListObjectsV2Input{
