@@ -134,6 +134,7 @@ export const generatePortfolioMarkdown = (
       {
         desc: "A fully declarative, highly opinionated, and reproducible NixOS/Hyprland desktop environment. Equipped with a custom Rust-based daemon (wabi), interactive QML-based Quickshell widgets, and dynamic Material You color schemes generated from your wallpapers via Matugen. Includes local AI workflows (OCR, Speech-to-Text, and LLMs) along with Waydroid virtualization and Cockpit server panel integration out of the box. Designed to look gorgeous without bloated overhead.",
         image: "https://img.przknv.cc/t/doty.png",
+        logo: "https://img.przknv.cc/t/dotly.png",
         productUrl: "https://github.com/parazeeknova/doty",
         readmeUrl:
           "https://raw.githubusercontent.com/parazeeknova/doty/refs/heads/main/.github/README.md",
