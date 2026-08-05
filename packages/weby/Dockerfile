@@ -26,6 +26,6 @@ COPY --from=build /app/packages/weby/.output ./.output
 COPY --from=build /app/node_modules/undici ./node_modules/undici
 USER node
 EXPOSE 8080
-HEALTHCHECK --interval=30s --timeout=3s --start-period=5s --retries=3 \
+HEALTHCHECK --interval=30s --timeout=10s --start-period=15s --retries=3 \
   CMD node -e "fetch('http://127.0.0.1:8080/').then((r)=>{if(!r.ok)process.exit(1)}).catch(()=>process.exit(1))"
 CMD ["node", ".output/server/index.mjs"]
