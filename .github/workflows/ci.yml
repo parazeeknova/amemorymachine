@@ -175,16 +175,23 @@ jobs:
           cache-from: type=gha
           cache-to: type=gha,mode=max
 
-      - name: Verify SSR bundle is self-contained (weby)
+      - name: Verify SSR runtime deps are present (weby)
         if: matrix.package == 'weby'
         run: |
           IMAGE="${{ env.REGISTRY }}/${{ github.repository_owner }}/${{ matrix.image-name }}:${{ needs.check-release-tag.outputs.tag }}"
           podman pull "$IMAGE" >/dev/null 2>&1 || docker pull "$IMAGE" >/dev/null 2>&1
-          if podman run --rm --platform linux/amd64 --entrypoint sh "$IMAGE" -c "grep -rl 'from \"undici\"' /app/.output/server/_ssr/ 2>/dev/null" | grep -q .; then
-            echo "::error::SSR bundle still externalizes undici; production image has no node_modules and will crash on every request"
-            exit 1
-          fi
-          echo "SSR bundle is self-contained"
+          podman run --rm --platform linux/amd64 --entrypoint sh "$IMAGE" -c '
+            set -e
+            if grep -rl "from \"undici\"" /app/.output/server/_ssr/ 2>/dev/null | grep -q .; then
+              # The SSR bundle externalizes undici: it must be shipped in the
+              # image node_modules (the Dockerfile copies it from the build stage).
+              test -f /app/node_modules/undici/package.json || {
+                echo "::error::SSR bundle externalizes undici but the image does not ship it; every request will crash with ERR_MODULE_NOT_FOUND"
+                exit 1
+              }
+            fi
+          '
+          echo "SSR runtime deps are present"
 
       - name: Generate attestation
         uses: actions/attest-build-provenance@v4
