@@ -20,6 +20,7 @@ CREATE TABLE IF NOT EXISTS portfolio_experiences (
     title TEXT NOT NULL DEFAULT '',
     location TEXT NOT NULL DEFAULT '',
     period TEXT NOT NULL DEFAULT '',
+    description TEXT NOT NULL DEFAULT '',
     position INT NOT NULL DEFAULT 0,
     created_at TIMESTAMPTZ NOT NULL DEFAULT NOW(),
     updated_at TIMESTAMPTZ NOT NULL DEFAULT NOW()
