@@ -19,7 +19,7 @@
     "build": "lerna run build",
     "check": "ultracite fix --unsafe && lerna run check",
     "check-types": "lerna run check-types",
-    "dev": "lerna run dev",
+    "dev": "docker compose -f docker/docker-compose.infrastructure.yml up -d && lerna run dev",
     "infra:down": "docker compose -f docker/docker-compose.infrastructure.yml down",
     "infra:up": "docker compose -f docker/docker-compose.infrastructure.yml up -d",
     "db:migrate": "lerna run db:migrate",

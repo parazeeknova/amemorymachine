@@ -88,7 +88,7 @@ func main() {
 	dbAvailable := dbErr == nil
 	var storageClient *storage.Client
 	if !dbAvailable {
-		log.Warn().Err(dbErr).Msg("database init warning, blog endpoints will be unavailable")
+		log.Fatal().Err(dbErr).Msg("database unreachable — start it with `bun run infra:up` from the repo root, then retry")
 	} else {
 		pool := database.GetPool()
 		if err := database.MigrateUp(context.Background(), pool); err != nil {

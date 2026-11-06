@@ -28,7 +28,9 @@ const config = defineConfig(async ({ mode }) => {
     ...loadEnv(mode, process.cwd(), ""),
     ...process.env,
   };
-  const port = env.PORT || env.BACKEND_PORT || "7000";
+  // Proxy target is always backy, never this dev server: use BACKY_PORT,
+  // not PORT (PORT is overridden to 3000 for the weby dev server itself).
+  const backyPort = env.BACKY_PORT || "7000";
   const appVersion = readPackageVersion();
 
   const plugins = [devtools(), tailwindcss(), tanstackStart(), viteReact()];
@@ -87,7 +89,7 @@ const config = defineConfig(async ({ mode }) => {
               }
             });
           },
-          target: `http://localhost:${port}`,
+          target: `http://localhost:${backyPort}`,
         },
       },
     },
