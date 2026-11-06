@@ -14,7 +14,7 @@ optdepends=('gstreamer: audio/video support'
 provides=('amemorymachine')
 conflicts=('amemorymachine')
 source=("https://github.com/parazeeknova/amemorymachine/releases/download/v${pkgver}/stable-linux-x64-Amemorymachine-Setup.tar.gz")
-sha256sums=('6e6d8d9788cfb8b1a4eddba425b9bf227f15913dd86fb9567d9dfb6f6e140b55')
+sha256sums=('3211382b424c164f4d79cf9eec0a025541fcbbbf5837a2641984eb958fbf47dc')
 
 package() {
     # Install application files
