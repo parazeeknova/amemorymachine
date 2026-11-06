@@ -35,7 +35,11 @@ import (
 )
 
 func main() {
-	_ = godotenv.Load()
+	// Env cascade (first file wins in godotenv, OS env always wins):
+	// root .env (gitignored overrides) > root .env.development (committed)
+	// > package .env > package .env.development.
+	// This mirrors the dev scripts: dotenv -e ../../.env -e ../../.env.development.
+	_ = godotenv.Load("../../.env", "../../.env.development", ".env", ".env.development")
 
 	log := logger.Log
 

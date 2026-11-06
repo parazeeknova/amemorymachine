@@ -1,6 +1,6 @@
 {
   "name": "@amemorymachine/weby",
-  "version": "0.7.45",
+  "version": "0.7.46",
   "private": true,
   "type": "module",
   "imports": {
@@ -9,7 +9,7 @@
   "scripts": {
     "build": "vite build",
     "check-types": "tsc --noEmit",
-    "dev": "NODE_OPTIONS=\"--localstorage-file=/tmp/verso-localstorage\" vite dev --port 3000",
+    "dev": "dotenv -e ../../.env -e ../../.env.development -- cross-env NODE_OPTIONS=--localstorage-file=/tmp/amemorymachine-localstorage vite dev --port 3000",
     "preview": "vite preview",
     "test": "vitest run"
   },

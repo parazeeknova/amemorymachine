@@ -16,3 +16,12 @@ dist/
 .direnv/
 slop.md
 packages/native/artifacts
+
+# Env: commit .env.development + .env.example, never local overrides.
+# Root .env wins over .env.development (dotenv -e .env -e .env.development).
+.env
+.env.local
+.env.*.local
+packages/*/.env
+packages/*/.env.local
+!packages/*/.env.example

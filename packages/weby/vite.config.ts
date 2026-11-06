@@ -18,7 +18,16 @@ const readPackageVersion = (): string => {
 };
 
 const config = defineConfig(async ({ mode }) => {
-  const env = loadEnv(mode, process.cwd(), "");
+  // Merge order (later wins, real process.env wins overall):
+  // root .env.development (committed) < package .env files < dotenv-cli injection < OS env.
+  // Dev scripts run: dotenv -e ../../.env -e ../../.env.development (first -e wins),
+  // so root .env overrides root .env.development before Vite even starts.
+  const rootDir = resolve(process.cwd(), "../..");
+  const env = {
+    ...loadEnv(mode, rootDir, ""),
+    ...loadEnv(mode, process.cwd(), ""),
+    ...process.env,
+  };
   const port = env.PORT || env.BACKEND_PORT || "7000";
   const appVersion = readPackageVersion();
 

@@ -1,12 +1,12 @@
 services:
   postgres:
     image: postgres:18.3
-    container_name: verso-postgres
+    container_name: amemorymachine-postgres
     restart: unless-stopped
     environment:
-      POSTGRES_DB: ${POSTGRES_DB:-verso}
-      POSTGRES_USER: ${POSTGRES_USER:-verso}
-      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-verso_secure_password}
+      POSTGRES_DB: ${POSTGRES_DB:-amemorymachine}
+      POSTGRES_USER: ${POSTGRES_USER:-amemorymachine}
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD:-amemorymachine_dev_password}
       POSTGRES_HOST_AUTH_METHOD: ${POSTGRES_HOST_AUTH_METHOD:-md5}
       PGDATA: /var/lib/postgresql/pgdata
     ports:
@@ -14,20 +14,20 @@ services:
     volumes:
       - postgres_data:/var/lib/postgresql
     healthcheck:
-      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-verso}"]
+      test: ["CMD-SHELL", "pg_isready -U ${POSTGRES_USER:-amemorymachine}"]
       interval: 10s
       timeout: 5s
       retries: 5
     networks:
-      - verso-network
+      - amemorymachine-network
 
   rustfs:
     image: rustfs/rustfs:${RUSTFS_VERSION:-latest}
-    container_name: verso-rustfs
+    container_name: amemorymachine-rustfs
     restart: unless-stopped
     environment:
-      RUSTFS_ACCESS_KEY: ${RUSTFS_ACCESS_KEY:-verso}
-      RUSTFS_SECRET_KEY: ${RUSTFS_SECRET_KEY:-verso_secret_key}
+      RUSTFS_ACCESS_KEY: ${RUSTFS_ACCESS_KEY:-amemorymachine}
+      RUSTFS_SECRET_KEY: ${RUSTFS_SECRET_KEY:-amemorymachine_dev_secret}
       RUSTFS_VOLUMES: /data
       RUSTFS_ADDRESS: 0.0.0.0:9000
       RUSTFS_CONSOLE_ADDRESS: 0.0.0.0:9001
@@ -43,7 +43,7 @@ services:
       timeout: 5s
       retries: 5
     networks:
-      - verso-network
+      - amemorymachine-network
 
 volumes:
   postgres_data:
@@ -54,5 +54,5 @@ volumes:
     driver: local
 
 networks:
-  verso-network:
+  amemorymachine-network:
     driver: bridge

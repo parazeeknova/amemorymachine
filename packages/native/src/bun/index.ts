@@ -70,7 +70,7 @@ const getAppUrl = async (): Promise<{ url: string; env: "dev" | "prod" }> => {
   process.env.NODE_ENV = "production";
 
   if (!process.env.BACKY_ORIGIN) {
-    process.env.BACKY_ORIGIN = "https://verso-serve.przknv.cc";
+    process.env.BACKY_ORIGIN = "http://localhost:7000";
   }
 
   const serverPath = join(PATHS.VIEWS_FOLDER, "weby-server", "server", "index.mjs");
