@@ -41,6 +41,11 @@ const config = defineConfig(async ({ mode }) => {
   plugins.push(nitro({ noExternals: ["undici"], preset: "node-server" }));
 
   return {
+    // NOTE: `undici` is imported by the SSE stream proxy routes (server-only
+    // `Agent` with timeouts disabled). It must stay external in SSR: inlining
+    // its CJS entry into the ESM module runner crashes dev SSR with
+    // `require is not defined`. The production image already ships
+    // `node_modules/undici`, so runtime resolution works in both cases.
     define: {
       "import.meta.env.VITE_APP_ORIGIN": JSON.stringify(
         env.VITE_APP_ORIGIN?.trim() || "https://amemorymachine.cc",
@@ -92,12 +97,6 @@ const config = defineConfig(async ({ mode }) => {
           target: `http://localhost:${backyPort}`,
         },
       },
-    },
-    ssr: {
-      // Prefer inlining undici into the SSR bundle. Some build environments
-      // (containerized bun) still externalize it via TanStack Start's router
-      // chunk, so the Dockerfile additionally ships the package in the image.
-      noExternal: ["undici"],
     },
   };
 });
