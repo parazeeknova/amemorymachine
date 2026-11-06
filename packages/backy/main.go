@@ -107,12 +107,6 @@ func main() {
 		}
 	}
 
-	// Create handlers with configuration
-	cfg := handlers.Config{
-		GitHubToken:    os.Getenv("GITHUB_TOKEN"),
-		GitHubUsername: getEnvOrDefault("GITHUB_USERNAME", "parazeeknova"),
-	}
-
 	var h *handlers.Handlers
 	var notificationService *notifeat.NotificationService
 	var hub *notifeat.NotificationHub
@@ -176,12 +170,11 @@ func main() {
 		spaceService.SetCommentRepo(commentRepo)
 		commentHandlers = commentfeat.NewCommentHandlers(commentService, commentHub)
 
-		h = handlers.NewWithDB(cfg, pageService, spaceService, workspaceService, groupService)
+		h = handlers.NewWithDB(pageService, spaceService, workspaceService, groupService)
 		h.SetNotifier(notificationService)
 		h.SetPageFavoriteRepo(pageFavRepo)
-		h.SetPortfolioRepo(repositories.NewPortfolioRepo())
 	} else {
-		h = handlers.New(cfg)
+		h = handlers.New()
 	}
 	if storageClient != nil {
 		h.SetStorageClient(storageClient)
@@ -298,15 +291,6 @@ func main() {
 	// API routes
 	api := r.Group("/api")
 	{
-		api.GET("/profile", h.GetProfile)
-		api.GET("/experience", h.GetExperience)
-		api.GET("/projects", h.GetProjects)
-		api.GET("/github/stats", h.GetGitHubStats)
-		api.GET("/github/enabled", h.GetGitHubEnabledStatus)
-		api.GET("/cf/enabled", h.GetCFEnabledStatus)
-		api.GET("/cf/settings", h.GetCFSettings)
-		api.GET("/cf/data", h.GetCFData)
-		api.GET("/stats", h.GetStats)
 		api.GET("/blogs", h.GetBlogManifest)
 		api.GET("/blogs/:slug", h.GetBlogPost)
 
@@ -349,17 +333,6 @@ func main() {
 			}
 			// Collab token endpoint
 			console.POST("/auth/collab-token", authHandlers.CollabToken)
-
-			// Templates
-			console.GET("/templates", h.GetTemplates)
-			console.POST("/templates/pin", h.PinPortfolioTemplate)
-			console.DELETE("/templates", h.UnpinPortfolioTemplate)
-			console.GET("/github-settings", h.GetGitHubSettings)
-			console.POST("/github-settings", h.UpdateGitHubSettings)
-			console.GET("/cf-settings", h.GetCFSettings)
-			console.POST("/cf-settings", h.UpdateCFSettings)
-			console.GET("/video-thumbnail", h.GetVideoThumbnail)
-			console.DELETE("/video-thumbnails", h.DeleteVideoThumbnails)
 
 			// Profile
 			profileHandlers.RegisterRoutes(console)
@@ -505,11 +478,4 @@ func main() {
 	if err := r.Run(":" + port); err != nil {
 		log.Fatal().Err(err).Msg("server failed")
 	}
-}
-
-func getEnvOrDefault(key, defaultValue string) string {
-	if value := os.Getenv(key); value != "" {
-		return value
-	}
-	return defaultValue
 }

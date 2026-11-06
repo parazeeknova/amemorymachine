@@ -17,8 +17,6 @@ services:
     image: ghcr.io/parazeeknova/verso-serve:latest
     environment:
       PORT: "7000"
-      GITHUB_TOKEN: ${GITHUB_TOKEN}
-      GITHUB_USERNAME: ${GITHUB_USERNAME}
       WEB_ORIGIN: ${WEB_ORIGIN}
     expose:
       - "7000"

@@ -16,13 +16,8 @@ func setupConsoleRouter() *gin.Engine {
 	gin.SetMode(gin.TestMode)
 	r := gin.New()
 
-	cfg := handlers.Config{
-		GitHubToken:    "test-token",
-		GitHubUsername: "testuser",
-	}
-
 	// Create handlers without a DB-backed page service.
-	h := handlers.New(cfg)
+	h := handlers.New()
 
 	api := r.Group("/api")
 	console := api.Group("/console")
@@ -224,12 +219,7 @@ func TestCreateConsolePage_MissingSlugId(t *testing.T) {
 	gin.SetMode(gin.TestMode)
 	r := gin.New()
 
-	cfg := handlers.Config{
-		GitHubToken:    "test-token",
-		GitHubUsername: "testuser",
-	}
-
-	h := handlers.New(cfg)
+	h := handlers.New()
 	// Manually set a nil pageService still produces the validation error
 	// before hitting the nil check.
 	r.POST("/api/console/pages", h.CreateConsolePage)

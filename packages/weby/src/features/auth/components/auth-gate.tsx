@@ -33,7 +33,7 @@ export const AuthGate = ({ children }: { children: React.ReactNode }) => {
       }
     } else if ((isError || !user) && !hasRedirected.current) {
       hasRedirected.current = true;
-      void navigate({ replace: true, to: "/" });
+      void navigate({ replace: true, to: "/about" });
     }
   }, [isPending, user, isError, visible, navigate]);
 

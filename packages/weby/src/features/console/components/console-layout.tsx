@@ -1,12 +1,9 @@
 import {
-  ChatCenteredTextIcon,
   ClockCounterClockwiseIcon,
   CommandIcon,
   ControlIcon,
   FileTextIcon,
-  GlobeSimpleIcon,
   HouseSimpleIcon,
-  LayoutIcon,
   PlusIcon,
   TrashIcon,
 } from "@phosphor-icons/react";
@@ -29,7 +26,6 @@ import { SpaceSidebar } from "#/features/space/components/space-sidebar";
 import { useConsoleStore } from "#/features/console/stores/console-store";
 import { useConsoleBootstrap } from "#/features/console/hooks/use-console-bootstrap";
 import { FileTreeSidebar } from "./file-tree-sidebar";
-import { PortfolioEditorSidebar } from "#/features/templates/components/portfolio-editor-sidebar";
 import { useCreatePage } from "#/features/console/hooks/use-pages";
 
 const SIDEBAR_WIDTH = 280;
@@ -37,12 +33,7 @@ const SIDEBAR_WIDTH = 280;
 const platform = detectPlatform();
 const ModIcon = platform === "mac" ? CommandIcon : ControlIcon;
 
-const NAV_ROUTES = [
-  { href: "/home", icon: HouseSimpleIcon, label: "home", shortcut: "1" },
-  { href: "/", icon: GlobeSimpleIcon, label: "public", shortcut: "2" },
-  { href: "/", icon: ChatCenteredTextIcon, label: "blogs", shortcut: "3" },
-  { href: "/home/templates", icon: LayoutIcon, label: "templates", shortcut: "4" },
-] as const;
+const NAV_ROUTES = [{ href: "/home", icon: HouseSimpleIcon, label: "home", shortcut: "1" }] as const;
 
 export const ConsoleLayout = () => {
   const { isDarkMode } = useTheme();
@@ -97,14 +88,12 @@ export const ConsoleLayout = () => {
   const isSettingsRoute = routerState.location.pathname.startsWith("/settings");
   const isSettingsDebugRoute = routerState.location.pathname === "/settings/systems/debug";
   const isSpaceRoute = routerState.location.pathname.startsWith("/s/");
-  const isTemplatesRoute = routerState.location.pathname.startsWith("/home/templates");
   const isProfileRoute = routerState.location.pathname === "/settings/account/profile";
   const isPreferencesRoute = routerState.location.pathname === "/settings/account/preferences";
   const isWorkspaceRoute = routerState.location.pathname === "/settings/workspace";
   const isMembersRoute = routerState.location.pathname === "/settings/members";
   const isSpacesRoute = routerState.location.pathname === "/settings/spaces";
   const isGroupsRoute = routerState.location.pathname === "/settings/groups";
-  const isPortfolioRoute = routerState.location.pathname === "/home/templates/portfolio";
   const debugSelectedTable =
     ((routerState.location.search as Record<string, unknown> | undefined)?.table as string) ?? null;
   const debugSelectedTab =
@@ -147,15 +136,6 @@ export const ConsoleLayout = () => {
 
   useHotkey("Mod+1", () => {
     navigate({ to: "/home" });
-  });
-  useHotkey("Mod+2", () => {
-    navigate({ to: "/" });
-  });
-  useHotkey("Mod+3", () => {
-    navigate({ to: "/" });
-  });
-  useHotkey("Mod+4", () => {
-    navigate({ to: "/home/templates" });
   });
 
   const t = (dark: string, light: string) => (isDarkMode ? dark : light);
@@ -279,8 +259,6 @@ export const ConsoleLayout = () => {
     );
   } else if (isSpaceRoute && currentSpace) {
     sidebarContent = <SpaceSidebar space={currentSpace} />;
-  } else if (isPortfolioRoute) {
-    sidebarContent = <PortfolioEditorSidebar />;
   } else {
     sidebarContent = (
       <div className="min-h-0 w-full flex-1 flex flex-col overflow-y-auto px-4">
@@ -405,7 +383,7 @@ export const ConsoleLayout = () => {
           )}
 
           <main
-            className={`min-h-0 min-w-0 flex-1 relative flex flex-col ${isSpaceRoute || isTemplatesRoute ? "overflow-hidden" : "overflow-y-auto"}`}
+            className={`min-h-0 min-w-0 flex-1 relative flex flex-col ${isSpaceRoute ? "overflow-hidden" : "overflow-y-auto"}`}
             ref={mainRef}
           >
             <Outlet />

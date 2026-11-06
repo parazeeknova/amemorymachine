@@ -14,19 +14,11 @@ import { Route as SplatRouteImport } from './routes/$'
 import { Route as AboutRouteImport } from './routes/about'
 import { Route as DesktopRouteImport } from './routes/desktop'
 import { Route as HomeRouteImport } from './routes/home'
-import { Route as LlmsDottxtRouteImport } from './routes/llms[.]txt'
 import { Route as MfaChallengeRouteImport } from './routes/mfa-challenge'
-import { Route as RobotsDottxtRouteImport } from './routes/robots[.]txt'
 import { Route as SettingsRouteImport } from './routes/settings'
-import { Route as SitemapDotxmlRouteImport } from './routes/sitemap[.]xml'
 import { Route as ApiBlogsRouteImport } from './routes/api/blogs'
-import { Route as ApiExperienceRouteImport } from './routes/api/experience'
-import { Route as ApiProfileRouteImport } from './routes/api/profile'
-import { Route as ApiProjectsRouteImport } from './routes/api/projects'
-import { Route as ApiStatsRouteImport } from './routes/api/stats'
 import { Route as HomeIndexRouteImport } from './routes/home/index'
 import { Route as HomeDebugRouteImport } from './routes/home/debug'
-import { Route as HomeTemplatesRouteImport } from './routes/home/templates'
 import { Route as SSpaceSlugRouteImport } from './routes/s/$spaceSlug'
 import { Route as SettingsGroupsRouteImport } from './routes/settings/groups'
 import { Route as SettingsMembersRouteImport } from './routes/settings/members'
@@ -41,24 +33,16 @@ import { Route as ApiAuthLogoutRouteImport } from './routes/api/auth/logout'
 import { Route as ApiAuthMeRouteImport } from './routes/api/auth/me'
 import { Route as ApiAuthRefreshRouteImport } from './routes/api/auth/refresh'
 import { Route as ApiBlogsSlugRouteImport } from './routes/api/blogs/$slug'
-import { Route as ApiCfDataRouteImport } from './routes/api/cf/data'
-import { Route as ApiCfSettingsRouteImport } from './routes/api/cf/settings'
-import { Route as ApiConsoleCfSettingsRouteImport } from './routes/api/console/cf-settings'
-import { Route as ApiConsoleGithubSettingsRouteImport } from './routes/api/console/github-settings'
 import { Route as ApiConsoleNotificationsRouteImport } from './routes/api/console/notifications'
 import { Route as ApiConsolePagesRouteImport } from './routes/api/console/pages'
 import { Route as ApiConsoleProfileRouteImport } from './routes/api/console/profile'
 import { Route as ApiConsoleSpacesRouteImport } from './routes/api/console/spaces'
 import { Route as ApiConsoleSystemSettingsRouteImport } from './routes/api/console/system-settings'
-import { Route as ApiConsoleTemplatesRouteImport } from './routes/api/console/templates'
 import { Route as ApiConsoleUploadRouteImport } from './routes/api/console/upload'
 import { Route as ApiConsoleUsersRouteImport } from './routes/api/console/users'
 import { Route as ApiConsoleWorkspacesRouteImport } from './routes/api/console/workspaces'
-import { Route as ApiGithubStatsRouteImport } from './routes/api/github/stats'
 import { Route as ApiSharesTokenRouteImport } from './routes/api/shares/$token'
 import { Route as ApiShortShortcodeRouteImport } from './routes/api/short/$shortcode'
-import { Route as HomeTemplatesIndexRouteImport } from './routes/home/templates/index'
-import { Route as HomeTemplatesPortfolioRouteImport } from './routes/home/templates/portfolio'
 import { Route as SSpaceSlugIndexRouteImport } from './routes/s/$spaceSlug/index'
 import { Route as SSpaceSlugSettingsRouteImport } from './routes/s/$spaceSlug/settings'
 import { Route as SettingsAccountPreferencesRouteImport } from './routes/settings/account/preferences'
@@ -154,19 +138,9 @@ const HomeRoute = HomeRouteImport.update({
   path: '/home',
   getParentRoute: () => rootRouteImport,
 } as any)
-const LlmsDottxtRoute = LlmsDottxtRouteImport.update({
-  id: '/llms.txt',
-  path: '/llms.txt',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const MfaChallengeRoute = MfaChallengeRouteImport.update({
   id: '/mfa-challenge',
   path: '/mfa-challenge',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const RobotsDottxtRoute = RobotsDottxtRouteImport.update({
-  id: '/robots.txt',
-  path: '/robots.txt',
   getParentRoute: () => rootRouteImport,
 } as any)
 const SettingsRoute = SettingsRouteImport.update({
@@ -174,34 +148,9 @@ const SettingsRoute = SettingsRouteImport.update({
   path: '/settings',
   getParentRoute: () => rootRouteImport,
 } as any)
-const SitemapDotxmlRoute = SitemapDotxmlRouteImport.update({
-  id: '/sitemap.xml',
-  path: '/sitemap.xml',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiBlogsRoute = ApiBlogsRouteImport.update({
   id: '/api/blogs',
   path: '/api/blogs',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiExperienceRoute = ApiExperienceRouteImport.update({
-  id: '/api/experience',
-  path: '/api/experience',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiProfileRoute = ApiProfileRouteImport.update({
-  id: '/api/profile',
-  path: '/api/profile',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiProjectsRoute = ApiProjectsRouteImport.update({
-  id: '/api/projects',
-  path: '/api/projects',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiStatsRoute = ApiStatsRouteImport.update({
-  id: '/api/stats',
-  path: '/api/stats',
   getParentRoute: () => rootRouteImport,
 } as any)
 const HomeIndexRoute = HomeIndexRouteImport.update({
@@ -212,11 +161,6 @@ const HomeIndexRoute = HomeIndexRouteImport.update({
 const HomeDebugRoute = HomeDebugRouteImport.update({
   id: '/debug',
   path: '/debug',
-  getParentRoute: () => HomeRoute,
-} as any)
-const HomeTemplatesRoute = HomeTemplatesRouteImport.update({
-  id: '/templates',
-  path: '/templates',
   getParentRoute: () => HomeRoute,
 } as any)
 const SSpaceSlugRoute = SSpaceSlugRouteImport.update({
@@ -289,27 +233,6 @@ const ApiBlogsSlugRoute = ApiBlogsSlugRouteImport.update({
   path: '/$slug',
   getParentRoute: () => ApiBlogsRoute,
 } as any)
-const ApiCfDataRoute = ApiCfDataRouteImport.update({
-  id: '/api/cf/data',
-  path: '/api/cf/data',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiCfSettingsRoute = ApiCfSettingsRouteImport.update({
-  id: '/api/cf/settings',
-  path: '/api/cf/settings',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiConsoleCfSettingsRoute = ApiConsoleCfSettingsRouteImport.update({
-  id: '/api/console/cf-settings',
-  path: '/api/console/cf-settings',
-  getParentRoute: () => rootRouteImport,
-} as any)
-const ApiConsoleGithubSettingsRoute =
-  ApiConsoleGithubSettingsRouteImport.update({
-    id: '/api/console/github-settings',
-    path: '/api/console/github-settings',
-    getParentRoute: () => rootRouteImport,
-  } as any)
 const ApiConsoleNotificationsRoute = ApiConsoleNotificationsRouteImport.update({
   id: '/api/console/notifications',
   path: '/api/console/notifications',
@@ -336,11 +259,6 @@ const ApiConsoleSystemSettingsRoute =
     path: '/api/console/system-settings',
     getParentRoute: () => rootRouteImport,
   } as any)
-const ApiConsoleTemplatesRoute = ApiConsoleTemplatesRouteImport.update({
-  id: '/api/console/templates',
-  path: '/api/console/templates',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiConsoleUploadRoute = ApiConsoleUploadRouteImport.update({
   id: '/api/console/upload',
   path: '/api/console/upload',
@@ -356,11 +274,6 @@ const ApiConsoleWorkspacesRoute = ApiConsoleWorkspacesRouteImport.update({
   path: '/api/console/workspaces',
   getParentRoute: () => rootRouteImport,
 } as any)
-const ApiGithubStatsRoute = ApiGithubStatsRouteImport.update({
-  id: '/api/github/stats',
-  path: '/api/github/stats',
-  getParentRoute: () => rootRouteImport,
-} as any)
 const ApiSharesTokenRoute = ApiSharesTokenRouteImport.update({
   id: '/api/shares/$token',
   path: '/api/shares/$token',
@@ -370,16 +283,6 @@ const ApiShortShortcodeRoute = ApiShortShortcodeRouteImport.update({
   id: '/api/short/$shortcode',
   path: '/api/short/$shortcode',
   getParentRoute: () => rootRouteImport,
-} as any)
-const HomeTemplatesIndexRoute = HomeTemplatesIndexRouteImport.update({
-  id: '/',
-  path: '/',
-  getParentRoute: () => HomeTemplatesRoute,
-} as any)
-const HomeTemplatesPortfolioRoute = HomeTemplatesPortfolioRouteImport.update({
-  id: '/portfolio',
-  path: '/portfolio',
-  getParentRoute: () => HomeTemplatesRoute,
 } as any)
 const SSpaceSlugIndexRoute = SSpaceSlugIndexRouteImport.update({
   id: '/',
@@ -776,18 +679,10 @@ export interface FileRoutesByFullPath {
   '/about': typeof AboutRoute
   '/desktop': typeof DesktopRoute
   '/home': typeof HomeRouteWithChildren
-  '/llms.txt': typeof LlmsDottxtRoute
   '/mfa-challenge': typeof MfaChallengeRoute
-  '/robots.txt': typeof RobotsDottxtRoute
   '/settings': typeof SettingsRouteWithChildren
-  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/blogs': typeof ApiBlogsRouteWithChildren
-  '/api/experience': typeof ApiExperienceRoute
-  '/api/profile': typeof ApiProfileRoute
-  '/api/projects': typeof ApiProjectsRoute
-  '/api/stats': typeof ApiStatsRoute
   '/home/debug': typeof HomeDebugRoute
-  '/home/templates': typeof HomeTemplatesRouteWithChildren
   '/s/$spaceSlug': typeof SSpaceSlugRouteWithChildren
   '/settings/groups': typeof SettingsGroupsRoute
   '/settings/members': typeof SettingsMembersRoute
@@ -803,28 +698,20 @@ export interface FileRoutesByFullPath {
   '/api/auth/me': typeof ApiAuthMeRoute
   '/api/auth/refresh': typeof ApiAuthRefreshRoute
   '/api/blogs/$slug': typeof ApiBlogsSlugRoute
-  '/api/cf/data': typeof ApiCfDataRoute
-  '/api/cf/settings': typeof ApiCfSettingsRoute
-  '/api/console/cf-settings': typeof ApiConsoleCfSettingsRoute
-  '/api/console/github-settings': typeof ApiConsoleGithubSettingsRoute
   '/api/console/notifications': typeof ApiConsoleNotificationsRouteWithChildren
   '/api/console/pages': typeof ApiConsolePagesRouteWithChildren
   '/api/console/profile': typeof ApiConsoleProfileRouteWithChildren
   '/api/console/spaces': typeof ApiConsoleSpacesRouteWithChildren
   '/api/console/system-settings': typeof ApiConsoleSystemSettingsRoute
-  '/api/console/templates': typeof ApiConsoleTemplatesRoute
   '/api/console/upload': typeof ApiConsoleUploadRoute
   '/api/console/users': typeof ApiConsoleUsersRouteWithChildren
   '/api/console/workspaces': typeof ApiConsoleWorkspacesRouteWithChildren
-  '/api/github/stats': typeof ApiGithubStatsRoute
   '/api/shares/$token': typeof ApiSharesTokenRouteWithChildren
   '/api/short/$shortcode': typeof ApiShortShortcodeRoute
-  '/home/templates/portfolio': typeof HomeTemplatesPortfolioRoute
   '/s/$spaceSlug/settings': typeof SSpaceSlugSettingsRoute
   '/settings/account/preferences': typeof SettingsAccountPreferencesRoute
   '/settings/account/profile': typeof SettingsAccountProfileRoute
   '/settings/systems/debug': typeof SettingsSystemsDebugRoute
-  '/home/templates/': typeof HomeTemplatesIndexRoute
   '/s/$spaceSlug/': typeof SSpaceSlugIndexRoute
   '/api/auth/mfa/verify': typeof ApiAuthMfaVerifyRoute
   '/api/console/auth/collab-token': typeof ApiConsoleAuthCollabTokenRoute
@@ -896,16 +783,9 @@ export interface FileRoutesByTo {
   '/$': typeof SplatRoute
   '/about': typeof AboutRoute
   '/desktop': typeof DesktopRoute
-  '/llms.txt': typeof LlmsDottxtRoute
   '/mfa-challenge': typeof MfaChallengeRoute
-  '/robots.txt': typeof RobotsDottxtRoute
   '/settings': typeof SettingsRouteWithChildren
-  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/blogs': typeof ApiBlogsRouteWithChildren
-  '/api/experience': typeof ApiExperienceRoute
-  '/api/profile': typeof ApiProfileRoute
-  '/api/projects': typeof ApiProjectsRoute
-  '/api/stats': typeof ApiStatsRoute
   '/home/debug': typeof HomeDebugRoute
   '/settings/groups': typeof SettingsGroupsRoute
   '/settings/members': typeof SettingsMembersRoute
@@ -921,28 +801,20 @@ export interface FileRoutesByTo {
   '/api/auth/me': typeof ApiAuthMeRoute
   '/api/auth/refresh': typeof ApiAuthRefreshRoute
   '/api/blogs/$slug': typeof ApiBlogsSlugRoute
-  '/api/cf/data': typeof ApiCfDataRoute
-  '/api/cf/settings': typeof ApiCfSettingsRoute
-  '/api/console/cf-settings': typeof ApiConsoleCfSettingsRoute
-  '/api/console/github-settings': typeof ApiConsoleGithubSettingsRoute
   '/api/console/notifications': typeof ApiConsoleNotificationsRouteWithChildren
   '/api/console/pages': typeof ApiConsolePagesRouteWithChildren
   '/api/console/profile': typeof ApiConsoleProfileRouteWithChildren
   '/api/console/spaces': typeof ApiConsoleSpacesRouteWithChildren
   '/api/console/system-settings': typeof ApiConsoleSystemSettingsRoute
-  '/api/console/templates': typeof ApiConsoleTemplatesRoute
   '/api/console/upload': typeof ApiConsoleUploadRoute
   '/api/console/users': typeof ApiConsoleUsersRouteWithChildren
   '/api/console/workspaces': typeof ApiConsoleWorkspacesRouteWithChildren
-  '/api/github/stats': typeof ApiGithubStatsRoute
   '/api/shares/$token': typeof ApiSharesTokenRouteWithChildren
   '/api/short/$shortcode': typeof ApiShortShortcodeRoute
-  '/home/templates/portfolio': typeof HomeTemplatesPortfolioRoute
   '/s/$spaceSlug/settings': typeof SSpaceSlugSettingsRoute
   '/settings/account/preferences': typeof SettingsAccountPreferencesRoute
   '/settings/account/profile': typeof SettingsAccountProfileRoute
   '/settings/systems/debug': typeof SettingsSystemsDebugRoute
-  '/home/templates': typeof HomeTemplatesIndexRoute
   '/s/$spaceSlug': typeof SSpaceSlugIndexRoute
   '/api/auth/mfa/verify': typeof ApiAuthMfaVerifyRoute
   '/api/console/auth/collab-token': typeof ApiConsoleAuthCollabTokenRoute
@@ -1016,18 +888,10 @@ export interface FileRoutesById {
   '/about': typeof AboutRoute
   '/desktop': typeof DesktopRoute
   '/home': typeof HomeRouteWithChildren
-  '/llms.txt': typeof LlmsDottxtRoute
   '/mfa-challenge': typeof MfaChallengeRoute
-  '/robots.txt': typeof RobotsDottxtRoute
   '/settings': typeof SettingsRouteWithChildren
-  '/sitemap.xml': typeof SitemapDotxmlRoute
   '/api/blogs': typeof ApiBlogsRouteWithChildren
-  '/api/experience': typeof ApiExperienceRoute
-  '/api/profile': typeof ApiProfileRoute
-  '/api/projects': typeof ApiProjectsRoute
-  '/api/stats': typeof ApiStatsRoute
   '/home/debug': typeof HomeDebugRoute
-  '/home/templates': typeof HomeTemplatesRouteWithChildren
   '/s/$spaceSlug': typeof SSpaceSlugRouteWithChildren
   '/settings/groups': typeof SettingsGroupsRoute
   '/settings/members': typeof SettingsMembersRoute
@@ -1043,28 +907,20 @@ export interface FileRoutesById {
   '/api/auth/me': typeof ApiAuthMeRoute
   '/api/auth/refresh': typeof ApiAuthRefreshRoute
   '/api/blogs/$slug': typeof ApiBlogsSlugRoute
-  '/api/cf/data': typeof ApiCfDataRoute
-  '/api/cf/settings': typeof ApiCfSettingsRoute
-  '/api/console/cf-settings': typeof ApiConsoleCfSettingsRoute
-  '/api/console/github-settings': typeof ApiConsoleGithubSettingsRoute
   '/api/console/notifications': typeof ApiConsoleNotificationsRouteWithChildren
   '/api/console/pages': typeof ApiConsolePagesRouteWithChildren
   '/api/console/profile': typeof ApiConsoleProfileRouteWithChildren
   '/api/console/spaces': typeof ApiConsoleSpacesRouteWithChildren
   '/api/console/system-settings': typeof ApiConsoleSystemSettingsRoute
-  '/api/console/templates': typeof ApiConsoleTemplatesRoute
   '/api/console/upload': typeof ApiConsoleUploadRoute
   '/api/console/users': typeof ApiConsoleUsersRouteWithChildren
   '/api/console/workspaces': typeof ApiConsoleWorkspacesRouteWithChildren
-  '/api/github/stats': typeof ApiGithubStatsRoute
   '/api/shares/$token': typeof ApiSharesTokenRouteWithChildren
   '/api/short/$shortcode': typeof ApiShortShortcodeRoute
-  '/home/templates/portfolio': typeof HomeTemplatesPortfolioRoute
   '/s/$spaceSlug/settings': typeof SSpaceSlugSettingsRoute
   '/settings/account/preferences': typeof SettingsAccountPreferencesRoute
   '/settings/account/profile': typeof SettingsAccountProfileRoute
   '/settings/systems/debug': typeof SettingsSystemsDebugRoute
-  '/home/templates/': typeof HomeTemplatesIndexRoute
   '/s/$spaceSlug/': typeof SSpaceSlugIndexRoute
   '/api/auth/mfa/verify': typeof ApiAuthMfaVerifyRoute
   '/api/console/auth/collab-token': typeof ApiConsoleAuthCollabTokenRoute
@@ -1139,18 +995,10 @@ export interface FileRouteTypes {
     | '/about'
     | '/desktop'
     | '/home'
-    | '/llms.txt'
     | '/mfa-challenge'
-    | '/robots.txt'
     | '/settings'
-    | '/sitemap.xml'
     | '/api/blogs'
-    | '/api/experience'
-    | '/api/profile'
-    | '/api/projects'
-    | '/api/stats'
     | '/home/debug'
-    | '/home/templates'
     | '/s/$spaceSlug'
     | '/settings/groups'
     | '/settings/members'
@@ -1166,28 +1014,20 @@ export interface FileRouteTypes {
     | '/api/auth/me'
     | '/api/auth/refresh'
     | '/api/blogs/$slug'
-    | '/api/cf/data'
-    | '/api/cf/settings'
-    | '/api/console/cf-settings'
-    | '/api/console/github-settings'
     | '/api/console/notifications'
     | '/api/console/pages'
     | '/api/console/profile'
     | '/api/console/spaces'
     | '/api/console/system-settings'
-    | '/api/console/templates'
     | '/api/console/upload'
     | '/api/console/users'
     | '/api/console/workspaces'
-    | '/api/github/stats'
     | '/api/shares/$token'
     | '/api/short/$shortcode'
-    | '/home/templates/portfolio'
     | '/s/$spaceSlug/settings'
     | '/settings/account/preferences'
     | '/settings/account/profile'
     | '/settings/systems/debug'
-    | '/home/templates/'
     | '/s/$spaceSlug/'
     | '/api/auth/mfa/verify'
     | '/api/console/auth/collab-token'
@@ -1259,16 +1099,9 @@ export interface FileRouteTypes {
     | '/$'
     | '/about'
     | '/desktop'
-    | '/llms.txt'
     | '/mfa-challenge'
-    | '/robots.txt'
     | '/settings'
-    | '/sitemap.xml'
     | '/api/blogs'
-    | '/api/experience'
-    | '/api/profile'
-    | '/api/projects'
-    | '/api/stats'
     | '/home/debug'
     | '/settings/groups'
     | '/settings/members'
@@ -1284,28 +1117,20 @@ export interface FileRouteTypes {
     | '/api/auth/me'
     | '/api/auth/refresh'
     | '/api/blogs/$slug'
-    | '/api/cf/data'
-    | '/api/cf/settings'
-    | '/api/console/cf-settings'
-    | '/api/console/github-settings'
     | '/api/console/notifications'
     | '/api/console/pages'
     | '/api/console/profile'
     | '/api/console/spaces'
     | '/api/console/system-settings'
-    | '/api/console/templates'
     | '/api/console/upload'
     | '/api/console/users'
     | '/api/console/workspaces'
-    | '/api/github/stats'
     | '/api/shares/$token'
     | '/api/short/$shortcode'
-    | '/home/templates/portfolio'
     | '/s/$spaceSlug/settings'
     | '/settings/account/preferences'
     | '/settings/account/profile'
     | '/settings/systems/debug'
-    | '/home/templates'
     | '/s/$spaceSlug'
     | '/api/auth/mfa/verify'
     | '/api/console/auth/collab-token'
@@ -1378,18 +1203,10 @@ export interface FileRouteTypes {
     | '/about'
     | '/desktop'
     | '/home'
-    | '/llms.txt'
     | '/mfa-challenge'
-    | '/robots.txt'
     | '/settings'
-    | '/sitemap.xml'
     | '/api/blogs'
-    | '/api/experience'
-    | '/api/profile'
-    | '/api/projects'
-    | '/api/stats'
     | '/home/debug'
-    | '/home/templates'
     | '/s/$spaceSlug'
     | '/settings/groups'
     | '/settings/members'
@@ -1405,28 +1222,20 @@ export interface FileRouteTypes {
     | '/api/auth/me'
     | '/api/auth/refresh'
     | '/api/blogs/$slug'
-    | '/api/cf/data'
-    | '/api/cf/settings'
-    | '/api/console/cf-settings'
-    | '/api/console/github-settings'
     | '/api/console/notifications'
     | '/api/console/pages'
     | '/api/console/profile'
     | '/api/console/spaces'
     | '/api/console/system-settings'
-    | '/api/console/templates'
     | '/api/console/upload'
     | '/api/console/users'
     | '/api/console/workspaces'
-    | '/api/github/stats'
     | '/api/shares/$token'
     | '/api/short/$shortcode'
-    | '/home/templates/portfolio'
     | '/s/$spaceSlug/settings'
     | '/settings/account/preferences'
     | '/settings/account/profile'
     | '/settings/systems/debug'
-    | '/home/templates/'
     | '/s/$spaceSlug/'
     | '/api/auth/mfa/verify'
     | '/api/console/auth/collab-token'
@@ -1500,16 +1309,9 @@ export interface RootRouteChildren {
   AboutRoute: typeof AboutRoute
   DesktopRoute: typeof DesktopRoute
   HomeRoute: typeof HomeRouteWithChildren
-  LlmsDottxtRoute: typeof LlmsDottxtRoute
   MfaChallengeRoute: typeof MfaChallengeRoute
-  RobotsDottxtRoute: typeof RobotsDottxtRoute
   SettingsRoute: typeof SettingsRouteWithChildren
-  SitemapDotxmlRoute: typeof SitemapDotxmlRoute
   ApiBlogsRoute: typeof ApiBlogsRouteWithChildren
-  ApiExperienceRoute: typeof ApiExperienceRoute
-  ApiProfileRoute: typeof ApiProfileRoute
-  ApiProjectsRoute: typeof ApiProjectsRoute
-  ApiStatsRoute: typeof ApiStatsRoute
   SSpaceSlugRoute: typeof SSpaceSlugRouteWithChildren
   ShShortcodeRoute: typeof ShShortcodeRoute
   ShareTokenRoute: typeof ShareTokenRoute
@@ -1519,20 +1321,14 @@ export interface RootRouteChildren {
   ApiAuthLogoutRoute: typeof ApiAuthLogoutRoute
   ApiAuthMeRoute: typeof ApiAuthMeRoute
   ApiAuthRefreshRoute: typeof ApiAuthRefreshRoute
-  ApiCfDataRoute: typeof ApiCfDataRoute
-  ApiCfSettingsRoute: typeof ApiCfSettingsRoute
-  ApiConsoleCfSettingsRoute: typeof ApiConsoleCfSettingsRoute
-  ApiConsoleGithubSettingsRoute: typeof ApiConsoleGithubSettingsRoute
   ApiConsoleNotificationsRoute: typeof ApiConsoleNotificationsRouteWithChildren
   ApiConsolePagesRoute: typeof ApiConsolePagesRouteWithChildren
   ApiConsoleProfileRoute: typeof ApiConsoleProfileRouteWithChildren
   ApiConsoleSpacesRoute: typeof ApiConsoleSpacesRouteWithChildren
   ApiConsoleSystemSettingsRoute: typeof ApiConsoleSystemSettingsRoute
-  ApiConsoleTemplatesRoute: typeof ApiConsoleTemplatesRoute
   ApiConsoleUploadRoute: typeof ApiConsoleUploadRoute
   ApiConsoleUsersRoute: typeof ApiConsoleUsersRouteWithChildren
   ApiConsoleWorkspacesRoute: typeof ApiConsoleWorkspacesRouteWithChildren
-  ApiGithubStatsRoute: typeof ApiGithubStatsRoute
   ApiSharesTokenRoute: typeof ApiSharesTokenRouteWithChildren
   ApiShortShortcodeRoute: typeof ApiShortShortcodeRoute
   ApiAuthMfaVerifyRoute: typeof ApiAuthMfaVerifyRoute
@@ -1589,25 +1385,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof HomeRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/llms.txt': {
-      id: '/llms.txt'
-      path: '/llms.txt'
-      fullPath: '/llms.txt'
-      preLoaderRoute: typeof LlmsDottxtRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/mfa-challenge': {
       id: '/mfa-challenge'
       path: '/mfa-challenge'
       fullPath: '/mfa-challenge'
       preLoaderRoute: typeof MfaChallengeRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/robots.txt': {
-      id: '/robots.txt'
-      path: '/robots.txt'
-      fullPath: '/robots.txt'
-      preLoaderRoute: typeof RobotsDottxtRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/settings': {
@@ -1617,46 +1399,11 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof SettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/sitemap.xml': {
-      id: '/sitemap.xml'
-      path: '/sitemap.xml'
-      fullPath: '/sitemap.xml'
-      preLoaderRoute: typeof SitemapDotxmlRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/blogs': {
       id: '/api/blogs'
       path: '/api/blogs'
       fullPath: '/api/blogs'
       preLoaderRoute: typeof ApiBlogsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/experience': {
-      id: '/api/experience'
-      path: '/api/experience'
-      fullPath: '/api/experience'
-      preLoaderRoute: typeof ApiExperienceRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/profile': {
-      id: '/api/profile'
-      path: '/api/profile'
-      fullPath: '/api/profile'
-      preLoaderRoute: typeof ApiProfileRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/projects': {
-      id: '/api/projects'
-      path: '/api/projects'
-      fullPath: '/api/projects'
-      preLoaderRoute: typeof ApiProjectsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/stats': {
-      id: '/api/stats'
-      path: '/api/stats'
-      fullPath: '/api/stats'
-      preLoaderRoute: typeof ApiStatsRouteImport
       parentRoute: typeof rootRouteImport
     }
     '/home/': {
@@ -1671,13 +1418,6 @@ declare module '@tanstack/react-router' {
       path: '/debug'
       fullPath: '/home/debug'
       preLoaderRoute: typeof HomeDebugRouteImport
-      parentRoute: typeof HomeRoute
-    }
-    '/home/templates': {
-      id: '/home/templates'
-      path: '/templates'
-      fullPath: '/home/templates'
-      preLoaderRoute: typeof HomeTemplatesRouteImport
       parentRoute: typeof HomeRoute
     }
     '/s/$spaceSlug': {
@@ -1778,34 +1518,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiBlogsSlugRouteImport
       parentRoute: typeof ApiBlogsRoute
     }
-    '/api/cf/data': {
-      id: '/api/cf/data'
-      path: '/api/cf/data'
-      fullPath: '/api/cf/data'
-      preLoaderRoute: typeof ApiCfDataRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/cf/settings': {
-      id: '/api/cf/settings'
-      path: '/api/cf/settings'
-      fullPath: '/api/cf/settings'
-      preLoaderRoute: typeof ApiCfSettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/console/cf-settings': {
-      id: '/api/console/cf-settings'
-      path: '/api/console/cf-settings'
-      fullPath: '/api/console/cf-settings'
-      preLoaderRoute: typeof ApiConsoleCfSettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
-    '/api/console/github-settings': {
-      id: '/api/console/github-settings'
-      path: '/api/console/github-settings'
-      fullPath: '/api/console/github-settings'
-      preLoaderRoute: typeof ApiConsoleGithubSettingsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/console/notifications': {
       id: '/api/console/notifications'
       path: '/api/console/notifications'
@@ -1841,13 +1553,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiConsoleSystemSettingsRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/console/templates': {
-      id: '/api/console/templates'
-      path: '/api/console/templates'
-      fullPath: '/api/console/templates'
-      preLoaderRoute: typeof ApiConsoleTemplatesRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/console/upload': {
       id: '/api/console/upload'
       path: '/api/console/upload'
@@ -1869,13 +1574,6 @@ declare module '@tanstack/react-router' {
       preLoaderRoute: typeof ApiConsoleWorkspacesRouteImport
       parentRoute: typeof rootRouteImport
     }
-    '/api/github/stats': {
-      id: '/api/github/stats'
-      path: '/api/github/stats'
-      fullPath: '/api/github/stats'
-      preLoaderRoute: typeof ApiGithubStatsRouteImport
-      parentRoute: typeof rootRouteImport
-    }
     '/api/shares/$token': {
       id: '/api/shares/$token'
       path: '/api/shares/$token'
@@ -1889,20 +1587,6 @@ declare module '@tanstack/react-router' {
       fullPath: '/api/short/$shortcode'
       preLoaderRoute: typeof ApiShortShortcodeRouteImport
       parentRoute: typeof rootRouteImport
-    }
-    '/home/templates/': {
-      id: '/home/templates/'
-      path: '/'
-      fullPath: '/home/templates/'
-      preLoaderRoute: typeof HomeTemplatesIndexRouteImport
-      parentRoute: typeof HomeTemplatesRoute
-    }
-    '/home/templates/portfolio': {
-      id: '/home/templates/portfolio'
-      path: '/portfolio'
-      fullPath: '/home/templates/portfolio'
-      preLoaderRoute: typeof HomeTemplatesPortfolioRouteImport
-      parentRoute: typeof HomeTemplatesRoute
     }
     '/s/$spaceSlug/': {
       id: '/s/$spaceSlug/'
@@ -2390,29 +2074,13 @@ declare module '@tanstack/react-router' {
   }
 }
 
-interface HomeTemplatesRouteChildren {
-  HomeTemplatesPortfolioRoute: typeof HomeTemplatesPortfolioRoute
-  HomeTemplatesIndexRoute: typeof HomeTemplatesIndexRoute
-}
-
-const HomeTemplatesRouteChildren: HomeTemplatesRouteChildren = {
-  HomeTemplatesPortfolioRoute: HomeTemplatesPortfolioRoute,
-  HomeTemplatesIndexRoute: HomeTemplatesIndexRoute,
-}
-
-const HomeTemplatesRouteWithChildren = HomeTemplatesRoute._addFileChildren(
-  HomeTemplatesRouteChildren,
-)
-
 interface HomeRouteChildren {
   HomeDebugRoute: typeof HomeDebugRoute
-  HomeTemplatesRoute: typeof HomeTemplatesRouteWithChildren
   HomeIndexRoute: typeof HomeIndexRoute
 }
 
 const HomeRouteChildren: HomeRouteChildren = {
   HomeDebugRoute: HomeDebugRoute,
-  HomeTemplatesRoute: HomeTemplatesRouteWithChildren,
   HomeIndexRoute: HomeIndexRoute,
 }
 
@@ -2811,16 +2479,9 @@ const rootRouteChildren: RootRouteChildren = {
   AboutRoute: AboutRoute,
   DesktopRoute: DesktopRoute,
   HomeRoute: HomeRouteWithChildren,
-  LlmsDottxtRoute: LlmsDottxtRoute,
   MfaChallengeRoute: MfaChallengeRoute,
-  RobotsDottxtRoute: RobotsDottxtRoute,
   SettingsRoute: SettingsRouteWithChildren,
-  SitemapDotxmlRoute: SitemapDotxmlRoute,
   ApiBlogsRoute: ApiBlogsRouteWithChildren,
-  ApiExperienceRoute: ApiExperienceRoute,
-  ApiProfileRoute: ApiProfileRoute,
-  ApiProjectsRoute: ApiProjectsRoute,
-  ApiStatsRoute: ApiStatsRoute,
   SSpaceSlugRoute: SSpaceSlugRouteWithChildren,
   ShShortcodeRoute: ShShortcodeRoute,
   ShareTokenRoute: ShareTokenRoute,
@@ -2830,20 +2491,14 @@ const rootRouteChildren: RootRouteChildren = {
   ApiAuthLogoutRoute: ApiAuthLogoutRoute,
   ApiAuthMeRoute: ApiAuthMeRoute,
   ApiAuthRefreshRoute: ApiAuthRefreshRoute,
-  ApiCfDataRoute: ApiCfDataRoute,
-  ApiCfSettingsRoute: ApiCfSettingsRoute,
-  ApiConsoleCfSettingsRoute: ApiConsoleCfSettingsRoute,
-  ApiConsoleGithubSettingsRoute: ApiConsoleGithubSettingsRoute,
   ApiConsoleNotificationsRoute: ApiConsoleNotificationsRouteWithChildren,
   ApiConsolePagesRoute: ApiConsolePagesRouteWithChildren,
   ApiConsoleProfileRoute: ApiConsoleProfileRouteWithChildren,
   ApiConsoleSpacesRoute: ApiConsoleSpacesRouteWithChildren,
   ApiConsoleSystemSettingsRoute: ApiConsoleSystemSettingsRoute,
-  ApiConsoleTemplatesRoute: ApiConsoleTemplatesRoute,
   ApiConsoleUploadRoute: ApiConsoleUploadRoute,
   ApiConsoleUsersRoute: ApiConsoleUsersRouteWithChildren,
   ApiConsoleWorkspacesRoute: ApiConsoleWorkspacesRouteWithChildren,
-  ApiGithubStatsRoute: ApiGithubStatsRoute,
   ApiSharesTokenRoute: ApiSharesTokenRouteWithChildren,
   ApiShortShortcodeRoute: ApiShortShortcodeRoute,
   ApiAuthMfaVerifyRoute: ApiAuthMfaVerifyRoute,

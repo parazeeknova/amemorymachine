@@ -4,8 +4,7 @@ import { useNavigate } from "@tanstack/react-router";
 import { useRateLimitedCallback } from "@tanstack/react-pacer";
 import { gsap } from "gsap";
 import { useCallback, useEffect, useRef, useState } from "react";
-import { useQuery } from "@tanstack/react-query";
-import type { AuthUser, Stats } from "#/shared/types";
+import type { AuthUser } from "#/shared/types";
 import { useAuth, useAuthActions } from "../hooks/use-auth";
 import { useBootstrapState } from "../hooks/use-bootstrap-state";
 
@@ -348,7 +347,6 @@ const BootstrapFlow = ({ isDarkMode, onSubmit, serverError }: BootstrapFlowProps
 
 interface AccountPanelProps {
   user: Pick<AuthUser, "username" | "email">;
-  stats: { pages: number; posts: number; readmes: number } | undefined;
   onLogout: () => void;
   onNavigateConsole: () => void;
   isDarkMode: boolean;
@@ -356,7 +354,6 @@ interface AccountPanelProps {
 
 const AccountPanel = ({
   user,
-  stats,
   onLogout,
   onNavigateConsole,
   isDarkMode,
@@ -372,14 +369,6 @@ const AccountPanel = ({
         {user.email}
       </p>
     </div>
-
-    {stats && (
-      <div className={`text-[11px] ${isDarkMode ? "text-text-dark/40" : "text-text-light/40"}`}>
-        <span className="mr-3">pages {stats.pages}</span>
-        <span className="mr-3">posts {stats.posts}</span>
-        <span>readmes {stats.readmes}</span>
-      </div>
-    )}
 
     <div
       className={`flex gap-0 border-t pt-3 ${isDarkMode ? "border-border-dark" : "border-border-light"}`}
@@ -419,18 +408,6 @@ export const LoginPopup = ({ isDarkMode, isAtBottom = false }: LoginPopupProps) 
   const { data: bootstrapState } = useBootstrapState();
   const { login: loginAction, logout } = useAuthActions();
   const navigate = useNavigate();
-
-  const { data: stats } = useQuery<Stats>({
-    queryFn: async ({ signal }) => {
-      const response = await fetch("/api/stats", { signal });
-      if (!response.ok) {
-        throw new Error("Failed to fetch stats");
-      }
-      return response.json() as Promise<Stats>;
-    },
-    queryKey: ["stats"],
-    staleTime: 5 * 60 * 1000,
-  });
 
   const isAuthenticated = user !== undefined && user !== null;
 
@@ -733,7 +710,6 @@ export const LoginPopup = ({ isDarkMode, isAtBottom = false }: LoginPopupProps) 
                   setOpen(false);
                   void navigate({ to: "/home" });
                 }}
-                stats={stats ?? undefined}
                 user={user}
               />
             )}

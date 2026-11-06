@@ -45,7 +45,7 @@ const RootComponent = () => {
     <PersistQueryClientProvider
       client={queryClient}
       persistOptions={{
-        buster: `verso-${import.meta.env.VITE_APP_VERSION || "dev"}`,
+        buster: `amemorymachine-${import.meta.env.VITE_APP_VERSION || "dev"}`,
         maxAge: 1000 * 60 * 60 * 24 * 7,
         persister,
       }}
@@ -86,11 +86,6 @@ const RootShell = ({ children }: { children: React.ReactNode }) => (
   <html lang="en" data-theme="dark" data-mantine-color-scheme="dark" suppressHydrationWarning>
     <head>
       <script dangerouslySetInnerHTML={{ __html: THEME_SCRIPT }} />
-      <script
-        defer
-        src="https://tracking.przknv.cc/script.js"
-        data-website-id="2e47b7c9-3f7a-4e37-b435-3922b269c7ec"
-      />
       <HeadContent />
     </head>
     <body>
@@ -141,11 +136,11 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         name: "theme-color",
       },
       {
-        content: "third year undergrad, full stack and devops engineer",
+        content: "amemorymachine — self-hosted markdown editor and personal knowledge base",
         name: "description",
       },
       {
-        content: "gist, parazeeknova, developer, fullstack, devops",
+        content: "amemorymachine, markdown editor, personal knowledge base, self-hosted, notes",
         name: "keywords",
       },
       {
@@ -157,16 +152,15 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         property: "og:type",
       },
       {
-        content: "gist - parazeeknova",
+        content: "amemorymachine",
         property: "og:title",
       },
       {
-        content: "third year undergrad, fullstack & devops engineer",
+        content: "amemorymachine — self-hosted markdown editor and personal knowledge base",
         property: "og:description",
       },
       {
-        content:
-          "http://cdn.itssingularity.com/images/2026/05/02/52d60e02dc868234b4c03f50270ba3f0.png",
+        content: "https://amemorymachine.cc/amemorymachine-og.png",
         property: "og:image",
       },
       {
@@ -178,20 +172,19 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         property: "twitter:card",
       },
       {
-        content: "gist - parazeeknova",
+        content: "amemorymachine",
         property: "twitter:title",
       },
       {
-        content: "third year undergrad, fullstack & devops engineer",
+        content: "amemorymachine — self-hosted markdown editor and personal knowledge base",
         property: "twitter:description",
       },
       {
-        content:
-          "http://cdn.itssingularity.com/images/2026/05/02/52d60e02dc868234b4c03f50270ba3f0.png",
+        content: "https://amemorymachine.cc/amemorymachine-og.png",
         property: "twitter:image",
       },
       {
-        content: "gist - parazeeknova",
+        content: "amemorymachine",
         name: "application-name",
       },
       {
@@ -203,7 +196,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         name: "apple-mobile-web-app-status-bar-style",
       },
       {
-        content: "gist",
+        content: "amemorymachine",
         name: "apple-mobile-web-app-title",
       },
       {
@@ -211,7 +204,7 @@ export const Route = createRootRouteWithContext<{ queryClient: QueryClient }>()(
         name: "mobile-web-app-capable",
       },
     ],
-    title: "gist - parazeeknova",
+    title: "amemorymachine",
   }),
   notFoundComponent: () => <p>Not Found</p>,
   shellComponent: RootShell,

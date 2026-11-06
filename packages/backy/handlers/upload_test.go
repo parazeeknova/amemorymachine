@@ -38,8 +38,7 @@ func TestLocalUploadAndDownload(t *testing.T) {
 	// Setup router
 	gin.SetMode(gin.TestMode)
 	r := gin.New()
-	cfg := Config{}
-	h := New(cfg)
+	h := New()
 
 	r.POST("/api/console/upload", h.UploadFile)
 	r.GET("/api/console/files/:bucket/:filename", h.GetUploadedFile)

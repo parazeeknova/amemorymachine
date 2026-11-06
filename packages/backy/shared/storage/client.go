@@ -23,7 +23,6 @@ var defaultBuckets = []string{
 	"avatars-workspaces",
 	"avatars-spaces",
 	"avatars-profiles",
-	"video-thumbnails",
 }
 
 // Client wraps an S3 client configured for RustFS.

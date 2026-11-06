@@ -1,46 +1,3 @@
-export interface Link {
-  label: string;
-  url: string;
-}
-
-export interface Profile {
-  description: string;
-  email?: string;
-  links: Record<string, Link>;
-  name: string;
-  tagline: string;
-  username?: string;
-  lightVideo?: string;
-  darkVideo?: string;
-  resumeUrl?: string;
-}
-
-export type ExperienceSection = "professional" | "research" | "university clubs";
-
-export interface ExperienceItem {
-  description?: string;
-  image?: string;
-  location: string;
-  period: string;
-  section?: ExperienceSection;
-  title: string;
-}
-
-export type ProjectSection = "prod" | "personal" | "freelance" | "hackathon" | "opensource";
-
-export interface Project {
-  desc: string;
-  image?: string;
-  logo?: string;
-  logoScale?: number;
-  productUrl?: string;
-  readmeUrl?: string;
-  repoUrl?: string;
-  section?: ProjectSection;
-  stack: string;
-  title: string;
-}
-
 export interface BlogHeading {
   id: string;
   label: string;
@@ -96,12 +53,6 @@ export interface ConsoleUser {
 
 export interface BootstrapState {
   bootstrapped: boolean;
-}
-
-export interface Stats {
-  pages: number;
-  posts: number;
-  readmes: number;
 }
 
 export interface ConsolePage {

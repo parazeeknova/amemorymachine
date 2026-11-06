@@ -1,9 +1,7 @@
 import { gsap } from "gsap";
-import { useQuery } from "@tanstack/react-query";
 import { Link, useNavigate, useRouterState } from "@tanstack/react-router";
 import { useDebouncedState } from "@tanstack/react-pacer";
 import { useEffect, useRef, useState } from "react";
-import type { Stats } from "#/shared/types";
 import { AvatarBadge } from "#/shared/components/avatar-badge";
 import { useAuth, useAuthActions } from "#/features/auth/hooks/use-auth";
 import { useTheme } from "#/shared/hooks/use-theme";
@@ -35,7 +33,6 @@ interface ProfileDropdownProps {
   logout: () => void;
   navigate: ReturnType<typeof useNavigate>;
   selectedWorkspace: { icon: string; name: string } | undefined;
-  stats: Stats | undefined;
   user:
     | { avatar_url: string; email: string; isOwner: boolean; name: string; username: string }
     | null
@@ -48,7 +45,6 @@ const ProfileDropdown = ({
   logout,
   navigate,
   selectedWorkspace,
-  stats,
   user,
   workspaceName,
 }: ProfileDropdownProps) => {
@@ -167,11 +163,6 @@ const ProfileDropdown = ({
                   </p>
                 </div>
               </div>
-              {stats && (
-                <p className={`mt-1 text-[11px] ${t("text-text-dark/20", "text-text-light/20")}`}>
-                  pg {stats.pages} &middot; pts {stats.posts} &middot; rmd {stats.readmes}
-                </p>
-              )}
             </div>
 
             {/* Profile actions */}
@@ -367,119 +358,6 @@ const SpaceBreadcrumb = ({
   );
 };
 
-interface TemplatesBreadcrumbProps {
-  isDarkMode: boolean;
-  navigate: ReturnType<typeof useNavigate>;
-  currentPath: string;
-}
-
-const TemplatesBreadcrumb = ({ isDarkMode, navigate, currentPath }: TemplatesBreadcrumbProps) => {
-  const t = (dark: string, light: string) => (isDarkMode ? dark : light);
-  const isTemplatesIndex = currentPath === "/home/templates" || currentPath === "/home/templates/";
-  const isPortfolioPage = currentPath === "/home/templates/portfolio";
-  const [dropdownOpen, setDropdownOpen] = useState(false);
-  const dropdownRef = useRef<HTMLDivElement>(null);
-
-  useEffect(() => {
-    if (!dropdownOpen) {
-      return;
-    }
-    const handleClick = (e: MouseEvent) => {
-      if (dropdownRef.current && !dropdownRef.current.contains(e.target as Node)) {
-        setDropdownOpen(false);
-      }
-    };
-    document.addEventListener("mousedown", handleClick);
-    return () => document.removeEventListener("mousedown", handleClick);
-  }, [dropdownOpen]);
-
-  useEffect(() => {
-    if (!dropdownOpen || !dropdownRef.current) {
-      return;
-    }
-    const inner = dropdownRef.current.querySelector(":scope > div");
-    if (inner) {
-      gsap.fromTo(
-        inner,
-        { opacity: 0, scale: 0.98, y: -4 },
-        { duration: 0.15, ease: "power2.out", opacity: 1, scale: 1, y: 0 },
-      );
-    }
-  }, [dropdownOpen]);
-
-  const templatePages = [
-    { href: "/home/templates", label: "templates" },
-    { href: "/home/templates/portfolio", label: "portfolio" },
-  ];
-
-  return (
-    <div className="flex items-center gap-1">
-      <Link
-        className={`lowercase ${t("text-text-dark/50 hover:text-text-dark", "text-text-light/50 hover:text-text-light")}`}
-        to="/home"
-      >
-        <img alt="amemorymachine" className="h-3.5 w-3.5" src="/amemorymachine.svg" />
-      </Link>
-
-      <span className={t("text-text-dark/15", "text-text-light/15")}>/</span>
-
-      {isTemplatesIndex ? (
-        <span className={`lowercase text-[12px] ${t("text-text-dark/70", "text-text-light/70")}`}>
-          templates
-        </span>
-      ) : (
-        <div className="flex items-center gap-1">
-          <Link
-            className={`lowercase text-[12px] ${t("text-text-dark/50 hover:text-text-dark", "text-text-light/50 hover:text-text-light")}`}
-            to="/home/templates"
-          >
-            templates
-          </Link>
-
-          <span className={t("text-text-dark/15", "text-text-light/15")}>/</span>
-
-          {isPortfolioPage ? (
-            <div className="relative" ref={dropdownRef}>
-              <button
-                className={`flex items-center gap-1.5 lowercase text-[12px] ${t("text-text-dark/50 hover:text-text-dark", "text-text-light/50 hover:text-text-light")}`}
-                onClick={() => setDropdownOpen((o) => !o)}
-                type="button"
-              >
-                portfolio
-                <CaretDownIcon size={10} />
-              </button>
-              {dropdownOpen && (
-                <div
-                  className={`absolute left-0 top-full mt-1 border p-1.5 z-50 shadow-lg w-36 max-h-48 overflow-y-auto ${t("border-border-dark bg-text-light", "border-border-light bg-[#e0e0e0]")}`}
-                >
-                  {templatePages.map((page) => (
-                    <button
-                      className={`flex w-full items-center gap-1.5 px-1.5 py-1 text-left text-[11px] lowercase ${currentPath === page.href ? t("text-text-dark", "text-text-light") : t("text-text-dark/50 hover:text-text-dark", "text-text-light/50 hover:text-text-light")}`}
-                      key={page.href}
-                      onClick={() => {
-                        setDropdownOpen(false);
-                        navigate({ to: page.href });
-                      }}
-                      type="button"
-                    >
-                      {page.label}
-                    </button>
-                  ))}
-                </div>
-              )}
-            </div>
-          ) : (
-            <span
-              className={`lowercase text-[12px] ${t("text-text-dark/70", "text-text-light/70")}`}
-            >
-              template
-            </span>
-          )}
-        </div>
-      )}
-    </div>
-  );
-};
 export const ConsoleNavbar = ({ onToggleSidebar, sidebarOpen }: ConsoleNavbarProps) => {
   const navigate = useNavigate();
   const routerState = useRouterState();
@@ -495,20 +373,7 @@ export const ConsoleNavbar = ({ onToggleSidebar, sidebarOpen }: ConsoleNavbarPro
   const spaceSlug = isSpaceRoute
     ? routerState.location.pathname.replace("/s/", "").split("/")[0]
     : "";
-  const isTemplatesRoute = routerState.location.pathname.startsWith("/home/templates");
   const [searchQuery, setSearchQuery] = useDebouncedState("", { wait: 150 });
-
-  const { data: stats } = useQuery<Stats>({
-    queryFn: async ({ signal }) => {
-      const r = await fetch("/api/stats", { signal });
-      if (!r.ok) {
-        throw new Error("Failed to fetch stats");
-      }
-      return r.json() as Promise<Stats>;
-    },
-    queryKey: ["stats"],
-    staleTime: 5 * 60 * 1000,
-  });
 
   const t = (dark: string, light: string) => (isDarkMode ? dark : light);
 
@@ -529,14 +394,6 @@ export const ConsoleNavbar = ({ onToggleSidebar, sidebarOpen }: ConsoleNavbarPro
         }
         spaceSlug={spaceSlug}
         workspaces={workspaces}
-      />
-    );
-  } else if (isTemplatesRoute) {
-    leftNavContent = (
-      <TemplatesBreadcrumb
-        isDarkMode={isDarkMode}
-        navigate={navigate}
-        currentPath={routerState.location.pathname}
       />
     );
   } else {
@@ -607,7 +464,6 @@ export const ConsoleNavbar = ({ onToggleSidebar, sidebarOpen }: ConsoleNavbarPro
           logout={logout}
           navigate={navigate}
           selectedWorkspace={selectedWorkspace}
-          stats={stats}
           user={user}
           workspaceName={workspaceName}
         />
