@@ -6,6 +6,7 @@
   "scripts": {
     "start": "electrobun dev",
     "dev": "electrobun dev --watch",
+    "dev:icon": "bun scripts/embed-dev-icon.ts",
     "generate-icons": "bun run scripts/generate-icons.ts",
     "check-types": "tsc --noEmit",
     "build:canary": "electrobun build --env=canary",

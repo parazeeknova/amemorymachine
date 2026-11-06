@@ -4,6 +4,7 @@ import { useEffect, useRef, useState } from "react";
 import { getAuthCache } from "#/features/auth/lib/auth-cache";
 import { useAuth } from "#/features/auth/hooks/use-auth";
 import { useTheme } from "#/shared/hooks/use-theme";
+import { isDesktopApp } from "#/shared/lib/desktop";
 
 export const AuthGate = ({ children }: { children: React.ReactNode }) => {
   const { data: user, isPending, isError } = useAuth();
@@ -33,7 +34,8 @@ export const AuthGate = ({ children }: { children: React.ReactNode }) => {
       }
     } else if ((isError || !user) && !hasRedirected.current) {
       hasRedirected.current = true;
-      void navigate({ replace: true, to: "/about" });
+      // Desktop has its own onboarding at /desktop — never drop it on the web landing.
+      void navigate({ replace: true, to: isDesktopApp() ? "/desktop" : "/about" });
     }
   }, [isPending, user, isError, visible, navigate]);
 

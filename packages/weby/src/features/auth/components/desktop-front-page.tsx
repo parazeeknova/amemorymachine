@@ -135,7 +135,9 @@ export const DesktopFrontPage = () => {
   }, [isDarkMode]);
 
   // If user is already logged in, automatically navigate to console.
-  const isLoggedIn = user !== null;
+  // NOTE: user is undefined while the query is loading — only navigate once
+  // loading settles, otherwise a fresh logged-out launch bounces to /home.
+  const isLoggedIn = !isAuthLoading && user !== undefined && user !== null;
   useEffect(() => {
     if (isLoggedIn) {
       void navigate({ replace: true, to: "/home" });
