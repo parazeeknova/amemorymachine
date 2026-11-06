@@ -14,7 +14,7 @@
         # Derivation that fetches the release tarball and wraps it
         amemorymachine = pkgs.stdenv.mkDerivation rec {
           pname = "amemorymachine";
-          version = "0.7.47"; # Dynamically updated by release scripts
+          version = "0.7.50"; # Dynamically updated by release scripts
 
           src = pkgs.fetchurl {
             url = "https://github.com/parazeeknova/amemorymachine/releases/download/v${version}/stable-linux-x64-Amemorymachine-Setup.tar.gz";

@@ -1,10 +1,10 @@
 {
   "name": "@amemorymachine/backy",
-  "version": "0.7.47",
+  "version": "0.7.50",
   "private": true,
   "scripts": {
     "build": "go build -o bin/backy",
-    "check": "./scripts/check.sh",
+    "check": "sh ./scripts/check.sh",
     "check-types": "go vet ./...",
     "db:migrate": "dotenv -e ../../.env -e ../../.env.development -- go run ./database/cmd/migrate up",
     "db:reset": "dotenv -e ../../.env -e ../../.env.development -- go run ./database/cmd/migrate reset",

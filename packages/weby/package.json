@@ -1,6 +1,6 @@
 {
   "name": "@amemorymachine/weby",
-  "version": "0.7.47",
+  "version": "0.7.50",
   "private": true,
   "type": "module",
   "imports": {
