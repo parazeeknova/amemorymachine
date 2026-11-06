@@ -24,9 +24,9 @@ const PageView = () => {
     if (typeof document === "undefined") {
       return;
     }
-    document.title = page?.title ? `verso — ${page.title}` : `verso — ${pageid}`;
+    document.title = page?.title ? `amemorymachine — ${page.title}` : `amemorymachine — ${pageid}`;
     return () => {
-      document.title = "verso — console";
+      document.title = "amemorymachine — console";
     };
   }, [page?.title, pageid]);
 

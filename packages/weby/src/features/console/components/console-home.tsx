@@ -429,7 +429,7 @@ export const ConsoleHome = () => {
         spotted a bug or have a suggestion ?{" "}
         <a
           className="underline hover:opacity-70"
-          href="https://github.com/parazeeknova/verso/issues"
+          href="https://github.com/parazeeknova/amemorymachine/issues"
           rel="noopener noreferrer"
           target="_blank"
         >

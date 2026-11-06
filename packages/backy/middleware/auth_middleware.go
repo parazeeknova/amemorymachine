@@ -7,9 +7,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"verso/backy/repositories"
-	"verso/backy/shared/auth"
-	"verso/backy/shared/logger"
+	"amemorymachine/backy/repositories"
+	"amemorymachine/backy/shared/auth"
+	"amemorymachine/backy/shared/logger"
 )
 
 type SessionValidator interface {

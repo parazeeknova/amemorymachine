@@ -1,40 +1,40 @@
 # Maintainer: Harsh Sahu <harsh@itssingularity.com> (Singularity Works - itssingularity.com)
-pkgname=verso-bin
-pkgver=0.7.46
+pkgname=amemorymachine-bin
+pkgver=0.7.47
 pkgrel=1
-pkgdesc="Personal knowledge base and folio, blog for public face & private brain, one app"
+pkgdesc="Self-hosted markdown editor with second-brain capabilities"
 arch=('x86_64')
-url="https://github.com/parazeeknova/verso"
+url="https://github.com/parazeeknova/amemorymachine"
 license=('MIT')
 depends=('webkit2gtk-4.1' 'gtk3' 'libsoup3' 'libayatana-appindicator3' 'glib-networking')
 optdepends=('gstreamer: audio/video support'
             'gst-plugins-base: audio/video support'
             'gst-plugins-good: audio/video support'
             'gst-plugins-bad: WebVTT subtitles and video support')
-provides=('verso')
-conflicts=('verso')
-source=("https://github.com/parazeeknova/verso/releases/download/v${pkgver}/stable-linux-x64-Verso-Setup.tar.gz")
+provides=('amemorymachine')
+conflicts=('amemorymachine')
+source=("https://github.com/parazeeknova/amemorymachine/releases/download/v${pkgver}/stable-linux-x64-Amemorymachine-Setup.tar.gz")
 sha256sums=('6e6d8d9788cfb8b1a4eddba425b9bf227f15913dd86fb9567d9dfb6f6e140b55')
 
 package() {
     # Install application files
-    install -d "${pkgdir}/opt/verso"
-    cp -r "${srcdir}/stable-linux-x64-Verso-Setup/"* "${pkgdir}/opt/verso/"
+    install -d "${pkgdir}/opt/amemorymachine"
+    cp -r "${srcdir}/stable-linux-x64-Amemorymachine-Setup/"* "${pkgdir}/opt/amemorymachine/"
     
     # Create symlink in bin
     install -d "${pkgdir}/usr/bin"
-    ln -s "/opt/verso/Verso" "${pkgdir}/usr/bin/verso"
+    ln -s "/opt/amemorymachine/Amemorymachine" "${pkgdir}/usr/bin/amemorymachine"
 
     # Add .desktop and icon
     install -d "${pkgdir}/usr/share/applications"
-    cat << EOF > "${pkgdir}/usr/share/applications/verso.desktop"
+    cat << EOF > "${pkgdir}/usr/share/applications/amemorymachine.desktop"
 [Desktop Entry]
-Name=Verso
-Exec=verso
-Icon=/opt/verso/resources/verso.png
+Name=Amemorymachine
+Exec=amemorymachine
+Icon=/opt/amemorymachine/resources/amemorymachine.png
 Type=Application
 Categories=Utility;
 Terminal=false
-Comment=Personal knowledge base and folio, blog for public face & private brain, one app
+Comment=Self-hosted markdown editor with second-brain capabilities
 EOF
 }

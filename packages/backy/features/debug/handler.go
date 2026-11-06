@@ -7,8 +7,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"verso/backy/database"
-	"verso/backy/shared/logger"
+	"amemorymachine/backy/database"
+	"amemorymachine/backy/shared/logger"
 )
 
 type DebugHandlers struct{}

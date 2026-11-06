@@ -10,11 +10,11 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"verso/backy/shared/auth"
+	"amemorymachine/backy/shared/auth"
 )
 
 func TestMain(m *testing.M) {
-	_ = os.Setenv("JWT_ACCESS_TOKEN_SECRET", "test-secret-at-least-32-bytes-long-for-verso-collaboration-testing")
+	_ = os.Setenv("JWT_ACCESS_TOKEN_SECRET", "test-secret-at-least-32-bytes-long-for-amemorymachine-collaboration-testing")
 	os.Exit(m.Run())
 }
 

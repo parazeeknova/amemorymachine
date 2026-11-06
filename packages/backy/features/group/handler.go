@@ -6,9 +6,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	wsfeat "verso/backy/features/workspace"
-	"verso/backy/middleware"
-	"verso/backy/shared/logger"
+	wsfeat "amemorymachine/backy/features/workspace"
+	"amemorymachine/backy/middleware"
+	"amemorymachine/backy/shared/logger"
 )
 
 type GroupHandlers struct {

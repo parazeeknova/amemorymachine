@@ -4,7 +4,7 @@ import (
 	"context"
 	"testing"
 
-	"verso/backy/database/models"
+	"amemorymachine/backy/database/models"
 )
 
 func TestExtractMentionIDs(t *testing.T) {

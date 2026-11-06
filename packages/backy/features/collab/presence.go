@@ -9,9 +9,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"verso/backy/database/models"
-	"verso/backy/middleware"
-	"verso/backy/shared/auth"
+	"amemorymachine/backy/database/models"
+	"amemorymachine/backy/middleware"
+	"amemorymachine/backy/shared/auth"
 )
 
 // ActiveUser represents a member or guest currently active on a page.

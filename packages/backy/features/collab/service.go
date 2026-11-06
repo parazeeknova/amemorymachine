@@ -10,10 +10,10 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	yws "github.com/reearth/ygo/provider/websocket"
 
-	notifeat "verso/backy/features/notification"
-	"verso/backy/repositories"
-	"verso/backy/shared/auth"
-	"verso/backy/shared/logger"
+	notifeat "amemorymachine/backy/features/notification"
+	"amemorymachine/backy/repositories"
+	"amemorymachine/backy/shared/auth"
+	"amemorymachine/backy/shared/logger"
 )
 
 // CollabService wraps the ygo Yjs WebSocket server and manages page collaboration permissions.

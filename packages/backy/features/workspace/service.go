@@ -8,10 +8,10 @@ import (
 
 	"github.com/google/uuid"
 
-	"verso/backy/database"
-	"verso/backy/database/models"
-	notifeat "verso/backy/features/notification"
-	"verso/backy/repositories"
+	"amemorymachine/backy/database"
+	"amemorymachine/backy/database/models"
+	notifeat "amemorymachine/backy/features/notification"
+	"amemorymachine/backy/repositories"
 )
 
 var (

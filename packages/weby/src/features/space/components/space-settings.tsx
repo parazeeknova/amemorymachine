@@ -698,9 +698,11 @@ export const SpaceSettings = () => {
   const fileInputRef = useRef<HTMLInputElement>(null);
 
   useEffect(() => {
-    document.title = space?.name ? `verso — ${space.name} settings` : "verso — space settings";
+    document.title = space?.name
+      ? `amemorymachine — ${space.name} settings`
+      : "amemorymachine — space settings";
     return () => {
-      document.title = "verso — space";
+      document.title = "amemorymachine — space";
     };
   }, [space?.name]);
   useEffect(() => {

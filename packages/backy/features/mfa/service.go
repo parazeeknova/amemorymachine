@@ -9,9 +9,9 @@ import (
 	"github.com/pquerna/otp"
 	"github.com/pquerna/otp/totp"
 
-	"verso/backy/repositories"
-	"verso/backy/shared/auth"
-	"verso/backy/shared/logger"
+	"amemorymachine/backy/repositories"
+	"amemorymachine/backy/shared/auth"
+	"amemorymachine/backy/shared/logger"
 )
 
 // MFAError is returned for MFA-specific errors.
@@ -97,7 +97,7 @@ func (s *MFAService) Setup(ctx context.Context, userID string) (*MFASetupResult,
 	}
 
 	key, err := totp.Generate(totp.GenerateOpts{
-		Issuer:      "Verso",
+		Issuer:      "Amemorymachine",
 		AccountName: userID,
 		SecretSize:  32,
 		Digits:      otp.DigitsSix,

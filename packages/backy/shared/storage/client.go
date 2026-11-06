@@ -40,12 +40,12 @@ func NewClient() (*Client, error) {
 
 	accessKey := os.Getenv("RUSTFS_ACCESS_KEY")
 	if accessKey == "" {
-		accessKey = "verso"
+		accessKey = "amemorymachine"
 	}
 
 	secretKey := os.Getenv("RUSTFS_SECRET_KEY")
 	if secretKey == "" {
-		secretKey = "verso_secret_key"
+		secretKey = "amemorymachine_dev_secret"
 	}
 
 	region := os.Getenv("RUSTFS_REGION")

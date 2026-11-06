@@ -4,7 +4,7 @@ import { randomBytes } from "node:crypto";
 import { join } from "node:path";
 import { platform } from "node:process";
 
-const APP_NAME = ".verso";
+const APP_NAME = ".amemorymachine";
 
 export const getConfigDir = (): string => {
   const home = homedir();

@@ -12,11 +12,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"verso/backy/database/models"
-	wsfeat "verso/backy/features/workspace"
-	"verso/backy/middleware"
-	"verso/backy/repositories"
-	"verso/backy/shared/logger"
+	"amemorymachine/backy/database/models"
+	wsfeat "amemorymachine/backy/features/workspace"
+	"amemorymachine/backy/middleware"
+	"amemorymachine/backy/repositories"
+	"amemorymachine/backy/shared/logger"
 )
 
 type rateLimiter struct {

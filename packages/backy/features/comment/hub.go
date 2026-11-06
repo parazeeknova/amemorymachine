@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"sync"
 
-	"verso/backy/database/models"
+	"amemorymachine/backy/database/models"
 )
 
 // CommentEvent represents a real-time event for comments.

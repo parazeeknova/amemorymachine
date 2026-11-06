@@ -7,7 +7,7 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"verso/backy/shared/logger"
+	"amemorymachine/backy/shared/logger"
 )
 
 var globalPool *pgxpool.Pool

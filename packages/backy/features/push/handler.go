@@ -6,10 +6,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 
-	"verso/backy/database/models"
-	notifeat "verso/backy/features/notification"
-	"verso/backy/middleware"
-	"verso/backy/shared/logger"
+	"amemorymachine/backy/database/models"
+	notifeat "amemorymachine/backy/features/notification"
+	"amemorymachine/backy/middleware"
+	"amemorymachine/backy/shared/logger"
 )
 
 // PushSubscriptionHandlers holds HTTP handlers for browser push subscription management.

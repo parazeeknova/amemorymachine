@@ -74,5 +74,5 @@ func GetMFAChallengeCookieName() string {
 	if name := os.Getenv("MFA_CHALLENGE_COOKIE_NAME"); name != "" {
 		return name
 	}
-	return "verso_mfa_challenge"
+	return "amemorymachine_mfa_challenge"
 }

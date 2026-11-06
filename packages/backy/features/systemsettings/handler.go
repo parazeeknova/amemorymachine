@@ -5,9 +5,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"verso/backy/middleware"
-	"verso/backy/repositories"
-	"verso/backy/shared/logger"
+	"amemorymachine/backy/middleware"
+	"amemorymachine/backy/repositories"
+	"amemorymachine/backy/shared/logger"
 )
 
 type SystemSettingsHandlers struct {

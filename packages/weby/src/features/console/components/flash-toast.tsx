@@ -1,7 +1,7 @@
 import { useEffect, useState } from "react";
 
-const FLASH_TOAST_KEY = "verso-console-flash-toast";
-const FLASH_TOAST_EVENT = "verso-console-flash-toast";
+const FLASH_TOAST_KEY = "amemorymachine-console-flash-toast";
+const FLASH_TOAST_EVENT = "amemorymachine-console-flash-toast";
 
 interface FlashToastProps {
   isDarkMode: boolean;

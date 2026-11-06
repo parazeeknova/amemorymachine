@@ -1,66 +1,67 @@
 ```text
 ⠀⠀⠀⠀⢀⠠⠤⠀⢀⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠐⠀⠐⠀⠀⢀⣾⣿⡇⠀⠀⠀⠀⠀⢀⣼⡇⠀⠀⠀⠀    verso by @parazeeknova
+⠀⠀⠐⠀⠐⠀⠀⢀⣾⣿⡇⠀⠀⠀⠀⠀⢀⣼⡇⠀⠀⠀⠀    amemorymachine by @parazeeknova
 ⠀⠀⠀⠀⠀⠀⠀⣸⣿⣿⣿⠀⠀⠀⠀⣴⣿⣿⠇⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⠀⢠⣿⣿⣿⣇⠀⠀⢀⣾⣿⣿⣿⠀⠀⠀⠀⠀    personal knowledge base and folio,
-⠀⠀⠀⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠀⠀⠐⠀⡀    blog for public face & private brain,
-⠀⠀⠀⠀⢰⡿⠉⠀⡜⣿⣿⣿⡿⠿⢿⣿⣿⡃⠀⠀⠂⠄⠀    one app, two sides of the same surface.
+⠀⠀⠀⠀⠀⢠⣿⣿⣿⣇⠀⠀⢀⣾⣿⣿⣿⠀⠀⠀⠀⠀    self-hosted markdown editor
+⠀⠀⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠀⠀⠐⠀⡀    with a second brain.
+⠀⠀⠀⢰⡿⠉⠀⡜⣿⣿⣿⡿⠿⢿⣿⣿⡃⠀⠀⠂⠄⠀    write it down. it remembers.
 ⠀⠀⠒⠒⠸⣿⣄⡘⣃⣿⣿⡟⢰⠃⠀⢹⣿⡇⠀⠀⠀⠀⠀
-⠀⠀⠚⠉⠀⠊⠻⣿⣿⣿⣿⣿⣮⣤⣤⣿⡟⠁⠘⠠⠁⠀⠀
+⠀⠀⠚⠉⠀⠊⠻⣿⣿⣿⣿⣮⣤⣤⣿⡟⠁⠘⠠⠁⠀⠀
 ⠀⠀⠀⠀⠀⠠⠀⠀⠈⠙⠛⠛⠛⠛⠛⠁⠀⠒⠤⠀⠀⠀⠀    - selfhosted, open source, and free to use.
 ⠨⠠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠑⠀⠀⠀⠀⠀⠀
 ⠁⠃⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
 ```
 
 <div align="center">
-  <h3><strong>V E R S O</strong> &nbsp;<sub><em>ヴェルソ &nbsp;·&nbsp; 维索 &nbsp;·&nbsp; वर्सो</em></sub></h3>
-  <sub><em>"the other side of the page."</em></sub>
+  <h3><strong>A M E M O R Y M A C H I N E</strong></h3>
+  <sub><em>"write it down. it remembers."</em></sub>
 </div>
 
-## hey, you found verso.
+## hey, you found amemorymachine.
 
 so. you're reading a readme. which means you're probably a developer, or deeply lost. either way, welcome.
 
-verso is a personal knowledge base and folio, blog for public face & private brain, one app that doesn't apologize for being both. the left side is where i exist as a person (public face): my projects, my work, my contribution graph. the right side is where i think out loud (private brain): notes, docs, blog posts, half-baked ideas.
+amemorymachine is a self-hosted markdown editor with a second brain. everything you read, write, hear, or scribble gets ingested, indexed, and made retrievable. OCR pulls text out of images and scans, speech-to-text turns voice into notes. notes live as a retrieval-augmented graph, not a folder tree, so context surfaces on its own instead of getting buried.
 
-it's a wiki glued to a developer portfolio. i built it because i couldn't find anything that did both without making me feel like i was filling out a form.
+it's a markdown editor where the memory underneath actually connects things. i built it because my brain forgets and my notes app doesn't retrieve.
 
 ## why does this exist
 
 here's the honest answer: i was tired.
 
-tired of maintaining a portfolio site that was always three projects behind. tired of keeping notes in five different places. tired of notion being a whole subscription, confluence being enterprise-shaped trauma, and obsidian vaults that only i could ever see. i wanted one place - mine, self-hosted, permanent - where i could put both the _what i built_ and the _why i built it_.
+tired of keeping notes in five different places. tired of notion being a whole subscription, confluence being enterprise-shaped trauma, and obsidian vaults that only i could ever see. tired of writing things down and then never finding them again. i wanted one place - mine, self-hosted, permanent - where writing something down meant it would actually come back to me when it mattered.
 
-so i built verso. because apparently the solution to "too many tools" is "build another tool." the hubris is not lost on me.
+so i built amemorymachine. because apparently the solution to "too many tools" is "build another tool." the hubris is not lost on me.
 
 ## what it does
 
-- **portfolio panel** — your profile, your projects, your work history, your activity. the whole "here's who i am professionally" side of things, laid out clean.
-- **knowledge base panel** — a full wiki. write in markdown, organize into folders, link between pages, publish what you want. your public docs live here.
-- **real-time collaborative editor** — because even personal projects deserve proper tooling.
-- **spaces & folders** — organize your writing the way your brain actually works, not the way some vc-funded startup thinks you should.
-- **self-hosted, fully** — your data, your server, your rules. no phone home, no "we updated our privacy policy" emails.
+- **realtime markdown editor** — notion-style editing, workspaces, spaces, and pages. the actual writing part, done properly.
+- **retrieval-augmented memory** — content is chunked, embedded, and indexed in a vector store. semantic search, direct questions, recency-aware ranking.
+- **capture from anywhere** — save notes, attach files, transcribe voice memos, or edit straight from whatsapp, telegram, and discord.
+- **automatic OCR** — photos of documents or handwritten notes become searchable text without a manual step.
+- **real-time collaboration** — CRDT-synced editing with presence, comments, and shared pages.
+- **self-hosted, fully** — your data, your server, your rules. runs on local or self-hosted LLMs. no data leaves unless you say so.
 - **open source** — fork it, break it, make it yours. i won't stop you. i'll probably star your fork.
 
 ## what it might become
 
 i have no idea. that's the honest answer and also the exciting one.
 
-right now verso is personal infrastructure built for me, open-sourced because hoarding code is a bad personality trait. but i can see it becoming a few things:
+right now amemorymachine is personal infrastructure built for me, open-sourced because hoarding code is a bad personality trait. but i can see it becoming a few things:
 
-it could become the go-to self-hosted alternative for developers who want a portfolio that _thinks_ — where your writing and your projects are aware of each other, cross-linked, living in the same place. imagine a project page that automatically surfaces the blog posts you wrote while building it.
+it could become the go-to self-hosted memory layer — every app you use writes into it, and it answers from everything you've ever given it.
 
-it could get an API layer. rss feeds for your public notes. embeds. a CLI for pushing markdown straight from your editor. probably an obsidian plugin that someone else builds and i take zero credit for.
+it could get an API layer. a CLI for pushing markdown straight from your editor. probably an obsidian plugin that someone else builds and i take zero credit for.
 
-it could grow a proper multi-user mode — teams, permissions, shared spaces. a studio wiki and a portfolio rolled into one, for small builders who don't want to pay for confluence and also have taste.
+it could grow a proper multi-user mode — teams, permissions, shared spaces. a studio brain for small builders who don't want to pay for confluence and also have taste.
 
 or it stays exactly what it is — a quiet, self-contained corner of the internet where i document things. that's also fine. not everything needs to scale.
 
 ## the part where i ask something of you
 
-if you use this, break something, or have an opinion - open an issue. if you build something on top of it, tell me. if you think the name is pretentious, you're right, i know, i like it anyway.
+if you use this, break something, or have an opinion - open an issue. if you build something on top of it, tell me. if you think the name is unwieldy, you're right, i know, i like it anyway.
 
-verso is a living thing. it'll change as i change. that's the point.
+amemorymachine is a living thing. it'll change as i change. that's the point.
 
 good luck out there.
 

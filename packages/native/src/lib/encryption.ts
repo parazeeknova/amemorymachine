@@ -1,10 +1,10 @@
 import { randomBytes, scryptSync, createCipheriv, createDecipheriv } from "node:crypto";
 import { getMachineId } from "./paths";
 
-const KEY_SALT = Buffer.from("verso-desktop-storage-v1", "utf-8");
+const KEY_SALT = Buffer.from("amemorymachine-desktop-storage-v1", "utf-8");
 
 const getAppKey = (): Buffer => {
-  const machineId = getMachineId() ?? "verso-default-key";
+  const machineId = getMachineId() ?? "amemorymachine-default-key";
   return scryptSync(machineId, KEY_SALT, 32);
 };
 

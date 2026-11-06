@@ -14,11 +14,11 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 
-	"verso/backy/database"
-	"verso/backy/database/models"
-	notifeat "verso/backy/features/notification"
-	"verso/backy/repositories"
-	"verso/backy/shared/fractional"
+	"amemorymachine/backy/database"
+	"amemorymachine/backy/database/models"
+	notifeat "amemorymachine/backy/features/notification"
+	"amemorymachine/backy/repositories"
+	"amemorymachine/backy/shared/fractional"
 )
 
 // PageService provides business logic over page and page history repositories

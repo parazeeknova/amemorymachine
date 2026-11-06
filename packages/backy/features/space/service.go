@@ -10,11 +10,11 @@ import (
 
 	"github.com/google/uuid"
 
-	"verso/backy/database"
-	"verso/backy/database/models"
-	notifeat "verso/backy/features/notification"
-	"verso/backy/repositories"
-	"verso/backy/shared/logger"
+	"amemorymachine/backy/database"
+	"amemorymachine/backy/database/models"
+	notifeat "amemorymachine/backy/features/notification"
+	"amemorymachine/backy/repositories"
+	"amemorymachine/backy/shared/logger"
 )
 
 // ErrSpaceNotFound is returned when a space is not found.

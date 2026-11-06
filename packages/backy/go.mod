@@ -1,4 +1,4 @@
-module verso/backy
+module amemorymachine/backy
 
 go 1.26
 

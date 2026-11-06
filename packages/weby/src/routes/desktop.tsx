@@ -5,8 +5,8 @@ export const Route = createFileRoute("/desktop")({
   component: DesktopFrontPage,
   head: () => ({
     meta: [
-      { title: "verso — desktop" },
-      { content: "verso desktop application", name: "description" },
+      { title: "amemorymachine — desktop" },
+      { content: "amemorymachine desktop application", name: "description" },
     ],
   }),
 });

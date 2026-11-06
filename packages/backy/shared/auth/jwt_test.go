@@ -13,10 +13,10 @@ func TestMain(m *testing.M) {
 	if err := os.Setenv("JWT_ACCESS_TOKEN_SECRET", "test-secret-that-is-at-least-32-bytes-long!"); err != nil {
 		os.Exit(1)
 	}
-	if err := os.Setenv("JWT_ISSUER", "verso-test"); err != nil {
+	if err := os.Setenv("JWT_ISSUER", "amemorymachine-test"); err != nil {
 		os.Exit(1)
 	}
-	if err := os.Setenv("JWT_AUDIENCE", "verso-test"); err != nil {
+	if err := os.Setenv("JWT_AUDIENCE", "amemorymachine-test"); err != nil {
 		os.Exit(1)
 	}
 	if err := os.Setenv("ACCESS_TOKEN_TTL", "15m"); err != nil {
@@ -58,8 +58,8 @@ func TestGenerateAndValidateAccessToken(t *testing.T) {
 	if claims.IsOwner != false {
 		t.Errorf("IsOwner = %v, want false", claims.IsOwner)
 	}
-	if claims.Issuer != "verso-test" {
-		t.Errorf("Issuer = %s, want verso-test", claims.Issuer)
+	if claims.Issuer != "amemorymachine-test" {
+		t.Errorf("Issuer = %s, want amemorymachine-test", claims.Issuer)
 	}
 }
 
@@ -76,7 +76,7 @@ func TestValidateAccessToken_WrongIssuer(t *testing.T) {
 		RegisteredClaims: jwt.RegisteredClaims{
 			Issuer:    "wrong-issuer",
 			Subject:   userID.String(),
-			Audience:  jwt.ClaimStrings{"verso-test"},
+			Audience:  jwt.ClaimStrings{"amemorymachine-test"},
 			IssuedAt:  jwt.NewNumericDate(now),
 			ExpiresAt: jwt.NewNumericDate(now.Add(ttl)),
 			NotBefore: jwt.NewNumericDate(now),
@@ -109,7 +109,7 @@ func TestValidateAccessToken_WrongAudience(t *testing.T) {
 
 	claims := AccessTokenClaims{
 		RegisteredClaims: jwt.RegisteredClaims{
-			Issuer:    "verso-test",
+			Issuer:    "amemorymachine-test",
 			Subject:   userID.String(),
 			Audience:  jwt.ClaimStrings{"wrong-audience"},
 			IssuedAt:  jwt.NewNumericDate(now),
@@ -162,9 +162,9 @@ func TestValidateAccessToken_NonHMAC(t *testing.T) {
 
 	claims := AccessTokenClaims{
 		RegisteredClaims: jwt.RegisteredClaims{
-			Issuer:    "verso-test",
+			Issuer:    "amemorymachine-test",
 			Subject:   userID.String(),
-			Audience:  jwt.ClaimStrings{"verso-test"},
+			Audience:  jwt.ClaimStrings{"amemorymachine-test"},
 			IssuedAt:  jwt.NewNumericDate(now),
 			ExpiresAt: jwt.NewNumericDate(now.Add(15 * time.Minute)),
 			NotBefore: jwt.NewNumericDate(now),

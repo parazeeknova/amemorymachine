@@ -8,9 +8,9 @@ const SettingsPreferencesRouteComponent = () => {
   const t = (dark: string, light: string) => (isDarkMode ? dark : light);
 
   useEffect(() => {
-    document.title = "verso — preferences";
+    document.title = "amemorymachine — preferences";
     return () => {
-      document.title = "verso — console";
+      document.title = "amemorymachine — console";
     };
   }, []);
 

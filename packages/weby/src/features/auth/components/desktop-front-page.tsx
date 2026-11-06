@@ -437,7 +437,7 @@ export const DesktopFrontPage = () => {
               as="h1"
               className="text-7xl sm:text-9xl lg:text-[9.5em] font-bold tracking-tight lowercase select-none"
             >
-              verso
+              amemorymachine
             </GradientText>
           </div>
           <a
@@ -498,7 +498,7 @@ export const DesktopFrontPage = () => {
                 </button>
 
                 <h2 className="text-xs font-semibold uppercase tracking-widest text-center mb-4 opacity-70">
-                  {isSetupNeeded ? "initialize verso" : "welcome back"}
+                  {isSetupNeeded ? "initialize amemorymachine" : "welcome back"}
                 </h2>
 
                 {error && (
@@ -522,7 +522,7 @@ export const DesktopFrontPage = () => {
 
       {/* Footer */}
       <footer className="absolute bottom-4 left-0 right-0 z-20 text-center text-[10px] lowercase opacity-40 pointer-events-none">
-        &copy; {new Date().getFullYear()} verso. open source &middot; MIT &middot; yours.
+        &copy; {new Date().getFullYear()} amemorymachine. open source &middot; MIT &middot; yours.
       </footer>
     </div>
   );

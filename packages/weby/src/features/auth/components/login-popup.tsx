@@ -352,12 +352,7 @@ interface AccountPanelProps {
   isDarkMode: boolean;
 }
 
-const AccountPanel = ({
-  user,
-  onLogout,
-  onNavigateConsole,
-  isDarkMode,
-}: AccountPanelProps) => (
+const AccountPanel = ({ user, onLogout, onNavigateConsole, isDarkMode }: AccountPanelProps) => (
   <div className="space-y-3">
     <div className={`border-b pb-3 ${isDarkMode ? "border-border-dark" : "border-border-light"}`}>
       <p className={`text-[13px] ${isDarkMode ? "text-text-dark" : "text-text-light"}`}>
@@ -517,7 +512,7 @@ export const LoginPopup = ({ isDarkMode, isAtBottom = false }: LoginPopupProps) 
                 void navigate({ to: "/about" });
               }}
             >
-              verso
+              amemorymachine
             </a>
           </span>
         )}
@@ -544,7 +539,7 @@ export const LoginPopup = ({ isDarkMode, isAtBottom = false }: LoginPopupProps) 
             >
               powered by{" "}
               <a href="/about" className="underline" target="_blank" rel="noopener noreferrer">
-                verso
+                amemorymachine
               </a>{" "}
               a personal knowledge base and folio
             </p>

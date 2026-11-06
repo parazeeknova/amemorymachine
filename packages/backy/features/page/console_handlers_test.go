@@ -9,7 +9,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"verso/backy/handlers"
+	"amemorymachine/backy/handlers"
 )
 
 func setupConsoleRouter() *gin.Engine {

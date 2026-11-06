@@ -9,10 +9,10 @@ ARTIFACTS_DIR="$NATIVE_DIR/artifacts"
 mkdir -p "$ARTIFACTS_DIR"
 
 # Discover build directory dynamically
-BUILD_DIR=$(ls -d "$NATIVE_DIR/build/stable-linux-x64/Verso" 2>/dev/null || ls -d "$NATIVE_DIR/build/stable-linux-x64/verso" 2>/dev/null || echo "")
+BUILD_DIR=$(ls -d "$NATIVE_DIR/build/stable-linux-x64/Amemorymachine" 2>/dev/null || ls -d "$NATIVE_DIR/build/stable-linux-x64/amemorymachine" 2>/dev/null || echo "")
 
 if [ -z "$BUILD_DIR" ] || [ ! -d "$BUILD_DIR" ]; then
-  echo "Error: Build directory not found in packages/native/build/stable-linux-x64/Verso"
+  echo "Error: Build directory not found in packages/native/build/stable-linux-x64/Amemorymachine"
   exit 1
 fi
 
@@ -22,20 +22,20 @@ VERSION=$(jq -r '.version' "$REPO_ROOT/package.json")
 if command -v fpm &> /dev/null; then
   echo "Building DEB and RPM packages..."
   # Debian package
-  fpm -s dir -t deb -n verso -v "$VERSION" \
-    --prefix /opt/verso \
+  fpm -s dir -t deb -n amemorymachine -v "$VERSION" \
+    --prefix /opt/amemorymachine \
     --force \
     -d "libwebkit2gtk-4.1-0" -d "libgtk-3-0" -d "libsoup-3.0-0" -d "libayatana-appindicator3-1" \
-    -p "$ARTIFACTS_DIR/verso_${VERSION}_amd64.deb" \
-    "$BUILD_DIR/"=/opt/verso
+    -p "$ARTIFACTS_DIR/amemorymachine_${VERSION}_amd64.deb" \
+    "$BUILD_DIR/"=/opt/amemorymachine
 
   # RPM package
-  fpm -s dir -t rpm -n verso -v "$VERSION" \
-    --prefix /opt/verso \
+  fpm -s dir -t rpm -n amemorymachine -v "$VERSION" \
+    --prefix /opt/amemorymachine \
     --force \
     -d "webkit2gtk4.1" -d "gtk3" -d "libsoup3" -d "libayatana-appindicator3" \
-    -p "$ARTIFACTS_DIR/verso-${VERSION}-1.x86_64.rpm" \
-    "$BUILD_DIR/"=/opt/verso
+    -p "$ARTIFACTS_DIR/amemorymachine-${VERSION}-1.x86_64.rpm" \
+    "$BUILD_DIR/"=/opt/amemorymachine
 else
   echo "fpm not installed, skipping DEB/RPM packaging."
 fi
@@ -49,8 +49,8 @@ mkdir -p "$APPDIR/usr/share/icons/hicolor/256x256/apps"
 
 # Copy files
 cp -r "$BUILD_DIR/"* "$APPDIR/usr/bin/"
-cp "$REPO_ROOT/packages/weby/public/amemorymachine.png" "$APPDIR/verso.png"
-cp "$REPO_ROOT/packages/weby/public/amemorymachine.png" "$APPDIR/usr/share/icons/hicolor/256x256/apps/verso.png"
+cp "$REPO_ROOT/packages/weby/public/amemorymachine.png" "$APPDIR/amemorymachine.png"
+cp "$REPO_ROOT/packages/weby/public/amemorymachine.png" "$APPDIR/usr/share/icons/hicolor/256x256/apps/amemorymachine.png"
 
 # AppRun script (sets flags and starts the app)
 cat << 'EOF' > "$APPDIR/AppRun"
@@ -58,20 +58,20 @@ cat << 'EOF' > "$APPDIR/AppRun"
 SELF=$(readlink -f "$0")
 HERE=$(dirname "$SELF")
 export WEBKIT_DISABLE_SANDBOX_THIS_IS_DANGEROUS=1
-exec "$HERE/usr/bin/Verso" "$@"
+exec "$HERE/usr/bin/Amemorymachine" "$@"
 EOF
 chmod +x "$APPDIR/AppRun"
 
 # Desktop entry
-cat << EOF > "$APPDIR/verso.desktop"
+cat << EOF > "$APPDIR/amemorymachine.desktop"
 [Desktop Entry]
-Name=Verso
-Exec=Verso
-Icon=verso
+Name=Amemorymachine
+Exec=Amemorymachine
+Icon=amemorymachine
 Type=Application
 Categories=Utility;
 Terminal=false
-Comment=Personal knowledge base and folio, blog for public face & private brain, one app
+Comment=Self-hosted markdown editor with second-brain capabilities
 EOF
 
 # Download appimagetool if not present
@@ -86,6 +86,6 @@ export ARCH=x86_64
 cd "$NATIVE_DIR/build"
 ./appimagetool --appimage-extract
 cd "$REPO_ROOT"
-"$NATIVE_DIR/build/squashfs-root/AppRun" "$APPDIR" "$ARTIFACTS_DIR/Verso-${VERSION}-x86_64.AppImage"
+"$NATIVE_DIR/build/squashfs-root/AppRun" "$APPDIR" "$ARTIFACTS_DIR/Amemorymachine-${VERSION}-x86_64.AppImage"
 
 echo "Packaging complete!"

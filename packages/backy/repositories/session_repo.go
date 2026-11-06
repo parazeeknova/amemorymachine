@@ -8,8 +8,8 @@ import (
 	"github.com/jackc/pgx/v5"
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"verso/backy/database"
-	"verso/backy/database/models"
+	"amemorymachine/backy/database"
+	"amemorymachine/backy/database/models"
 )
 
 // SessionRepo handles database operations for the sessions and refresh_tokens tables.

@@ -8,12 +8,12 @@ self.addEventListener("push", (event) => {
     // ignore parse errors
   }
 
-  const title = data.title ?? "Verso";
+  const title = data.title ?? "Amemorymachine";
   const options = {
-    badge: "/verso.png",
+    badge: "/amemorymachine.png",
     body: data.body ?? "",
-    icon: "/verso.png",
-    tag: "verso-notification",
+    icon: "/amemorymachine.png",
+    tag: "amemorymachine-notification",
   };
 
   event.waitUntil(self.registration.showNotification(title, options));

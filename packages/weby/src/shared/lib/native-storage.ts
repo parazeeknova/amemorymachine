@@ -25,10 +25,10 @@ const getNativeGlobal = <T>(key: string): T | null => {
 };
 
 export const getCachedAuth = (): InitialAuthData | null =>
-  getNativeGlobal<InitialAuthData>("__versoInitialAuthData");
+  getNativeGlobal<InitialAuthData>("__amemorymachineInitialAuthData");
 
 export const getCachedTheme = (): InitialThemeData | null =>
-  getNativeGlobal<InitialThemeData>("__versoInitialTheme");
+  getNativeGlobal<InitialThemeData>("__amemorymachineInitialTheme");
 
 export const hasCachedSession = (): boolean => {
   const auth = getCachedAuth();

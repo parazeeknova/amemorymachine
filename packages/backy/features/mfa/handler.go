@@ -6,10 +6,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	notifeat "verso/backy/features/notification"
-	"verso/backy/middleware"
-	"verso/backy/shared/auth"
-	"verso/backy/shared/logger"
+	notifeat "amemorymachine/backy/features/notification"
+	"amemorymachine/backy/middleware"
+	"amemorymachine/backy/shared/auth"
+	"amemorymachine/backy/shared/logger"
 )
 
 // MFAHandlers holds HTTP handlers for MFA endpoints.

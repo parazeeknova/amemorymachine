@@ -49,11 +49,11 @@ export const SidebarFooter = ({ isDebugRoute, isSettingsRoute }: SidebarFooterPr
         powered by{" "}
         <a
           className="underline"
-          href="https://github.com/parazeeknova/verso"
+          href="https://github.com/parazeeknova/amemorymachine"
           rel="noopener noreferrer"
           target="_blank"
         >
-          verso
+          amemorymachine
         </a>{" "}
         know more at{" "}
         <a className="underline" href="/about" target="_blank" rel="noopener noreferrer">

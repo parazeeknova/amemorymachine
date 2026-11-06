@@ -76,13 +76,13 @@ export const WorkspaceSettings = ({ urlWorkspaceName }: WorkspaceSettingsProps) 
   // Update URL and document title when workspace changes
   useEffect(() => {
     if (workspace) {
-      document.title = `verso — ${workspace.name}`;
+      document.title = `amemorymachine — ${workspace.name}`;
       navigate({ replace: true, search: { name: workspace.name } });
     } else {
-      document.title = "verso — workspace";
+      document.title = "amemorymachine — workspace";
     }
     return () => {
-      document.title = "verso — console";
+      document.title = "amemorymachine — console";
     };
   }, [workspace, workspace?.name, navigate]);
 

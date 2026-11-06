@@ -1,3 +1,3 @@
-module verso/scripts
+module amemorymachine/scripts
 
 go 1.26

@@ -69,7 +69,7 @@ func TestGetMFAChallengeCookieName(t *testing.T) {
 	if name == "" {
 		t.Error("expected non-empty cookie name")
 	}
-	if name != "verso_mfa_challenge" {
-		t.Errorf("cookie name = %s, want verso_mfa_challenge", name)
+	if name != "amemorymachine_mfa_challenge" {
+		t.Errorf("cookie name = %s, want amemorymachine_mfa_challenge", name)
 	}
 }

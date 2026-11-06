@@ -16,10 +16,10 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 
-	"verso/backy/database/models"
-	"verso/backy/features/page"
-	"verso/backy/middleware"
-	"verso/backy/shared/logger"
+	"amemorymachine/backy/database/models"
+	"amemorymachine/backy/features/page"
+	"amemorymachine/backy/middleware"
+	"amemorymachine/backy/shared/logger"
 )
 
 // maxUploadBytes bounds the in-memory buffer used for uploads to prevent
@@ -154,7 +154,7 @@ func (h *Handlers) UploadFile(c *gin.Context) {
 	}
 	defer func() { _ = file.Close() }()
 
-	tempSpool, err := os.CreateTemp("", "verso-upload-spool-*")
+	tempSpool, err := os.CreateTemp("", "amemorymachine-upload-spool-*")
 	if err != nil {
 		logger.Log.Error().Err(err).Msg("failed to create temporary spool file")
 		c.JSON(http.StatusInternalServerError, gin.H{"error": "failed to initialize upload spool"})

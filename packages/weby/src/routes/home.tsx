@@ -30,9 +30,9 @@ export const Route = createFileRoute("/home")({
   head: () => ({
     links: [{ href: "/home", rel: "canonical" }],
     meta: [
-      { title: "verso — console" },
+      { title: "amemorymachine — console" },
       { content: "noindex, nofollow", name: "robots" },
-      { content: "verso — console", property: "og:title" },
+      { content: "amemorymachine — console", property: "og:title" },
       { content: "website", property: "og:type" },
     ],
   }),

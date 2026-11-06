@@ -78,7 +78,7 @@ const getInitialSidebarOpen = (): boolean => {
     return true;
   }
   try {
-    const stored = localStorage.getItem("verso-console-store");
+    const stored = localStorage.getItem("amemorymachine-console-store");
     if (stored) {
       try {
         const parsed = JSON.parse(stored);
@@ -109,7 +109,7 @@ export const useConsoleStore = create<ConsoleState & ConsoleActions>()(
       toggleSidebar: () => set((s) => ({ sidebarOpen: !s.sidebarOpen })),
     }),
     {
-      name: "verso-console-store",
+      name: "amemorymachine-console-store",
       partialize: (state) => ({
         selectedSpaceId: state.selectedSpaceId,
         selectedWorkspaceId: state.selectedWorkspaceId,

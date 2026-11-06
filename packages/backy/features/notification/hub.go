@@ -4,7 +4,7 @@ import (
 	"encoding/json"
 	"sync"
 
-	"verso/backy/database/models"
+	"amemorymachine/backy/database/models"
 )
 
 // NotificationHub is an in-memory pub/sub hub that streams new notifications

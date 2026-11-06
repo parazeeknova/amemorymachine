@@ -11,10 +11,10 @@ import (
 	"github.com/stretchr/testify/assert"
 	"github.com/stretchr/testify/require"
 
-	"verso/backy/database"
-	"verso/backy/database/models"
-	"verso/backy/repositories"
-	"verso/backy/shared/testutil"
+	"amemorymachine/backy/database"
+	"amemorymachine/backy/database/models"
+	"amemorymachine/backy/repositories"
+	"amemorymachine/backy/shared/testutil"
 )
 
 func seedTestData(t *testing.T, db *testutil.TestDB) (userA *models.AuthUser, userB *models.AuthUser, userC *models.AuthUser, workspace *models.Workspace) {

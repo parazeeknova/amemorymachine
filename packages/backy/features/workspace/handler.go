@@ -6,9 +6,9 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"verso/backy/database/models"
-	"verso/backy/middleware"
-	"verso/backy/shared/logger"
+	"amemorymachine/backy/database/models"
+	"amemorymachine/backy/middleware"
+	"amemorymachine/backy/shared/logger"
 )
 
 type WorkspaceHandlers struct {

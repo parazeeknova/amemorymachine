@@ -7,7 +7,7 @@ import (
 	"github.com/google/uuid"
 	"github.com/stretchr/testify/require"
 
-	"verso/backy/database/models"
+	"amemorymachine/backy/database/models"
 )
 
 func CreateTestUser(t *testing.T, ctx context.Context, db *TestDB, username, email string) string {

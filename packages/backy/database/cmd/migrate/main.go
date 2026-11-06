@@ -6,8 +6,8 @@ import (
 
 	"github.com/joho/godotenv"
 
-	"verso/backy/database"
-	"verso/backy/shared/logger"
+	"amemorymachine/backy/database"
+	"amemorymachine/backy/shared/logger"
 )
 
 func main() {

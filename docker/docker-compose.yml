@@ -1,6 +1,6 @@
 services:
   web:
-    image: ghcr.io/parazeeknova/verso-web:latest
+    image: ghcr.io/parazeeknova/amemorymachine-web:latest
     depends_on:
       backy:
         condition: service_healthy
@@ -14,7 +14,7 @@ services:
     restart: unless-stopped
 
   backy:
-    image: ghcr.io/parazeeknova/verso-serve:latest
+    image: ghcr.io/parazeeknova/amemorymachine-serve:latest
     environment:
       PORT: "7000"
       WEB_ORIGIN: ${WEB_ORIGIN}

@@ -377,36 +377,31 @@ export const ConsoleNavbar = ({ onToggleSidebar, sidebarOpen }: ConsoleNavbarPro
 
   const t = (dark: string, light: string) => (isDarkMode ? dark : light);
 
-  let leftNavContent: React.ReactNode;
-  if (isSpaceRoute) {
-    leftNavContent = (
-      <SpaceBreadcrumb
-        isDarkMode={isDarkMode}
-        navigate={navigate}
-        selectedWorkspace={
-          selectedWorkspace
-            ? {
-                icon: selectedWorkspace.icon,
-                id: selectedWorkspace.id,
-                name: selectedWorkspace.name,
-              }
-            : undefined
-        }
-        spaceSlug={spaceSlug}
-        workspaces={workspaces}
-      />
-    );
-  } else {
-    leftNavContent = (
-      <Link
-        className={`flex items-center gap-1.5 lowercase mr-1 md:mr-3 ${t("text-text-dark/70 hover:text-text-dark", "text-text-light/70 hover:text-text-light")}`}
-        to="/home"
-      >
-        <img alt="amemorymachine" className="h-3.5 w-3.5" src="/amemorymachine.svg" />
-        verso
-      </Link>
-    );
-  }
+  const leftNavContent: React.ReactNode = isSpaceRoute ? (
+    <SpaceBreadcrumb
+      isDarkMode={isDarkMode}
+      navigate={navigate}
+      selectedWorkspace={
+        selectedWorkspace
+          ? {
+              icon: selectedWorkspace.icon,
+              id: selectedWorkspace.id,
+              name: selectedWorkspace.name,
+            }
+          : undefined
+      }
+      spaceSlug={spaceSlug}
+      workspaces={workspaces}
+    />
+  ) : (
+    <Link
+      className={`flex items-center gap-1.5 lowercase mr-1 md:mr-3 ${t("text-text-dark/70 hover:text-text-dark", "text-text-light/70 hover:text-text-light")}`}
+      to="/home"
+    >
+      <img alt="amemorymachine" className="h-3.5 w-3.5" src="/amemorymachine.svg" />
+      amemorymachine
+    </Link>
+  );
 
   return (
     <nav

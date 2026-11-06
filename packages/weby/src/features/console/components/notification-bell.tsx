@@ -123,7 +123,7 @@ export const NotificationBell = ({ isDarkMode }: NotificationBellProps) => {
     if (pageId) {
       if (typeof window !== "undefined") {
         window.dispatchEvent(
-          new CustomEvent("verso:open-comments", { detail: { commentId, pageId } }),
+          new CustomEvent("amemorymachine:open-comments", { detail: { commentId, pageId } }),
         );
       }
 

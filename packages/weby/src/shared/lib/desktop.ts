@@ -5,12 +5,13 @@ export const isDesktopApp = (): boolean => {
     return false;
   }
   const win = window as unknown as Record<string, unknown>;
-  if (win.__electrobun || win.versoDesktop) {
+  if (win.__electrobun || win.amemorymachineDesktop) {
     return true;
   }
   if (
     typeof navigator !== "undefined" &&
-    (navigator.userAgent.includes("Electrobun") || navigator.userAgent.includes("verso-desktop"))
+    (navigator.userAgent.includes("Electrobun") ||
+      navigator.userAgent.includes("amemorymachine-desktop"))
   ) {
     return true;
   }

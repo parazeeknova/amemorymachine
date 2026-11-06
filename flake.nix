@@ -1,5 +1,5 @@
 {
-  description = "Personal knowledge base and folio, blog for public face & private brain, one app";
+  description = "Self-hosted markdown editor with second-brain capabilities";
 
   inputs = {
     nixpkgs.url = "github:NixOS/nixpkgs/nixpkgs-unstable";
@@ -12,12 +12,12 @@
         pkgs = import nixpkgs { inherit system; };
         
         # Derivation that fetches the release tarball and wraps it
-        verso = pkgs.stdenv.mkDerivation rec {
-          pname = "verso";
-          version = "0.7.46"; # Dynamically updated by release scripts
+        amemorymachine = pkgs.stdenv.mkDerivation rec {
+          pname = "amemorymachine";
+          version = "0.7.47"; # Dynamically updated by release scripts
 
           src = pkgs.fetchurl {
-            url = "https://github.com/parazeeknova/verso/releases/download/v${version}/stable-linux-x64-Verso-Setup.tar.gz";
+            url = "https://github.com/parazeeknova/amemorymachine/releases/download/v${version}/stable-linux-x64-Amemorymachine-Setup.tar.gz";
             sha256 = "sha256-bm2Nl4jPuLGk7dukJbm/In8VkT3Yb7lWfZ37b24UC1U="; # Updated with each release hash
           };
 
@@ -51,11 +51,11 @@
           '';
 
           installPhase = ''
-            mkdir -p $out/opt/verso
-            cp -r src/* $out/opt/verso/
+            mkdir -p $out/opt/amemorymachine
+            cp -r src/* $out/opt/amemorymachine/
 
             mkdir -p $out/bin
-            makeWrapper $out/opt/verso/Verso $out/bin/verso \
+            makeWrapper $out/opt/amemorymachine/Amemorymachine $out/bin/amemorymachine \
               --prefix LD_LIBRARY_PATH : "${pkgs.lib.makeLibraryPath buildInputs}" \
               --prefix GIO_EXTRA_MODULES : "${pkgs.glib-networking}/lib/gio/modules" \
               --prefix GST_PLUGIN_PATH : "${pkgs.lib.makeSearchPath "lib/gstreamer-1.0" [ pkgs.gst_all_1.gst-plugins-base pkgs.gst_all_1.gst-plugins-good pkgs.gst_all_1.gst-plugins-bad pkgs.gst_all_1.gst-plugins-ugly pkgs.gst_all_1.gst-libav ]}" \
@@ -66,8 +66,8 @@
         };
       in
       {
-        packages.default = verso;
-        packages.verso = verso;
+        packages.default = amemorymachine;
+        packages.amemorymachine = amemorymachine;
       }
     );
 }

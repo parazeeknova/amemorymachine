@@ -42,15 +42,15 @@ const DebugRouteComponent = () => {
 
   useEffect(() => {
     if (tab === "storage") {
-      document.title = "verso — storage";
+      document.title = "amemorymachine — storage";
       return () => {
-        document.title = "verso — console";
+        document.title = "amemorymachine — console";
       };
     }
 
-    document.title = table ? `verso — ${table}` : "verso — debug";
+    document.title = table ? `amemorymachine — ${table}` : "amemorymachine — debug";
     return () => {
-      document.title = "verso — console";
+      document.title = "amemorymachine — console";
     };
   }, [table, tab]);
 

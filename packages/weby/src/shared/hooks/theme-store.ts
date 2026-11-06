@@ -55,7 +55,7 @@ const readStoredPreference = (): ThemePreference | null => {
     return null;
   }
   try {
-    const raw = localStorage.getItem("verso-theme");
+    const raw = localStorage.getItem("amemorymachine-theme");
     if (raw) {
       const parsed = JSON.parse(raw);
       const p = parsed?.state?.preference;
@@ -134,14 +134,14 @@ export const useThemeStore = create<ThemeState & ThemeActions>()(
       },
     }),
     {
-      name: "verso-theme",
+      name: "amemorymachine-theme",
       partialize: (state) => ({ preference: state.preference }),
       storage: createJSONStorage(() => (isDesktopApp() ? inMemoryStorage : localStorage)),
     },
   ),
 );
 
-// Once the desktop shell provides a theme via `verso:os-theme`, it is treated
+// Once the desktop shell provides a theme via `amemorymachine:os-theme`, it is treated
 // as authoritative: matchMedia changes (unreliable on some Linux webviews) no
 // longer override it. The OS listener keeps applying later shell events.
 let osThemeAuthoritative = false;
@@ -177,7 +177,7 @@ const setupOsThemeListener = () => {
   if (typeof window === "undefined") {
     return;
   }
-  window.addEventListener("verso:os-theme", (event) => {
+  window.addEventListener("amemorymachine:os-theme", (event) => {
     // A saved explicit preference may not be restored into state yet: the shell
     // can dispatch this before hydration runs, when preference is still the
     // initial "system". The pre-hydration script already applied the saved

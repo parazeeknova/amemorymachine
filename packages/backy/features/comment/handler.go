@@ -9,8 +9,8 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"verso/backy/middleware"
-	"verso/backy/shared/logger"
+	"amemorymachine/backy/middleware"
+	"amemorymachine/backy/shared/logger"
 )
 
 type CommentHandlers struct {

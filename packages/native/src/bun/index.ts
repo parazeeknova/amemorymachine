@@ -108,9 +108,9 @@ const injectState = (win: BrowserWindow, env: "dev" | "prod") => {
   }
 
   const js = `
-    window.__versoInitialAuthData = ${authJson};
-    window.__versoInitialTheme = ${themeJson};
-    window.__versoEnv = '${env}';
+    window.__amemorymachineInitialAuthData = ${authJson};
+    window.__amemorymachineInitialTheme = ${themeJson};
+    window.__amemorymachineEnv = '${env}';
   `;
   try {
     win.webview.executeJavascript(js);
@@ -120,7 +120,7 @@ const injectState = (win: BrowserWindow, env: "dev" | "prod") => {
 };
 
 const applyOsTheme = (win: BrowserWindow, theme: "light" | "dark") => {
-  const js = `window.dispatchEvent(new CustomEvent('verso:os-theme', { detail: '${theme}' }));`;
+  const js = `window.dispatchEvent(new CustomEvent('amemorymachine:os-theme', { detail: '${theme}' }));`;
   try {
     win.webview.executeJavascript(js);
   } catch {
@@ -225,7 +225,7 @@ const main = async () => {
       x: 100,
       y: 100,
     },
-    title: "Verso",
+    title: "Amemorymachine",
     url: `${url}/desktop`,
   });
 
@@ -254,7 +254,7 @@ const main = async () => {
     void poll();
   })();
 
-  console.log(`Verso desktop application started! Window ID: ${mainWindow.id}`);
+  console.log(`Amemorymachine desktop application started! Window ID: ${mainWindow.id}`);
 };
 
 void main();

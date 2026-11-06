@@ -13,7 +13,7 @@ import (
 	"github.com/reearth/ygo/crdt"
 )
 
-// PagePersistence implements yws.PersistenceAdapter for Verso pages.
+// PagePersistence implements yws.PersistenceAdapter for Amemorymachine pages.
 type PagePersistence struct {
 	pool *pgxpool.Pool
 }

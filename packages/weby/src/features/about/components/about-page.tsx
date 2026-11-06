@@ -78,7 +78,7 @@ const prefersReducedMotion = (): boolean =>
   typeof window.matchMedia === "function" &&
   window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-const REPO = "parazeeknova/verso";
+const REPO = "parazeeknova/amemorymachine";
 const GH = `https://github.com/${REPO}`;
 const API = `https://api.github.com/repos/${REPO}`;
 const FALLBACK_TAG = "v0.3.70";
@@ -122,17 +122,17 @@ interface DownloadLink {
 
 const FALLBACK_ASSET_NAMES = [
   "stable-linux-x64-update.json",
-  "stable-linux-x64-Verso-Setup.tar.gz",
-  "stable-linux-x64-Verso.tar.zst",
+  "stable-linux-x64-Amemorymachine-Setup.tar.gz",
+  "stable-linux-x64-Amemorymachine.tar.zst",
   "stable-macos-arm64-update.json",
-  "stable-macos-arm64-Verso.app.tar.zst",
-  "stable-macos-arm64-Verso.dmg",
+  "stable-macos-arm64-Amemorymachine.app.tar.zst",
+  "stable-macos-arm64-Amemorymachine.dmg",
   "stable-win-x64-update.json",
-  "stable-win-x64-Verso-Setup.zip",
-  "stable-win-x64-Verso.tar.zst",
-  "verso-0.3.70-1.x86_64.rpm",
-  "Verso-0.3.70-x86_64.AppImage",
-  "verso_0.3.70_amd64.deb",
+  "stable-win-x64-Amemorymachine-Setup.zip",
+  "stable-win-x64-Amemorymachine.tar.zst",
+  "amemorymachine-0.3.70-1.x86_64.rpm",
+  "Amemorymachine-0.3.70-x86_64.AppImage",
+  "amemorymachine_0.3.70_amd64.deb",
 ];
 
 const fallbackAssets = (): GhAsset[] =>
@@ -165,7 +165,7 @@ const FALLBACK_RELEASES: GhRelease[] = [
   },
   {
     assets: fallbackAssets(),
-    body: '## Changes\n\n- fix[CI]: Fix Docker workspace dependency copy and desktop build folder change (62e9021)\n\n## Container Images\n\n- "ghcr.io/parazeeknova/verso-web:v0.2.90"\n- "ghcr.io/parazeeknova/verso-serve:v0.2.90"\n\n- "ghcr.io/parazeeknova/verso-web:latest"\n- "ghcr.io/parazeeknova/verso-serve:latest"',
+    body: '## Changes\n\n- fix[CI]: Fix Docker workspace dependency copy and desktop build folder change (62e9021)\n\n## Container Images\n\n- "ghcr.io/parazeeknova/amemorymachine-web:v0.2.90"\n- "ghcr.io/parazeeknova/amemorymachine-serve:v0.2.90"\n\n- "ghcr.io/parazeeknova/amemorymachine-web:latest"\n- "ghcr.io/parazeeknova/amemorymachine-serve:latest"',
     draft: false,
     html_url: `${GH}/releases/tag/v0.2.90`,
     name: "Release v0.2.90",
@@ -225,7 +225,7 @@ const buildDownloads = (release: GhRelease): DownloadLink[] => {
 
   const links: DownloadLink[] = [];
 
-  const mac = dl(/^stable-macos-arm64-Verso\.dmg$/);
+  const mac = dl(/^stable-macos-arm64-Amemorymachine\.dmg$/);
   if (mac) {
     links.push({
       detail: "apple silicon · .dmg",
@@ -234,7 +234,7 @@ const buildDownloads = (release: GhRelease): DownloadLink[] => {
       name: "macos",
     });
   }
-  const win = dl(/^stable-win-x64-Verso-Setup\.zip$/);
+  const win = dl(/^stable-win-x64-Amemorymachine-Setup\.zip$/);
   if (win) {
     links.push({
       detail: "x64 · installer",
@@ -243,7 +243,7 @@ const buildDownloads = (release: GhRelease): DownloadLink[] => {
       name: "windows",
     });
   }
-  const linux = dl(/^stable-linux-x64-Verso-Setup\.tar\.gz$/);
+  const linux = dl(/^stable-linux-x64-Amemorymachine-Setup\.tar\.gz$/);
   if (linux) {
     links.push({
       detail: "x64 · portable tarball",
@@ -252,7 +252,7 @@ const buildDownloads = (release: GhRelease): DownloadLink[] => {
       name: "linux",
     });
   }
-  const deb = dl(/^verso_.*_amd64\.deb$/);
+  const deb = dl(/^amemorymachine_.*_amd64\.deb$/);
   if (deb) {
     links.push({
       detail: "amd64 · .deb",
@@ -261,7 +261,7 @@ const buildDownloads = (release: GhRelease): DownloadLink[] => {
       name: "debian / ubuntu",
     });
   }
-  const rpm = dl(/^verso-.*\.x86_64\.rpm$/);
+  const rpm = dl(/^amemorymachine-.*\.x86_64\.rpm$/);
   if (rpm) {
     links.push({
       detail: "x86_64 · .rpm",
@@ -270,7 +270,7 @@ const buildDownloads = (release: GhRelease): DownloadLink[] => {
       name: "fedora / rhel",
     });
   }
-  const appimage = dl(/^Verso-.*\.AppImage$/);
+  const appimage = dl(/^Amemorymachine-.*\.AppImage$/);
   if (appimage) {
     links.push({
       detail: "x86_64 · portable",
@@ -281,13 +281,13 @@ const buildDownloads = (release: GhRelease): DownloadLink[] => {
   }
 
   links.push({
-    detail: "verso-bin · maintained pkgbuild",
-    href: "https://aur.archlinux.org/packages/verso-bin",
+    detail: "amemorymachine-bin · maintained pkgbuild",
+    href: "https://aur.archlinux.org/packages/amemorymachine-bin",
     key: "arch",
     name: "arch (aur)",
   });
   links.push({
-    detail: "flake · nix run github:parazeeknova/verso",
+    detail: "flake · nix run github:parazeeknova/amemorymachine",
     href: `${GH}`,
     key: "nix",
     name: "nixos",
@@ -296,17 +296,17 @@ const buildDownloads = (release: GhRelease): DownloadLink[] => {
   const ver = stripV(tag_name);
   links.push({
     detail: "container image",
-    href: `${GH}/pkgs/container/verso-web`,
+    href: `${GH}/pkgs/container/amemorymachine-web`,
     key: "web",
-    name: "verso-web",
-    ref: `ghcr.io/parazeeknova/verso-web:${ver}`,
+    name: "amemorymachine-web",
+    ref: `ghcr.io/parazeeknova/amemorymachine-web:${ver}`,
   });
   links.push({
     detail: "container image",
-    href: `${GH}/pkgs/container/verso-serve`,
+    href: `${GH}/pkgs/container/amemorymachine-serve`,
     key: "serve",
-    name: "verso-serve",
-    ref: `ghcr.io/parazeeknova/verso-serve:${ver}`,
+    name: "amemorymachine-serve",
+    ref: `ghcr.io/parazeeknova/amemorymachine-serve:${ver}`,
   });
 
   return links;
@@ -687,7 +687,7 @@ const EditorPreview = () => {
           deployment guide
         </div>
         <div className={t("text-text-dark/55", "text-text-light/55")}>
-          this guide covers setting up verso for production. follow each step carefully.
+          this guide covers setting up amemorymachine for production. follow each step carefully.
           <span
             className={`inline-block w-1 h-3 ml-0.5 animate-pulse ${t("bg-text-dark/40", "bg-text-light/40")}`}
           />
@@ -743,7 +743,9 @@ const EditorPreview = () => {
             <span className={t("text-text-dark/15", "text-text-light/15")}>web:</span>
             <div className="pl-2">
               <span className={t("text-text-dark/40", "text-text-light/40")}>image:</span>{" "}
-              <span className={t("text-text-dark/55", "text-text-light/55")}>verso-web:latest</span>
+              <span className={t("text-text-dark/55", "text-text-light/55")}>
+                amemorymachine-web:latest
+              </span>
             </div>
             <div className="pl-2">
               <span className={t("text-text-dark/40", "text-text-light/40")}>ports:</span>{" "}
@@ -978,9 +980,9 @@ export const AboutPage = () => {
       url: "https://github.com/parazeeknova",
     },
     description:
-      "Verso is a self-hosted personal knowledge base, blog, and portfolio with two access tiers: a public portfolio and blog, and an authenticated markdown workspace with RAG, OCR, and capture channels.",
+      "Amemorymachine is a self-hosted markdown editor with second-brain capabilities: an authenticated markdown workspace with retrieval-augmented memory, OCR, speech-to-text, and capture channels.",
     downloadUrl: downloads.map((d) => d.href),
-    name: "Verso",
+    name: "Amemorymachine",
     offers: { "@type": "Offer", price: "0", priceCurrency: "USD" },
     operatingSystem: "macOS, Windows, Linux",
     sameAs: [GH],
@@ -1058,7 +1060,7 @@ export const AboutPage = () => {
         >
           <a className="flex items-center gap-2 lowercase" href="/">
             <img alt="amemorymachine" className="h-4 w-4" src="/amemorymachine.svg" />
-            verso
+            amemorymachine
           </a>
           <div className="flex items-center gap-3">
             <a className="lowercase" href={`${GH}`}>
@@ -1084,7 +1086,7 @@ export const AboutPage = () => {
         >
           <a className="flex items-center gap-2 lowercase" href="/">
             <img alt="amemorymachine" className="h-4 w-4" src="/amemorymachine.svg" />
-            verso
+            amemorymachine
           </a>
           <div className="flex items-center gap-4 lowercase">
             <a href={`${GH}`}>github</a>
@@ -1120,13 +1122,12 @@ export const AboutPage = () => {
         <p
           className={`mt-5 text-[14px] leading-relaxed lowercase ${t("text-text-dark/60", "text-text-light/60")}`}
         >
-          a self-hosted personal knowledge base, blog, and portfolio built as one app with two
-          access tiers. publicly it shows a portfolio and blog anyone can browse. behind
-          authentication it becomes a full markdown editor and workspace for{" "}
+          a self-hosted markdown editor with second-brain capabilities. everything you read, write,
+          hear, or scribble gets ingested, indexed, and made retrievable —{" "}
           <strong className={t("text-text-dark/80", "text-text-light/80")}>
             notes, documents, and long-term memory
           </strong>
-          , with docmost-style editing and workspace management.
+          , with realtime markdown editing and workspace management.
         </p>
 
         <div className="mt-8 flex flex-wrap gap-3">
@@ -1160,7 +1161,7 @@ export const AboutPage = () => {
 
         <section className="mt-16">
           <GradientText as="h2" className="text-2xl sm:text-3xl font-bold lowercase mb-6">
-            ## what is verso
+            ## what is amemorymachine
           </GradientText>
 
           <div className="space-y-3">
@@ -1223,7 +1224,7 @@ export const AboutPage = () => {
           </div>
 
           <GradientText as="h3" className="text-lg sm:text-xl font-bold lowercase mt-10 mb-4">
-            ### two chat experiences
+            ### chat with your memory
           </GradientText>
           <div className="grid sm:grid-cols-2 gap-4">
             <FeatureRow
@@ -1245,10 +1246,10 @@ export const AboutPage = () => {
                   size={18}
                 />
               }
-              title="public chat"
+              title="everywhere you type"
             >
-              a separate, deliberately limited chat embedded on the public portfolio. visitors ask
-              about the owner and their work without ever touching private notes.
+              the same chat lives inside whatsapp, telegram, and discord — ask about anything in
+              memory without opening the app.
             </FeatureRow>
           </div>
 
@@ -1257,8 +1258,7 @@ export const AboutPage = () => {
           >
             <p className="leading-relaxed lowercase text-[14px]">
               in short, it&apos;s a personal knowledge system that remembers everything written into
-              it and can be talked to — with a public face for visitors and a private mind for its
-              owner, unified in a single app.
+              it and can be talked to — your second brain, self-hosted in a single app.
             </p>
           </blockquote>
         </section>
@@ -1387,8 +1387,8 @@ export const AboutPage = () => {
           <p
             className={`text-[12px] leading-relaxed lowercase mt-3 ${t("text-text-dark/45", "text-text-light/45")}`}
           >
-            these images run the server side of verso. use them to self-host your own instance
-            behind a reverse proxy or on your own host.
+            these images run the server side of amemorymachine. use them to self-host your own
+            instance behind a reverse proxy or on your own host.
           </p>
         </section>
 
@@ -1406,8 +1406,8 @@ export const AboutPage = () => {
                   <strong className={t("text-text-dark/80", "text-text-light/80")}>
                     air-gap compatible
                   </strong>
-                  . zero external dependencies. run verso on a raspberry pi, your homelab, or your
-                  enterprise cluster.
+                  . zero external dependencies. run amemorymachine on a raspberry pi, your homelab,
+                  or your enterprise cluster.
                 </p>
               </blockquote>
               <blockquote
@@ -1442,10 +1442,11 @@ export const AboutPage = () => {
               </div>
               <div>
                 <span className={t("text-text-dark/25", "text-text-light/25")}>$</span> git clone
-                https://github.com/parazeeknova/verso
+                https://github.com/parazeeknova/amemorymachine
               </div>
               <div>
-                <span className={t("text-text-dark/25", "text-text-light/25")}>$</span> cd verso
+                <span className={t("text-text-dark/25", "text-text-light/25")}>$</span> cd
+                amemorymachine
               </div>
               <div>
                 <span className={t("text-text-dark/25", "text-text-light/25")}>$</span> cp
@@ -1466,7 +1467,7 @@ export const AboutPage = () => {
 
         <section className="mt-16">
           <GradientText as="h2" className="text-2xl sm:text-3xl font-bold lowercase mb-6">
-            ## see verso in action
+            ## see amemorymachine in action
           </GradientText>
           <InteractivePreview />
         </section>
@@ -1697,7 +1698,7 @@ export const AboutPage = () => {
                 as="h2"
                 className="text-8xl lg:text-[10em] font-bold tracking-tight lowercase"
               >
-                verso
+                amemorymachine
               </GradientText>
             </div>
             <p
@@ -1708,7 +1709,8 @@ export const AboutPage = () => {
             <p
               className={`mt-1 text-[10px] lowercase ${t("text-text-dark/20", "text-text-light/20")}`}
             >
-              &copy; {new Date().getFullYear()} verso. open source &middot; MIT &middot; yours.
+              &copy; {new Date().getFullYear()} amemorymachine. open source &middot; MIT &middot;
+              yours.
             </p>
             <div
               className={`mt-5 flex flex-wrap items-center justify-center gap-x-4 gap-y-1 text-[11px] lowercase ${t("text-text-dark/35", "text-text-light/35")}`}

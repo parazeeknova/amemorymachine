@@ -93,7 +93,7 @@ func getAccessTokenSecret() string {
 func getJWTIssuer() string {
 	issuer := os.Getenv("JWT_ISSUER")
 	if issuer == "" {
-		issuer = "verso"
+		issuer = "amemorymachine"
 	}
 	return issuer
 }
@@ -101,7 +101,7 @@ func getJWTIssuer() string {
 func getJWTAudience() string {
 	aud := os.Getenv("JWT_AUDIENCE")
 	if aud == "" {
-		aud = "verso"
+		aud = "amemorymachine"
 	}
 	return aud
 }
@@ -227,7 +227,7 @@ func GetAccessTokenCookieName() string {
 	if name := os.Getenv("ACCESS_TOKEN_COOKIE_NAME"); name != "" {
 		return name
 	}
-	return "verso_access_token"
+	return "amemorymachine_access_token"
 }
 
 // GetRefreshTokenCookieName returns the cookie name for the refresh token.
@@ -235,7 +235,7 @@ func GetRefreshTokenCookieName() string {
 	if name := os.Getenv("REFRESH_TOKEN_COOKIE_NAME"); name != "" {
 		return name
 	}
-	return "verso_refresh_token"
+	return "amemorymachine_refresh_token"
 }
 
 // CollabTokenClaims holds claims for WebSocket collaboration authentication.

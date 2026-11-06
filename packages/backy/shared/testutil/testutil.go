@@ -16,8 +16,8 @@ import (
 	"github.com/jackc/pgx/v5/pgxpool"
 	_ "github.com/jackc/pgx/v5/stdlib"
 
-	"verso/backy/database"
-	"verso/backy/repositories"
+	"amemorymachine/backy/database"
+	"amemorymachine/backy/repositories"
 )
 
 type TestDB struct {
@@ -88,7 +88,7 @@ func GetTestDatabaseURL(t *testing.T, databaseURL string) string {
 
 	originalDB := strings.TrimPrefix(u.Path, "/")
 	if originalDB == "" {
-		originalDB = "verso"
+		originalDB = "amemorymachine"
 	}
 
 	u.Path = "/postgres"

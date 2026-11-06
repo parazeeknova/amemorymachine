@@ -6,7 +6,7 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"verso/backy/database"
+	"amemorymachine/backy/database"
 )
 
 // PageWatcherRepo handles database operations for page watchers.

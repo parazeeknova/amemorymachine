@@ -63,10 +63,10 @@ export const Route = createFileRoute("/$")({
       },
     ],
     meta: [
-      { title: "page not found — verso" },
+      { title: "page not found — amemorymachine" },
       { content: "this page could not be found.", name: "description" },
       { content: "noindex", name: "robots" },
-      { content: "page not found — verso", property: "og:title" },
+      { content: "page not found — amemorymachine", property: "og:title" },
       { content: "this page could not be found.", property: "og:description" },
       { content: "website", property: "og:type" },
       { content: "/amemorymachine-og.png", property: "og:image" },
@@ -74,7 +74,7 @@ export const Route = createFileRoute("/$")({
       { content: "630", property: "og:image:height" },
       { content: "image/png", property: "og:image:type" },
       { content: "summary_large_image", property: "twitter:card" },
-      { content: "page not found — verso", property: "twitter:title" },
+      { content: "page not found — amemorymachine", property: "twitter:title" },
     ],
   }),
 });

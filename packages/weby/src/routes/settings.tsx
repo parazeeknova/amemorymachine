@@ -38,9 +38,9 @@ export const Route = createFileRoute("/settings")({
   head: () => ({
     links: [{ href: "/settings", rel: "canonical" }],
     meta: [
-      { title: "verso — settings" },
+      { title: "amemorymachine — settings" },
       { content: "noindex, nofollow", name: "robots" },
-      { content: "verso — settings", property: "og:title" },
+      { content: "amemorymachine — settings", property: "og:title" },
       { content: "website", property: "og:type" },
     ],
   }),

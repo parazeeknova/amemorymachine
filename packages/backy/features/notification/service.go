@@ -10,9 +10,9 @@ import (
 	"github.com/SherClockHolmes/webpush-go"
 	"github.com/google/uuid"
 
-	"verso/backy/database/models"
-	"verso/backy/repositories"
-	"verso/backy/shared/logger"
+	"amemorymachine/backy/database/models"
+	"amemorymachine/backy/repositories"
+	"amemorymachine/backy/shared/logger"
 )
 
 // NotificationService creates persistent notification rows and delivers browser push.
@@ -296,7 +296,7 @@ func (s *NotificationService) deliverPush(ctx context.Context, userID string, no
 	vapidPublicKey := os.Getenv("VAPID_PUBLIC_KEY")
 	vapidSubject := os.Getenv("VAPID_SUBJECT")
 	if vapidSubject == "" {
-		vapidSubject = "mailto:admin@verso.local"
+		vapidSubject = "mailto:admin@amemorymachine.cc"
 	}
 	if vapidPrivateKey == "" || vapidPublicKey == "" {
 		logger.Log.Warn().Msg("VAPID keys not configured; skipping browser push delivery")

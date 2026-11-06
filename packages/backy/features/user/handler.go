@@ -7,10 +7,10 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	"verso/backy/middleware"
-	"verso/backy/repositories"
-	"verso/backy/shared/auth"
-	"verso/backy/shared/logger"
+	"amemorymachine/backy/middleware"
+	"amemorymachine/backy/repositories"
+	"amemorymachine/backy/shared/auth"
+	"amemorymachine/backy/shared/logger"
 )
 
 type UserHandlers struct{}

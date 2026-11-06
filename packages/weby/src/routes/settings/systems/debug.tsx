@@ -8,9 +8,9 @@ const SettingsSystemsDebugRouteComponent = () => {
   const t = (dark: string, light: string) => (isDarkMode ? dark : light);
 
   useEffect(() => {
-    document.title = "verso — debug settings";
+    document.title = "amemorymachine — debug settings";
     return () => {
-      document.title = "verso — console";
+      document.title = "amemorymachine — console";
     };
   }, []);
 

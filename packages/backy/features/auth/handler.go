@@ -8,9 +8,9 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 
-	mfafeat "verso/backy/features/mfa"
-	"verso/backy/shared/auth"
-	"verso/backy/shared/logger"
+	mfafeat "amemorymachine/backy/features/mfa"
+	"amemorymachine/backy/shared/auth"
+	"amemorymachine/backy/shared/logger"
 )
 
 // AuthHandlers holds HTTP handlers for authentication endpoints.

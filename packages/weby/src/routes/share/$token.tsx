@@ -46,7 +46,7 @@ const SharedPageComponent = () => {
 
     // Set SEO title
     if (data.page.title) {
-      document.title = `${data.page.title} - shared via verso`;
+      document.title = `${data.page.title} - shared via amemorymachine`;
     }
 
     // Handle SEO search engine indexing
@@ -110,7 +110,7 @@ const SharedPageComponent = () => {
               rel="noopener noreferrer"
               className="font-semibold hover:underline text-neutral-800 dark:text-neutral-100 pointer-events-auto"
             >
-              verso
+              amemorymachine
             </a>
           </span>
         </div>
@@ -158,7 +158,7 @@ const SharedPageComponent = () => {
             rel="noopener noreferrer"
             className="font-semibold hover:underline text-neutral-800 dark:text-neutral-100 pointer-events-auto"
           >
-            verso
+            amemorymachine
           </a>
         </span>
       </div>

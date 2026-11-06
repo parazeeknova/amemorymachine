@@ -8,7 +8,7 @@ import (
 	"strings"
 	"time"
 
-	"verso/backy/database/models"
+	"amemorymachine/backy/database/models"
 )
 
 // ImportService handles importing markdown files into DB-backed pages

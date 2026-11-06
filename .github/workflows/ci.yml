@@ -307,7 +307,7 @@ jobs:
           {
             echo "changes<<CHANGES_EOF"
             echo "<p align=\"center\">"
-            echo "  <img src=\"https://github.com/parazeeknova/verso/blob/main/packages/weby/public/amemorymachine.png?raw=true\" alt=\"Amemorymachine Logo\" width=\"128\" height=\"128\" />"
+            echo "  <img src=\"https://github.com/parazeeknova/amemorymachine/blob/main/packages/weby/public/amemorymachine.png?raw=true\" alt=\"Amemorymachine Logo\" width=\"128\" height=\"128\" />"
             echo "</p>"
             echo ""
             echo "## Changes"
@@ -337,7 +337,7 @@ jobs:
 
       - name: Update SHA256 hashes in flake.nix and PKGBUILD
         run: |
-          TAR_FILE="desktop-artifacts/stable-linux-x64-Verso-Setup.tar.gz"
+          TAR_FILE="desktop-artifacts/stable-linux-x64-Amemorymachine-Setup.tar.gz"
           if [ -f "$TAR_FILE" ]; then
             # Calculate hex hash
             HEX_HASH=$(sha256sum "$TAR_FILE" | cut -d' ' -f1)
@@ -357,7 +357,7 @@ jobs:
             git commit -m "chore(release): Update SHA256 hashes for v${{ needs.check-release-tag.outputs.version }} [skip ci]" || echo "No changes to commit"
             git push origin HEAD:${{ github.ref_name }}
           else
-            echo "Warning: stable-linux-x64-Verso-Setup.tar.gz not found, skipping hash updates."
+            echo "Warning: stable-linux-x64-Amemorymachine-Setup.tar.gz not found, skipping hash updates."
           fi
 
       - name: Setup Go

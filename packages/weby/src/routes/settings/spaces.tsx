@@ -10,9 +10,9 @@ const SettingsSpacesRouteComponent = () => {
   const search = Route.useSearch();
 
   useEffect(() => {
-    document.title = "verso — spaces";
+    document.title = "amemorymachine — spaces";
     return () => {
-      document.title = "verso — console";
+      document.title = "amemorymachine — console";
     };
   }, []);
 

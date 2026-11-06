@@ -9,8 +9,8 @@ import (
 	"github.com/jackc/pgx/v5/pgconn"
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"verso/backy/database"
-	"verso/backy/database/models"
+	"amemorymachine/backy/database"
+	"amemorymachine/backy/database/models"
 )
 
 // ErrDuplicateUser is returned when a user creation violates a unique constraint.

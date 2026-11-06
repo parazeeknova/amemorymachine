@@ -14,18 +14,18 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5/pgconn"
 
-	"verso/backy/database"
-	"verso/backy/database/models"
-	"verso/backy/repositories"
+	"amemorymachine/backy/database"
+	"amemorymachine/backy/database/models"
+	"amemorymachine/backy/repositories"
 
-	authfeat "verso/backy/features/auth"
-	commentfeat "verso/backy/features/comment"
-	groupfeat "verso/backy/features/group"
-	notifeat "verso/backy/features/notification"
-	pagefeat "verso/backy/features/page"
-	spacefeat "verso/backy/features/space"
-	ws "verso/backy/features/workspace"
-	"verso/backy/shared/auth"
+	authfeat "amemorymachine/backy/features/auth"
+	commentfeat "amemorymachine/backy/features/comment"
+	groupfeat "amemorymachine/backy/features/group"
+	notifeat "amemorymachine/backy/features/notification"
+	pagefeat "amemorymachine/backy/features/page"
+	spacefeat "amemorymachine/backy/features/space"
+	ws "amemorymachine/backy/features/workspace"
+	"amemorymachine/backy/shared/auth"
 )
 
 // testDB holds shared database state for integration tests.
@@ -77,7 +77,7 @@ func getTestDatabaseURL(t *testing.T, databaseURL string) string {
 
 	originalDB := strings.TrimPrefix(u.Path, "/")
 	if originalDB == "" {
-		originalDB = "verso"
+		originalDB = "amemorymachine"
 	}
 	testDBName := originalDB + "_test"
 

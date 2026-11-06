@@ -154,7 +154,7 @@ export const getGuestPokemon = (): GuestPokemon => {
   }
   let guestIndexStr: string | null = null;
   try {
-    guestIndexStr = sessionStorage.getItem("verso-guest-pokemon-idx");
+    guestIndexStr = sessionStorage.getItem("amemorymachine-guest-pokemon-idx");
   } catch {
     // ignore
   }
@@ -162,7 +162,7 @@ export const getGuestPokemon = (): GuestPokemon => {
     const randomIdx = Math.floor(Math.random() * POKEMON_LIST.length);
     guestIndexStr = String(randomIdx);
     try {
-      sessionStorage.setItem("verso-guest-pokemon-idx", guestIndexStr);
+      sessionStorage.setItem("amemorymachine-guest-pokemon-idx", guestIndexStr);
     } catch {
       // ignore
     }

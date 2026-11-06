@@ -8,9 +8,9 @@ const SettingsMembersRouteComponent = () => {
   const t = (dark: string, light: string) => (isDarkMode ? dark : light);
 
   useEffect(() => {
-    document.title = "verso — members";
+    document.title = "amemorymachine — members";
     return () => {
-      document.title = "verso — console";
+      document.title = "amemorymachine — console";
     };
   }, []);
 

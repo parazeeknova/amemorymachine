@@ -29,13 +29,13 @@ export const usePresenceApi = (
     if (typeof window === "undefined") {
       return `client-${Math.random().toString(36).slice(2, 9)}`;
     }
-    const stored = sessionStorage.getItem("verso-presence-client-id");
+    const stored = sessionStorage.getItem("amemorymachine-presence-client-id");
     if (stored) {
       return stored;
     }
     const newId = `client-${Math.random().toString(36).slice(2, 9)}`;
     try {
-      sessionStorage.setItem("verso-presence-client-id", newId);
+      sessionStorage.setItem("amemorymachine-presence-client-id", newId);
     } catch {
       // ignore
     }

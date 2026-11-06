@@ -99,7 +99,7 @@ const getInitialFullWidth = () => {
     return false;
   }
   try {
-    return localStorage.getItem("verso-editor-fullwidth") === "true";
+    return localStorage.getItem("amemorymachine-editor-fullwidth") === "true";
   } catch {
     return false;
   }
@@ -108,7 +108,7 @@ const getInitialFullWidth = () => {
 const saveFullWidth = (next: boolean) => {
   if (typeof window !== "undefined" && window.localStorage) {
     try {
-      localStorage.setItem("verso-editor-fullwidth", String(next));
+      localStorage.setItem("amemorymachine-editor-fullwidth", String(next));
     } catch {
       // ignore
     }
@@ -1661,9 +1661,9 @@ export const PageEditor = ({
         setCommentsOpen(true);
       }
     };
-    window.addEventListener("verso:open-comments", handleOpenCommentsEvent);
+    window.addEventListener("amemorymachine:open-comments", handleOpenCommentsEvent);
     return () => {
-      window.removeEventListener("verso:open-comments", handleOpenCommentsEvent);
+      window.removeEventListener("amemorymachine:open-comments", handleOpenCommentsEvent);
     };
   }, [pageId]);
 

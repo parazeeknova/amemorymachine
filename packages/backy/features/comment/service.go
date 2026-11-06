@@ -10,9 +10,9 @@ import (
 	"github.com/google/uuid"
 	"github.com/jackc/pgx/v5"
 
-	"verso/backy/database/models"
-	notifeat "verso/backy/features/notification"
-	"verso/backy/repositories"
+	"amemorymachine/backy/database/models"
+	notifeat "amemorymachine/backy/features/notification"
+	"amemorymachine/backy/repositories"
 )
 
 var (

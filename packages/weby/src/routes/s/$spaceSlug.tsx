@@ -27,10 +27,12 @@ const SpaceConsole = function SpaceConsole() {
       return;
     }
 
-    document.title = space?.name ? `verso — ${space.name}` : `verso — ${spaceSlug}`;
+    document.title = space?.name
+      ? `amemorymachine — ${space.name}`
+      : `amemorymachine — ${spaceSlug}`;
 
     return () => {
-      document.title = "verso — console";
+      document.title = "amemorymachine — console";
     };
   }, [space?.name, spaceSlug]);
 

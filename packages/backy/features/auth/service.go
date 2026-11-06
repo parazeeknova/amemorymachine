@@ -11,11 +11,11 @@ import (
 
 	"github.com/google/uuid"
 
-	"verso/backy/database/models"
-	wsfeat "verso/backy/features/workspace"
-	"verso/backy/repositories"
-	"verso/backy/shared/auth"
-	"verso/backy/shared/logger"
+	"amemorymachine/backy/database/models"
+	wsfeat "amemorymachine/backy/features/workspace"
+	"amemorymachine/backy/repositories"
+	"amemorymachine/backy/shared/auth"
+	"amemorymachine/backy/shared/logger"
 )
 
 // Sentinel errors for expected auth outcomes.

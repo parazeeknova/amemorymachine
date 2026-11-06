@@ -10,16 +10,16 @@ import (
 	"github.com/gin-gonic/gin"
 	"github.com/google/uuid"
 
-	"verso/backy/database/models"
-	groupfeat "verso/backy/features/group"
-	notifeat "verso/backy/features/notification"
-	pagefeat "verso/backy/features/page"
-	spacefeat "verso/backy/features/space"
-	wsfeat "verso/backy/features/workspace"
-	"verso/backy/middleware"
-	"verso/backy/repositories"
-	"verso/backy/shared/logger"
-	"verso/backy/shared/storage"
+	"amemorymachine/backy/database/models"
+	groupfeat "amemorymachine/backy/features/group"
+	notifeat "amemorymachine/backy/features/notification"
+	pagefeat "amemorymachine/backy/features/page"
+	spacefeat "amemorymachine/backy/features/space"
+	wsfeat "amemorymachine/backy/features/workspace"
+	"amemorymachine/backy/middleware"
+	"amemorymachine/backy/repositories"
+	"amemorymachine/backy/shared/logger"
+	"amemorymachine/backy/shared/storage"
 )
 
 // Handlers holds all HTTP handlers

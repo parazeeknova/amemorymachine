@@ -5,11 +5,11 @@ import (
 
 	"github.com/gin-gonic/gin"
 
-	authfeat "verso/backy/features/auth"
-	notifeat "verso/backy/features/notification"
-	"verso/backy/middleware"
-	"verso/backy/shared/auth"
-	"verso/backy/shared/logger"
+	authfeat "amemorymachine/backy/features/auth"
+	notifeat "amemorymachine/backy/features/notification"
+	"amemorymachine/backy/middleware"
+	"amemorymachine/backy/shared/auth"
+	"amemorymachine/backy/shared/logger"
 )
 
 // ProfileHandlers holds HTTP handlers for profile endpoints.

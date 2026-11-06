@@ -33,7 +33,9 @@ const SIDEBAR_WIDTH = 280;
 const platform = detectPlatform();
 const ModIcon = platform === "mac" ? CommandIcon : ControlIcon;
 
-const NAV_ROUTES = [{ href: "/home", icon: HouseSimpleIcon, label: "home", shortcut: "1" }] as const;
+const NAV_ROUTES = [
+  { href: "/home", icon: HouseSimpleIcon, label: "home", shortcut: "1" },
+] as const;
 
 export const ConsoleLayout = () => {
   const { isDarkMode } = useTheme();

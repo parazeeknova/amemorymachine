@@ -8,9 +8,9 @@ const SettingsProfileRouteComponent = () => {
   const t = (dark: string, light: string) => (isDarkMode ? dark : light);
 
   useEffect(() => {
-    document.title = "verso — profile";
+    document.title = "amemorymachine — profile";
     return () => {
-      document.title = "verso — console";
+      document.title = "amemorymachine — console";
     };
   }, []);
 

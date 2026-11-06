@@ -7,7 +7,7 @@ import (
 
 	"github.com/jackc/pgx/v5/pgxpool"
 
-	"verso/backy/database"
+	"amemorymachine/backy/database"
 )
 
 type SystemSetting struct {
