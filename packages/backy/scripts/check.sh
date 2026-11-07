@@ -19,10 +19,10 @@ if ! [ -x "$GOPATH_BIN/goimports" ]; then
     go install golang.org/x/tools/cmd/goimports@latest
 fi
 
-if ! [ -x "$GOPATH_BIN/golangci-lint" ] || ! "$GOPATH_BIN/golangci-lint" --version 2>&1 | grep -q "2\.11\.4"; then
-    echo "golangci-lint v2.11.4 not found in $GOPATH_BIN, installing..."
-    # Pin v2.11.4 to ensure exact linting consistency across different developer and CI environments.
-    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b "$GOPATH_BIN" v2.11.4
+if ! [ -x "$GOPATH_BIN/golangci-lint" ] || ! "$GOPATH_BIN/golangci-lint" --version 2>&1 | grep -q "2\.15\.0"; then
+    echo "golangci-lint v2.15.0 not found in $GOPATH_BIN, installing..."
+    # Pin v2.15.0 to ensure exact linting consistency across different developer and CI environments.
+    curl -sSfL https://raw.githubusercontent.com/golangci/golangci-lint/master/install.sh | sh -s -- -b "$GOPATH_BIN" v2.15.0
 fi
 
 echo "Running gofumpt check..."
