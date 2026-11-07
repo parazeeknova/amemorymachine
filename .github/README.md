@@ -39,9 +39,9 @@ content can be captured from anywhere a whatsapp message can save a note, attach
 
 <table>
   <tr>
-    <td align="center"><img src="https://img.przknv.cc/t/amm/home.png" width="250" alt="home dashboard with quick actions, spaces, and recent pages" /><br/><sub>home spaces, quick actions, recents</sub></td>
-    <td align="center"><img src="https://img.przknv.cc/t/amm/slash.png" width="250" alt="editor slash menu with text, headings, lists, and blocks" /><br/><sub>editor slash menu</sub></td>
-    <td align="center"><img src="https://img.przknv.cc/t/amm/space_properties.png" width="250" alt="workspace space settings with members, groups, and security" /><br/><sub>spaces members, groups, settings</sub></td>
+    <td align="center"><img src="https://img.przknv.cc/t/amemorymachine/home.png" width="250" alt="home dashboard with quick actions, spaces, and recent pages" /><br/><sub>home spaces, quick actions, recents</sub></td>
+    <td align="center"><img src="https://img.przknv.cc/t/amemorymachine/slash.png" width="250" alt="editor slash menu with text, headings, lists, and blocks" /><br/><sub>editor slash menu</sub></td>
+    <td align="center"><img src="https://img.przknv.cc/t/amemorymachine/space_properties.png" width="250" alt="workspace space settings with members, groups, and security" /><br/><sub>spaces members, groups, settings</sub></td>
   </tr>
 </table>
 
@@ -92,9 +92,9 @@ it could grow a proper multi-user mode — teams, permissions, shared spaces. a 
 
 seamlessly embed and integrate with your existing tools. from diagrams to databases, bring all your content together.
 
-| <img src="https://cdn.simpleicons.org/figma" height="28" alt="figma" /><br/>figma                        | <img src="https://cdn.simpleicons.org/airtable" height="28" alt="airtable" /><br/>airtable                                                                                                       | <img src="https://cdn.simpleicons.org/googledrive" height="28" alt="google drive" /><br/>google drive | <img src="https://cdn.simpleicons.org/mermaid" height="28" alt="mermaid" /><br/>mermaid                                                                                                                          | <img src="https://cdn.simpleicons.org/diagramsdotnet" height="28" alt="draw.io" /><br/>draw.io | <img src="https://cdn.simpleicons.org/excalidraw" height="28" alt="excalidraw" /><br/>excalidraw                                                                                                         |
-| -------------------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------ | ----------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| <img src="https://cdn.simpleicons.org/googlesheets" height="28" alt="google sheets" /><br/>google sheets | <picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.simpleicons.org/miro/white" /><img src="https://cdn.simpleicons.org/miro" height="28" alt="miro" /></picture><br/>miro | <img src="https://cdn.simpleicons.org/loom" height="28" alt="loom" /><br/>loom                        | <picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.simpleicons.org/typeform/white" /><img src="https://cdn.simpleicons.org/typeform" height="28" alt="typeform" /></picture><br/>typeform | <img src="https://cdn.simpleicons.org/lumen" height="28" alt="lumen" /><br/>lumen              | <picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.simpleicons.org/github/white" /><img src="https://cdn.simpleicons.org/github" height="28" alt="github" /></picture><br/>github |
+|            <img src="https://cdn.simpleicons.org/figma" width="32" height="32" alt="figma" /><br/>figma             |                                                    <img src="https://cdn.simpleicons.org/airtable" width="32" height="32" alt="airtable" /><br/>airtable                                                    | <img src="https://cdn.simpleicons.org/googledrive" width="32" height="32" alt="google drive" /><br/>google drive |                                                             <img src="https://cdn.simpleicons.org/mermaid" width="32" height="32" alt="mermaid" /><br/>mermaid                                                              | <img src="https://cdn.simpleicons.org/diagramsdotnet" width="32" height="32" alt="draw.io" /><br/>draw.io |                                                     <img src="https://cdn.simpleicons.org/excalidraw" width="32" height="32" alt="excalidraw" /><br/>excalidraw                                                     |
+| :-----------------------------------------------------------------------------------------------------------------: | :---------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :--------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: | :-------------------------------------------------------------------------------------------------------: | :-----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------: |
+| <img src="https://cdn.simpleicons.org/googlesheets" width="32" height="32" alt="google sheets" /><br/>google sheets | <picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.simpleicons.org/miro/white" /><img src="https://cdn.simpleicons.org/miro" width="32" height="32" alt="miro" /></picture><br/>miro |            <img src="https://cdn.simpleicons.org/loom" width="32" height="32" alt="loom" /><br/>loom             | <picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.simpleicons.org/typeform/white" /><img src="https://cdn.simpleicons.org/typeform" width="32" height="32" alt="typeform" /></picture><br/>typeform |       <img src="https://cdn.simpleicons.org/lumen" width="32" height="32" alt="lumen" /><br/>lumen        | <picture><source media="(prefers-color-scheme: dark)" srcset="https://cdn.simpleicons.org/github/white" /><img src="https://cdn.simpleicons.org/github" width="32" height="32" alt="github" /></picture><br/>github |
 
 - **draw.io** — create flowcharts, uml, network diagrams, and org charts with hundreds of built-in shape libraries.
 - **excalidraw** — sketch ideas with a natural, hand-drawn style. perfect for quick whiteboarding and visual brainstorming.
@@ -111,17 +111,3 @@ amemorymachine is a living thing. it'll change as i change. that's the point.
 good luck out there.
 
 — harsh / @parazeeknova
-
-```text
-⠀⠀⠀⠀⢀⠠⠤⠀⢀⣿⡀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-⠀⠀⠐⠀⠐⠀⠀⢀⣾⣿⡇⠀⠀⠀⠀⠀⢀⣼⡇⠀⠀⠀⠀    amemorymachine by @parazeeknova
-⠀⠀⠀⠀⠀⠀⠀⣸⣿⣿⣿⠀⠀⠀⠀⣴⣿⣿⠇⠀⠀⠀⠀
-⠀⠀⠀⠀⠀⢠⣿⣿⣿⣇⠀⠀⢀⣾⣿⣿⣿⠀⠀⠀⠀⠀     self-hosted markdown editor
-⠀⠀⠀⠀⣴⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⣿⡟⠀⠀⠐⠀⡀     with a second brain.
-⠀⠀⠀⢰⡿⠉⠀⡜⣿⣿⣿⡿⠿⢿⣿⣿⡃⠀⠀⠂⠄⠀     write it down. it remembers.
-⠀⠀⠒⠒⠸⣿⣄⡘⣃⣿⣿⡟⢰⠃⠀⢹⣿⡇⠀⠀⠀⠀⠀
-⠀⠀⠚⠉⠀⠊⠻⣿⣿⣿⣿⣮⣤⣤⣿⡟⠁⠘⠠⠁⠀⠀
-⠀⠀⠀⠀⠀⠠⠀⠀⠈⠙⠛⠛⠛⠛⠛⠁⠀⠒⠤⠀⠀⠀⠀    - selfhosted, open source, and free to use.
-⠨⠠⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠑⠀⠀⠀⠀⠀⠀
-⠁⠃⠉⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀⠀
-```
