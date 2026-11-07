@@ -1,6 +1,6 @@
 # Maintainer: Harsh Sahu <harsh@itssingularity.com> (Singularity Works - itssingularity.com)
 pkgname=amemorymachine-bin
-pkgver=0.7.51
+pkgver=0.7.52
 pkgrel=1
 pkgdesc="Self-hosted markdown editor with second-brain capabilities"
 arch=('x86_64')
