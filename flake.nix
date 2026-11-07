@@ -18,7 +18,7 @@
 
           src = pkgs.fetchurl {
             url = "https://github.com/parazeeknova/amemorymachine/releases/download/v${version}/stable-linux-x64-Amemorymachine-Setup.tar.gz";
-            sha256 = "sha256-MhE4K0JMFk9Nec+e7AoCVUH8u79YN6JkGYTrlY+/R9w="; # Updated with each release hash
+            sha256 = "sha256-rBROWd3uyN3DQT8FWhZaErdk51NWlDRH0Q+ulTrWOts="; # Updated with each release hash
           };
 
           nativeBuildInputs = [ pkgs.makeWrapper pkgs.autoPatchelfHook ];
